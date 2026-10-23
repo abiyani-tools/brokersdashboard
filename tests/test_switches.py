@@ -72,9 +72,34 @@ def test_unknown_and_unimplemented_switches_are_refused():
     with pytest.raises(SW.SwitchError, match='unknown'):
         Inputs(snap, 'z', [])
     with pytest.raises(SW.SwitchError, match='not implemented'):
-        Inputs(snap, 'ab', [])
+        Inputs(snap, 'c', [])
 
 
 def test_cumulative_order():
     assert SW.cumulative('a') == (frozenset(), frozenset('a'))
     assert SW.cumulative('c') == (frozenset('ab'), frozenset('abc'))
+
+
+@pytest.fixture(scope='module')
+def with_ab():
+    return load_snapshot(SNAP, 'ab', REVIEWED)
+
+
+def test_switch_b_replaces_the_21_revenue_mix_cells(with_ab):
+    b = {c: v for c, v in with_ab.overrides.items() if v[2] == 'b'}
+    assert len(b) == 21 and {c[2] for c in b} == {15, 16, 17} and {c[1] for c in b} == set('FGHIJKM')
+    assert with_ab.ws('J', 17) == 0.061 and with_ab.ws('M', 16) == 0.086 and with_ab.ws('F', 15) == 0.525
+
+
+def test_switch_b_daily_ratios_are_the_mix_ratios(with_a, with_ab):
+    a, b = daily.run(with_a)['daily'], daily.run(with_ab)['daily']
+    ratio = lambda seg, d, k='rev_mn': b[seg][d][k] / a[seg][d][k]
+    # commodity: fixed Q3 FY26 take rate, J17 0.06 -> 0.061, on every day
+    assert all(ratio('comm', d) == pytest.approx(0.061 / 0.06, rel=1e-12) for d in a['comm'] if a['comm'][d]['rev_mn'])
+    # F&O Q3 FY26 days use their own quarter's take rate: J15 0.44 -> 0.443
+    assert ratio('fo', '2025-11-03') == pytest.approx(0.443 / 0.44, rel=1e-12)
+    # cash Q1 FY27 is an actual quarter: M16 0.09 -> 0.086
+    assert ratio('cash', '2026-05-04') == pytest.approx(0.086 / 0.09, rel=1e-12)
+    # cash projected quarters: average of the last three quarters' take rates (Q3 FY26..Q1 FY27)
+    assert ratio('cash', '2026-08-03') == pytest.approx(16.5122 / 16.7752, rel=1e-4)
+    assert all(a['mtf'][d]['gross_cr'] == b['mtf'][d]['gross_cr'] for d in a['mtf'])

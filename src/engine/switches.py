@@ -13,6 +13,12 @@ CELL_SWITCHES = {
     #     J8 feeds the commodity take rate (Commodities!AI11 = J17 × J99 / J8) and the F&O share of
     #     orders for Q3 FY26 (row 10 = J6 / (J6 + J7 + J8)).
     'a': {(WS, 'J', 8): ('orders_comm', 'Q3 FY 2026')},
+    # (b) revenue mix to the deck's one decimal (Working sheet rows 15-17 = F&O, cash, commodity share
+    #     of total income) for Q3 FY25 .. Q1 FY27. Q2 FY27 enters with switch (h).
+    'b': {(WS, col, row): (metric, q)
+          for q, col in (('Q3 FY 2025', 'F'), ('Q4 FY 2025', 'G'), ('Q1 FY 2026', 'H'), ('Q2 FY 2026', 'I'),
+                         ('Q3 FY 2026', 'J'), ('Q4 FY 2026', 'K'), ('Q1 FY 2027', 'M'))
+          for row, metric in ((15, 'revmix_fo'), (16, 'revmix_cash'), (17, 'revmix_comm'))},
 }
 
 IMPLEMENTED = set(CELL_SWITCHES)

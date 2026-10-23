@@ -37,7 +37,7 @@ D1 summary laid out exactly like the Excel sheet, with FY / quarter / month drop
 - [~] **E6 DB reader** *(coded; the CI-vs-snapshot test runs once the secrets exist)* using `SUPABASE_SERVICE_KEY` from the environment (never hard-coded). Exit: a run from CI equals a run from the snapshot.
 - [ ] **3.1 Switches, one commit each, each with an ADR bridge** (FY27, Q2 FY27, Oct-26, per segment):
   - [x] (a) J8 = 35: commodity +2.857% on every day; F&O +0.087% from Apr-26 (J8 is in the Q3 FY26 F&O share of orders); Consolidated FY27 +0.30%. Bridge `out/bridges/a.md`, check `out/checks/switch_a.md` (22/22 agree).
-  - (b) one-decimal revenue mix
+  - [x] (b) one-decimal revenue mix (21 cells, Q3 FY25–Q1 FY27): F&O −0.064%, cash −1.57% projected (FY27 −2.87%: Q1 FY27 actual 9% → 8.6%), commodity +1.667%; Consolidated FY27 −0.23%. `out/bridges/b.md`, check `out/checks/switch_b.md`.
   - (c) BSE contracts unfrozen (Oct F&O roughly 6.74 → 11.67, parity rules)
   - (d) special sessions excluded
   - (e) D2 monthly cash share
