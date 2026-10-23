@@ -30,7 +30,14 @@ MARKET_SWITCHES = {
     'c': {('bse_fo', 'contracts')},
 }
 
-IMPLEMENTED = set(CELL_SWITCHES) | set(MARKET_SWITCHES)
+# switch -> rule applied when averaging daily revenue (summary statistics only; daily rows are kept)
+SUMMARY_SWITCHES = {
+    # (d) special sessions (sb_calendar.special_session: Muhurat, DR test) are dropped from every average,
+    #     last-N and weekday statistic, for all segments; they stay in the daily rows and in totals.
+    'd': 'exclude_special_sessions',
+}
+
+IMPLEMENTED = set(CELL_SWITCHES) | set(MARKET_SWITCHES) | set(SUMMARY_SWITCHES)
 
 
 class SwitchError(ValueError):
@@ -84,3 +91,10 @@ def market_overrides(switches, mkt, lake):
             out[key] = {d: (lake[key][d], 'ok') for d, (v, st) in mkt[key].items()
                         if st == 'imputed' and d in lake.get(key, {})}
     return out
+
+
+def excluded_dates(I):
+    """Dates left out of averages under the summary switches that are on (ISO strings)."""
+    if 'd' in I.switches:
+        return {d for d, r in I.cal.items() if r.get('special_session')}
+    return set()

@@ -1,6 +1,7 @@
 """ADR bridge for one switch (LIVE_SPEC §5): average daily revenue before → after, per segment.
 
-Periods: FY 2027 (to date), Q2 FY 2027, FY 2027 October (to date). Rs crore per trading day; MTF is gross.
+Periods: FY 2027 (to date), Q2 FY 2027, FY 2027 October (to date), and the comparison bases FY 2026,
+Q3 FY 2026 and FY 2026 October. Rs crore per trading day; MTF is gross.
 "Before" = the switches earlier in the order a → i; "after" adds this one, so bridges add up.
 
     python3 -m src.engine.bridge a            # writes out/bridges/a.md
@@ -14,13 +15,15 @@ from .summary_periods import PANELS, _combine, make_segments
 
 SNAP = 'snapshot/db_snapshot_2026-10-23.json'
 REVIEWED = 'snapshot/facts_reviewed_2026-10-23.json'
-PERIODS = (('FY', 'FY 2027'), ('Q', 'Q2 FY 2027'), ('M', 'FY 2027 October'))
+PERIODS = (('FY', 'FY 2027'), ('Q', 'Q2 FY 2027'), ('M', 'FY 2027 October'),
+           # comparison bases (YoY / QoQ) that a switch can move without touching the current periods
+           ('FY', 'FY 2026'), ('Q', 'Q3 FY 2026'), ('M', 'FY 2026 October'))
 SEGMENTS = (('fo', 'F&O', 'rev_mn'), ('cash', 'Cash', 'rev_mn'), ('comm', 'Commodities', 'rev_mn'), ('mtf', 'MTF', 'gross_cr'))
 
 
 def adr(I):
     res = daily.run(I)
-    segs = make_segments(res['daily'])
+    segs = make_segments(res['daily'], exclude=SW.excluded_dates(I))
     get = {'FY': lambda s, k: s.fy(k), 'Q': lambda s, k: s.q(k), 'M': lambda s, k: s.m(k)}
     table = {(p, k, panel): _combine(segs, panel, lambda s: get[p](s, k)) for p, k in PERIODS for panel in PANELS}
     return table, res
@@ -57,7 +60,8 @@ def bridge(letter, snap=SNAP, reviewed=REVIEWED):
                 market={k: I_b.market_overrides.get(k, {}) for k in SW.MARKET_SWITCHES.get(letter, ())},
                 market_before={k: {d: I_a.mkt[k][d] for d in I_b.market_overrides.get(k, {})}
                                for k in SW.MARKET_SWITCHES.get(letter, ())},
-                days=daily_changes(r_a, r_b))
+                days=daily_changes(r_a, r_b),
+                excluded=SW.excluded_dates(I_b) - SW.excluded_dates(I_a))
 
 
 def markdown(b):
@@ -75,6 +79,8 @@ def markdown(b):
             v0, st0 = b['market_before'][key][d]
             L.append(f"| {d} | {v0:,.0f} ({st0}) | {v:,.0f} |")
         L.append('')
+    if b.get('excluded'):
+        L += ['Days left out of every average: ' + ', '.join(sorted(b['excluded'])), '']
     L += ['ADR, Rs crore per trading day (MTF gross):', '',
           '| Period | Panel | Before | After | Δ | Δ % |', '|---|---|---:|---:|---:|---:|']
     for r in b['rows']:

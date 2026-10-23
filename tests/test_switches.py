@@ -72,7 +72,7 @@ def test_unknown_and_unimplemented_switches_are_refused():
     with pytest.raises(SW.SwitchError, match='unknown'):
         Inputs(snap, 'z', [])
     with pytest.raises(SW.SwitchError, match='not implemented'):
-        Inputs(snap, 'd', [])
+        Inputs(snap, 'e', [])
 
 
 def test_cumulative_order():
@@ -127,3 +127,23 @@ def test_switch_c_scales_each_day_by_its_market_volume(with_ab, with_abc):
     assert changed == set(with_abc.market_overrides[('bse_fo', 'contracts')])
     for d in changed:   # same contracts/order, share and take rate: revenue ∝ NSE + BSE contracts
         assert b[d]['rev_mn'] / a[d]['rev_mn'] == pytest.approx((nse[d] + new[d]) / (nse[d] + old[d]), rel=1e-12)
+
+
+def test_switch_d_drops_special_sessions_from_averages_only():
+    from statistics import mean
+    from src.engine import bridge as B
+    from src.engine.inputs import fy_month_of
+    I_c = load_snapshot(SNAP, 'abc', REVIEWED)
+    I_d = load_snapshot(SNAP, 'abcd', REVIEWED)
+    assert SW.excluded_dates(I_c) == set()
+    assert SW.excluded_dates(I_d) == {'2023-11-12', '2024-03-02', '2024-05-18', '2024-11-01', '2025-10-21'}
+    t_c, r_c = B.adr(I_c)
+    t_d, r_d = B.adr(I_d)
+    assert r_c['daily'] == r_d['daily']                       # daily rows (and totals) untouched
+    fo = {d: r['rev_mn'] / 10 for d, r in r_d['daily']['fo'].items() if fy_month_of(d) == 'FY 2026 October'}
+    assert t_c[('M', 'FY 2026 October', 'F&O')] == pytest.approx(mean(fo.values()), rel=1e-12)
+    assert t_d[('M', 'FY 2026 October', 'F&O')] == pytest.approx(
+        mean(v for d, v in fo.items() if d != '2025-10-21'), rel=1e-12)
+    for k in ('FY 2027', 'Q2 FY 2027', 'FY 2027 October'):   # no special session in FY27 to date
+        p = 'FY' if k == 'FY 2027' else ('Q' if k.startswith('Q') else 'M')
+        assert t_c[(p, k, 'Consolidated')] == t_d[(p, k, 'Consolidated')]

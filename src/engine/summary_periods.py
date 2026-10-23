@@ -150,8 +150,12 @@ def _cmp(a, b, what):
 
 
 # ── segments from the engine's daily output ──
-def make_segments(daily, guarded=False, calendar=None):
-    """Same series and scaling as summary.build. guarded=True needs `calendar` ({iso: sb_calendar row})."""
+def make_segments(daily, guarded=False, calendar=None, exclude=()):
+    """Same series and scaling as summary.build. guarded=True needs `calendar` ({iso: sb_calendar row}).
+    exclude: dates left out of every statistic (switch d: special sessions)."""
+    exclude = set(exclude)
+    if exclude:
+        daily = {seg: {d: r for d, r in rows.items() if d not in exclude} for seg, rows in daily.items()}
     spec = {
         'F&O': ({d: r['rev_mn'] for d, r in daily['fo'].items()}, 10, None, False, 'is_equity_day'),
         'Cash': ({d: r['rev_mn'] for d, r in daily['cash'].items()}, 10, None, False, 'is_equity_day'),
@@ -162,7 +166,7 @@ def make_segments(daily, guarded=False, calendar=None):
     out = {}
     for name, (s, scale, w, pos, flag) in spec.items():
         if guarded:
-            days = [d for d, r in calendar.items() if r[flag]]
+            days = [d for d, r in calendar.items() if r[flag] and d not in exclude]
             out[name] = GuardedSeg(name, s, days, scale, w, pos)
         else:
             out[name] = Seg(s, scale, w, pos)
