@@ -20,10 +20,13 @@ from .periods import Calendar
 # F&O-market sheet until filing-extractor stages the disclosed value (which is 'reviewed' and wins).
 SEED_PREFERENCE = {"total_orders": "F&O market"}
 
+# Exchange series the ADR engine reads (E5 blocks on these) ...
 ADR_MARKET_KEYS = (
-    "nse_fo:contracts", "nse_fo:io_contracts", "nse_fo:so_contracts", "bse_fo:contracts",
-    "nse_cash:trades", "bse_cash:trades", "mcx:contracts", "mtf_industry:book_cr",
+    "nse_fo:contracts", "bse_fo:contracts", "nse_cash:trades", "bse_cash:trades", "mcx:contracts",
+    "mtf_industry:book_cr",
 )
+# ... and series E5 only audits (the engine uses total NSE F&O contracts, not the index / stock option split)
+AUDIT_ONLY_KEYS = ("nse_fo:io_contracts", "nse_fo:so_contracts")
 
 MONEY = {"Rs Mn": 1e6, "Rs Bn": 1e9, "Rs Cr": 1e7}
 FRACTION_UNITS = {"fraction"}
@@ -157,7 +160,7 @@ def _volume(row: Mapping) -> Volume:
     return Volume(d, f'{row["dataset"]}:{row["metric"]}', float(row["value"]), row["status"], row["source"])
 
 
-def select_volumes(rows: Iterable[Mapping], policy: str, keys: Iterable[str] = ADR_MARKET_KEYS
+def select_volumes(rows: Iterable[Mapping], policy: str, keys: Iterable[str] = ADR_MARKET_KEYS + AUDIT_ONLY_KEYS
                    ) -> dict[str, list[Volume]]:
     if policy not in ("excel_first", "best_ok"):
         raise ValueError(f"unknown volume policy {policy!r}")

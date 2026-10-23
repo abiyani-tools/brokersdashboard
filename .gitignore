@@ -5,3 +5,4 @@ __pycache__/
 data/raw/
 *.pdf
 parity_rows.json
+out/live/*/summary_rows.json

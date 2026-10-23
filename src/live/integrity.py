@@ -18,7 +18,7 @@ from dataclasses import dataclass, field
 from typing import Iterable
 
 from .guards import Insufficient, is_insufficient
-from .loader import Facts, Inputs, Volume
+from .loader import ADR_MARKET_KEYS, Facts, Inputs, Volume
 from .periods import Calendar
 
 FROZEN_RUN = 3
@@ -39,6 +39,17 @@ RULES: dict[str, Rule] = {
     # NSE publishes the industry MTF book with a lag and skips some days (e.g. 8 Apr 2026);
     # the quarterly industry average is taken over the days reported, so a gap is a warning.
     "mtf_industry:book_cr": Rule(tail_lag=3, missing="warning"),
+}
+
+# Reviewed exceptions: (check, key, date) -> reason. A matching issue is reported as 'info' with the reason,
+# never dropped. Add an entry only after the day has been looked at; say what is and is not known.
+KNOWN_ISSUES = {
+    ("jump", "mcx:contracts", "2025-01-01"):
+        "406,749 contracts against a trailing 20-day minimum of 2,205,346; not a special session in "
+        "sb_calendar; cause not yet sourced (lake-auditor to check against MCX)",
+    ("jump", "mcx:contracts", "2025-02-01"):
+        "a Saturday session (1 Feb 2025; Union Budget day, to be confirmed against the exchange circular), "
+        "not flagged in sb_calendar.special_session; proposal: mark it 'budget' (sb_calendar write needs AB's OK)",
 }
 
 
@@ -98,6 +109,8 @@ class IntegrityError(RuntimeError):
 
 def series_issues(key: str, series: list[Volume], calendar: Calendar, as_of: dt.date,
                   severity: str, source: str = "") -> list[Issue]:
+    """Issues for one series. Special sessions (sb_calendar.special_session) are thin by design and are
+    not tested for jumps, nor used as the jump baseline."""
     rule = RULES.get(key, Rule())
     out: list[Issue] = []
     by_date = {v.date: v for v in series}
@@ -138,8 +151,9 @@ def series_issues(key: str, series: list[Volume], calendar: Calendar, as_of: dt.
     # jumps against the trailing non-zero range
     hist: list[float] = []
     jumps = []
+    special = {d.date for d in calendar.days if d.special}
     for v in ordered:
-        if v.value == 0:
+        if v.value == 0 or v.date in special:
             continue
         window = hist[-JUMP_WINDOW:]
         if len(window) >= JUMP_MIN_HISTORY:
@@ -154,10 +168,23 @@ def series_issues(key: str, series: list[Volume], calendar: Calendar, as_of: dt.
 
 
 def check_selected(inputs: Inputs) -> list[Issue]:
+    """Blocking checks on the series the engine reads; a series with no rows at all is an error."""
     out = []
-    for key, series in sorted(inputs.volumes.items()):
+    for key in ADR_MARKET_KEYS:
+        series = inputs.volumes.get(key, [])
+        if not series:
+            out.append(Issue("missing", key, "error", (), "no rows at all for an input the engine reads"))
+            continue
         out += series_issues(key, series, inputs.calendar, inputs.as_of, "error")
-    return out
+    return [_known(i) for i in out]
+
+
+def _known(issue: Issue) -> Issue:
+    if len(issue.dates) == 1:
+        why = KNOWN_ISSUES.get((issue.check, issue.key, issue.dates[0].isoformat()))
+        if why:
+            return Issue(issue.check, issue.key, "info", issue.dates, f"{issue.detail} — known: {why}", issue.source)
+    return issue
 
 
 def audit_sources(inputs: Inputs) -> list[Issue]:

@@ -44,13 +44,13 @@ D1 summary laid out exactly like the Excel sheet, with FY / quarter / month drop
   - [x] (f) D3 quarterly commodity take rate (Q2 FY25 24.39 … Q1 FY27 22.94; Q2–Q3 FY27 carry Q1 FY27): commodity FY27 / Q2 FY27 / Oct-26 −1.61%, FY26 −1.64%; Consolidated FY27 −0.15%. Q1 FY25 has no disclosed mix → earliest rate, flagged [SOURCE NEEDED]. `out/bridges/f.md`, check `out/checks/switch_f.md` (33/33).
   - [x] (g) D4 MTF gross / net: MTF gross in every table (the workbook's weekday tables used net), plus an 'MTF (net)' panel at 45% × gross; Consolidated stays gross. FY/Q/M unchanged; weekday Consolidated +~2.6 Rs Cr/day. `out/bridges/g.md`, check `out/checks/switch_g.md` (29/29). Open: AB to confirm gross headline.
   - [x] (h) Q2 FY27 actuals in, projections rolled to Q3 FY27 (synthetic Q2 FY27 column from reviewed facts; last-actual pins → Q2 FY27; MTF Q2 book 7,453 Cr / daily industry avg): F&O FY27 +1.84%, cash +1.37%, commodity −0.92%, MTF +0.35%; Consolidated FY27 +1.18%, Q2 FY27 +1.40%, Oct-26 +1.02%. `out/bridges/h.md`, check `out/checks/switch_h.md` (101/101).
-  - [~] (i) F&O and commodity monthly inputs to Sep-26 (cash is covered by e, h): F&O FY27 −1.83%, commodity Oct-26 −7.22%; Consolidated FY27 −1.30%, Oct-26 −1.67%. `out/bridges/i.md`. **Independent check not yet run** (checker hit a usage limit) — run `recompute-checker` before relying on it.
+  - [x] (i) F&O and commodity monthly inputs to Sep-26 (cash is covered by e, h): F&O FY27 −1.83%, commodity Oct-26 −7.22%; Consolidated FY27 −1.30%, Oct-26 −1.67%. `out/bridges/i.md`, check `out/checks/switch_i.md` (69/69).
   - Exit for each: recompute-checker's independent numbers agree to 1e-6.
 - [ ] **3.2 Out-of-sample log.** For every new quarter, store the model estimate vs reported orders and revenue by segment (as in Build Plan §2c). Exit: a table `sb_backtest` or a JSON file plus a page on the dashboard.
 
 ### Phase 4 — daily automation
 - [~] **4.0 GitHub repo.** *Pushed to `abiyani-tools/brokersdashboard` on 23 Oct; AB still adds the secrets `SUPABASE_URL`, `SUPABASE_SERVICE_KEY`.* AB creates a private repo under `abiyani-tools`. Then attach it (add_repo, access "push"), push, and AB adds the secrets. *Owner: AB, then ops-runner.*
-- [ ] **4.1 `daily.yml`:** after the market closes (the ExchangesDash schedule plus a buffer): pull from the lake → E5 → engine (live) → write `sb_runs` / `sb_daily_revenue` / `sb_summary_cells` / `sb_calibration`. Keep a parity job on every push. Exit: 10 trading days unattended with no silent gaps.
+- [~] **4.1 `daily.yml`:** *Dry-run runner done: `python3 run_live.py` → E5 (pass on the full history; two reviewed exceptions) → engine with switches a–i → E1 coverage → 1,827 Summary rows, report in `out/live/<as_of>/report.md`. Not yet: DB reader input, publishing (needs AB's OK), the workflow schedule.* after the market closes (the ExchangesDash schedule plus a buffer): pull from the lake → E5 → engine (live) → write `sb_runs` / `sb_daily_revenue` / `sb_summary_cells` / `sb_calibration`. Keep a parity job on every push. Exit: 10 trading days unattended with no silent gaps.
 - [ ] **4.2 Filing watcher:** query the NSE corporate-announcements API for ANGELONE, filtering by `desc` (Monthly Business Updates, Press Release, Investor Presentation, Outcome of Board Meeting), not by file name. Then download, sha256, parse, stage the facts and notify AB to review. Note that NSE may block CI IPs: fall back to running on AB's Mac (the curl approach works there) or to `w3assets.angelone.in`. Exit: the 6 Nov 2026 business update (expected date — verify) is staged automatically.
 
 ### Phase 5 — dashboard
@@ -88,7 +88,7 @@ Route by the kind of work, not by its importance. **No financial extraction or u
 
 ## 5. Next session — start here
 1. Branch `claude/jolly-knuth-ws84jt` is ahead of `main` (fast-forward). `python3 -m pytest tests/ -q` → 78 passed, 1 skipped.
-2. Run the independent check for switch (i) (`recompute-checker`; brief = the commit message of 708305c + `out/bridges/i.md`), write `out/checks/switch_i.md`.
+2. `python3 run_live.py` (dry run) must exit 0; report in `out/live/<as_of>/report.md`.
 3. AB decisions still open: (d) should MTF keep Muhurat / DR-test days? (proposed: yes) · (g) gross MTF headline with a separate net panel? (proposed: yes) · Q1 FY25 revenue mix for (f) [SOURCE NEEDED] · 2.4 back-sourcing.
 4. Cumulative parity → live bridge: `out/bridges/summary.md` (Consolidated FY27 17.10 → 17.51, Q2 FY27 16.56 → 16.50, Oct-26 15.55 → 20.22).
 5. Then: live run → publish to `sb_runs` / `sb_daily_revenue` / `sb_summary_cells` (E3 rows via `publish.period_summary_rows`) — needs AB's OK; phase 4 daily job.

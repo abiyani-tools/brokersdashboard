@@ -27,6 +27,8 @@ src/engine/daily.py      daily revenue per segment
 src/engine/summary.py    the Summary grid (cell for cell, incl. the workbook's quirks)
 src/engine/summary_periods.py  E3: the Summary for every FY / quarter / month (live, guarded)
 src/live/                live-mode inputs: periods (E1), loader (E2), guards (E4), integrity (E5), db readers (E6)
+src/live/run.py          live dry run: E5 → engine (switches a–i) → E1 coverage → E3 rows (`python3 run_live.py`)
+src/engine/switches.py   the parity → live switches a–i; src/engine/bridge.py the ADR bridge per switch
 migrations/              SQL migrations for the sb_* tables
 src/engine/parity.py     compare with sb_parity_expected; documented out-of-scope list
 src/engine/publish.py    rows for sb_runs / sb_calibration / sb_daily_revenue / sb_summary_cells
