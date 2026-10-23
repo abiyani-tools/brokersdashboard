@@ -44,7 +44,7 @@ D1 summary laid out exactly like the Excel sheet, with FY / quarter / month drop
   - [x] (f) D3 quarterly commodity take rate (Q2 FY25 24.39 … Q1 FY27 22.94; Q2–Q3 FY27 carry Q1 FY27): commodity FY27 / Q2 FY27 / Oct-26 −1.61%, FY26 −1.64%; Consolidated FY27 −0.15%. Q1 FY25 has no disclosed mix → earliest rate, flagged [SOURCE NEEDED]. `out/bridges/f.md`, check `out/checks/switch_f.md` (33/33).
   - [x] (g) D4 MTF gross / net: MTF gross in every table (the workbook's weekday tables used net), plus an 'MTF (net)' panel at 45% × gross; Consolidated stays gross. FY/Q/M unchanged; weekday Consolidated +~2.6 Rs Cr/day. `out/bridges/g.md`, check `out/checks/switch_g.md` (29/29). Open: AB to confirm gross headline.
   - [x] (h) Q2 FY27 actuals in, projections rolled to Q3 FY27 (synthetic Q2 FY27 column from reviewed facts; last-actual pins → Q2 FY27; MTF Q2 book 7,453 Cr / daily industry avg): F&O FY27 +1.84%, cash +1.37%, commodity −0.92%, MTF +0.35%; Consolidated FY27 +1.18%, Q2 FY27 +1.40%, Oct-26 +1.02%. `out/bridges/h.md`, check `out/checks/switch_h.md` (101/101).
-  - (i) F&O / cash inputs cut off at the latest disclosed month
+  - [~] (i) F&O and commodity monthly inputs to Sep-26 (cash is covered by e, h): F&O FY27 −1.83%, commodity Oct-26 −7.22%; Consolidated FY27 −1.30%, Oct-26 −1.67%. `out/bridges/i.md`. **Independent check not yet run** (checker hit a usage limit) — run `recompute-checker` before relying on it.
   - Exit for each: recompute-checker's independent numbers agree to 1e-6.
 - [ ] **3.2 Out-of-sample log.** For every new quarter, store the model estimate vs reported orders and revenue by segment (as in Build Plan §2c). Exit: a table `sb_backtest` or a JSON file plus a page on the dashboard.
 
@@ -87,7 +87,8 @@ Route by the kind of work, not by its importance. **No financial extraction or u
 **Hand-off contract for every subagent:** the input is a task, file paths and an exit test. The output is a file in `out/` plus a reply of ≤ 30 lines: what was done, numbers with sources, failures, and open `[SOURCE NEEDED]` items.
 
 ## 5. Next session — start here
-1. `git log --oneline` on `main`; `python3 -m pytest tests/ -q` should pass (61 passed, 1 skipped).
-2. `sb_summary_cells` has `period_type` / `period_key` / `note` (migration applied 23 Oct); a live run publishes with `publish.period_summary_rows()`.
-3. Refresh `snapshot/` with the reviewed facts and the lake volumes (the current snapshot predates the review), then start
-   switch (a) — one switch per commit, each with a bridge checked by `recompute-checker`.
+1. Branch `claude/jolly-knuth-ws84jt` is ahead of `main` (fast-forward). `python3 -m pytest tests/ -q` → 78 passed, 1 skipped.
+2. Run the independent check for switch (i) (`recompute-checker`; brief = the commit message of 708305c + `out/bridges/i.md`), write `out/checks/switch_i.md`.
+3. AB decisions still open: (d) should MTF keep Muhurat / DR-test days? (proposed: yes) · (g) gross MTF headline with a separate net panel? (proposed: yes) · Q1 FY25 revenue mix for (f) [SOURCE NEEDED] · 2.4 back-sourcing.
+4. Cumulative parity → live bridge: `out/bridges/summary.md` (Consolidated FY27 17.10 → 17.51, Q2 FY27 16.56 → 16.50, Oct-26 15.55 → 20.22).
+5. Then: live run → publish to `sb_runs` / `sb_daily_revenue` / `sb_summary_cells` (E3 rows via `publish.period_summary_rows`) — needs AB's OK; phase 4 daily job.
