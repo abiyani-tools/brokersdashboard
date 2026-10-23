@@ -43,3 +43,32 @@ def build_snapshot(reader, broker=BROKER, as_of=None):
     }
     reviewed = [f for f in facts if f['status'] == 'reviewed']
     return snap, reviewed
+
+
+def complete_through(snap, keys=None):
+    """(date, limiting series): the last calendar day on which every engine input has an 'ok' value, in the
+    workbook's copy or in the lake (switch c takes the lake's value on imputed days).
+
+    The industry MTF book is published with a lag and is left out (coverage allows its last 3 trading days).
+    """
+    keys = keys or [k for k in ADR_MARKET_KEYS if k != 'mtf_industry:book_cr']
+    last = {}
+    for r in list(snap['market_daily']) + list(snap.get('market_daily_lake', [])):
+        k = f"{r['dataset']}:{r['metric']}"
+        if k in keys and r.get('status', 'ok') == 'ok':
+            last[k] = max(last.get(k, ''), r['trade_date'])
+    missing = [k for k in keys if k not in last]
+    if missing:
+        raise ValueError(f'no rows for {missing}')
+    key = min(last, key=last.get)
+    cal_last = max(r['trade_date'] for r in snap['calendar'])
+    return min(last[key], cal_last), key
+
+
+def trim(snap, as_of):
+    """Copy of the snapshot without calendar days or volumes after as_of."""
+    out = dict(snap)
+    out['calendar'] = [r for r in snap['calendar'] if r['trade_date'] <= as_of]
+    out['market_daily'] = [r for r in snap['market_daily'] if r['trade_date'] <= as_of]
+    out['market_daily_lake'] = [r for r in snap['market_daily_lake'] if r['trade_date'] <= as_of]
+    return out

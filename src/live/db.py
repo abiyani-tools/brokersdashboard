@@ -74,3 +74,42 @@ class SupabaseReader:
 def reader_from_env(snapshot: str | Path | None = None):
     """Snapshot if a path is given (tests, local runs), else the DB (CI / daily job)."""
     return SnapshotReader(snapshot) if snapshot else SupabaseReader()
+
+
+class SupabaseWriter:
+    """PostgREST inserts / updates with the service key from the environment (same rules as the reader)."""
+
+    def __init__(self, url: str | None = None, session=None, chunk: int = 500):
+        key = os.environ.get(KEY_ENV)
+        if not key:
+            raise MissingCredentials(f"{KEY_ENV} is not set; publishing needs the service key")
+        self.url = (url or os.environ.get(URL_ENV) or DEFAULT_URL).rstrip("/")
+        self.chunk = chunk
+        if session is None:
+            import requests
+            session = requests.Session()
+        self._session = session
+        self._headers: Callable[[], dict] = lambda: {
+            "apikey": key, "Authorization": f"Bearer {key}", "Content-Type": "application/json",
+            "Prefer": "return=minimal"}
+
+    def __repr__(self) -> str:
+        return f"SupabaseWriter(url={self.url!r})"
+
+    def _check(self, resp, what):
+        if resp.status_code not in (200, 201, 204):
+            raise RuntimeError(f"{what} failed: HTTP {resp.status_code} {resp.text[:300]}")
+
+    def insert(self, table: str, rows: list[dict]) -> int:
+        for i in range(0, len(rows), self.chunk):
+            part = rows[i:i + self.chunk]
+            resp = self._session.post(f"{self.url}/rest/v1/{table}", data=json.dumps(part), headers=self._headers(),
+                                      timeout=120)
+            self._check(resp, f"insert into {table} (rows {i}..{i + len(part) - 1})")
+        return len(rows)
+
+    def update(self, table: str, values: dict, **eq) -> None:
+        params = {k: f"eq.{v}" for k, v in eq.items()}
+        resp = self._session.patch(f"{self.url}/rest/v1/{table}", params=params, data=json.dumps(values),
+                                   headers=self._headers(), timeout=60)
+        self._check(resp, f"update {table}")

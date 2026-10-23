@@ -1,10 +1,11 @@
 name: daily
-# Switched on once live mode passes its checks (Build Plan v2, phase 4).
-# Needs repository secrets: SUPABASE_URL, SUPABASE_SERVICE_KEY (never commit keys).
+# Daily live run (PLAN 4.1), switched on 23 Oct 2026 with AB's OK.
+# Needs repository secrets: SUPABASE_URL, SUPABASE_SERVICE_KEY (never commit keys); the first step stops the job
+# if either is missing. A run whose E5 checks block is not published (the job fails and keeps the report).
 on:
   workflow_dispatch:
-  # schedule:
-  #   - cron: '0 14 * * 1-5'   # 19:30 IST, after exchange files post
+  schedule:
+    - cron: '17 14 * * 1-5'    # 19:47 IST, Mon-Fri, after the exchange files post
 jobs:
   run:
     runs-on: ubuntu-latest
@@ -20,8 +21,8 @@ jobs:
         run: test -n "$SUPABASE_URL" && test -n "$SUPABASE_SERVICE_KEY"
       - name: Parity gate
         run: python -m pytest tests/ -q
-      - name: Live dry run from the DB (E5 -> engine a-i -> E1 coverage -> Summary rows; no DB writes)
-        run: python run_live.py --db
+      - name: Live run from the DB and publish (E5 -> engine a-i -> E1 coverage -> Summary rows -> sb_*)
+        run: python run_live.py --db --publish
       - name: Keep the run's report and inputs
         if: always()
         uses: actions/upload-artifact@v4
@@ -29,5 +30,3 @@ jobs:
           name: live-run
           path: out/live/
           retention-days: 30
-      # Next (phase 4, needs AB's OK): publish to sb_runs / sb_daily_revenue / sb_summary_cells / sb_calibration,
-      # then switch on the schedule above.

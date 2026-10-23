@@ -33,8 +33,17 @@ def calibration_rows(run_id, calib):
         add('comm', 'M', m, 'share', r['share'], 'actual' if r['share_rule'].startswith('actual') else 'projected', r['share_rule'])
         add('comm', 'M', m, 'mcx_contracts', r.get('mcx_contracts'), 'actual', 'sum of MCX contracts')
         add('comm', 'M', m, 'comm_orders_mn', r.get('comm_orders'), 'actual', 'total orders x commodity %')
-    tr, q = calib['comm_take_rate']
-    add('comm', 'Q', q, 'take_rate_used', tr, 'actual', 'fixed quarter (Commodities!AI11), applied to all dates')
+    if 'comm_take_rate_q' in calib:                                    # live switch f: each quarter's own rate
+        from .inputs import quarter_of_month
+        from .switches import comm_rate_for
+        qs = sorted({quarter_of_month(m) for m in calib['comm_month']}, key=lambda x: (int(x[-4:]), int(x[1])))
+        for q in qs:
+            v, regime, src = comm_rate_for(calib['comm_take_rate_q'], q)
+            add('comm', 'Q', q, 'take_rate_used', v, regime,
+                'own quarter (switch f)' if src == q else f'carried from {src} (switch f)', src)
+    else:
+        tr, q = calib['comm_take_rate']
+        add('comm', 'Q', q, 'take_rate_used', tr, 'actual', 'fixed quarter (Commodities!AI11), applied to all dates')
     for q, r in calib['mtf_quarter'].items():
         add('mtf', 'Q', q, 'share', r.get('share'), r['regime'], r['rule'])
         add('mtf', 'Q', q, 'industry_avg_cr', r.get('industry_avg_cr'), r['regime'])

@@ -103,7 +103,7 @@ def live_run_snapshot(snap, reviewed, switches=ALL_SWITCHES, as_of=None):
                          mtf_split='g' in I.switches, exclude_segments=SW.D_SEGMENTS)
     rows = period_rows(segs)
     return dict(as_of=as_of, switches=''.join(sorted(I.switches)), report=report, daily=res['daily'],
-                rows=rows, overrides=I.overrides)
+                calib=res['calib'], rows=rows, overrides=I.overrides)
 
 
 def headline(rows, keys=(('FY', 'FY 2027'), ('Q', 'Q2 FY 2027'), ('M', 'FY 2027 October'))):
