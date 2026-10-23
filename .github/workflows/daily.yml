@@ -1,0 +1,23 @@
+name: daily
+# Switched on once live mode passes its checks (Build Plan v2, phase 4).
+# Needs repository secrets: SUPABASE_URL, SUPABASE_SERVICE_KEY (never commit keys).
+on:
+  workflow_dispatch:
+  # schedule:
+  #   - cron: '0 14 * * 1-5'   # 19:30 IST, after exchange files post
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    env:
+      SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+      SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - run: pip install -r requirements.txt
+      - name: Check secrets are present
+        run: test -n "$SUPABASE_URL" && test -n "$SUPABASE_SERVICE_KEY"
+      - name: Parity gate
+        run: python -m pytest tests/ -q
+      # Next (phase 3-4): integrity checks -> live engine -> write sb_* outputs

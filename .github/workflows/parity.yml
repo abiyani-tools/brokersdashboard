@@ -1,0 +1,14 @@
+name: parity
+on:
+  push:
+  pull_request:
+jobs:
+  parity:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - run: pip install -r requirements.txt
+      - name: Engine reproduces the workbook (8,774 / 8,797 exact; 23 documented out of scope)
+        run: python -m pytest tests/ -q
