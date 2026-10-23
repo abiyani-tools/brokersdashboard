@@ -50,7 +50,7 @@ D1 summary laid out exactly like the Excel sheet, with FY / quarter / month drop
 
 ### Phase 4 — daily automation
 - [~] **4.0 GitHub repo.** *Pushed to `abiyani-tools/brokersdashboard` on 23 Oct; AB still adds the secrets `SUPABASE_URL`, `SUPABASE_SERVICE_KEY`.* AB creates a private repo under `abiyani-tools`. Then attach it (add_repo, access "push"), push, and AB adds the secrets. *Owner: AB, then ops-runner.*
-- [~] **4.1 `daily.yml`:** *Dry-run runner done: `python3 run_live.py` → E5 (pass on the full history; two reviewed exceptions) → engine with switches a–i → E1 coverage → 1,827 Summary rows, report in `out/live/<as_of>/report.md`. Not yet: DB reader input, publishing (needs AB's OK), the workflow schedule.* after the market closes (the ExchangesDash schedule plus a buffer): pull from the lake → E5 → engine (live) → write `sb_runs` / `sb_daily_revenue` / `sb_summary_cells` / `sb_calibration`. Keep a parity job on every push. Exit: 10 trading days unattended with no silent gaps.
+- [~] **4.1 `daily.yml`:** *Dry-run runner done: `python3 run_live.py` → E5 (pass on the full history; two reviewed exceptions) → engine with switches a–i → E1 coverage → 1,827 Summary rows, report in `out/live/<as_of>/report.md`. `run_live.py --db` reads the DB through the service key; `daily.yml` (manual trigger) runs it and uploads `out/live/` as an artifact. Live mode extends the calibration past the workbook's Oct-26 grid. Not yet: publishing (needs AB's OK) and the schedule. Known stop: NSE cash trades end 21 Oct in the lake, so a DB run past that date stops at the coverage check (cash) until the ExchangesDash owner adds them.* after the market closes (the ExchangesDash schedule plus a buffer): pull from the lake → E5 → engine (live) → write `sb_runs` / `sb_daily_revenue` / `sb_summary_cells` / `sb_calibration`. Keep a parity job on every push. Exit: 10 trading days unattended with no silent gaps.
 - [ ] **4.2 Filing watcher:** query the NSE corporate-announcements API for ANGELONE, filtering by `desc` (Monthly Business Updates, Press Release, Investor Presentation, Outcome of Board Meeting), not by file name. Then download, sha256, parse, stage the facts and notify AB to review. Note that NSE may block CI IPs: fall back to running on AB's Mac (the curl approach works there) or to `w3assets.angelone.in`. Exit: the 6 Nov 2026 business update (expected date — verify) is staged automatically.
 
 ### Phase 5 — dashboard
@@ -88,7 +88,7 @@ Route by the kind of work, not by its importance. **No financial extraction or u
 
 ## 5. Next session — start here
 1. Branch `claude/jolly-knuth-ws84jt` is ahead of `main` (fast-forward). `python3 -m pytest tests/ -q` → 78 passed, 1 skipped.
-2. `python3 run_live.py` (dry run) must exit 0; report in `out/live/<as_of>/report.md`.
+2. `python3 run_live.py` (dry run) must exit 0; report in `out/live/<as_of>/report.md`. After merging to `main`, run `daily` from the Actions tab (manual) to try the DB path with the secrets.
 3. AB decisions still open: (d) should MTF keep Muhurat / DR-test days? (proposed: yes) · (g) gross MTF headline with a separate net panel? (proposed: yes) · Q1 FY25 revenue mix for (f) [SOURCE NEEDED] · 2.4 back-sourcing.
 4. Cumulative parity → live bridge: `out/bridges/summary.md` (Consolidated FY27 17.10 → 17.51, Q2 FY27 16.56 → 16.50, Oct-26 15.55 → 20.22).
 5. Then: live run → publish to `sb_runs` / `sb_daily_revenue` / `sb_summary_cells` (E3 rows via `publish.period_summary_rows`) — needs AB's OK; phase 4 daily job.
