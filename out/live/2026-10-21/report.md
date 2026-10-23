@@ -10,9 +10,9 @@ Nothing was written to the database.
 |---|---|---:|---:|---:|
 | FY 2027 | Broking | 13.2863 | — | +6.6% |
 | FY 2027 | Cash | 1.9849 | — | +15.8% |
-| FY 2027 | Commodities | 1.5178 | — | +26.5% |
-| FY 2027 | Consolidated | 17.5103 | — | +12.4% |
-| FY 2027 | F&O | 9.7836 | — | +2.5% |
+| FY 2027 | Commodities | 1.5178 | — | +26.1% |
+| FY 2027 | Consolidated | 17.5103 | — | +12.3% |
+| FY 2027 | F&O | 9.7836 | — | +2.4% |
 | FY 2027 | MTF | 4.2240 | — | +35.5% |
 | FY 2027 | MTF (net) | 1.9008 | — | +35.5% |
 | FY 2027 October | Broking | 15.4738 | +25.2% | +14.8% |

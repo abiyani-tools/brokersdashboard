@@ -89,6 +89,6 @@ Route by the kind of work, not by its importance. **No financial extraction or u
 ## 5. Next session — start here
 1. Branch `claude/jolly-knuth-ws84jt` is ahead of `main` (fast-forward). `python3 -m pytest tests/ -q` → 78 passed, 1 skipped.
 2. `python3 run_live.py` (dry run) must exit 0; report in `out/live/<as_of>/report.md`. After merging to `main`, run `daily` from the Actions tab (manual) to try the DB path with the secrets.
-3. Open for AB: flag 2024-01-20 (Sat) and 2026-02-01 (Sun, Budget day) as special sessions? · Q1 FY25 revenue mix [SOURCE NEEDED] (deck not reachable from the cloud session) · 2.4 back-sourcing · publishing a live run and the daily schedule.
+3. Open: Q1 FY25 revenue mix [SOURCE NEEDED] (NSE / BSE / Angel One still refused by this cloud environment's network policy — AB consented; the environment's Network access setting has to allow them, or run it on AB's Mac) · 2.4 back-sourcing · publishing a live run and the daily schedule.
 4. Cumulative parity → live bridge: `out/bridges/summary.md` (Consolidated FY27 17.10 → 17.51, Q2 FY27 16.56 → 16.50, Oct-26 15.55 → 20.22).
 5. Then: live run → publish to `sb_runs` / `sb_daily_revenue` / `sb_summary_cells` (E3 rows via `publish.period_summary_rows`) — needs AB's OK; phase 4 daily job.

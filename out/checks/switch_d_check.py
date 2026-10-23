@@ -1,4 +1,4 @@
-# Independent check of switch (d), revised rule 23 Oct 2026: drop special sessions from TRADING segments only (fo,cash,comm); MTF keeps all dates. Stdlib only; reads snapshot JSON only.
+# Independent check of switch (d), revised rule 23 Oct 2026, calendar incl. 2024-01-20 and 2026-02-01: drop special sessions from TRADING segments only (fo,cash,comm); MTF keeps all dates. Stdlib only; reads snapshot JSON only.
 import json,re
 R='/home/user/brokersdashboard/snapshot/'
 d=json.load(open(R+'db_snapshot_2026-10-23.json'))
@@ -67,7 +67,7 @@ claims={
  ('FY 2027','fy'):({'cons':None},None),
 }
 CL={ # (period,field): {seg:(before,after)}
- ('FY 2026','fy'):{'cons':(15.555597,15.598985),'fo':(9.513241,9.547485),'cash':(1.709086,1.713904),'comm':(1.216053,1.220379),'mtf':(3.117217,3.117217)},
+ ('FY 2026','fy'):{'cons':(15.555597,15.606158),'fo':(9.513241,9.551611),'cash':(1.709086,1.713360),'comm':(1.216053,1.223970),'mtf':(3.117217,3.117217)},
  ('Q3 FY 2026','q_fy'):{'cons':(15.945517,16.121545),'fo':(9.559822,9.698682),'cash':(1.661333,1.679983),'comm':(1.275227,1.293745),'mtf':(3.449134,3.449134)},
  ('FY 2026 October','fy_month'):{'cons':(16.293960,16.851172),'fo':(9.933101,10.375291),'cash':(1.684168,1.742192),'comm':(1.305592,1.362591),'mtf':(3.371099,3.371099)},
 }
@@ -91,3 +91,5 @@ print('2025-02-01 fy/q/month:',cal['2025-02-01']['fy'],cal['2025-02-01']['q_fy']
 n+=1; ok=cal['2025-02-01']['fy']=='FY 2025' and all(cal[dt]['fy']!='FY 2026' for dt in ['2025-02-01']); ag+=ok
 print('2025-02-01 outside FY 2026/27 periods:',ok)
 print('n',n,'agree',ag)
+for dt in ('2024-01-20','2026-02-01'):
+    print(dt,cal[dt]['fy'],cal[dt]['q_fy'],cal[dt]['fy_month'],cal[dt]['special_session'],'| segs in daily series:',[ss for (ss,x) in D if x==dt])

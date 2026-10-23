@@ -136,7 +136,8 @@ def test_switch_d_drops_special_sessions_from_averages_only():
     I_c = load_snapshot(SNAP, 'abc', REVIEWED)
     I_d = load_snapshot(SNAP, 'abcd', REVIEWED)
     assert SW.excluded_dates(I_c) == set()
-    assert SW.excluded_dates(I_d) == {'2023-11-12', '2024-03-02', '2024-05-18', '2024-11-01', '2025-02-01', '2025-10-21'}
+    assert SW.excluded_dates(I_d) == {'2023-11-12', '2024-01-20', '2024-03-02', '2024-05-18', '2024-11-01', '2025-02-01',
+                                      '2025-10-21', '2026-02-01'}
     t_c, r_c, _ = B.adr(I_c)
     t_d, r_d, _ = B.adr(I_d)
     assert r_c['daily'] == r_d['daily']                       # daily rows (and totals) untouched
