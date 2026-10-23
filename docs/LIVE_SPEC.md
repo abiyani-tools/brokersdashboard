@@ -95,8 +95,7 @@ A selected value that is not `ok` is never replaced by 0; E5 blocks on it.
   all from reviewed facts. **Done.**
 - Still open: running the parity gate once the engine imports `live/`. The gate must stay unchanged.
 
-**E3 — Summary for every FY / quarter / month (D1).** *Code done (`src/engine/summary_periods.py`); the migration waits for
-AB's OK.*
+**E3 — Summary for every FY / quarter / month (D1).** *Done: `src/engine/summary_periods.py`; migration applied 23 Oct 2026.*
 - **One label rule** builds every comparison from the selection:
   - FY → previous FY (YoY).
   - Quarter → previous quarter (QoQ) and the same quarter last FY (YoY).
@@ -118,13 +117,13 @@ AB's OK.*
 - **Exit test (`tests/test_summary_periods.py`), passing:** the general rule at the parity selections reproduces the
   workbook's 264 Summary cells exactly (rel 1e-9). The live comparisons match an independent recompute from the daily
   series.
-- **Migration** `migrations/20261023_sb_summary_cells_period.sql`, **not applied**:
+- **Migration** `migrations/20261023_sb_summary_cells_period.sql`, **applied 23 Oct 2026** with AB's OK:
   - It adds `period_type`, `period_key` and `note`.
   - It fills them for the 210 stored parity rows.
   - It widens the primary key to (run_id, panel, period_type, period_key, table_name, row_label). The old key would collide
     on labels like "Avg of last 6 months".
 
-  A dry run inside a rolled-back transaction succeeded on 23 Oct.
+  Verified after applying: 210 rows (FY 12, Q 24, M 24, asof 150), no NULL periods, values unchanged (sum 1,485.349792).
 
 **E4 — short-history guards.**
 - Last-45-day, last-3 and last-10 averages, weekday tables and every ratio return "insufficient data" with a reason when

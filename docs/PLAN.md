@@ -8,7 +8,7 @@ Each to-do ends with an **exit test**. A to-do is done only when its test passes
 |---|---|
 | Supabase `brokers-dashboard` (`everjfpbnlbcpuarnhob`, Mumbai), `sb_*` schema | live |
 | Parity engine (`src/engine`) | 8,774 / 8,797 exact, 0 unexplained, 264 / 264 Summary cells |
-| Live input layer (`src/live`) + E3 (`src/engine/summary_periods.py`) | E1–E6 coded and tested (61 passed on 3.9 and 3.13); E3 migration not applied |
+| Live input layer (`src/live`) + E3 (`src/engine/summary_periods.py`) | E1–E6 coded and tested (61 passed on 3.9 and 3.13); E3 migration applied |
 | Parity run stored | run `42e5519f-0e19-4834-9a4c-2ce8ccec574a` |
 | Catch-up facts (Jun–Sep 26, Q1/Q2 FY27, Q3 FY26 fix, Q2 FY27 deck mix) | 178 **reviewed** (fact_ids 478–655, all approved 23 Oct; 477 seeds staged) |
 | Review page | "Angel One Figure Review" artifact; decisions in its `reviews` collection |
@@ -31,7 +31,7 @@ D1 summary laid out exactly like the Excel sheet, with FY / quarter / month drop
 - [x] **3.0 Spec first.** *Signed off 23 Oct; all seven §7 proposals accepted.* The main session writes `docs/LIVE_SPEC.md`: each switch from parity to live, its rule, its inputs, and the expected direction of the ADR change. *Owner: main (Opus).* Exit: AB signs off.
 - [x] **E1 Derive period ranges from `sb_calendar`.** A day with no calibration raises or is flagged, never dropped. Exit: a test where November exists in the calendar fails loudly without inputs.
 - [x] **E2 Live loader** by `metric × period` from reviewed facts, with seeds as fallback; cell lookups kept for parity only. Exit: the loader returns Q2 FY27 inputs; the parity test is unchanged.
-- [~] **E3 Summary for every FY / quarter / month** (D1). *Code + exit test done; `migrations/20261023_sb_summary_cells_period.sql` waits for AB's OK.* Store the rows in `sb_summary_cells` with `period_key`. Comparisons follow the selected period. Exit: the parity labels reproduce today's 264 cells.
+- [x] **E3 Summary for every FY / quarter / month** (D1). *Code + exit test done; migration `20261023_sb_summary_cells_period` applied 23 Oct.* Store the rows in `sb_summary_cells` with `period_key`. Comparisons follow the selected period. Exit: the parity labels reproduce today's 264 cells.
 - [x] **E4 Guards for short history** (last-45, weekday, division by zero) → "insufficient data". Exit: unit tests.
 - [x] **E5 Integrity checks** before every run: missing days, frozen series, jumps of 5× / 0.2×, unit sanity. A failure blocks publishing. Exit: the known lake gaps (BSE cash 15 Jun 2026; NSE IO/SO 12–15 Oct; MCX 27–28 May) are caught.
 - [~] **E6 DB reader** *(coded; the CI-vs-snapshot test runs once the secrets exist)* using `SUPABASE_SERVICE_KEY` from the environment (never hard-coded). Exit: a run from CI equals a run from the snapshot.
@@ -88,6 +88,6 @@ Route by the kind of work, not by its importance. **No financial extraction or u
 
 ## 5. Next session — start here
 1. `git log --oneline` on `main`; `python3 -m pytest tests/ -q` should pass (61 passed, 1 skipped).
-2. If AB approved the E3 migration → apply `migrations/20261023_sb_summary_cells_period.sql`, then publish a live E3 run.
+2. `sb_summary_cells` has `period_type` / `period_key` / `note` (migration applied 23 Oct); a live run publishes with `publish.period_summary_rows()`.
 3. Refresh `snapshot/` with the reviewed facts and the lake volumes (the current snapshot predates the review), then start
    switch (a) — one switch per commit, each with a bridge checked by `recompute-checker`.

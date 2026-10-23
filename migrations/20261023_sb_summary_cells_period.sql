@@ -1,5 +1,6 @@
 -- E3 (LIVE_SPEC §3): sb_summary_cells holds the Summary for every FY / quarter / month.
--- NOT APPLIED. Needs AB's OK (CLAUDE.md rule 7). Apply with Supabase apply_migration on everjfpbnlbcpuarnhob.
+-- APPLIED 23 Oct 2026 on everjfpbnlbcpuarnhob (apply_migration 'sb_summary_cells_period'), with AB's OK.
+-- Verified: 210 rows (FY 12, Q 24, M 24, asof 150), no NULL periods, values unchanged (sum 1485.349792).
 --
 -- What it does, step by step:
 --   1. Adds period_type ('FY' | 'Q' | 'M' | 'asof'), period_key (the selected period, or the as-of date for the
