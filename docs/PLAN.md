@@ -36,7 +36,7 @@ D1 summary laid out exactly like the Excel sheet, with FY / quarter / month drop
 - [x] **E5 Integrity checks** before every run: missing days, frozen series, jumps of 5× / 0.2×, unit sanity. A failure blocks publishing. Exit: the known lake gaps (BSE cash 15 Jun 2026; NSE IO/SO 12–15 Oct; MCX 27–28 May) are caught.
 - [~] **E6 DB reader** *(coded; the CI-vs-snapshot test runs once the secrets exist)* using `SUPABASE_SERVICE_KEY` from the environment (never hard-coded). Exit: a run from CI equals a run from the snapshot.
 - [ ] **3.1 Switches, one commit each, each with an ADR bridge** (FY27, Q2 FY27, Oct-26, per segment):
-  - (a) J8 = 35 (commodity +2.86%)
+  - [x] (a) J8 = 35: commodity +2.857% on every day; F&O +0.087% from Apr-26 (J8 is in the Q3 FY26 F&O share of orders); Consolidated FY27 +0.30%. Bridge `out/bridges/a.md`, check `out/checks/switch_a.md` (22/22 agree).
   - (b) one-decimal revenue mix
   - (c) BSE contracts unfrozen (Oct F&O roughly 6.74 → 11.67, parity rules)
   - (d) special sessions excluded
