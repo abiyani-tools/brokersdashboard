@@ -21,7 +21,16 @@ CELL_SWITCHES = {
           for row, metric in ((15, 'revmix_fo'), (16, 'revmix_cash'), (17, 'revmix_comm'))},
 }
 
-IMPLEMENTED = set(CELL_SWITCHES)
+# switch -> exchange series whose imputed (carried-forward) days take the lake's value instead.
+MARKET_SWITCHES = {
+    # (c) BSE F&O contracts: the workbook carries 18,962,859 forward from 29 Sep to 21 Oct 2026 in the
+    #     daily column (backtesting F&O!V); the lake (exchangesdash_json) has the real daily totals.
+    #     The monthly contracts per order already uses the real totals in parity, so only the daily
+    #     market volume (V) changes.
+    'c': {('bse_fo', 'contracts')},
+}
+
+IMPLEMENTED = set(CELL_SWITCHES) | set(MARKET_SWITCHES)
 
 
 class SwitchError(ValueError):
@@ -60,4 +69,18 @@ def cell_overrides(switches, facts, seed_units):
             if seed_units.get(cell) != f.unit:
                 raise SwitchError(f'switch {sw}: unit of {cell} is {seed_units.get(cell)!r}, fact {f.fact_id} is {f.unit!r}')
             out[cell] = (f.value, f.fact_id, sw)
+    return out
+
+
+def market_overrides(switches, mkt, lake):
+    """{(dataset, metric): {date: (value, 'ok')}} replacing imputed days with the lake's value.
+
+    mkt: {(dataset, metric): {date: (value, status)}}; lake: {(dataset, metric): {date: value}}.
+    An imputed day with no lake value is left as it is (status 'imputed'), for E5 to block on.
+    """
+    out = {}
+    for sw in sorted(switches):
+        for key in MARKET_SWITCHES.get(sw, ()):
+            out[key] = {d: (lake[key][d], 'ok') for d, (v, st) in mkt[key].items()
+                        if st == 'imputed' and d in lake.get(key, {})}
     return out

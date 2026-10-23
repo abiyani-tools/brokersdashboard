@@ -72,7 +72,7 @@ def test_unknown_and_unimplemented_switches_are_refused():
     with pytest.raises(SW.SwitchError, match='unknown'):
         Inputs(snap, 'z', [])
     with pytest.raises(SW.SwitchError, match='not implemented'):
-        Inputs(snap, 'c', [])
+        Inputs(snap, 'd', [])
 
 
 def test_cumulative_order():
@@ -103,3 +103,27 @@ def test_switch_b_daily_ratios_are_the_mix_ratios(with_a, with_ab):
     # cash projected quarters: average of the last three quarters' take rates (Q3 FY26..Q1 FY27)
     assert ratio('cash', '2026-08-03') == pytest.approx(16.5122 / 16.7752, rel=1e-4)
     assert all(a['mtf'][d]['gross_cr'] == b['mtf'][d]['gross_cr'] for d in a['mtf'])
+
+
+@pytest.fixture(scope='module')
+def with_abc():
+    return load_snapshot(SNAP, 'abc', REVIEWED)
+
+
+def test_switch_c_unfreezes_bse_contracts_from_the_lake(with_ab, with_abc):
+    days = with_abc.market_overrides[('bse_fo', 'contracts')]
+    assert len(days) == 15 and min(days) == '2026-09-29' and max(days) == '2026-10-21'
+    assert days['2026-10-01'] == (512976127, 'ok')
+    assert all(with_ab.series('bse_fo', 'contracts')[d] == 18962859 for d in days)
+    assert with_abc.status('bse_fo', 'contracts')['2026-10-01'] == 'ok'
+    assert with_ab.status('bse_fo', 'contracts')['2026-10-01'] == 'imputed'
+
+
+def test_switch_c_scales_each_day_by_its_market_volume(with_ab, with_abc):
+    a, b = daily.run(with_ab)['daily']['fo'], daily.run(with_abc)['daily']['fo']
+    nse = with_ab.series('nse_fo', 'contracts')
+    old, new = with_ab.series('bse_fo', 'contracts'), with_abc.series('bse_fo', 'contracts')
+    changed = {d for d in a if b[d]['rev_mn'] != a[d]['rev_mn']}
+    assert changed == set(with_abc.market_overrides[('bse_fo', 'contracts')])
+    for d in changed:   # same contracts/order, share and take rate: revenue ∝ NSE + BSE contracts
+        assert b[d]['rev_mn'] / a[d]['rev_mn'] == pytest.approx((nse[d] + new[d]) / (nse[d] + old[d]), rel=1e-12)

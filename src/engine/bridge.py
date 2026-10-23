@@ -54,6 +54,9 @@ def bridge(letter, snap=SNAP, reviewed=REVIEWED):
             rows.append(dict(period=k, panel=panel, before=x, after=y, delta=y - x, pct=(y / x - 1) if x else None))
     return dict(letter=letter, before=sorted(before), after=sorted(after), rows=rows,
                 overrides={c: v for c, v in I_b.overrides.items() if v[2] == letter},
+                market={k: I_b.market_overrides.get(k, {}) for k in SW.MARKET_SWITCHES.get(letter, ())},
+                market_before={k: {d: I_a.mkt[k][d] for d in I_b.market_overrides.get(k, {})}
+                               for k in SW.MARKET_SWITCHES.get(letter, ())},
                 days=daily_changes(r_a, r_b))
 
 
@@ -64,6 +67,13 @@ def markdown(b):
         L += ['Cells replaced:', '']
         for (sheet, col, row), (v, fid, _) in b['overrides'].items():
             L.append(f"- `{sheet}!{col}{row}` → {v:g} (fact {fid}, reviewed)")
+        L.append('')
+    for key, days in b.get('market', {}).items():
+        L += [f"Exchange series replaced on imputed days: `{key[0]}/{key[1]}` ({len(days)} days, lake value)", '',
+              '| Date | Before (status) | After (lake) |', '|---|---:|---:|']
+        for d, (v, _) in sorted(days.items()):
+            v0, st0 = b['market_before'][key][d]
+            L.append(f"| {d} | {v0:,.0f} ({st0}) | {v:,.0f} |")
         L.append('')
     L += ['ADR, Rs crore per trading day (MTF gross):', '',
           '| Period | Panel | Before | After | Δ | Δ % |', '|---|---|---:|---:|---:|---:|']
