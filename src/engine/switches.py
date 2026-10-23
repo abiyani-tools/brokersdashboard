@@ -73,8 +73,16 @@ QUARTER_SWITCHES = {
     },
 }
 
+# switch -> monthly input series extended with reviewed monthly facts for months the workbook does not have
+MONTHLY_SWITCHES = {
+    # (i) F&O and commodity monthly inputs run to the latest disclosed month (Sep 2026) instead of the
+    #     workbook's cut-offs (F&O share and total orders: May-26; commodity total orders: Jun-26; commodity
+    #     share: Aug-26). Months the workbook already has are not changed. Cash is covered by (e) and (h).
+    'i': ('share_fo', 'total_orders', 'share_comm'),
+}
+
 IMPLEMENTED = (set(CELL_SWITCHES) | set(MARKET_SWITCHES) | set(SUMMARY_SWITCHES) | set(PROJECTION_SWITCHES)
-               | set(QUARTER_SWITCHES))
+               | set(QUARTER_SWITCHES) | set(MONTHLY_SWITCHES))
 
 
 class SwitchError(ValueError):
@@ -210,3 +218,16 @@ def comm_rate_for(rates, q):
     earlier = [x for x in have if key(x) < key(q)]
     src = earlier[-1] if earlier else have[0]
     return rates[src][0], 'projected', src
+
+
+def extend_monthly(I, metric, series, also_present=()):
+    """Copy of `series` ({fy_month: value}) plus reviewed monthly facts of `metric` for months not in it
+    (nor in any of `also_present`), when a monthly switch covering `metric` is on."""
+    out = dict(series)
+    if not any(metric in MONTHLY_SWITCHES.get(sw, ()) for sw in I.switches) or I.facts is None:
+        return out
+    taken = set(out).union(*[set(x) for x in also_present])
+    for (m, period, seg), f in I.facts.current.items():
+        if m == metric and f.period_type == 'M' and f.status == 'reviewed' and not seg and period not in taken:
+            out[period] = f.value
+    return out

@@ -71,8 +71,8 @@ def test_unknown_and_unimplemented_switches_are_refused():
     snap = json.load(open(SNAP))
     with pytest.raises(SW.SwitchError, match='unknown'):
         Inputs(snap, 'z', [])
-    with pytest.raises(SW.SwitchError, match='not implemented'):
-        Inputs(snap, 'i', [])
+    with pytest.raises(SW.SwitchError, match='unknown'):
+        Inputs(snap, 'x', [])
 
 
 def test_cumulative_order():
@@ -245,3 +245,32 @@ def test_switch_h_adds_q2_fy27_as_an_actual_quarter():
     # nothing before April 2026 moves
     for seg, key in (('fo', 'rev_mn'), ('cash', 'rev_mn'), ('comm', 'rev_mn'), ('mtf', 'gross_cr')):
         assert all(rg['daily'][seg][d][key] == rh['daily'][seg][d][key] for d in rg['daily'][seg] if d < '2026-04-01')
+
+
+def test_switch_i_monthly_inputs_run_to_september():
+    from statistics import mean
+    I_h = load_snapshot(SNAP, 'abcdefgh', REVIEWED)
+    I_i = load_snapshot(SNAP, 'abcdefghi', REVIEWED)
+    ch, ci = daily.run(I_h)['calib'], daily.run(I_i)['calib']
+    fo, cm = ci['fo_month'], ci['comm_month']
+    # F&O: June-September are actual months now (reviewed monthly orders and shares)
+    for m, C, sh in (('FY 2027 June', 140.04, 0.221), ('FY 2027 July', 134.68, 0.222),
+                     ('FY 2027 August', 109.5, 0.217), ('FY 2027 September', 122.29, 0.225)):
+        r = fo[m]
+        assert (r['total_orders'], r['share_rule'], r['rule']) == (C, 'actual', 'H = G / F')
+        assert r['share'] == pytest.approx(sh, rel=1e-12)
+        assert r['cpo'] == pytest.approx((sh * r['mkt_contracts'] / 1e6) / (r['fo_pct'] * C), rel=1e-12)
+    assert fo['FY 2027 July']['fo_pct'] == pytest.approx(256 / 367, rel=1e-12)          # Q2 FY27 (switch h)
+    assert fo['FY 2027 October']['share'] == pytest.approx(mean([0.222, 0.217, 0.225]), rel=1e-12)
+    assert fo['FY 2027 October']['cpo'] == fo['FY 2027 September']['cpo']
+    # months the workbook already had do not change
+    assert fo['FY 2027 May'] == ch['fo_month']['FY 2027 May'] and cm['FY 2027 June'] == ch['comm_month']['FY 2027 June']
+    # commodity: July-September actual with Q2 FY27's commodity % (45 / 366.46); October = mean of the three
+    for m in ('FY 2027 July', 'FY 2027 August', 'FY 2027 September'):
+        assert cm[m]['regime'] == 'actual' and cm[m]['comm_pct'] == pytest.approx(45 / 366.46, rel=1e-12)
+    assert cm['FY 2027 September']['share'] == pytest.approx(0.417, rel=1e-12)
+    assert cm['FY 2027 October']['cpo'] == pytest.approx(
+        mean(cm[m]['cpo'] for m in ('FY 2027 July', 'FY 2027 August', 'FY 2027 September')), rel=1e-12)
+    # cash and MTF untouched
+    dh, di = daily.run(I_h)['daily'], daily.run(I_i)['daily']
+    assert dh['cash'] == di['cash'] and dh['mtf'] == di['mtf']

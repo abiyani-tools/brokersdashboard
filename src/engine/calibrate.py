@@ -55,6 +55,10 @@ def calib_fo(I, daily_contracts_by_month, tr):
     months = month_seq('FY 2025 October', 'FY 2027 October')            # rows 4-28 / 32-56
     share_src = I.fact[('share_fo', 'F&O market')]                       # N4:N23 hardcoded
     orders_src = I.fact[('total_orders', 'F&O market')]                  # C32:C51 hardcoded
+    if I.switches:                                                       # live (i): to the latest disclosed month
+        from .switches import extend_monthly
+        share_src = extend_monthly(I, 'share_fo', share_src)
+        orders_src = extend_monthly(I, 'total_orders', orders_src)
     last_fo_pct_q = I.pin('fo_pct_last_actual_quarter')[1]                # Q4 FY 2026
     last_tr_q = I.pin('fo_take_rate_last_actual_quarter')[1]              # Q4 FY 2026
     out, shares, fo_pct_hist = {}, [], []
@@ -142,6 +146,10 @@ def calib_comm(I, mcx_by_month):
     aa_src = I.fact[('share_comm', 'Commodities')]                       # AA hardcoded (14-37, 41, 42)
     ws_f = I.fact[('share_comm', 'Working sheet - Angel One')]          # AA38:AA40 = WS F165:F167
     ws_c = I.fact[('total_orders', 'Working sheet - Angel One')]        # WS C141:C167
+    if I.switches:                                                       # live (i): to the latest disclosed month
+        from .switches import extend_monthly
+        aa_src = extend_monthly(I, 'share_comm', aa_src, also_present=(ws_f,))
+        ws_c = extend_monthly(I, 'total_orders', ws_c)
     out, prev, cpos = {}, None, []
     for m in months:
         q = quarter_of_month(m)
