@@ -100,7 +100,7 @@ def live_run_snapshot(snap, reviewed, switches=ALL_SWITCHES, as_of=None):
     coverage(I.snap['calendar'], res['daily'], as_of, {'mtf': mtf_gaps})
 
     segs = make_segments(res['daily'], guarded=True, calendar=I.cal, exclude=SW.excluded_dates(I),
-                         mtf_split='g' in I.switches)
+                         mtf_split='g' in I.switches, exclude_segments=SW.D_SEGMENTS)
     rows = period_rows(segs)
     return dict(as_of=as_of, switches=''.join(sorted(I.switches)), report=report, daily=res['daily'],
                 rows=rows, overrides=I.overrides)

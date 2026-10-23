@@ -1,4 +1,4 @@
-# Independent check of switch (d): drop special sessions from period averages. Stdlib only; reads snapshot JSON only.
+# Independent check of switch (d), revised rule 23 Oct 2026: drop special sessions from TRADING segments only (fo,cash,comm); MTF keeps all dates. Stdlib only; reads snapshot JSON only.
 import json,re
 R='/home/user/brokersdashboard/snapshot/'
 d=json.load(open(R+'db_snapshot_2026-10-23.json'))
@@ -58,7 +58,7 @@ for (s,dt),v in pe.items():
 print('special sessions in calendar:',sorted(special))
 print('in daily series:',sorted({dt for (s,dt) in D if dt in special}),'| per seg:',{s:sorted(dt for (ss,dt) in D if ss==s and dt in special) for s in('fo','cash','comm','mtf')})
 def seg_avg(s,key,field,drop):
-    v=[val for (ss,dt),val in D.items() if ss==s and cal[dt][field]==key and not(drop and dt in special)]
+    v=[val for (ss,dt),val in D.items() if ss==s and cal[dt][field]==key and not(drop and s!='mtf' and dt in special)]
     return sum(v)/len(v),len(v)
 def adr(key,field,drop):
     a={s:seg_avg(s,key,field,drop)[0] for s in('fo','cash','comm','mtf')}
@@ -67,9 +67,9 @@ claims={
  ('FY 2027','fy'):({'cons':None},None),
 }
 CL={ # (period,field): {seg:(before,after)}
- ('FY 2026','fy'):{'cons':(15.555597,15.597885),'fo':(9.513241,9.547485),'cash':(1.709086,1.713904),'comm':(1.216053,1.220379),'mtf':(3.117217,3.116117)},
- ('Q3 FY 2026','q_fy'):{'cons':(15.945517,16.122550),'fo':(9.559822,9.698682),'cash':(1.661333,1.679983),'comm':(1.275227,1.293745),'mtf':(3.449134,3.450140)},
- ('FY 2026 October','fy_month'):{'cons':(16.293960,16.850336),'fo':(9.933101,10.375291),'cash':(1.684168,1.742192),'comm':(1.305592,1.362591),'mtf':(3.371099,3.370264)},
+ ('FY 2026','fy'):{'cons':(15.555597,15.598985),'fo':(9.513241,9.547485),'cash':(1.709086,1.713904),'comm':(1.216053,1.220379),'mtf':(3.117217,3.117217)},
+ ('Q3 FY 2026','q_fy'):{'cons':(15.945517,16.121545),'fo':(9.559822,9.698682),'cash':(1.661333,1.679983),'comm':(1.275227,1.293745),'mtf':(3.449134,3.449134)},
+ ('FY 2026 October','fy_month'):{'cons':(16.293960,16.851172),'fo':(9.933101,10.375291),'cash':(1.684168,1.742192),'comm':(1.305592,1.362591),'mtf':(3.371099,3.371099)},
 }
 n=ag=0
 def cmp(name,m,c,tol=5e-7):   # claims rounded to 6dp -> half-ulp 5e-7 absolute; use rel<=1e-6 or abs<=5.5e-7
@@ -78,6 +78,7 @@ def cmp(name,m,c,tol=5e-7):   # claims rounded to 6dp -> half-ulp 5e-7 absolute;
     print('%-34s mine %.9f claim %.6f rel %.2e %s'%(name,m,c,rd,'AGREE' if ok else 'DISAGREE'))
 for (p,fld),segs in CL.items():
     b=adr(p,fld,False); a=adr(p,fld,True)
+    print(p,'special dates in period (any seg):',sorted({dt for (ss,dt) in D if cal[dt][fld]==p and dt in special}))
     print(p,'days(fo,cash,comm,mtf) before',[seg_avg(s,p,fld,False)[1] for s in('fo','cash','comm','mtf')],'after',[seg_avg(s,p,fld,True)[1] for s in('fo','cash','comm','mtf')])
     for s,(cb,ca) in segs.items():
         cmp(f'{p} {s} before',b[s],cb); cmp(f'{p} {s} after',a[s],ca)
@@ -85,4 +86,8 @@ for p,fld in (('FY 2027','fy'),('Q2 FY 2027','q_fy'),('FY 2027 October','fy_mont
     b=adr(p,fld,False); a=adr(p,fld,True)
     n+=1; ok=all(abs(a[s]-b[s])<=1e-12 for s in b); ag+=ok
     print(p,'no change:',ok,'cons %.9f'%b['cons'])
+fy25=[dt for (ss,dt) in D if dt in special and cal[dt]['fy']=='FY 2025']
+print('2025-02-01 fy/q/month:',cal['2025-02-01']['fy'],cal['2025-02-01']['q_fy'],cal['2025-02-01']['fy_month'],'| in daily series:',[ss for (ss,dt) in D if dt=='2025-02-01'])
+n+=1; ok=cal['2025-02-01']['fy']=='FY 2025' and all(cal[dt]['fy']!='FY 2026' for dt in ['2025-02-01']); ag+=ok
+print('2025-02-01 outside FY 2026/27 periods:',ok)
 print('n',n,'agree',ag)

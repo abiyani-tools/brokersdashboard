@@ -1,6 +1,6 @@
 # Live run (dry run) — as of 2026-10-21
 
-Switches: abcdefghi · E5: pass (0 blocking, 4 warnings, 7 info) · E1 coverage: pass · Summary rows: 1827
+Switches: abcdefghi · E5: pass (0 blocking, 4 warnings, 5 info) · E1 coverage: pass · Summary rows: 1827
 
 Nothing was written to the database.
 
@@ -13,8 +13,8 @@ Nothing was written to the database.
 | FY 2027 | Commodities | 1.5178 | — | +26.5% |
 | FY 2027 | Consolidated | 17.5103 | — | +12.4% |
 | FY 2027 | F&O | 9.7836 | — | +2.5% |
-| FY 2027 | MTF | 4.2240 | — | +35.6% |
-| FY 2027 | MTF (net) | 1.9008 | — | +35.6% |
+| FY 2027 | MTF | 4.2240 | — | +35.5% |
+| FY 2027 | MTF (net) | 1.9008 | — | +35.5% |
 | FY 2027 October | Broking | 15.4738 | +25.2% | +14.8% |
 | FY 2027 October | Cash | 2.0058 | -0.9% | +15.1% |
 | FY 2027 October | Commodities | 1.7978 | +16.6% | +31.9% |
@@ -33,9 +33,8 @@ Nothing was written to the database.
 ## E5 integrity report
 
 ```
-E5: 0 blocking, 4 warning, 7 info
+E5: 0 blocking, 4 warning, 5 info
 INFO    jump     mcx:contracts 2025-01-01: 406,749 outside 0.2×2,205,346 .. 5.0×7,748,851 — known: 406,749 contracts against a trailing 20-day minimum of 2,205,346; not a special session in sb_calendar; cause not yet sourced (lake-auditor to check against MCX)
-INFO    jump     mcx:contracts 2025-02-01: 464,813 outside 0.2×2,398,901 .. 5.0×8,283,918 — known: a Saturday session (1 Feb 2025; Union Budget day, to be confirmed against the exchange circular), not flagged in sb_calendar.special_session; proposal: mark it 'budget' (sb_calendar write needs AB's OK)
 WARNING missing  mtf_industry:book_cr 2026-04-08: no value on a trading day
 WARNING conflict total_orders FY 2025 January -: seed values disagree; using fact 415 (excel: F&O market!C35) by rule
 WARNING conflict total_orders FY 2025 November -: seed values disagree; using fact 413 (excel: F&O market!C33) by rule
@@ -43,6 +42,5 @@ WARNING conflict total_orders FY 2026 January -: seed values disagree; using fac
 INFO    status   bse_fo:contracts [excel_seed] 2026-09-29..2026-10-21 (15 days): status imputed
 INFO    frozen   bse_fo:contracts [excel_seed] 2026-09-28..2026-10-21 (16 days): 18,962,859 repeated 16 days
 INFO    jump     mcx:contracts [excel_seed] 2025-01-01: 406,749 outside 0.2×2,205,346 .. 5.0×7,748,851
-INFO    jump     mcx:contracts [excel_seed] 2025-02-01: 464,813 outside 0.2×2,398,901 .. 5.0×8,283,918
 INFO    missing  mtf_industry:book_cr [excel_seed] 2026-04-08: no value on a trading day
 ```

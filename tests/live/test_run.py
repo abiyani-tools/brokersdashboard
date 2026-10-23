@@ -55,7 +55,9 @@ def test_live_dry_run_on_the_snapshot(run):
     assert not rep.blocking, rep.summary()
     assert run['switches'] == 'abcdefghi' and run['as_of'] == '2026-10-21'
     # known exceptions are reported, not dropped
-    assert {i.dates[0].isoformat() for i in rep.find('jump', 'mcx:contracts', 'info') if not i.source} == {'2025-01-01', '2025-02-01'}
+    assert {i.dates[0].isoformat() for i in rep.find('jump', 'mcx:contracts', 'info') if not i.source} == {'2025-01-01'}
+    # 1 Feb 2025 is a special session ('budget', AB 23 Oct 2026): not jump-tested at all
+    assert not [i for i in rep.find('jump') if i.dates and i.dates[0].isoformat() == '2025-02-01' and not i.source]
     # the IO / SO split is audit-only: no blocking 'missing' for it
     assert not rep.find(key='nse_fo:io_contracts', severity='error')
     keys = [(r['panel'], r['period_type'], r['period_key'], r['table_name'], r['row_label']) for r in run['rows']]

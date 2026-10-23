@@ -23,7 +23,8 @@ SEGMENTS = (('fo', 'F&O', 'rev_mn'), ('cash', 'Cash', 'rev_mn'), ('comm', 'Commo
 
 def adr(I):
     res = daily.run(I)
-    segs = make_segments(res['daily'], exclude=SW.excluded_dates(I), mtf_split='g' in I.switches)
+    segs = make_segments(res['daily'], exclude=SW.excluded_dates(I), mtf_split='g' in I.switches,
+                         exclude_segments=SW.D_SEGMENTS)
     get = {'FY': lambda s, k: s.fy(k), 'Q': lambda s, k: s.q(k), 'M': lambda s, k: s.m(k)}
     table = {(p, k, panel): _combine(segs, panel, lambda s: get[p](s, k))
              for p, k in PERIODS for panel in panels_of(segs)}

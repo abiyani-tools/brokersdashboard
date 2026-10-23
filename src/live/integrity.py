@@ -47,9 +47,6 @@ KNOWN_ISSUES = {
     ("jump", "mcx:contracts", "2025-01-01"):
         "406,749 contracts against a trailing 20-day minimum of 2,205,346; not a special session in "
         "sb_calendar; cause not yet sourced (lake-auditor to check against MCX)",
-    ("jump", "mcx:contracts", "2025-02-01"):
-        "a Saturday session (1 Feb 2025; Union Budget day, to be confirmed against the exchange circular), "
-        "not flagged in sb_calendar.special_session; proposal: mark it 'budget' (sb_calendar write needs AB's OK)",
 }
 
 

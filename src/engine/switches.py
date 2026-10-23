@@ -32,8 +32,10 @@ MARKET_SWITCHES = {
 
 # switch -> rule applied when averaging daily revenue (summary statistics only; daily rows are kept)
 SUMMARY_SWITCHES = {
-    # (d) special sessions (sb_calendar.special_session: Muhurat, DR test) are dropped from every average,
-    #     last-N and weekday statistic, for all segments; they stay in the daily rows and in totals.
+    # (d) special sessions (sb_calendar.special_session: Muhurat, DR test, budget) are dropped from every
+    #     average, last-N and weekday statistic of the trading segments (F&O, cash, commodity); they stay in the
+    #     daily rows and in totals. MTF keeps them: it is interest on the funding book, not session revenue
+    #     (AB, 23 Oct 2026).
     'd': 'exclude_special_sessions',
     # (g) decision D4: MTF shown gross in every table (the workbook's weekday tables use net) plus an
     #     'MTF (net)' panel at net = 45% × gross [SOURCE NEEDED: basis for 45%]. Consolidated stays gross.
@@ -166,6 +168,9 @@ def market_overrides(switches, mkt, lake):
             out[key] = {d: (lake[key][d], 'ok') for d, (v, st) in mkt[key].items()
                         if st == 'imputed' and d in lake.get(key, {})}
     return out
+
+
+D_SEGMENTS = ('fo', 'cash', 'comm')   # segments whose averages leave out special sessions under (d)
 
 
 def excluded_dates(I):

@@ -155,14 +155,18 @@ def _cmp(a, b, what):
 
 
 # ── segments from the engine's daily output ──
-def make_segments(daily, guarded=False, calendar=None, exclude=(), mtf_split=False):
+def make_segments(daily, guarded=False, calendar=None, exclude=(), mtf_split=False, exclude_segments=None):
     """Same series and scaling as summary.build. guarded=True needs `calendar` ({iso: sb_calendar row}).
-    exclude: dates left out of every statistic (switch d: special sessions).
+    exclude: dates left out of every statistic (switch d: special sessions) of the segments in
+    exclude_segments (daily keys; None = all).
     mtf_split (switch g, decision D4): MTF is gross in every table (the workbook's weekday tables use net),
     and a separate 'MTF (net)' panel shows net = 45% × gross. Consolidated stays on gross."""
     exclude = set(exclude)
     if exclude:
-        daily = {seg: {d: r for d, r in rows.items() if d not in exclude} for seg, rows in daily.items()}
+        daily = {seg: ({d: r for d, r in rows.items() if d not in exclude}
+                       if exclude_segments is None or seg in exclude_segments else rows)
+                 for seg, rows in daily.items()}
+    seg_key = {'F&O': 'fo', 'Cash': 'cash', 'Commodities': 'comm', 'MTF': 'mtf', 'MTF (net)': 'mtf'}
     spec = {
         'F&O': ({d: r['rev_mn'] for d, r in daily['fo'].items()}, 10, None, False, 'is_equity_day'),
         'Cash': ({d: r['rev_mn'] for d, r in daily['cash'].items()}, 10, None, False, 'is_equity_day'),
@@ -175,7 +179,8 @@ def make_segments(daily, guarded=False, calendar=None, exclude=(), mtf_split=Fal
     out = {}
     for name, (s, scale, w, pos, flag) in spec.items():
         if guarded:
-            days = [d for d, r in calendar.items() if r[flag] and d not in exclude]
+            drop = exclude if exclude_segments is None or seg_key[name] in exclude_segments else set()
+            days = [d for d, r in calendar.items() if r[flag] and d not in drop]
             out[name] = GuardedSeg(name, s, days, scale, w, pos)
         else:
             out[name] = Seg(s, scale, w, pos)
