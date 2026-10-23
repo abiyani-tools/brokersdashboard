@@ -53,7 +53,28 @@ PROJECTION_SWITCHES = {
     'f': 'comm_take_rate_quarterly',
 }
 
-IMPLEMENTED = set(CELL_SWITCHES) | set(MARKET_SWITCHES) | set(SUMMARY_SWITCHES) | set(PROJECTION_SWITCHES)
+# switch -> a quarter the workbook has no column for, built from reviewed facts, and the pins it moves
+H_COL, H_ROW2 = 'Q2FY27', 183          # synthetic Working-sheet column / quarterly-table row (not Excel cells)
+QUARTER_SWITCHES = {
+    # (h) Q2 FY27 actuals in; projections roll to Q3 FY27. Cells: orders (6-8), revenue mix (15-17),
+    #     cash share (40), total income (99), quarterly table C (total orders) and F (commodity orders).
+    #     The last-actual-quarter pins move to Q2 FY27. MTF Q2 FY27: Angel book = disclosed average funding
+    #     book (Rs Mn ÷ 10, decision Q5); industry average = daily lake average, as the monthly series ends
+    #     in May 2026 (decision Q6).
+    'h': {
+        'quarter': 'Q2 FY 2027', 'col': H_COL, 'row2': H_ROW2,
+        'cells': {(WS, H_COL, 6): ('orders_fo', 'Mn'), (WS, H_COL, 7): ('orders_cash', 'Mn'),
+                  (WS, H_COL, 8): ('orders_comm', 'Mn'), (WS, H_COL, 15): ('revmix_fo', 'fraction'),
+                  (WS, H_COL, 16): ('revmix_cash', 'fraction'), (WS, H_COL, 17): ('revmix_comm', 'fraction'),
+                  (WS, H_COL, 40): ('share_cash_q', 'fraction'), (WS, H_COL, 99): ('total_income', 'Rs Mn'),
+                  (WS, 'C', H_ROW2): ('orders_total', 'Mn'), (WS, 'F', H_ROW2): ('orders_comm', 'Mn')},
+        'pins': {'fo_pct_last_actual_quarter': 'Q2 FY 2027', 'fo_take_rate_last_actual_quarter': 'Q2 FY 2027',
+                 'cash_last_actual_quarter': 'Q2 FY 2027', 'mtf_last_actual_quarter': 'Q2 FY 2027'},
+    },
+}
+
+IMPLEMENTED = (set(CELL_SWITCHES) | set(MARKET_SWITCHES) | set(SUMMARY_SWITCHES) | set(PROJECTION_SWITCHES)
+               | set(QUARTER_SWITCHES))
 
 
 class SwitchError(ValueError):
@@ -86,12 +107,42 @@ def cell_overrides(switches, facts, seed_units):
     out = {}
     for sw in sorted(switches):
         for cell, (metric, period) in CELL_SWITCHES.get(sw, {}).items():
+            if not facts.has(metric, period):
+                raise SwitchError(f'switch {sw}: no reviewed fact {metric} {period}')
             f = facts.fact(metric, period)
             if f.status != 'reviewed':
                 raise SwitchError(f'switch {sw}: {metric} {period} has no reviewed fact (got {f.status} {f.fact_id})')
             if seed_units.get(cell) != f.unit:
                 raise SwitchError(f'switch {sw}: unit of {cell} is {seed_units.get(cell)!r}, fact {f.fact_id} is {f.unit!r}')
             out[cell] = (f.value, f.fact_id, sw)
+        q = QUARTER_SWITCHES.get(sw)
+        if q:
+            for cell, (metric, unit) in q['cells'].items():
+                if not facts.has(metric, q['quarter']):
+                    raise SwitchError(f'switch {sw}: no reviewed fact {metric} {q["quarter"]}')
+                f = facts.fact(metric, q['quarter'])
+                if f.status != 'reviewed':
+                    raise SwitchError(f'switch {sw}: {metric} {q["quarter"]} has no reviewed fact')
+                if f.unit != unit:
+                    raise SwitchError(f'switch {sw}: {metric} {q["quarter"]} is in {f.unit!r}, expected {unit!r}')
+                out[cell] = (f.value, f.fact_id, sw)
+    return out
+
+
+def quarter_columns(switches):
+    """Extra {quarter: column} and {quarter: quarterly-table row} added by quarter switches."""
+    cols, rows = {}, {}
+    for sw in sorted(switches):
+        q = QUARTER_SWITCHES.get(sw)
+        if q:
+            cols[q['quarter']], rows[q['quarter']] = q['col'], q['row2']
+    return cols, rows
+
+
+def pin_overrides(switches):
+    out = {}
+    for sw in sorted(switches):
+        out.update(QUARTER_SWITCHES.get(sw, {}).get('pins', {}))
     return out
 
 
@@ -135,9 +186,9 @@ def quarter_comm_rates(I, tr):
     tr = calibrate.take_rates(I) (cells, so switches a, b apply). A quarter whose mix cell is empty but
     which has a reviewed revmix_comm fact (Q2 FY25) uses that fact with the quarter's income and orders.
     """
-    from .calibrate import WS_QCOL
+    from .calibrate import qcols
     out = {}
-    for q, col in WS_QCOL.items():
+    for q, col in qcols(I).items():
         r = tr.get(q, {})
         if 'take_rate_comm' in r:
             out[q] = (r['take_rate_comm'], 'actual')

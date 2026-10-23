@@ -72,7 +72,7 @@ def test_unknown_and_unimplemented_switches_are_refused():
     with pytest.raises(SW.SwitchError, match='unknown'):
         Inputs(snap, 'z', [])
     with pytest.raises(SW.SwitchError, match='not implemented'):
-        Inputs(snap, 'h', [])
+        Inputs(snap, 'i', [])
 
 
 def test_cumulative_order():
@@ -204,3 +204,44 @@ def test_switch_g_mtf_gross_everywhere_plus_a_net_panel():
     assert s_g[('MTF (net)', 'Weekday', 'Monday')] == pytest.approx(s_f[('MTF', 'Weekday', 'Monday')], rel=1e-12)
     # week tables already used gross: unchanged
     assert s_g[('Consolidated', 'Week', 'Last 5 trading days')] == s_f[('Consolidated', 'Week', 'Last 5 trading days')]
+
+
+def test_switch_h_adds_q2_fy27_as_an_actual_quarter():
+    from statistics import mean
+    from src.engine.inputs import q_of
+    I_g = load_snapshot(SNAP, 'abcdefg', REVIEWED)
+    I_h = load_snapshot(SNAP, 'abcdefgh', REVIEWED)
+    col = SW.H_COL
+    assert {r: I_h.ws(col, r) for r in (6, 7, 8, 15, 16, 17, 40, 99)} == \
+        {6: 256, 7: 66, 8: 45, 15: 0.387, 16: 0.087, 17: 0.071, 40: 0.168, 99: 14315}
+    assert (I_h.ws('C', SW.H_ROW2), I_h.ws('F', SW.H_ROW2)) == (366.46, 45)
+    assert I_h.pin('cash_last_actual_quarter')[1] == 'Q2 FY 2027' and I_g.pin('cash_last_actual_quarter')[1] == 'Q1 FY 2027'
+
+    rg, rh = daily.run(I_g), daily.run(I_h)
+    tr = rh['calib']['take_rates']
+    assert tr['Q2 FY 2027']['take_rate_fo'] == pytest.approx(0.387 * 14315 / 256, rel=1e-12)
+    assert tr['Q2 FY 2027']['take_rate_cash'] == pytest.approx(0.087 * 14315 / 66, rel=1e-12)
+    assert tr['Q2 FY 2027']['take_rate_comm'] == pytest.approx(0.071 * 14315 / 45, rel=1e-12)
+    # F&O: actual through Q2 FY27, Q3 FY27 = average of the last three quarters
+    fo_tr = rh['calib']['fo_take_rate']
+    assert fo_tr['Q2 FY 2027'][1] == 'actual'
+    assert fo_tr['Q3 FY 2027'][0] == pytest.approx(mean(tr[q]['take_rate_fo'] for q in ('Q4 FY 2026', 'Q1 FY 2027', 'Q2 FY 2027')), rel=1e-12)
+    # cash: Q2 FY27 actual with the quarterly share; Q3 FY27 averages the last three quarters
+    cq = rh['calib']['cash_quarter']
+    assert cq['Q2 FY 2027']['regime'] == 'actual' and cq['Q2 FY 2027']['share'] == 0.168
+    assert cq['Q3 FY 2027']['take_rate'] == pytest.approx(mean(cq[q]['take_rate'] for q in ('Q4 FY 2026', 'Q1 FY 2027', 'Q2 FY 2027')), rel=1e-12)
+    # MTF: Q2 FY27 share = disclosed book / daily industry average; Q3 FY27 = average of the last six quarters
+    mq = rh['calib']['mtf_quarter']
+    assert mq['Q2 FY 2027']['angel_book_cr'] == pytest.approx(7453.0, rel=1e-12)
+    assert mq['Q2 FY 2027']['share'] == pytest.approx(7453.0 / mq['Q2 FY 2027']['industry_avg_cr'], rel=1e-12)
+    six = ('Q1 FY 2026', 'Q2 FY 2026', 'Q3 FY 2026', 'Q4 FY 2026', 'Q1 FY 2027', 'Q2 FY 2027')
+    assert mq['Q3 FY 2027']['share'] == pytest.approx(mean(mq[q]['share'] for q in six), rel=1e-12)
+    # commodity (switch f): Jul-Oct days move from Q1 FY27's rate to Q2 FY27's own
+    a, b = rg['daily']['comm'], rh['daily']['comm']
+    ratio = tr['Q2 FY 2027']['take_rate_comm'] / tr['Q1 FY 2027']['take_rate_comm']
+    for d in b:
+        if q_of(d) in ('Q2 FY 2027', 'Q3 FY 2027') and a[d]['rev_mn']:
+            assert b[d]['rev_mn'] / a[d]['rev_mn'] == pytest.approx(ratio, rel=1e-12)
+    # nothing before April 2026 moves
+    for seg, key in (('fo', 'rev_mn'), ('cash', 'rev_mn'), ('comm', 'rev_mn'), ('mtf', 'gross_cr')):
+        assert all(rg['daily'][seg][d][key] == rh['daily'][seg][d][key] for d in rg['daily'][seg] if d < '2026-04-01')

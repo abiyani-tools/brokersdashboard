@@ -46,6 +46,8 @@ class Inputs:
         from . import switches as SW
         self.switches = SW.check(switches)
         self.overrides, self.market_overrides, self.facts = {}, {}, None
+        self.pin_overrides = SW.pin_overrides(self.switches)
+        self.extra_qcols, self.extra_qrows = SW.quarter_columns(self.switches)
         if self.switches:
             from ..live.loader import Facts
             facts = self.facts = Facts.from_rows(list(snap['facts']) + list(reviewed_facts or []))
@@ -64,6 +66,8 @@ class Inputs:
         return self.cell.get(key)
 
     def pin(self, key, period=''):
+        if not period and key in self.pin_overrides:          # quarter switches move last-actual pins
+            return (None, self.pin_overrides[key])
         return self.pins.get((key, period), (None, None))
 
     def series(self, dataset, metric):

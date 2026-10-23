@@ -14,6 +14,16 @@ WS_QROW2 = {q: 174 + i for i, q in enumerate(['Q1 FY 2025', 'Q2 FY 2025', 'Q3 FY
 WS_MROW0 = 141   # 'FY 2025 April' in Working sheet B141
 
 
+def qcols(I):
+    """Quarter -> Working-sheet column, plus quarters added by live switches (h)."""
+    return {**WS_QCOL, **getattr(I, 'extra_qcols', {})}
+
+
+def qrows2(I):
+    """Quarter -> quarterly-table row (174-182), plus quarters added by live switches (h)."""
+    return {**WS_QROW2, **getattr(I, 'extra_qrows', {})}
+
+
 def ws_month_row(fm):
     return WS_MROW0 + month_seq('FY 2025 April', fm).__len__() - 1
 
@@ -21,13 +31,14 @@ def ws_month_row(fm):
 # ── take rates: Working sheet rows 61-63 (= rev mix × total income) / rows 6-8 (orders) → rows 76-78 ──
 def take_rates(I):
     out = {}
-    for q, c in WS_QCOL.items():
+    QC, QR = qcols(I), qrows2(I)
+    for q, c in QC.items():
         ti = I.ws(c, 99)
         o = {s: I.ws(c, r) for s, r in (('fo', 6), ('cash', 7), ('comm', 8))}
         mix = {s: I.ws(c, r) for s, r in (('fo', 15), ('cash', 16), ('comm', 17))}
         row = {'total_income': ti}                                      # row 99
-        if q in WS_QROW2:                                                # I174:I182 = F / C
-            r2 = WS_QROW2[q]
+        if q in QR:                                                      # I174:I182 = F / C
+            r2 = QR[q]
             row['comm_pct'] = I.ws('F', r2) / I.ws('C', r2)
         for s in ('fo', 'cash', 'comm'):
             if ti is not None and mix[s] is not None and o[s]:
@@ -104,7 +115,7 @@ def calib_cash(I, daily_trades_by_quarter, tr):
     for q in quarter_seq('Q3 FY 2025', 'Q3 FY 2027'):
         r = {'mkt_trades_mn': daily_trades_by_quarter.get(q)}           # M (trades, Mn)
         if _q_le(q, last_q):
-            c = WS_QCOL[q]
+            c = qcols(I)[q]
             r['orders'] = I.ws(c, 7)                                     # N
             r['share'] = I.ws(c, 40)                                     # K
             r['mkt_orders'] = r['orders'] / r['share']                   # O
@@ -143,8 +154,8 @@ def calib_comm(I, mcx_by_month):
         else:
             r['share'], r['share_rule'] = prev['share'], 'carry'
         # Angel commodity orders Y = WS C (monthly total) × WS I (quarter commodity %, = F/C rows 174-182)
-        if m in ws_c and q in WS_QROW2:
-            row2 = WS_QROW2[q]
+        if m in ws_c and q in qrows2(I):
+            row2 = qrows2(I)[q]
             comm_pct = I.ws('F', row2) / I.ws('C', row2)
             r['comm_pct'] = comm_pct
             r['comm_orders'] = ws_c[m] * comm_pct                        # Y (= WS J)
@@ -183,13 +194,19 @@ def calib_mtf(I, daily_book_by_quarter=None):
         if _q_le(q, last_q):
             ov = I.pin('mtf_share_override', q)[0]
             book = I.pin('mtf_angel_book_cr', q)[0]
+            if book is None and getattr(I, 'facts', None) is not None:      # live (h): disclosed book, Q5
+                f = I.facts.fact('avg_funding_book', q)
+                book = f.value / 10 if f.unit == 'Rs Mn' else None             # Rs Mn -> Rs Cr
+            if 'industry_avg_cr' not in r and q in daily_book_by_quarter:      # live (h): daily lake avg, Q6
+                r['industry_avg_cr'] = daily_book_by_quarter[q]
             r['angel_book_cr'] = book                                      # P (pinned: as the workbook used it)
             r['share'] = ov if ov is not None else book / r['industry_avg_cr']   # Q = P / D (Q51 hard-coded)
             r['regime'], r['rule'] = 'actual', 'override' if ov is not None else 'Q = P / D'
             if _q_le('Q4 FY 2025', q):
                 hist.append(r['share'])                                    # Q52:Q57 feed Q58
         elif out[list(out)[-1]]['regime'] == 'actual':
-            r['share'], r['regime'], r['rule'] = mean(hist), 'projected', 'avg_Q4FY25..last_actual (Q58)'
+            # Q58 = AVERAGE(Q52:Q57): the last 6 reported quarters (sb_assumptions rule_mtf_share)
+            r['share'], r['regime'], r['rule'] = mean(hist[-6:]), 'projected', 'avg_last_6_reported_quarters (Q58)'
             if q in daily_book_by_quarter:                                   # D58 = AVERAGEIF(daily book), P58 = Q58*D58
                 r['industry_avg_cr'] = daily_book_by_quarter[q]
                 r['angel_book_cr'] = r['share'] * r['industry_avg_cr']
