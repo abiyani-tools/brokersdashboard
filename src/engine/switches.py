@@ -37,7 +37,15 @@ SUMMARY_SWITCHES = {
     'd': 'exclude_special_sessions',
 }
 
-IMPLEMENTED = set(CELL_SWITCHES) | set(MARKET_SWITCHES) | set(SUMMARY_SWITCHES)
+# switch -> projection rule replaced in the daily model
+PROJECTION_SWITCHES = {
+    # (e) decision D2: projected cash days use the monthly cash share (sb_disclosure_facts share_cash, period M)
+    #     of their own month, or of the latest earlier month that has one, instead of carrying the last
+    #     actual quarter's share. Actual quarters keep the quarterly share their trades/order is built on.
+    'e': 'cash_share_monthly',
+}
+
+IMPLEMENTED = set(CELL_SWITCHES) | set(MARKET_SWITCHES) | set(SUMMARY_SWITCHES) | set(PROJECTION_SWITCHES)
 
 
 class SwitchError(ValueError):
@@ -98,3 +106,16 @@ def excluded_dates(I):
     if 'd' in I.switches:
         return {d for d, r in I.cal.items() if r.get('special_session')}
     return set()
+
+
+def monthly_share(facts, metric, month, back=12):
+    """(value, month used, fact_id) for the share of `month`, or of the latest earlier month (≤ `back` back)."""
+    from .inputs import MONTHS
+    fy, i = int(month[3:7]), MONTHS.index(month[8:])
+    for k in range(back + 1):
+        idx = fy * 12 + i - k
+        m = f"FY {idx // 12} {MONTHS[idx % 12]}"
+        if facts.has(metric, m):
+            f = facts.fact(metric, m)
+            return f.value, m, f.fact_id
+    raise SwitchError(f'no {metric} for {month} or the {back} months before it')

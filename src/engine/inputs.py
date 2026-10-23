@@ -45,10 +45,10 @@ class Inputs:
         # live switches: cell overrides from reviewed facts (empty in parity mode)
         from . import switches as SW
         self.switches = SW.check(switches)
-        self.overrides, self.market_overrides = {}, {}
+        self.overrides, self.market_overrides, self.facts = {}, {}, None
         if self.switches:
             from ..live.loader import Facts
-            facts = Facts.from_rows(list(snap['facts']) + list(reviewed_facts or []))
+            facts = self.facts = Facts.from_rows(list(snap['facts']) + list(reviewed_facts or []))
             seed_units = {_ref(f['source_ref']): f['unit'] for f in snap['facts'] if _ref(f['source_ref'])}
             self.overrides = SW.cell_overrides(self.switches, facts, seed_units)
             self.market_overrides = SW.market_overrides(self.switches, self.mkt, self.lake)

@@ -72,7 +72,7 @@ def test_unknown_and_unimplemented_switches_are_refused():
     with pytest.raises(SW.SwitchError, match='unknown'):
         Inputs(snap, 'z', [])
     with pytest.raises(SW.SwitchError, match='not implemented'):
-        Inputs(snap, 'e', [])
+        Inputs(snap, 'f', [])
 
 
 def test_cumulative_order():
@@ -147,3 +147,17 @@ def test_switch_d_drops_special_sessions_from_averages_only():
     for k in ('FY 2027', 'Q2 FY 2027', 'FY 2027 October'):   # no special session in FY27 to date
         p = 'FY' if k == 'FY 2027' else ('Q' if k.startswith('Q') else 'M')
         assert t_c[(p, k, 'Consolidated')] == t_d[(p, k, 'Consolidated')]
+
+
+def test_switch_e_projected_cash_days_use_the_monthly_share():
+    I_d = load_snapshot(SNAP, 'abcd', REVIEWED)
+    I_e = load_snapshot(SNAP, 'abcde', REVIEWED)
+    a, b = daily.run(I_d)['daily']['cash'], daily.run(I_e)['daily']['cash']
+    changed = sorted(d for d in a if b[d]['rev_mn'] != a[d]['rev_mn'])
+    assert changed[0] == '2026-07-01' and changed[-1] == '2026-10-21' and len(changed) == 78
+    assert all(a[d]['regime'] == 'projected' for d in changed)
+    want = {'07': 0.171, '08': 0.17, '09': 0.162, '10': 0.162}   # Oct: latest disclosed month (Sep)
+    for d in changed:
+        assert b[d]['share'] == pytest.approx(want[d[5:7]], rel=1e-12)
+        assert b[d]['rev_mn'] / a[d]['rev_mn'] == pytest.approx(want[d[5:7]] / 0.174, rel=1e-12)
+    assert SW.monthly_share(I_e.facts, 'share_cash', 'FY 2027 October') == (0.162, 'FY 2027 September', 561)

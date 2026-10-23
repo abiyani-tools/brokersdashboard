@@ -3,6 +3,7 @@ Commodities!I, MTF data (2)!O/P."""
 from collections import defaultdict
 from .inputs import fy_month_of, q_of
 from . import calibrate as C
+from . import switches as SW
 
 
 def _sum_by(series, keyfn, dates=None):
@@ -53,8 +54,11 @@ def run(I):
         if q not in cash_q:
             continue
         c = cash_q[q]
-        R = trades[d] * c['share'] / c['tpo']
-        cash[d] = {'orders_mn': R, 'rev_mn': R * c['take_rate'], 'tpo': c['tpo'], 'share': c['share'],
+        share = c['share']
+        if 'e' in I.switches and c['regime'] == 'projected':          # switch e (D2): monthly cash share
+            share = SW.monthly_share(I.facts, 'share_cash', fy_month_of(d))[0]
+        R = trades[d] * share / c['tpo']
+        cash[d] = {'orders_mn': R, 'rev_mn': R * c['take_rate'], 'tpo': c['tpo'], 'share': share,
                    'regime': c['regime']}
     res['daily']['cash'] = cash
 
