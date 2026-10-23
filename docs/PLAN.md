@@ -86,7 +86,7 @@ Route by the kind of work, not by its importance. **No financial extraction or u
 
 **Hand-off contract for every subagent:** the input is a task, file paths and an exit test. The output is a file in `out/` plus a reply of ≤ 30 lines: what was done, numbers with sources, failures, and open `[SOURCE NEEDED]` items.
 
-## 5. Next session — start here
+## 5. Next session — start here (see also docs/HANDOFF_2026-10-23.md)
 1. Branch `claude/jolly-knuth-ws84jt` is ahead of `main` (fast-forward). `python3 -m pytest tests/ -q` → 78 passed, 1 skipped.
 2. `python3 run_live.py` (dry run) must exit 0; report in `out/live/<as_of>/report.md`. After merging to `main`, run `daily` from the Actions tab (manual) to try the DB path with the secrets.
 3. Open: Q1 FY25 revenue mix [SOURCE NEEDED] (NSE / BSE / Angel One still refused by this cloud environment's network policy — AB consented; the environment's Network access setting has to allow them, or run it on AB's Mac) · 2.4 back-sourcing · publishing a live run and the daily schedule.
