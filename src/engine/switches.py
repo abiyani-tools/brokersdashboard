@@ -43,6 +43,11 @@ PROJECTION_SWITCHES = {
     #     of their own month, or of the latest earlier month that has one, instead of carrying the last
     #     actual quarter's share. Actual quarters keep the quarterly share their trades/order is built on.
     'e': 'cash_share_monthly',
+    # (f) decision D3: each quarter's commodity days use that quarter's own take rate (mix × total income ÷
+    #     commodity orders) instead of the fixed Q3 FY26 rate (Commodities!AI11). Quarters after the last
+    #     one with a rate carry the latest (decision Q4). A quarter before the first one with a rate
+    #     (Q1 FY25: no revenue mix disclosed) uses the earliest rate, flagged as projected.
+    'f': 'comm_take_rate_quarterly',
 }
 
 IMPLEMENTED = set(CELL_SWITCHES) | set(MARKET_SWITCHES) | set(SUMMARY_SWITCHES) | set(PROJECTION_SWITCHES)
@@ -119,3 +124,35 @@ def monthly_share(facts, metric, month, back=12):
             f = facts.fact(metric, m)
             return f.value, m, f.fact_id
     raise SwitchError(f'no {metric} for {month} or the {back} months before it')
+
+
+def quarter_comm_rates(I, tr):
+    """{quarter: (Rs/order, 'actual')} for every quarter with a commodity take rate.
+
+    tr = calibrate.take_rates(I) (cells, so switches a, b apply). A quarter whose mix cell is empty but
+    which has a reviewed revmix_comm fact (Q2 FY25) uses that fact with the quarter's income and orders.
+    """
+    from .calibrate import WS_QCOL
+    out = {}
+    for q, col in WS_QCOL.items():
+        r = tr.get(q, {})
+        if 'take_rate_comm' in r:
+            out[q] = (r['take_rate_comm'], 'actual')
+            continue
+        ti, orders = I.ws(col, 99), I.ws(col, 8)
+        if I.facts is not None and I.facts.has('revmix_comm', q) and ti and orders:
+            f = I.facts.fact('revmix_comm', q)
+            if f.status == 'reviewed':
+                out[q] = (f.value * ti / orders, 'actual')
+    return out
+
+
+def comm_rate_for(rates, q):
+    """(rate, regime, source quarter) for quarter q under switch f."""
+    key = lambda x: (int(x[-4:]), int(x[1]))
+    if q in rates:
+        return rates[q][0], 'actual', q
+    have = sorted(rates, key=key)
+    earlier = [x for x in have if key(x) < key(q)]
+    src = earlier[-1] if earlier else have[0]
+    return rates[src][0], 'projected', src

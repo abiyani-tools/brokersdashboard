@@ -72,7 +72,7 @@ def test_unknown_and_unimplemented_switches_are_refused():
     with pytest.raises(SW.SwitchError, match='unknown'):
         Inputs(snap, 'z', [])
     with pytest.raises(SW.SwitchError, match='not implemented'):
-        Inputs(snap, 'f', [])
+        Inputs(snap, 'g', [])
 
 
 def test_cumulative_order():
@@ -161,3 +161,24 @@ def test_switch_e_projected_cash_days_use_the_monthly_share():
         assert b[d]['share'] == pytest.approx(want[d[5:7]], rel=1e-12)
         assert b[d]['rev_mn'] / a[d]['rev_mn'] == pytest.approx(want[d[5:7]] / 0.174, rel=1e-12)
     assert SW.monthly_share(I_e.facts, 'share_cash', 'FY 2027 October') == (0.162, 'FY 2027 September', 561)
+
+
+def test_switch_f_each_quarter_uses_its_own_commodity_take_rate():
+    from src.engine.inputs import q_of
+    I_e = load_snapshot(SNAP, 'abcde', REVIEWED)
+    I_f = load_snapshot(SNAP, 'abcdef', REVIEWED)
+    ra, rb = daily.run(I_e), daily.run(I_f)
+    a, b = ra['daily']['comm'], rb['daily']['comm']
+    rates = {q: v[0] for q, v in rb['calib']['comm_take_rate_q'].items()}
+    fixed = ra['calib']['comm_take_rate'][0]                         # Q3 FY26 after a + b: 23.3141
+    assert fixed == pytest.approx(0.061 * 13376.97 / 35, rel=1e-12)
+    assert rates['Q4 FY 2026'] == pytest.approx(0.065 * 14672.46 / 43, rel=1e-12)
+    assert rates['Q2 FY 2025'] == pytest.approx(0.037 * 15160 / 23, rel=1e-12)   # reviewed mix, no cell
+    want = {'Q1 FY 2025': rates['Q2 FY 2025'], 'Q2 FY 2027': rates['Q1 FY 2027'], 'Q3 FY 2027': rates['Q1 FY 2027']}
+    for d in a:
+        if not a[d]['rev_mn']:
+            continue
+        q = q_of(d)
+        assert b[d]['rev_mn'] / a[d]['rev_mn'] == pytest.approx(want.get(q, rates.get(q, fixed)) / fixed, rel=1e-12)
+    assert b['2024-05-02']['regime'] == 'projected'                  # Q1 FY25: no own rate (flagged)
+    assert all(b[d]['rev_mn'] == a[d]['rev_mn'] for d in a if q_of(d) == 'Q3 FY 2026')

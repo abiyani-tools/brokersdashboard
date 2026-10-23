@@ -67,14 +67,22 @@ def run(I):
     comm_m, comm_tr, comm_tr_q = C.calib_comm(I, _sum_by(mcx, fy_month_of))
     res['calib']['comm_month'], res['calib']['comm_take_rate'] = comm_m, (comm_tr, comm_tr_q)
     comm = {}
+    q_rates = SW.quarter_comm_rates(I, tr) if 'f' in I.switches else None    # switch f (D3)
+    if q_rates is not None:
+        res['calib']['comm_take_rate_q'] = q_rates
     for d in sorted(mcx):
         m = fy_month_of(d)
         if m not in comm_m:
             continue
         G = (mcx[d] / 1e6) / comm_m[m]['cpo']
         H = G * comm_m[m]['share']
-        comm[d] = {'orders_mn': H, 'rev_mn': H * comm_tr, 'cpo': comm_m[m]['cpo'], 'share': comm_m[m]['share'],
-                   'regime': comm_m[m]['regime']}
+        rate, regime = comm_tr, comm_m[m]['regime']
+        if q_rates is not None:
+            rate, rate_regime, _ = SW.comm_rate_for(q_rates, q_of(d))
+            if rate_regime == 'projected':
+                regime = 'projected'
+        comm[d] = {'orders_mn': H, 'rev_mn': H * rate, 'cpo': comm_m[m]['cpo'], 'share': comm_m[m]['share'],
+                   'take_rate': rate, 'regime': regime}
     res['daily']['comm'] = comm
 
     # ── MTF ──
