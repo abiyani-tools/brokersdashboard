@@ -8,7 +8,7 @@ from __future__ import annotations
 import datetime as dt
 import math
 from dataclasses import dataclass
-from typing import Iterable, Sequence
+from typing import Iterable, Sequence, Union
 
 
 @dataclass(frozen=True)
@@ -22,7 +22,7 @@ class Insufficient:
         return f"insufficient data: {self.reason}"
 
 
-Result = float | Insufficient
+Result = Union[float, Insufficient]
 
 
 def is_insufficient(x) -> bool:
