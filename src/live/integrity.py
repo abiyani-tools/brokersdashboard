@@ -47,8 +47,9 @@ RULES: dict[str, Rule] = {
 # never dropped. Add an entry only after the day has been looked at; say what is and is not known.
 KNOWN_ISSUES = {
     ("jump", "mcx:contracts", "2025-01-01"):
-        "406,749 contracts against a trailing 20-day minimum of 2,205,346; not a special session in "
-        "sb_calendar; cause not yet sourced (lake-auditor to check against MCX)",
+        "406,749 contracts against a trailing 20-day minimum of 2,205,346: New Year's Day, MCX traded the "
+        "morning session only (evening session from 5 pm closed; Zerodha bulletin 31 Dec 2024). Genuine thin "
+        "day, not a data error; not marked special in sb_calendar, so it stays in the commodity averages",
 }
 
 

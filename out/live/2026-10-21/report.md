@@ -34,7 +34,7 @@ Nothing was written to the database.
 
 ```
 E5: 0 blocking, 4 warning, 5 info
-INFO    jump     mcx:contracts 2025-01-01: 406,749 outside 0.2×2,205,346 .. 5.0×7,748,851 — known: 406,749 contracts against a trailing 20-day minimum of 2,205,346; not a special session in sb_calendar; cause not yet sourced (lake-auditor to check against MCX)
+INFO    jump     mcx:contracts 2025-01-01: 406,749 outside 0.2×2,205,346 .. 5.0×7,748,851 — known: 406,749 contracts against a trailing 20-day minimum of 2,205,346: New Year's Day, MCX traded the morning session only (evening session from 5 pm closed; Zerodha bulletin 31 Dec 2024). Genuine thin day, not a data error; not marked special in sb_calendar, so it stays in the commodity averages
 WARNING missing  mtf_industry:book_cr 2026-04-08: no value on a trading day
 WARNING conflict total_orders FY 2025 January -: seed values disagree; using fact 415 (excel: F&O market!C35) by rule
 WARNING conflict total_orders FY 2025 November -: seed values disagree; using fact 413 (excel: F&O market!C33) by rule
