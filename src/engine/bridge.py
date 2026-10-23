@@ -11,7 +11,7 @@ import sys
 
 from . import daily, switches as SW
 from .inputs import load_snapshot
-from .summary_periods import PANELS, _combine, make_segments
+from .summary_periods import _combine, asof_rows, make_segments, panels_of
 
 SNAP = 'snapshot/db_snapshot_2026-10-23.json'
 REVIEWED = 'snapshot/facts_reviewed_2026-10-23.json'
@@ -23,10 +23,14 @@ SEGMENTS = (('fo', 'F&O', 'rev_mn'), ('cash', 'Cash', 'rev_mn'), ('comm', 'Commo
 
 def adr(I):
     res = daily.run(I)
-    segs = make_segments(res['daily'], exclude=SW.excluded_dates(I))
+    segs = make_segments(res['daily'], exclude=SW.excluded_dates(I), mtf_split='g' in I.switches)
     get = {'FY': lambda s, k: s.fy(k), 'Q': lambda s, k: s.q(k), 'M': lambda s, k: s.m(k)}
-    table = {(p, k, panel): _combine(segs, panel, lambda s: get[p](s, k)) for p, k in PERIODS for panel in PANELS}
-    return table, res
+    table = {(p, k, panel): _combine(segs, panel, lambda s: get[p](s, k))
+             for p, k in PERIODS for panel in panels_of(segs)}
+    last = max(d for s in segs.values() for d in s.s)
+    asof = {(r['panel'], r['table_name'], r['row_label']): r['value']
+            for panel in panels_of(segs) for r in asof_rows(segs, panel, last)}
+    return table, res, asof
 
 
 def daily_changes(res_a, res_b):
@@ -48,19 +52,24 @@ def bridge(letter, snap=SNAP, reviewed=REVIEWED):
     before, after = SW.cumulative(letter)
     I_a = load_snapshot(snap, before, reviewed if before else None)
     I_b = load_snapshot(snap, after, reviewed)
-    t_a, r_a = adr(I_a)
-    t_b, r_b = adr(I_b)
+    t_a, r_a, s_a = adr(I_a)
+    t_b, r_b, s_b = adr(I_b)
     rows = []
+    panels = list(dict.fromkeys([k[2] for k in t_a] + [k[2] for k in t_b]))
     for p, k in PERIODS:
-        for panel in PANELS:
-            x, y = t_a[(p, k, panel)], t_b[(p, k, panel)]
-            rows.append(dict(period=k, panel=panel, before=x, after=y, delta=y - x, pct=(y / x - 1) if x else None))
+        for panel in panels:
+            x, y = t_a.get((p, k, panel)), t_b.get((p, k, panel))
+            rows.append(dict(period=k, panel=panel, before=x, after=y,
+                             delta=None if x is None or y is None else y - x,
+                             pct=(y / x - 1) if x and y is not None else None))
+    asof = [dict(key=key, before=s_a.get(key), after=s_b.get(key)) for key in dict.fromkeys(list(s_a) + list(s_b))
+            if s_a.get(key) != s_b.get(key)]
     return dict(letter=letter, before=sorted(before), after=sorted(after), rows=rows,
                 overrides={c: v for c, v in I_b.overrides.items() if v[2] == letter},
                 market={k: I_b.market_overrides.get(k, {}) for k in SW.MARKET_SWITCHES.get(letter, ())},
                 market_before={k: {d: I_a.mkt[k][d] for d in I_b.market_overrides.get(k, {})}
                                for k in SW.MARKET_SWITCHES.get(letter, ())},
-                days=daily_changes(r_a, r_b),
+                days=daily_changes(r_a, r_b), asof=asof,
                 excluded=SW.excluded_dates(I_b) - SW.excluded_dates(I_a))
 
 
@@ -85,7 +94,15 @@ def markdown(b):
           '| Period | Panel | Before | After | Δ | Δ % |', '|---|---|---:|---:|---:|---:|']
     for r in b['rows']:
         pct = '' if r['pct'] is None else f"{100 * r['pct']:+.4f}%"
-        L.append(f"| {r['period']} | {r['panel']} | {r['before']:.6f} | {r['after']:.6f} | {r['delta']:+.6f} | {pct} |")
+        f6 = lambda x, sign='': '—' if x is None else f"{x:{sign}.6f}"
+        L.append(f"| {r['period']} | {r['panel']} | {f6(r['before'])} | {f6(r['after'])} | {f6(r['delta'], '+')} | {pct} |")
+    if b.get('asof'):
+        L += ['', 'Week / weekday tables (as of the last date) that changed:', '',
+              '| Panel | Table | Row | Before | After |', '|---|---|---|---:|---:|']
+        for r in b['asof']:
+            (panel, table, label), x, y = r['key'], r['before'], r['after']
+            f6 = lambda v: '—' if v is None else f'{v:.6f}'
+            L.append(f"| {panel} | {table} | {label} | {f6(x)} | {f6(y)} |")
     L += ['', 'Daily revenue rows that changed:', '', '| Segment | Days | Changed | First | Last | Ratio min | Ratio max |',
           '|---|---:|---:|---|---|---:|---:|']
     for name, d in b['days'].items():

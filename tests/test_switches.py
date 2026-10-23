@@ -72,7 +72,7 @@ def test_unknown_and_unimplemented_switches_are_refused():
     with pytest.raises(SW.SwitchError, match='unknown'):
         Inputs(snap, 'z', [])
     with pytest.raises(SW.SwitchError, match='not implemented'):
-        Inputs(snap, 'g', [])
+        Inputs(snap, 'h', [])
 
 
 def test_cumulative_order():
@@ -137,8 +137,8 @@ def test_switch_d_drops_special_sessions_from_averages_only():
     I_d = load_snapshot(SNAP, 'abcd', REVIEWED)
     assert SW.excluded_dates(I_c) == set()
     assert SW.excluded_dates(I_d) == {'2023-11-12', '2024-03-02', '2024-05-18', '2024-11-01', '2025-10-21'}
-    t_c, r_c = B.adr(I_c)
-    t_d, r_d = B.adr(I_d)
+    t_c, r_c, _ = B.adr(I_c)
+    t_d, r_d, _ = B.adr(I_d)
     assert r_c['daily'] == r_d['daily']                       # daily rows (and totals) untouched
     fo = {d: r['rev_mn'] / 10 for d, r in r_d['daily']['fo'].items() if fy_month_of(d) == 'FY 2026 October'}
     assert t_c[('M', 'FY 2026 October', 'F&O')] == pytest.approx(mean(fo.values()), rel=1e-12)
@@ -182,3 +182,25 @@ def test_switch_f_each_quarter_uses_its_own_commodity_take_rate():
         assert b[d]['rev_mn'] / a[d]['rev_mn'] == pytest.approx(want.get(q, rates.get(q, fixed)) / fixed, rel=1e-12)
     assert b['2024-05-02']['regime'] == 'projected'                  # Q1 FY25: no own rate (flagged)
     assert all(b[d]['rev_mn'] == a[d]['rev_mn'] for d in a if q_of(d) == 'Q3 FY 2026')
+
+
+def test_switch_g_mtf_gross_everywhere_plus_a_net_panel():
+    from src.engine import bridge as B
+    I_f = load_snapshot(SNAP, 'abcdef', REVIEWED)
+    I_g = load_snapshot(SNAP, 'abcdefg', REVIEWED)
+    t_f, r_f, s_f = B.adr(I_f)
+    t_g, r_g, s_g = B.adr(I_g)
+    assert r_f['daily'] == r_g['daily']                                   # presentation only
+    assert all(t_g[k] == v for k, v in t_f.items())                       # FY / Q / M unchanged
+    net = I_g.assume['mtf_net_factor'][0]
+    assert net == 0.45
+    for p, k in B.PERIODS:
+        assert t_g[(p, k, 'MTF (net)')] == pytest.approx(net * t_g[(p, k, 'MTF')], rel=1e-12)
+    # weekday tables: MTF switches from net to gross (x 1/0.45); Consolidated moves by the same amount
+    for day in ('Monday', 'Thursday'):
+        before, after = s_f[('MTF', 'Weekday', day)], s_g[('MTF', 'Weekday', day)]
+        assert after == pytest.approx(before / net, rel=1e-12)
+        assert s_g[('Consolidated', 'Weekday', day)] - s_f[('Consolidated', 'Weekday', day)] == pytest.approx(after - before, rel=1e-12)
+    assert s_g[('MTF (net)', 'Weekday', 'Monday')] == pytest.approx(s_f[('MTF', 'Weekday', 'Monday')], rel=1e-12)
+    # week tables already used gross: unchanged
+    assert s_g[('Consolidated', 'Week', 'Last 5 trading days')] == s_f[('Consolidated', 'Week', 'Last 5 trading days')]

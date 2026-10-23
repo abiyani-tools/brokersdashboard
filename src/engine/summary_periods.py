@@ -25,8 +25,13 @@ PARITY_SELECTIONS = {
     'default': ('FY 2027', 'Q2 FY 2027', 'FY 2027 September'),
     'Cash': ('FY 2027', 'Q4 FY 2026', 'FY 2026 February'),
 }
-SEGMENT_PANELS = ('F&O', 'Cash', 'Commodities', 'MTF')
+SEGMENT_PANELS = ('F&O', 'Cash', 'Commodities', 'MTF', 'MTF (net)')
 PANELS = ('Consolidated', 'Broking', 'MTF', 'F&O', 'Cash', 'Commodities')
+
+
+def panels_of(segs):
+    """The panels to show: the six workbook panels, plus 'MTF (net)' under switch g."""
+    return PANELS + (('MTF (net)',) if 'MTF (net)' in segs else ())
 
 
 # ── label arithmetic ──
@@ -150,9 +155,11 @@ def _cmp(a, b, what):
 
 
 # ── segments from the engine's daily output ──
-def make_segments(daily, guarded=False, calendar=None, exclude=()):
+def make_segments(daily, guarded=False, calendar=None, exclude=(), mtf_split=False):
     """Same series and scaling as summary.build. guarded=True needs `calendar` ({iso: sb_calendar row}).
-    exclude: dates left out of every statistic (switch d: special sessions)."""
+    exclude: dates left out of every statistic (switch d: special sessions).
+    mtf_split (switch g, decision D4): MTF is gross in every table (the workbook's weekday tables use net),
+    and a separate 'MTF (net)' panel shows net = 45% × gross. Consolidated stays on gross."""
     exclude = set(exclude)
     if exclude:
         daily = {seg: {d: r for d, r in rows.items() if d not in exclude} for seg, rows in daily.items()}
@@ -161,8 +168,10 @@ def make_segments(daily, guarded=False, calendar=None, exclude=()):
         'Cash': ({d: r['rev_mn'] for d, r in daily['cash'].items()}, 10, None, False, 'is_equity_day'),
         'Commodities': ({d: r['rev_mn'] for d, r in daily['comm'].items()}, 10, None, True, 'is_mcx_day'),
         'MTF': ({d: r['gross_cr'] for d, r in daily['mtf'].items()}, 1,
-                {d: r['net_cr'] for d, r in daily['mtf'].items()}, False, 'is_equity_day'),
+                None if mtf_split else {d: r['net_cr'] for d, r in daily['mtf'].items()}, False, 'is_equity_day'),
     }
+    if mtf_split:
+        spec['MTF (net)'] = ({d: r['net_cr'] for d, r in daily['mtf'].items()}, 1, None, False, 'is_equity_day')
     out = {}
     for name, (s, scale, w, pos, flag) in spec.items():
         if guarded:
@@ -190,7 +199,7 @@ def parity_stats(segs):
                 'wd': [[seg.weekday(k, 1), seg.weekday(k, 3), seg.weekday(k, 10)] for k in range(5)]}
     D = labels_for(*PARITY_SELECTIONS['default'])
     stats = {n: block(segs[n], labels_for(*PARITY_SELECTIONS.get(n, PARITY_SELECTIONS['default'])))
-             for n in SEGMENT_PANELS}
+             for n in ('F&O', 'Cash', 'Commodities', 'MTF')}
     parts = [block(segs[n], D) for n in ('F&O', 'Cash', 'Commodities')]
 
     def add(blocks):
@@ -212,13 +221,13 @@ def _row(panel, ptype, pkey, table, label, value, comparison=None, comp=None):
 
 
 def period_rows(segs, six='calendar'):
-    """Rows for every FY, quarter and month present in the daily series, for all six panels."""
+    """Rows for every FY, quarter and month present in the daily series, for every panel."""
     dates = sorted({d for s in segs.values() for d in s.s})
     fys = sorted({fy_of(d) for d in dates})
     qs = sorted({q_of(d) for d in dates}, key=lambda q: (int(q[-4:]), int(q[1])))
     ms = sorted({fy_month_of(d) for d in dates}, key=lambda m: (int(m[3:7]), MONTHS.index(m[8:])))
     rows = []
-    for panel in PANELS:
+    for panel in panels_of(segs):
         v = lambda fn: _combine(segs, panel, fn)
         for fy in fys:
             a, b = v(lambda s: s.fy(fy)), v(lambda s: s.fy(prev_fy(fy)))

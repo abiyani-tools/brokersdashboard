@@ -35,6 +35,9 @@ SUMMARY_SWITCHES = {
     # (d) special sessions (sb_calendar.special_session: Muhurat, DR test) are dropped from every average,
     #     last-N and weekday statistic, for all segments; they stay in the daily rows and in totals.
     'd': 'exclude_special_sessions',
+    # (g) decision D4: MTF shown gross in every table (the workbook's weekday tables use net) plus an
+    #     'MTF (net)' panel at net = 45% × gross [SOURCE NEEDED: basis for 45%]. Consolidated stays gross.
+    'g': 'mtf_gross_and_net',
 }
 
 # switch -> projection rule replaced in the daily model
