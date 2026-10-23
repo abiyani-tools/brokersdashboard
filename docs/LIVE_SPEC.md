@@ -1,6 +1,7 @@
 # LIVE_SPEC — Angel One ADR engine: parity → live
 
-Status: **DRAFT for AB sign-off** (PLAN 3.0) · written 23 Oct 2026 · broker `ANGELONE`
+Status: **SIGNED OFF by AB, 23 Oct 2026** — all seven §7 proposals accepted. E1, E2, E4, E5 and E6 are implemented in
+`src/live/` (tests in `tests/live/`). E3 and the §4 switches wait for the engine code. · broker `ANGELONE`
 Baseline: parity run `42e5519f-0e19-4834-9a4c-2ce8ccec574a` (as-of 21 Oct 2026, 8,774 / 8,797 exact, 0 unexplained).
 
 This spec was written from the live database (`sb_*` tables, the stored calibration of the parity run) and the plan.
@@ -8,7 +9,7 @@ The engine code (`src/engine`, commits `d237013` / `7c745d5`) was not available 
 function names are left to `engine-coder`. Every number below was recomputed from DB rows and reproduces the parity
 calibration where a parity value exists (F&O take rate 21.4230, cash 16.7752, commodity 22.2949).
 
-Sign-off: AB ticks each box in §7 or writes a different rule next to it. Nothing in E1–E6 or §4 is coded before that.
+Sign-off: AB accepted every proposal in §7 on 23 Oct 2026 (the proposal in italics is the rule in force).
 
 ---
 
@@ -36,8 +37,16 @@ Sign-off: AB ticks each box in §7 or writes a different rule next to it. Nothin
 | Calendar, special sessions | `sb_calendar` | Excel date rows |
 | Fixed assumptions (MTF yield 14.95%, 246-day basis, 45% net factor) | `sb_assumptions` | same |
 
-**Precedence** is already built into the view `sb_facts_current`: drop `rejected`, then prefer `reviewed`, then the latest
-`created_at`, then the highest `fact_id`. The loader uses the view and does not apply its own ordering.
+**Precedence** for facts is the same as the view `sb_facts_current`: drop `rejected`, prefer `reviewed`, then the latest
+`created_at`, then the highest `fact_id`. The loader (`live.loader.select_current`) reads `sb_disclosure_facts` and applies
+this ordering in code. It adds one more step, decision Q1: among non-reviewed rows of `total_orders`, the F&O-market sheet
+wins. The view happens to give the same answer today only because those rows have the higher fact_ids.
+
+**Volumes** (`live.loader.select_volumes`) keep one value per date and input:
+- **Without switch (c)**, the volume policy is `excel_first` (parity inputs): the `excel_seed` row, else the lake row.
+- **With (c)**, it is `best_ok`: an `ok` lake row, else an `ok` Excel row, else whatever exists, kept with its status.
+
+A selected value that is not `ok` is never replaced by 0; E5 blocks on it.
 
 - After the 2.2 review (23 Oct): 178 reviewed, 477 seeds staged, 509 current rows.
 - 62 reviewed rows overlap a seed for the same metric and period, and the reviewed value wins. None of them sets
@@ -78,13 +87,15 @@ Sign-off: AB ticks each box in §7 or writes a different rule next to it. Nothin
 - Exit test: add a synthetic November 2026 row with no inputs; the run fails, naming the period.
 
 **E2 — live loader.**
-- The function is `load_inputs(broker, as_of, mode)`. In live mode it reads `sb_facts_current` as in §2 and returns a typed
-  `metric × period` frame with unit and source fact_id.
-- In parity mode it is unchanged.
-- Exit test: in live mode it returns the Q2 FY27 inputs (orders_fo 256, orders_cash 66, orders_comm 45, total_income 14,315,
-  revmix_fo 0.387 / cash 0.087 / comm 0.071, avg_funding_book 74,530 Rs Mn, share_*_q), and the parity test is byte-identical.
+- `live.loader.load_inputs(reader, broker, as_of, switches)` returns the calendar, the facts (precedence as in §2, with unit
+  conversion and the source fact_id of each value), the selected volumes and the raw volumes.
+- The parity engine keeps its own loader; the parity path is not touched.
+- Exit test (`tests/live/test_loader.py`): it returns the Q2 FY27 inputs (orders_fo 256, orders_cash 66, orders_comm 45,
+  total_income 14,315, revmix_fo 0.387 / cash 0.087 / comm 0.071, avg_funding_book 74,530 Rs Mn = 7,453 Cr, share_*_q),
+  all from reviewed facts. **Done.**
+- Still open: running the parity gate once the engine imports `live/`. The gate must stay unchanged.
 
-**E3 — Summary for every FY / quarter / month (D1).**
+**E3 — Summary for every FY / quarter / month (D1).** *Not started: it needs the engine's ADR code (`src/engine`).*
 - `sb_summary_cells` gets a `period_key` column, plus `period_type` and `mode`. That is a migration; the existing 210 rows get
   `period_key` = the as-of labels of the parity run.
 - For each selected period, comparisons follow the period:
@@ -101,19 +112,40 @@ Sign-off: AB ticks each box in §7 or writes a different rule next to it. Nothin
   n is below the window or the denominator is 0.
 - Exit test: unit tests for n = 0, 1 and window−1, and a zero denominator.
 
-**E5 — integrity checks before every live run.** Any failure blocks publishing (no `sb_summary_cells` write) and is
-written to `sb_runs.notes`.
-- Missing day: a calendar equity or MCX day with no row for a dataset the ADR uses.
-- Zero on a trading day, or a `suspect` row.
-- Frozen series: the same value on 3 or more consecutive trading days.
-- Jump: a day's value above 5× or below 0.2× of its trailing 20-day median.
-- Unit sanity: as in §2.
+**E5 — integrity checks before every live run** (`live.integrity.run_checks`). It runs in two layers:
+- **Selected layer:** the series the engine will use. An issue here is an *error* and blocks publishing (no
+  `sb_summary_cells` write); the report goes to `sb_runs.notes`.
+- **Audit layer:** each source on its own. Its issues are *info*, so a lake gap stays visible even when the other source
+  covers the day.
 
-The exit test is that it catches the known gaps, all present in `sb_market_daily` today:
-- BSE cash trades 0 on 15 Jun 2026.
-- NSE IO and SO contracts 0 on 12–15 Oct 2026.
-- MCX contracts 0 on 27–28 May 2026.
-- BSE F&O contracts frozen at 18,962,859 from 29 Sep to 21 Oct 2026 (15 days, `imputed`). This one becomes a hard failure once switch (c) is on.
+The checks:
+- **Missing day:** a calendar equity or MCX day with no value for an input the ADR uses.
+- **Status and zero:** a non-`ok` status, or zero on a trading day.
+- **Frozen series:** the same non-zero value on 3 or more consecutive trading days.
+- **Jump:** a day's value above 5× the **max**, or below 0.2× the **min**, of the trailing 20 non-zero values (with at
+  least 10 of them). *Changed from "5× the median":* expiry days run 15–20× a normal day (BSE F&O 1 Oct 513M vs 27M), so a
+  median rule would block every expiry. The max/min rule still catches ×100 or ÷1000 unit errors, and finds no false jump
+  in six months of real data.
+- **Unit sanity:** as in §2. A take rate outside 5–60 Rs/order, or "insufficient", is an error.
+- **Seed conflicts** settled by the Q1 rule are *warnings*.
+- **Industry MTF book:** a missing day is a *warning*, and the last 3 trading days may be missing (publication lag),
+  because the quarterly average is taken over the days reported. The only gap today is 8 Apr 2026.
+
+The exit test passes (`tests/live/test_integrity.py`) on lake data from 1 Apr to 21 Oct 2026:
+- **Without switch (c)**, two errors block: BSE F&O contracts frozen at 18,962,859 from 28 Sep to 21 Oct (16 days), and
+  15 `imputed` days, both from the Excel copy.
+- **With (c)**, nothing blocks: the lake has the real BSE values, so open question 3 is settled.
+- **Either way**, the audit reports every known gap:
+  - BSE cash 0 on 15 Jun (lake).
+  - NSE IO and SO 0 on 12–15 Oct (lake).
+  - MCX 0 on 27–28 May (`octo_mcx`).
+  - IO and SO missing from the lake on 16, 19 and 21 Oct.
+  - The frozen BSE values in the Excel copy.
+
+  In every one of these cases, the other source holds an `ok` value for those days.
+
+The calendar's equity days match every trading-day count Angel One discloses: Q1 FY27 60, Q2 FY27 65, and Jun / Jul /
+Aug / Sep 21 / 23 / 21 / 21.
 
 `nse_cash/turnover_cr` and `bse_cash/turnover_cr` are `suspect` on 340 days (an Excel row offset). They are not used by
 the ADR, so E5 checks only the datasets the ADR reads.
@@ -133,7 +165,7 @@ The Δ figures below are for the **input**; the ADR bridge in the commit shows t
 |---|---|---|---|---|
 | a | **J8 = 35** | Q3 FY26 commodity orders = 35 (reviewed 596), not 36 | orders_comm Q3 FY26 | Commodity take rate 22.2949 → **22.9319 (+2.86%)**. Commodity ADR **+2.86% on every day** while the fixed-quarter rule is on |
 | b | **One-decimal revenue mix** | revmix_* from reviewed deck values (Q2 FY25 – Q1 FY27) | revmix_fo / cash / comm | F&O take rate used 21.4230 → **21.4093 (−0.06%)**. Cash 16.7752 → **16.5122 (−1.57%)**. Commodity (after a) 22.9319 → **23.3141 (+1.67%)**. ADR moves the same % on projected days |
-| c | **BSE contracts unfrozen** | BSE F&O contracts from the lake for 29 Sep – 21 Oct 2026, not the carried 18,962,859 | `sb_market_daily bse_fo/contracts` | **Up**: the plan's estimate is Oct F&O ADR about 6.74 → 11.67 under parity rules. Needs the true BSE values in the lake first (lake-auditor) **[§7 Q3]** |
+| c | **BSE contracts unfrozen** | Volume policy `best_ok` (§2): an `ok` lake value first. For 29 Sep – 21 Oct 2026, BSE F&O contracts come from `exchangesdash_json` (for example 1 Oct 512,976,127; 15 Oct 493,485,755), not the carried 18,962,859. For every other input the lake and Excel agree on all days since April, except where the lake is 0 or missing; those days stay on Excel | `sb_market_daily bse_fo/contracts` | **Up**: the plan's estimate is Oct F&O ADR about 6.74 → 11.67 under parity rules. The lake values are present (Q3 settled) |
 | d | **Special sessions excluded** | Days with `special_session` (muhurat, dr_test) are dropped from averages, last-N and weekday tables in live mode. They remain in totals | `sb_calendar.special_session` (5 days; latest Muhurat 21 Oct 2025) | Averages over periods with a thin special session go **up** (FY26 October, FY25 November, …). So Oct-26 **YoY falls** and month-on-month comparisons involving those months change |
 | e | **D2 monthly cash share** | Projected cash orders use the latest **monthly** cash share, not the carried quarter | share_cash (Sep-26 0.162) vs carried Q1 FY27 0.174 | Cash orders and ADR for days after the last disclosed month (Oct-26) **−6.9%** (0.162 / 0.174) |
 | f | **D3 quarterly commodity take rate** | Each quarter's days use that quarter's own take rate. A quarter not yet reported carries the latest reported quarter **[§7 Q4]** | revmix_comm, orders_comm, total_income per quarter | Replaces the single Q3 FY26 rate (23.3141 after a + b) with each quarter's own, using the reviewed mix: Q1 FY26 23.285 (−0.1%), Q2 FY26 23.254 (−0.3%), Q3 FY26 unchanged, Q4 FY26 22.179 (**−4.9%**), Q1 FY27 22.939 (**−1.6%**). Q2 FY27 and later days carry Q1 FY27 (22.939, −1.6%) until (h). Commodity ADR **down or flat** in every quarter |
@@ -164,20 +196,20 @@ The following are not covered here:
 
 ## 7. Decisions needed from AB
 
-- [ ] **Q1** — The three seed-vs-seed monthly total_orders conflicts. Use the F&O-market value until `filing-extractor` stages the
+- [x] **Q1** — The three seed-vs-seed monthly total_orders conflicts. Use the F&O-market value until `filing-extractor` stages the
   disclosed values? *(proposed: yes)*
-- [ ] **Q2** — Live "6M" = revenue ÷ trading days over 6 calendar months ending at the selected month. The Excel averages the two
+- [x] **Q2** — Live "6M" = revenue ÷ trading days over 6 calendar months ending at the selected month. The Excel averages the two
   quarter ADRs instead. *(proposed: calendar 6M)*
-- [ ] **Q3** — Switch (c) needs real BSE F&O contracts for 29 Sep – 21 Oct. Take them from the ExchangesDash lake, or keep
+- [x] **Q3** — Switch (c) needs real BSE F&O contracts for 29 Sep – 21 Oct. Take them from the ExchangesDash lake, or keep
   `imputed` and let E5 block? *(proposed: lake; block if absent)*
-- [ ] **Q4** — D3 for a quarter not yet reported: carry the latest reported quarter's commodity take rate (after (h): Q2 FY27 = 22.586, applied to Q3 FY27)?
+- [x] **Q4** — D3 for a quarter not yet reported: carry the latest reported quarter's commodity take rate (after (h): Q2 FY27 = 22.586, applied to Q3 FY27)?
   *(proposed: yes)*
-- [ ] **Q5** — MTF Angel book: in live mode use the disclosed average funding book. The Excel back-solves the book from interest
+- [x] **Q5** — MTF Angel book: in live mode use the disclosed average funding book. The Excel back-solves the book from interest
   income ÷ 3.75% (`MTF data!P53:P57`). The two differ by ≤ 0.9% (Q4 FY26 5,796 vs 5,849 Cr; Q1 FY27 6,133 vs 6,137 Cr).
   *(proposed: disclosed book)*
-- [ ] **Q6** — The industry MTF average in live mode = the daily lake average for the quarter (Q1 FY27 120,751 Cr). Parity uses the
+- [x] **Q6** — The industry MTF average in live mode = the daily lake average for the quarter (Q1 FY27 120,751 Cr). Parity uses the
   monthly series (119,000 Cr). *(proposed: daily lake)*
-- [ ] **Q7** — Q2 FY27 changed the revenue-mix layout: depository 4.0% and other 1.0% are now separate lines, and broking = 54.5%
+- [x] **Q7** — Q2 FY27 changed the revenue-mix layout: depository 4.0% and other 1.0% are now separate lines, and broking = 54.5%
   = F&O 38.7 + cash 8.7 + commodity 7.1. The F&O take rate stays consistent (21.64 own-quarter, vs 21.51–21.55 in Q4 FY26 /
   Q1 FY27), so the F&O share is not inflated by the new lines. Accept the deck's segment shares as-is? *(proposed: yes)*
-- [ ] **Sign-off** — spec approved; `engine-coder` may start E1–E6.
+- [x] **Sign-off** — AB, 23 Oct 2026: "go with your proposals on all seven, start E1–E6".
