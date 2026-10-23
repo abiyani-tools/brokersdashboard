@@ -2,7 +2,7 @@ import datetime as dt
 
 import pytest
 
-from live.guards import Insufficient, is_insufficient, mean, mean_last, ratio_change, safe_div, weekday_mean
+from src.live.guards import Insufficient, is_insufficient, mean, mean_last, ratio_change, safe_div, weekday_mean
 
 
 def test_division_by_zero_is_insufficient_not_zero():

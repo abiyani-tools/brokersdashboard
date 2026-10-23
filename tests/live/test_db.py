@@ -3,7 +3,7 @@ import os
 
 import pytest
 
-from live.db import KEY_ENV, MissingCredentials, SnapshotReader, SupabaseReader, reader_from_env
+from src.live.db import KEY_ENV, MissingCredentials, SnapshotReader, SupabaseReader, reader_from_env
 
 SECRET = "sb_secret_TEST_ONLY_not_a_real_key"
 

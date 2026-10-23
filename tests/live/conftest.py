@@ -6,7 +6,7 @@ from pathlib import Path
 import pytest
 
 ROOT = Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(ROOT / "src"))
+sys.path.insert(0, str(ROOT))
 
 FIX = Path(__file__).parent / "fixtures"
 MARKET = FIX / "market_2026-04-01_2026-10-21.json"
