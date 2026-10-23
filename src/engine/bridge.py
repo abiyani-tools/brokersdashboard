@@ -1,0 +1,93 @@
+"""ADR bridge for one switch (LIVE_SPEC §5): average daily revenue before → after, per segment.
+
+Periods: FY 2027 (to date), Q2 FY 2027, FY 2027 October (to date). Rs crore per trading day; MTF is gross.
+"Before" = the switches earlier in the order a → i; "after" adds this one, so bridges add up.
+
+    python3 -m src.engine.bridge a            # writes out/bridges/a.md
+"""
+import os
+import sys
+
+from . import daily, switches as SW
+from .inputs import load_snapshot
+from .summary_periods import PANELS, _combine, make_segments
+
+SNAP = 'snapshot/db_snapshot_2026-10-23.json'
+REVIEWED = 'snapshot/facts_reviewed_2026-10-23.json'
+PERIODS = (('FY', 'FY 2027'), ('Q', 'Q2 FY 2027'), ('M', 'FY 2027 October'))
+SEGMENTS = (('fo', 'F&O', 'rev_mn'), ('cash', 'Cash', 'rev_mn'), ('comm', 'Commodities', 'rev_mn'), ('mtf', 'MTF', 'gross_cr'))
+
+
+def adr(I):
+    res = daily.run(I)
+    segs = make_segments(res['daily'])
+    get = {'FY': lambda s, k: s.fy(k), 'Q': lambda s, k: s.q(k), 'M': lambda s, k: s.m(k)}
+    table = {(p, k, panel): _combine(segs, panel, lambda s: get[p](s, k)) for p, k in PERIODS for panel in PANELS}
+    return table, res
+
+
+def daily_changes(res_a, res_b):
+    """Per segment: days whose revenue changed, and the range of after/before ratios."""
+    out = {}
+    for seg, name, key in SEGMENTS:
+        a, b = res_a['daily'][seg], res_b['daily'][seg]
+        if set(a) != set(b):
+            raise AssertionError(f'{name}: the switch changed which days exist')
+        ratios = [b[d][key] / a[d][key] for d in a if a[d][key] and b[d][key] != a[d][key]]
+        changed = sorted(d for d in a if b[d][key] != a[d][key])
+        out[name] = dict(days=len(a), changed=len(changed), first=changed[0] if changed else None,
+                         last=changed[-1] if changed else None,
+                         rmin=min(ratios) if ratios else None, rmax=max(ratios) if ratios else None)
+    return out
+
+
+def bridge(letter, snap=SNAP, reviewed=REVIEWED):
+    before, after = SW.cumulative(letter)
+    I_a = load_snapshot(snap, before, reviewed if before else None)
+    I_b = load_snapshot(snap, after, reviewed)
+    t_a, r_a = adr(I_a)
+    t_b, r_b = adr(I_b)
+    rows = []
+    for p, k in PERIODS:
+        for panel in PANELS:
+            x, y = t_a[(p, k, panel)], t_b[(p, k, panel)]
+            rows.append(dict(period=k, panel=panel, before=x, after=y, delta=y - x, pct=(y / x - 1) if x else None))
+    return dict(letter=letter, before=sorted(before), after=sorted(after), rows=rows,
+                overrides={c: v for c, v in I_b.overrides.items() if v[2] == letter},
+                days=daily_changes(r_a, r_b))
+
+
+def markdown(b):
+    L = [f"# Bridge — switch ({b['letter']})", '',
+         f"Before: switches {''.join(b['before']) or 'none (parity)'} · after: {''.join(b['after'])}", '']
+    if b['overrides']:
+        L += ['Cells replaced:', '']
+        for (sheet, col, row), (v, fid, _) in b['overrides'].items():
+            L.append(f"- `{sheet}!{col}{row}` → {v:g} (fact {fid}, reviewed)")
+        L.append('')
+    L += ['ADR, Rs crore per trading day (MTF gross):', '',
+          '| Period | Panel | Before | After | Δ | Δ % |', '|---|---|---:|---:|---:|---:|']
+    for r in b['rows']:
+        pct = '' if r['pct'] is None else f"{100 * r['pct']:+.4f}%"
+        L.append(f"| {r['period']} | {r['panel']} | {r['before']:.6f} | {r['after']:.6f} | {r['delta']:+.6f} | {pct} |")
+    L += ['', 'Daily revenue rows that changed:', '', '| Segment | Days | Changed | First | Last | Ratio min | Ratio max |',
+          '|---|---:|---:|---|---|---:|---:|']
+    for name, d in b['days'].items():
+        f = (lambda x: '' if x is None else f'{x:.9f}')
+        L.append(f"| {name} | {d['days']} | {d['changed']} | {d['first'] or ''} | {d['last'] or ''} | {f(d['rmin'])} | {f(d['rmax'])} |")
+    return '\n'.join(L) + '\n'
+
+
+def main(argv):
+    letter = argv[1]
+    b = bridge(letter)
+    os.makedirs('out/bridges', exist_ok=True)
+    path = f'out/bridges/{letter}.md'
+    with open(path, 'w') as fh:
+        fh.write(markdown(b))
+    print(markdown(b))
+    print(f'written {path}')
+
+
+if __name__ == '__main__':
+    main(sys.argv)

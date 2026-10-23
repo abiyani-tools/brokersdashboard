@@ -16,7 +16,9 @@ def _ref(ref):
 
 
 class Inputs:
-    def __init__(self, snap):
+    def __init__(self, snap, switches=(), reviewed_facts=None):
+        """switches: live switches to apply (src/engine/switches.py); none = parity mode.
+        reviewed_facts: sb_disclosure_facts rows with status 'reviewed' (needed by cell switches)."""
         self.snap = snap
         # calendar
         self.cal = {r['trade_date']: r for r in snap['calendar']}
@@ -40,11 +42,23 @@ class Inputs:
         # pins and assumptions
         self.pins = {(p['key'], p['period_key']): (p['value'], p['value_text']) for p in snap['pins']}
         self.assume = {a['key']: (a['value'], a['value_text']) for a in snap['assumptions']}
+        # live switches: cell overrides from reviewed facts (empty in parity mode)
+        from . import switches as SW
+        self.switches = SW.check(switches)
+        self.overrides = {}
+        if self.switches:
+            from ..live.loader import Facts
+            facts = Facts.from_rows(list(snap['facts']) + list(reviewed_facts or []))
+            seed_units = {_ref(f['source_ref']): f['unit'] for f in snap['facts'] if _ref(f['source_ref'])}
+            self.overrides = SW.cell_overrides(self.switches, facts, seed_units)
 
     # ── helpers ──
     def ws(self, col, row):
         """Value seeded from 'Working sheet - Angel One'!<col><row>."""
-        return self.cell.get(('Working sheet - Angel One', col, row))
+        key = ('Working sheet - Angel One', col, row)
+        if key in self.overrides:
+            return self.overrides[key][0]
+        return self.cell.get(key)
 
     def pin(self, key, period=''):
         return self.pins.get((key, period), (None, None))
@@ -56,8 +70,9 @@ class Inputs:
         return {d: s for d, (v, s) in self.mkt[(dataset, metric)].items()}
 
 
-def load_snapshot(path):
-    return Inputs(json.load(open(path)))
+def load_snapshot(path, switches=(), reviewed_path=None):
+    reviewed = json.load(open(reviewed_path))['facts'] if reviewed_path else None
+    return Inputs(json.load(open(path)), switches, reviewed)
 
 
 # ── calendar labels (same strings as the workbook) ──
