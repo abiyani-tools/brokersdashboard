@@ -40,7 +40,7 @@ D1 summary laid out exactly like the Excel sheet, with FY / quarter / month drop
   - [x] (b) one-decimal revenue mix (21 cells, Q3 FY25–Q1 FY27): F&O −0.064%, cash −1.57% projected (FY27 −2.87%: Q1 FY27 actual 9% → 8.6%), commodity +1.667%; Consolidated FY27 −0.23%. `out/bridges/b.md`, check `out/checks/switch_b.md`.
   - [x] (c) BSE contracts unfrozen (15 imputed days, 29 Sep–21 Oct, from the lake): F&O Oct-26 6.7458 → 11.6734 (+73.0%), FY27 +5.36%; Consolidated Oct-26 +31.6%. `out/bridges/c.md`, check `out/checks/switch_c.md` (13/13 agree).
   - [x] (d) special sessions excluded from averages (all segments): FY27 / Q2 FY27 / Oct-26 unchanged; Oct-25 Consolidated +3.41% (Oct-26 YoY +26.0% → +21.8%), Q3 FY26 +1.11%. `out/bridges/d.md`, check `out/checks/switch_d.md` (33/33). Open: AB to say whether MTF should keep special-session days.
-  - (e) D2 monthly cash share
+  - [x] (e) D2 monthly cash share on projected cash days (Jul 0.171, Aug 0.170, Sep 0.162; Oct uses Sep): cash Oct-26 −6.90%, Q2 FY27 −3.67%, FY27 −2.36%; Consolidated Oct-26 −0.72%. `out/bridges/e.md`, check `out/checks/switch_e.md` (20/20).
   - (f) D3 quarterly commodity take rate
   - (g) D4 MTF gross / net
   - (h) Q2 FY27 actuals in, projections rolled to Q3 FY27
