@@ -115,13 +115,15 @@ def headline(rows, keys=(('FY', 'FY 2027'), ('Q', 'Q2 FY 2027'), ('M', 'FY 2027 
     return out
 
 
-def report_md(run):
+def report_md(run, db_status=None):
+    """db_status: what happened in the database (None = a dry run, nothing written)."""
     rep: Report = run['report']
-    L = [f"# Live run (dry run) — as of {run['as_of']}", '',
+    title = 'Live run (dry run)' if db_status is None else 'Live run'
+    L = [f"# {title} — as of {run['as_of']}", '',
          f"Switches: {run['switches']} · E5: {'BLOCKING' if rep.blocking else 'pass'} "
          f"({len(rep.errors)} blocking, {len(rep.find(severity='warning'))} warnings, "
          f"{len(rep.find(severity='info'))} info) · E1 coverage: pass · Summary rows: {len(run['rows'])}", '',
-         'Nothing was written to the database.', '', '## Headline (Rs crore per trading day; MTF gross)', '',
+         db_status or 'Nothing was written to the database.', '', '## Headline (Rs crore per trading day; MTF gross)', '',
          '| Period | Panel | ADR | vs previous | YoY |', '|---|---|---:|---:|---:|']
     h = headline(run['rows'])
     pct = lambda x: '—' if x is None else f'{100 * x:+.1f}%'
@@ -135,10 +137,10 @@ def report_md(run):
     return '\n'.join(L)
 
 
-def write(run, out_dir):
+def write(run, out_dir, db_status=None):
     os.makedirs(out_dir, exist_ok=True)
     with open(os.path.join(out_dir, 'report.md'), 'w') as fh:
-        fh.write(report_md(run))
+        fh.write(report_md(run, db_status))
     with open(os.path.join(out_dir, 'summary_rows.json'), 'w') as fh:
         json.dump(run['rows'], fh)
     return out_dir

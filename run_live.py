@@ -15,6 +15,8 @@ import sys
 from src.live.run import live_run, live_run_snapshot, report_md, write
 
 note = ''
+pending = ('Not published yet: the run is published after this report if E5 does not block.'
+           if '--publish' in sys.argv else None)
 if '--db' in sys.argv:
     from src.live.db import SupabaseReader
     from src.live.snapshot import build_snapshot, complete_through, trim
@@ -23,7 +25,7 @@ if '--db' in sys.argv:
     note = f'complete through {as_of} (limited by {limiting})'
     snap = trim(snap, as_of)
     run = live_run_snapshot(snap, reviewed)
-    out = write(run, f"out/live/{run['as_of']}")
+    out = write(run, f"out/live/{run['as_of']}", pending)
     with open(os.path.join(out, 'snapshot.json'), 'w') as fh:      # git-ignored; the inputs of this run
         json.dump({'snapshot': snap, 'reviewed': reviewed}, fh, default=str)
 else:
@@ -34,7 +36,7 @@ else:
     reviewed = args[1] if len(args) > 1 else 'snapshot/facts_reviewed_2026-10-23.json'
     run = live_run(snap, reviewed)
     out = write(run, f"out/live/{run['as_of']}")
-print(report_md(run))
+print(report_md(run, pending))
 if note:
     print(note)
 print('written', out)
@@ -45,3 +47,4 @@ if '--publish' in sys.argv:
     from src.live.publish import publish
     run_id, counts = publish(run, SupabaseWriter(), notes_extra=note)
     print(f'published run {run_id}: {counts}')
+    write(run, out, f'Published to the database as run {run_id}: {counts}.')

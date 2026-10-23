@@ -6,7 +6,7 @@ import pytest
 from src.live.integrity import KNOWN_ISSUES, series_issues
 from src.live.loader import Volume
 from src.live.periods import Calendar, MissingCalibration
-from src.live.run import coverage, live_run
+from src.live.run import coverage, live_run, report_md
 
 ROOT = os.path.join(os.path.dirname(__file__), '..', '..')
 SNAP = os.path.join(ROOT, 'snapshot', 'db_snapshot_2026-10-23.json')
@@ -48,6 +48,14 @@ def test_known_issues_state_a_reason():
 @pytest.fixture(scope='module')
 def run():
     return live_run(SNAP, REVIEWED)
+
+
+def test_report_says_whether_the_run_was_published(run):
+    dry = report_md(run).splitlines()
+    assert dry[0].startswith('# Live run (dry run)') and 'Nothing was written to the database.' in dry
+    pub = report_md(run, 'Published to the database as run abc.').splitlines()
+    assert pub[0].startswith('# Live run —') and 'dry run' not in pub[0]
+    assert 'Nothing was written to the database.' not in pub
 
 
 def test_live_dry_run_on_the_snapshot(run):
