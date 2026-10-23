@@ -100,13 +100,20 @@ class SupabaseWriter:
         if resp.status_code not in (200, 201, 204):
             raise RuntimeError(f"{what} failed: HTTP {resp.status_code} {resp.text[:300]}")
 
-    def insert(self, table: str, rows: list[dict]) -> int:
+    def insert(self, table: str, rows: list[dict], returning: bool = False):
+        """Rows inserted (count), or with returning=True the inserted rows as the DB stored them (ids filled)."""
+        out: list[dict] = []
         for i in range(0, len(rows), self.chunk):
             part = rows[i:i + self.chunk]
-            resp = self._session.post(f"{self.url}/rest/v1/{table}", data=json.dumps(part), headers=self._headers(),
+            headers = self._headers()
+            if returning:
+                headers["Prefer"] = "return=representation"
+            resp = self._session.post(f"{self.url}/rest/v1/{table}", data=json.dumps(part), headers=headers,
                                       timeout=120)
             self._check(resp, f"insert into {table} (rows {i}..{i + len(part) - 1})")
-        return len(rows)
+            if returning:
+                out.extend(resp.json())
+        return out if returning else len(rows)
 
     def update(self, table: str, values: dict, **eq) -> None:
         params = {k: f"eq.{v}" for k, v in eq.items()}
