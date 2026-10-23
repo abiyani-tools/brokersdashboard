@@ -111,6 +111,20 @@ def test_missing_day_blocks():
     assert [(i.check, i.severity, i.dates) for i in issues] == [("missing", "error", (days[12],))]
 
 
+def test_value_on_closed_day_is_info_not_a_jump():
+    _, days = _cal()
+    cal = Calendar.from_rows({"trade_date": d.isoformat(), "is_equity_day": True, "is_mcx_day": i != 25}
+                             for i, d in enumerate(days))
+    values = [100 + (i % 7) for i in range(30)]
+    values[25] = 5                                   # thin value on a day MCX is closed
+    s = _series(days, values, key="mcx:contracts")
+    issues = series_issues("mcx:contracts", s, cal, days[-1], "error")
+    assert [(i.check, i.severity, i.dates) for i in issues] == [("closed", "info", (days[25],))]
+    # the same value on an open day still blocks
+    open_cal, _ = _cal()
+    assert "jump" in {i.check for i in series_issues("mcx:contracts", s, open_cal, days[-1], "error")}
+
+
 def test_take_rate_unit_sanity():
     issues = check_take_rates({("fo", "Q2 FY 2027"): 21.6403, ("fo", "Q3 FY 2027"): 2164.03,
                                ("cash", "Q3 FY 2027"): Insufficient("no orders")})

@@ -10,6 +10,8 @@ Checks: missing trading day, non-ok status, zero on a trading day, frozen series
 (≥ FROZEN_RUN equal non-zero values in a row), jump (above JUMP_UP × the trailing max or below
 JUMP_DOWN × the trailing min of the last JUMP_WINDOW non-zero values). The trailing max/min,
 not the median, is used because expiry days run 15–20× a normal day.
+A value on a day sb_calendar marks closed for the series is reported as 'closed' (info) and left out of
+the jump test.
 """
 from __future__ import annotations
 
@@ -145,12 +147,21 @@ def series_issues(key: str, series: list[Volume], calendar: Calendar, as_of: dt.
                              f"{run[0].value:,.0f} repeated {len(run)} days", source))
         run = [v] if v is not None else []
 
+    # values on days the calendar marks closed for this series (e.g. MCX on 1 Jan 2024): the engine does
+    # not average them, so they are reported as info and kept out of the jump test and its baseline
+    open_days = {d.date for d in calendar.trading_days(rule.days)}
+    closed = [v.date for v in ordered if v.date in calendar and v.date not in open_days]
+    if closed:
+        out.append(Issue("closed", key, "info", tuple(closed),
+                         f"value on a day sb_calendar marks closed for {rule.days}", source))
+
     # jumps against the trailing non-zero range
     hist: list[float] = []
     jumps = []
     special = {d.date for d in calendar.days if d.special}
+    skip = special | set(closed)
     for v in ordered:
-        if v.value == 0 or v.date in special:
+        if v.value == 0 or v.date in skip:
             continue
         window = hist[-JUMP_WINDOW:]
         if len(window) >= JUMP_MIN_HISTORY:
