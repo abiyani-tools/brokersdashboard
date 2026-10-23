@@ -25,6 +25,9 @@ src/engine/inputs.py     load a DB snapshot; FY / quarter / month labels
 src/engine/calibrate.py  take rates; F&O, cash, commodity and MTF calibration + the workbook's projection rules
 src/engine/daily.py      daily revenue per segment
 src/engine/summary.py    the Summary grid (cell for cell, incl. the workbook's quirks)
+src/engine/summary_periods.py  E3: the Summary for every FY / quarter / month (live, guarded)
+src/live/                live-mode inputs: periods (E1), loader (E2), guards (E4), integrity (E5), db readers (E6)
+migrations/              SQL migrations for the sb_* tables
 src/engine/parity.py     compare with sb_parity_expected; documented out-of-scope list
 src/engine/publish.py    rows for sb_runs / sb_calibration / sb_daily_revenue / sb_summary_cells
 seed/build_fixtures.py   builds the parity fixtures + data-lake rows (already loaded)

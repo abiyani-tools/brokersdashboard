@@ -8,10 +8,11 @@ Each to-do ends with an **exit test**. A to-do is done only when its test passes
 |---|---|
 | Supabase `brokers-dashboard` (`everjfpbnlbcpuarnhob`, Mumbai), `sb_*` schema | live |
 | Parity engine (`src/engine`) | 8,774 / 8,797 exact, 0 unexplained, 264 / 264 Summary cells |
+| Live input layer (`src/live`) + E3 (`src/engine/summary_periods.py`) | E1–E6 coded and tested (61 passed on 3.9 and 3.13); E3 migration not applied |
 | Parity run stored | run `42e5519f-0e19-4834-9a4c-2ce8ccec574a` |
-| Catch-up facts (Jun–Sep 26, Q1/Q2 FY27, Q3 FY26 fix, Q2 FY27 deck mix) | 178 staged in `sb_disclosure_facts` (fact_ids 478–655), awaiting review |
+| Catch-up facts (Jun–Sep 26, Q1/Q2 FY27, Q3 FY26 fix, Q2 FY27 deck mix) | 178 **reviewed** (fact_ids 478–655, all approved 23 Oct; 477 seeds staged) |
 | Review page | "Angel One Figure Review" artifact; decisions in its `reviews` collection |
-| Repo | local commits `d237013`, `7c745d5`; **not pushed** (GitHub repo not created yet) |
+| Repo | `abiyani-tools/brokersdashboard` (`main`); CI secrets not yet added |
 | Blocked on outside owners | NSE cash trades; MTF table access; anon read (RLS) policies on the lake |
 
 ## 1. Decisions in force (AB, 22–23 Oct)
@@ -20,20 +21,20 @@ D1 summary laid out exactly like the Excel sheet, with FY / quarter / month drop
 ## 2. To-dos by phase
 
 ### Phase 2 — finish the catch-up
-- [~] **2.1 AB reviews the 178 figures** on the review page. *Owner: AB.* Exit: no figure left "to review".
-- [ ] **2.2 Apply decisions.** Read the page's `reviews` collection (ArtifactData list → `out_dir`), run `apply_review.py` (the script does every value change), show AB the SQL, and then ops-runner executes it. *Owner: main → ops-runner.* Exit: count of `reviewed` = count approved; flagged figures still `staged`, with the note attached.
-- [ ] **2.3 Re-read the flagged figures** from the PDF page and stage corrected rows (`supersedes` = old fact_id). *Owner: filing-extractor.* Exit: AB approves the corrections.
+- [x] **2.1 AB reviews the 178 figures** on the review page. *Owner: AB.* Exit: no figure left "to review".
+- [x] **2.2 Apply decisions.** *Done 23 Oct: 178 → reviewed (status only; SQL in `out/apply_review_2026-10-23.sql`).* Read the page's `reviews` collection (ArtifactData list → `out_dir`), run `apply_review.py` (the script does every value change), show AB the SQL, and then ops-runner executes it. *Owner: main → ops-runner.* Exit: count of `reviewed` = count approved; flagged figures still `staged`, with the note attached.
+- [x] **2.3 Re-read the flagged figures** *(none flagged)* from the PDF page and stage corrected rows (`supersedes` = old fact_id). *Owner: filing-extractor.* Exit: AB approves the corrections.
 - [ ] **2.4 Back-source the four revenue-mix differences** (Q3/Q4 FY25 F&O and commodity). Find the Q3 and Q4 FY25 decks on the NSE feed and compare them with the Q2 FY27 deck. *Owner: filing-extractor.* Exit: each Excel value traced to a deck page, or marked as restated.
 - [ ] **2.5 P&L lines from the Q2 FY27 results PDF** (scanned pp. 3–15). Not needed for the ADR. *Owner: filing-extractor; low priority.*
 
 ### Phase 3 — live engine (Opus designs, engine-coder implements, recompute-checker verifies)
-- [ ] **3.0 Spec first.** The main session writes `docs/LIVE_SPEC.md`: each switch from parity to live, its rule, its inputs, and the expected direction of the ADR change. *Owner: main (Opus).* Exit: AB signs off.
-- [ ] **E1 Derive period ranges from `sb_calendar`.** A day with no calibration raises or is flagged, never dropped. Exit: a test where November exists in the calendar fails loudly without inputs.
-- [ ] **E2 Live loader** by `metric × period` from reviewed facts, with seeds as fallback; cell lookups kept for parity only. Exit: the loader returns Q2 FY27 inputs; the parity test is unchanged.
-- [ ] **E3 Summary for every FY / quarter / month** (D1). Store the rows in `sb_summary_cells` with `period_key`. Comparisons follow the selected period. Exit: the parity labels reproduce today's 264 cells.
-- [ ] **E4 Guards for short history** (last-45, weekday, division by zero) → "insufficient data". Exit: unit tests.
-- [ ] **E5 Integrity checks** before every run: missing days, frozen series, jumps of 5× / 0.2×, unit sanity. A failure blocks publishing. Exit: the known lake gaps (BSE cash 15 Jun 2026; NSE IO/SO 12–15 Oct; MCX 27–28 May) are caught.
-- [ ] **E6 DB reader** using `SUPABASE_SERVICE_KEY` from the environment (never hard-coded). Exit: a run from CI equals a run from the snapshot.
+- [x] **3.0 Spec first.** *Signed off 23 Oct; all seven §7 proposals accepted.* The main session writes `docs/LIVE_SPEC.md`: each switch from parity to live, its rule, its inputs, and the expected direction of the ADR change. *Owner: main (Opus).* Exit: AB signs off.
+- [x] **E1 Derive period ranges from `sb_calendar`.** A day with no calibration raises or is flagged, never dropped. Exit: a test where November exists in the calendar fails loudly without inputs.
+- [x] **E2 Live loader** by `metric × period` from reviewed facts, with seeds as fallback; cell lookups kept for parity only. Exit: the loader returns Q2 FY27 inputs; the parity test is unchanged.
+- [~] **E3 Summary for every FY / quarter / month** (D1). *Code + exit test done; `migrations/20261023_sb_summary_cells_period.sql` waits for AB's OK.* Store the rows in `sb_summary_cells` with `period_key`. Comparisons follow the selected period. Exit: the parity labels reproduce today's 264 cells.
+- [x] **E4 Guards for short history** (last-45, weekday, division by zero) → "insufficient data". Exit: unit tests.
+- [x] **E5 Integrity checks** before every run: missing days, frozen series, jumps of 5× / 0.2×, unit sanity. A failure blocks publishing. Exit: the known lake gaps (BSE cash 15 Jun 2026; NSE IO/SO 12–15 Oct; MCX 27–28 May) are caught.
+- [~] **E6 DB reader** *(coded; the CI-vs-snapshot test runs once the secrets exist)* using `SUPABASE_SERVICE_KEY` from the environment (never hard-coded). Exit: a run from CI equals a run from the snapshot.
 - [ ] **3.1 Switches, one commit each, each with an ADR bridge** (FY27, Q2 FY27, Oct-26, per segment):
   - (a) J8 = 35 (commodity +2.86%)
   - (b) one-decimal revenue mix
@@ -48,7 +49,7 @@ D1 summary laid out exactly like the Excel sheet, with FY / quarter / month drop
 - [ ] **3.2 Out-of-sample log.** For every new quarter, store the model estimate vs reported orders and revenue by segment (as in Build Plan §2c). Exit: a table `sb_backtest` or a JSON file plus a page on the dashboard.
 
 ### Phase 4 — daily automation
-- [ ] **4.0 GitHub repo.** AB creates a private repo under `abiyani-tools` (`brokers-dashboard-engine`). Then attach it (add_repo, access "push"), push, and AB adds the secrets. *Owner: AB, then ops-runner.*
+- [~] **4.0 GitHub repo.** *Pushed to `abiyani-tools/brokersdashboard` on 23 Oct; AB still adds the secrets `SUPABASE_URL`, `SUPABASE_SERVICE_KEY`.* AB creates a private repo under `abiyani-tools`. Then attach it (add_repo, access "push"), push, and AB adds the secrets. *Owner: AB, then ops-runner.*
 - [ ] **4.1 `daily.yml`:** after the market closes (the ExchangesDash schedule plus a buffer): pull from the lake → E5 → engine (live) → write `sb_runs` / `sb_daily_revenue` / `sb_summary_cells` / `sb_calibration`. Keep a parity job on every push. Exit: 10 trading days unattended with no silent gaps.
 - [ ] **4.2 Filing watcher:** query the NSE corporate-announcements API for ANGELONE, filtering by `desc` (Monthly Business Updates, Press Release, Investor Presentation, Outcome of Board Meeting), not by file name. Then download, sha256, parse, stage the facts and notify AB to review. Note that NSE may block CI IPs: fall back to running on AB's Mac (the curl approach works there) or to `w3assets.angelone.in`. Exit: the 6 Nov 2026 business update (expected date — verify) is staged automatically.
 
@@ -86,7 +87,7 @@ Route by the kind of work, not by its importance. **No financial extraction or u
 **Hand-off contract for every subagent:** the input is a task, file paths and an exit test. The output is a file in `out/` plus a reply of ≤ 30 lines: what was done, numbers with sources, failures, and open `[SOURCE NEEDED]` items.
 
 ## 5. Next session — start here
-1. `git log --oneline` should show `7c745d5`. `pytest -q` should pass.
-2. Check the review page's progress (ArtifactData list `reviews`). If AB has finished → 2.2.
-3. If the GitHub repo exists → 4.0 push.
-4. Otherwise start 3.0 (`LIVE_SPEC.md`) on Opus. Don't start coding E1–E6 before AB signs off on the spec.
+1. `git log --oneline` on `main`; `python3 -m pytest tests/ -q` should pass (61 passed, 1 skipped).
+2. If AB approved the E3 migration → apply `migrations/20261023_sb_summary_cells_period.sql`, then publish a live E3 run.
+3. Refresh `snapshot/` with the reviewed facts and the lake volumes (the current snapshot predates the review), then start
+   switch (a) — one switch per commit, each with a bridge checked by `recompute-checker`.

@@ -55,11 +55,15 @@ def daily_rows(run_id, daily):
     return rows
 
 
-def summary_rows(run_id, stats):
+def summary_rows(run_id, stats, as_of):
+    """Parity grid rows. period_type/period_key name the selection each table was built for (E3 columns)."""
     rows = []
+    TYPE = {'Financial Year': 'FY', 'Quarter': 'Q', 'Month': 'M', 'Week': 'asof', 'Weekday': 'asof'}
     def add(panel, tbl, label, value, cmp_name=None, cmp_val=None):
-        rows.append(dict(run_id=run_id, broker_id=BROKER, panel=panel, table_name=tbl, row_label=label,
-                         value=value, comparison=cmp_name, comp_value=cmp_val))
+        key = {'FY': lab['fy'][0], 'Q': lab['q'][0], 'M': lab['m'][0], 'asof': str(as_of)}[TYPE[tbl]]
+        rows.append(dict(run_id=run_id, broker_id=BROKER, panel=panel, period_type=TYPE[tbl], period_key=key,
+                         table_name=tbl, row_label=label, value=value, comparison=cmp_name, comp_value=cmp_val,
+                         note=None))
     def ratio(a, b):
         return a / b - 1 if b else None
     for panel, st in stats.items():
@@ -84,3 +88,8 @@ def summary_rows(run_id, stats):
             add(panel, 'Weekday', f'Average of last 3 {d}s', a3)
             add(panel, 'Weekday', f'Average of last 10 {d}s', a10)
     return rows
+
+
+def period_summary_rows(run_id, rows):
+    """Live E3 rows (summary_periods.period_rows) for sb_summary_cells. value is NULL when note says why."""
+    return [dict(run_id=run_id, broker_id=BROKER, **r) for r in rows]

@@ -95,17 +95,36 @@ A selected value that is not `ok` is never replaced by 0; E5 blocks on it.
   all from reviewed facts. **Done.**
 - Still open: running the parity gate once the engine imports `live/`. The gate must stay unchanged.
 
-**E3 — Summary for every FY / quarter / month (D1).** *Not started: it needs the engine's ADR code (`src/engine`).*
-- `sb_summary_cells` gets a `period_key` column, plus `period_type` and `mode`. That is a migration; the existing 210 rows get
-  `period_key` = the as-of labels of the parity run.
-- For each selected period, comparisons follow the period:
-  - FY → YoY.
-  - Quarter → QoQ and YoY.
-  - Month → MoM and YoY, plus "6M" = the 6 months ending at the selected month.
-  - The Week, Weekday and last-N tables stay anchored on `as_of_date`.
-- The parity rule `summary_6m_avg = avg_of_two_quarter_adrs` stays in parity only. Live 6M = total revenue ÷ trading days over
-  the 6 calendar months ending at the selected month. **[AB: §7 Q2]**
-- Exit test: the parity labels reproduce today's cells exactly.
+**E3 — Summary for every FY / quarter / month (D1).** *Code done (`src/engine/summary_periods.py`); the migration waits for
+AB's OK.*
+- **One label rule** builds every comparison from the selection:
+  - FY → previous FY (YoY).
+  - Quarter → previous quarter (QoQ) and the same quarter last FY (YoY).
+  - Month → previous month (MoM), the same month last FY (YoY) and "6M".
+  - The Week and Weekday tables stay anchored on the last date.
+- **The workbook's grid is this rule at two selections:** FY 2027 / Q2 FY 2027 / FY 2027 September for every panel, and
+  FY 2027 / Q4 FY 2026 / FY 2026 February for Cash. So the Cash panel's "stale labels" are just a different selection.
+- **6M:**
+  - Parity: the average of the two quarterly ADRs ending with the month's quarter.
+  - Live: the average over the 6 calendar months ending at the month (decision Q2). For Cash in September 2026 that gives
+    2.0543 Rs Cr/day, a different number from the two-quarter average.
+- **Live statistics are guarded.** A period that has a calendar trading day before a segment's series starts is partial,
+  so it gets *insufficient data* (the value is NULL and `note` gives the reason), never a short average. The F&O, Cash and
+  MTF series start 1 Oct 2024, so FY 2025 and earlier have no value; Q3 FY 2025 is complete. Commodities start
+  1 Apr 2024. An insufficient segment makes Broking and Consolidated insufficient too.
+- **Output:** `period_rows()` gives 1,566 rows for the parity daily series (6 panels × every FY / quarter / month, plus
+  the as-of tables), each with a unique key. `publish.period_summary_rows()` writes them, and `publish.summary_rows()` now
+  tags parity rows with their selection.
+- **Exit test (`tests/test_summary_periods.py`), passing:** the general rule at the parity selections reproduces the
+  workbook's 264 Summary cells exactly (rel 1e-9). The live comparisons match an independent recompute from the daily
+  series.
+- **Migration** `migrations/20261023_sb_summary_cells_period.sql`, **not applied**:
+  - It adds `period_type`, `period_key` and `note`.
+  - It fills them for the 210 stored parity rows.
+  - It widens the primary key to (run_id, panel, period_type, period_key, table_name, row_label). The old key would collide
+    on labels like "Avg of last 6 months".
+
+  A dry run inside a rolled-back transaction succeeded on 23 Oct.
 
 **E4 — short-history guards.**
 - Last-45-day, last-3 and last-10 averages, weekday tables and every ratio return "insufficient data" with a reason when
