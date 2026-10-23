@@ -20,4 +20,14 @@ jobs:
         run: test -n "$SUPABASE_URL" && test -n "$SUPABASE_SERVICE_KEY"
       - name: Parity gate
         run: python -m pytest tests/ -q
-      # Next (phase 3-4): integrity checks -> live engine -> write sb_* outputs
+      - name: Live dry run from the DB (E5 -> engine a-i -> E1 coverage -> Summary rows; no DB writes)
+        run: python run_live.py --db
+      - name: Keep the run's report and inputs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: live-run
+          path: out/live/
+          retention-days: 30
+      # Next (phase 4, needs AB's OK): publish to sb_runs / sb_daily_revenue / sb_summary_cells / sb_calibration,
+      # then switch on the schedule above.

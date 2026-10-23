@@ -12,13 +12,24 @@ import os
 
 from .integrity import Report, run_checks
 from .loader import load_inputs
-from .periods import Calendar, MissingCalibration
+from .periods import MissingCalibration
 
 ALL_SWITCHES = 'abcdefghi'
 BROKER = 'ANGELONE'
 # segment -> (daily key, value field, calendar flag, trading days allowed missing at the end)
 SEGMENTS = {'fo': ('rev_mn', 'is_equity_day', 0), 'cash': ('rev_mn', 'is_equity_day', 0),
             'comm': ('rev_mn', 'is_mcx_day', 0), 'mtf': ('gross_cr', 'is_equity_day', 3)}
+
+
+class MissingDailyRows(MissingCalibration):
+    """Trading days with no daily revenue row: the day's input or its period's calibration is missing."""
+
+    def __init__(self, missing):
+        self.missing = missing
+        parts = [f"{seg} {ds[0]}..{ds[-1]} ({len(ds)} days)" if len(ds) > 1 else f"{seg} {ds[0]}"
+                 for seg, ds in sorted(missing.items())]
+        Exception.__init__(self, 'no daily revenue for trading days (input or calibration missing): ' + '; '.join(parts))
+        self.periods = parts
 
 
 class EngineSnapshotReader:
@@ -30,6 +41,9 @@ class EngineSnapshotReader:
             'sb_calendar': snap['calendar'],
             'sb_disclosure_facts': [dict(f, broker_id=BROKER) for f in list(snap['facts']) + list(reviewed)],
             'sb_market_daily': [dict(r, source=r.get('source', 'excel_seed')) for r in snap['market_daily']] + lake,
+            'sb_market_monthly': snap.get('monthly', []),
+            'sb_parity_pins': snap.get('pins', []),
+            'sb_assumptions': snap.get('assumptions', []),
         }
 
     def table(self, name, **eq):
@@ -47,7 +61,7 @@ def coverage(calendar_rows, daily, as_of, input_gaps=None):
     for seg, (_, flag, lag) in SEGMENTS.items():
         rows = daily[seg]
         if not rows:
-            raise MissingCalibration([f'{seg}: no daily rows'])
+            raise MissingDailyRows({seg: ['all']})
         first = min(rows)
         days = sorted(r['trade_date'] for r in calendar_rows if r[flag] and first <= r['trade_date'] <= as_of)
         days = days[:len(days) - lag] if lag else days
@@ -55,20 +69,23 @@ def coverage(calendar_rows, daily, as_of, input_gaps=None):
         if gone:
             missing[seg] = gone
     if missing:
-        cal = Calendar.from_rows(calendar_rows)
-        raise MissingCalibration(sorted({f'{seg} {cal.period_of(dt.date.fromisoformat(d), "M")}'
-                                         for seg, ds in missing.items() for d in ds}))
+        raise MissingDailyRows(missing)
     return True
 
 
 def live_run(snapshot_path, reviewed_path, switches=ALL_SWITCHES, as_of=None):
+    snap = json.load(open(snapshot_path))
+    reviewed = json.load(open(reviewed_path))['facts'] if reviewed_path else []
+    return live_run_snapshot(snap, reviewed, switches, as_of)
+
+
+def live_run_snapshot(snap, reviewed, switches=ALL_SWITCHES, as_of=None):
     from ..engine import daily as D
     from ..engine import switches as SW
-    from ..engine.inputs import load_snapshot
+    from ..engine.inputs import Inputs
     from ..engine.summary_periods import make_segments, period_rows
 
-    I = load_snapshot(snapshot_path, switches, reviewed_path)
-    reviewed = json.load(open(reviewed_path))['facts'] if reviewed_path else []
+    I = Inputs(snap, switches, reviewed)
     as_of = as_of or max(r['trade_date'] for r in I.snap['calendar'])
 
     res = D.run(I)

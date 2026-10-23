@@ -23,7 +23,7 @@ def test_coverage_makes_a_dropped_day_loud():
     daily = {s: {d: {} for d in days} for s in ('fo', 'cash', 'comm', 'mtf')}
     assert coverage(_cal(days), daily, '2026-10-21')
     del daily['fo']['2026-10-20']
-    with pytest.raises(MissingCalibration, match='fo FY 2027 October'):
+    with pytest.raises(MissingCalibration, match='fo 2026-10-20'):
         coverage(_cal(days), daily, '2026-10-21')
     # an MTF day whose input is missing (E5 warning) is tolerated; any other MTF gap is not
     daily['fo']['2026-10-20'] = {}
@@ -92,3 +92,20 @@ def test_new_month_after_the_workbook_grid_is_calibrated_in_live_mode(tmp_path):
     assert 'FY 2027 November' in {r['period_key'] for r in run['rows'] if r['period_type'] == 'M'}
     # parity mode keeps the workbook's grid (ends October 2026)
     assert '2026-11-02' not in daily.run(load_snapshot(str(p)))['daily']['fo']
+
+
+def test_snapshot_built_from_sb_tables_gives_the_same_engine_run():
+    """The DB path (sb_* tables -> build_snapshot -> engine) equals the snapshot-file path."""
+    import json
+    from src.engine import daily
+    from src.engine.inputs import Inputs
+    from src.live.run import EngineSnapshotReader
+    from src.live.snapshot import build_snapshot
+    snap = json.load(open(SNAP))
+    reviewed = json.load(open(REVIEWED))['facts']
+    built, rev = build_snapshot(EngineSnapshotReader(snap, reviewed))
+    assert len(rev) == 178 and len(built['facts']) == 477
+    for sw in ('', 'abcdefghi'):
+        a = daily.run(Inputs(snap, sw, reviewed if sw else None))['daily']
+        b = daily.run(Inputs(built, sw, rev if sw else None))['daily']
+        assert a == b, sw
