@@ -41,7 +41,7 @@ D1 summary laid out exactly like the Excel sheet, with FY / quarter / month drop
   - [x] (c) BSE contracts unfrozen (15 imputed days, 29 Sep–21 Oct, from the lake): F&O Oct-26 6.7458 → 11.6734 (+73.0%), FY27 +5.36%; Consolidated Oct-26 +31.6%. `out/bridges/c.md`, check `out/checks/switch_c.md` (13/13 agree).
   - [x] (d) special sessions excluded from averages (all segments): FY27 / Q2 FY27 / Oct-26 unchanged; Oct-25 Consolidated +3.41% (Oct-26 YoY +26.0% → +21.8%), Q3 FY26 +1.11%. `out/bridges/d.md`, check `out/checks/switch_d.md` (33/33). Open: AB to say whether MTF should keep special-session days.
   - [x] (e) D2 monthly cash share on projected cash days (Jul 0.171, Aug 0.170, Sep 0.162; Oct uses Sep): cash Oct-26 −6.90%, Q2 FY27 −3.67%, FY27 −2.36%; Consolidated Oct-26 −0.72%. `out/bridges/e.md`, check `out/checks/switch_e.md` (20/20).
-  - (f) D3 quarterly commodity take rate
+  - [x] (f) D3 quarterly commodity take rate (Q2 FY25 24.39 … Q1 FY27 22.94; Q2–Q3 FY27 carry Q1 FY27): commodity FY27 / Q2 FY27 / Oct-26 −1.61%, FY26 −1.64%; Consolidated FY27 −0.15%. Q1 FY25 has no disclosed mix → earliest rate, flagged [SOURCE NEEDED]. `out/bridges/f.md`, check `out/checks/switch_f.md` (33/33).
   - (g) D4 MTF gross / net
   - (h) Q2 FY27 actuals in, projections rolled to Q3 FY27
   - (i) F&O / cash inputs cut off at the latest disclosed month
