@@ -43,7 +43,7 @@ D1 summary laid out exactly like the Excel sheet, with FY / quarter / month drop
   - [x] (e) D2 monthly cash share on projected cash days (Jul 0.171, Aug 0.170, Sep 0.162; Oct uses Sep): cash Oct-26 −6.90%, Q2 FY27 −3.67%, FY27 −2.36%; Consolidated Oct-26 −0.72%. `out/bridges/e.md`, check `out/checks/switch_e.md` (20/20).
   - [x] (f) D3 quarterly commodity take rate (Q2 FY25 24.39 … Q1 FY27 22.94; Q2–Q3 FY27 carry Q1 FY27): commodity FY27 / Q2 FY27 / Oct-26 −1.61%, FY26 −1.64%; Consolidated FY27 −0.15%. Q1 FY25 has no disclosed mix → earliest rate, flagged [SOURCE NEEDED]. `out/bridges/f.md`, check `out/checks/switch_f.md` (33/33).
   - [x] (g) D4 MTF gross / net: MTF gross in every table (the workbook's weekday tables used net), plus an 'MTF (net)' panel at 45% × gross; Consolidated stays gross. FY/Q/M unchanged; weekday Consolidated +~2.6 Rs Cr/day. `out/bridges/g.md`, check `out/checks/switch_g.md` (29/29). Open: AB to confirm gross headline.
-  - (h) Q2 FY27 actuals in, projections rolled to Q3 FY27
+  - [x] (h) Q2 FY27 actuals in, projections rolled to Q3 FY27 (synthetic Q2 FY27 column from reviewed facts; last-actual pins → Q2 FY27; MTF Q2 book 7,453 Cr / daily industry avg): F&O FY27 +1.84%, cash +1.37%, commodity −0.92%, MTF +0.35%; Consolidated FY27 +1.18%, Q2 FY27 +1.40%, Oct-26 +1.02%. `out/bridges/h.md`, check `out/checks/switch_h.md` (101/101).
   - (i) F&O / cash inputs cut off at the latest disclosed month
   - Exit for each: recompute-checker's independent numbers agree to 1e-6.
 - [ ] **3.2 Out-of-sample log.** For every new quarter, store the model estimate vs reported orders and revenue by segment (as in Build Plan §2c). Exit: a table `sb_backtest` or a JSON file plus a page on the dashboard.
