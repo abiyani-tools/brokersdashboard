@@ -17,15 +17,13 @@ on:
   schedule:
     - cron: '30 3 * * *'     # 09:00 IST: monthly business updates post ~07:30-08:05 IST
     - cron: '0 14 * * *'     # 19:30 IST: results, decks and press releases post ~17:15-18:50 IST
-  push:
-    branches: [claude/filing-watcher]    # CI probe while the PR is open (dry run); removed before merge
 jobs:
   watch:
     runs-on: ubuntu-latest
     env:
       SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
       SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
-      SINCE: ${{ github.event_name == 'push' && '2026-07-01' || inputs.since }}
+      SINCE: ${{ inputs.since }}
       WRITE: ${{ (github.event_name == 'workflow_dispatch' && inputs.write) || (github.event_name == 'schedule' && vars.FILINGS_WRITE == 'true') }}
     steps:
       - uses: actions/checkout@v4
@@ -42,11 +40,13 @@ jobs:
           if [ "$WRITE" = "true" ]; then args+=(--write); fi
           echo "args: ${args[*]}"
           python run_watch.py "${args[@]}"
-      - name: Keep the summary and payload
+      - name: Keep the summary, payload and downloaded PDFs
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: filings
-          path: out/filings/
+          path: |
+            out/filings/
+            data/raw/disclosures/angelone/
           if-no-files-found: ignore
           retention-days: 90
