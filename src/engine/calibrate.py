@@ -4,7 +4,7 @@ Each function returns {period_key: {param: value, ..., 'regime': 'actual'|'proje
 Cell comments name the workbook cells being reproduced.
 """
 from statistics import mean
-from .inputs import months_of_quarter, quarter_of_month, month_seq, quarter_seq
+from .inputs import MONTHS, fy_month_of, months_of_quarter, q_of, quarter_of_month, month_seq, quarter_seq
 
 # Working-sheet quarter columns (row 2 headers) and the 174-182 quarterly table rows
 WS_QCOL = {'Q1 FY 2025': 'D', 'Q2 FY 2025': 'E', 'Q3 FY 2025': 'F', 'Q4 FY 2025': 'G', 'Q1 FY 2026': 'H',
@@ -12,6 +12,27 @@ WS_QCOL = {'Q1 FY 2025': 'D', 'Q2 FY 2025': 'E', 'Q3 FY 2025': 'F', 'Q4 FY 2025'
 WS_QROW2 = {q: 174 + i for i, q in enumerate(['Q1 FY 2025', 'Q2 FY 2025', 'Q3 FY 2025', 'Q4 FY 2025',
                                               'Q1 FY 2026', 'Q2 FY 2026', 'Q3 FY 2026', 'Q4 FY 2026', 'Q1 FY 2027'])}
 WS_MROW0 = 141   # 'FY 2025 April' in Working sheet B141
+
+
+def _mkey(m):
+    return int(m[3:7]), MONTHS.index(m[8:])
+
+
+def _qkey(q):
+    return int(q[-4:]), int(q[1])
+
+
+def month_end(I, parity_end):
+    """Last month to calibrate: the workbook's grid end, or in live mode the calendar's last month if later (E1)."""
+    if not getattr(I, 'switches', None):
+        return parity_end
+    return max(parity_end, fy_month_of(max(I.cal)), key=_mkey)
+
+
+def quarter_end(I, parity_end):
+    if not getattr(I, 'switches', None):
+        return parity_end
+    return max(parity_end, q_of(max(I.cal)), key=_qkey)
 
 
 def qcols(I):
@@ -52,7 +73,7 @@ def take_rates(I):
 
 # ── F&O: ' F&O market' rows 4-28 (market) and 31-56 (Angel), backtesting F&O!AI48:AR52 (take rate) ──
 def calib_fo(I, daily_contracts_by_month, tr):
-    months = month_seq('FY 2025 October', 'FY 2027 October')            # rows 4-28 / 32-56
+    months = month_seq('FY 2025 October', month_end(I, 'FY 2027 October'))   # rows 4-28 / 32-56
     share_src = I.fact[('share_fo', 'F&O market')]                       # N4:N23 hardcoded
     orders_src = I.fact[('total_orders', 'F&O market')]                  # C32:C51 hardcoded
     if I.switches:                                                       # live (i): to the latest disclosed month
@@ -95,7 +116,7 @@ def calib_fo(I, daily_contracts_by_month, tr):
         prev = r
     # take rate by quarter (AJ51:AR51): actual through the pin, then avg of last 3, then carry
     trq, hist = {}, []
-    for q in quarter_seq('Q3 FY 2025', 'Q3 FY 2027'):
+    for q in quarter_seq('Q3 FY 2025', quarter_end(I, 'Q3 FY 2027')):
         if _q_le(q, last_tr_q):
             trq[q] = (tr[q]['take_rate_fo'], 'actual')
             hist.append(tr[q]['take_rate_fo'])
@@ -116,7 +137,7 @@ def _q_le(a, b):
 def calib_cash(I, daily_trades_by_quarter, tr):
     last_q = I.pin('cash_last_actual_quarter')[1]                       # Q1 FY 2027
     out, hist = {}, []
-    for q in quarter_seq('Q3 FY 2025', 'Q3 FY 2027'):
+    for q in quarter_seq('Q3 FY 2025', quarter_end(I, 'Q3 FY 2027')):
         r = {'mkt_trades_mn': daily_trades_by_quarter.get(q)}           # M (trades, Mn)
         if _q_le(q, last_q):
             c = qcols(I)[q]
@@ -142,7 +163,7 @@ def calib_cash(I, daily_trades_by_quarter, tr):
 
 # ── Commodities: Commodities!U14:AB44, take rate AI11 ──
 def calib_comm(I, mcx_by_month):
-    months = month_seq('FY 2025 April', 'FY 2027 October')             # rows 14-44
+    months = month_seq('FY 2025 April', month_end(I, 'FY 2027 October'))     # rows 14-44
     aa_src = I.fact[('share_comm', 'Commodities')]                       # AA hardcoded (14-37, 41, 42)
     ws_f = I.fact[('share_comm', 'Working sheet - Angel One')]          # AA38:AA40 = WS F165:F167
     ws_c = I.fact[('total_orders', 'Working sheet - Angel One')]        # WS C141:C167
@@ -194,7 +215,7 @@ def calib_mtf(I, daily_book_by_quarter=None):
     daily_book_by_quarter = daily_book_by_quarter or {}
     out, hist = {}, []
     last_q = I.pin('mtf_last_actual_quarter')[1]                        # Q1 FY 2027
-    for q in quarter_seq('Q1 FY 2025', 'Q4 FY 2027'):
+    for q in quarter_seq('Q1 FY 2025', quarter_end(I, 'Q4 FY 2027')):
         r = {}
         mo = [I.monthly.get(('mtf_industry', 'book_cr', m)) for m in months_of_quarter(q)]
         if None not in mo:

@@ -67,3 +67,28 @@ def test_live_headline_equals_the_cumulative_bridge(run):
     assert get[('Consolidated', 'FY 2027')] == pytest.approx(17.510302, abs=5e-7)
     assert get[('Consolidated', 'Q2 FY 2027')] == pytest.approx(16.495983, abs=5e-7)
     assert get[('Consolidated', 'FY 2027 October')] == pytest.approx(20.216017, abs=5e-7)
+
+
+def test_new_month_after_the_workbook_grid_is_calibrated_in_live_mode(tmp_path):
+    """E1 for the daily job: November 2026 days (after the workbook's Oct-26 grid) get revenue, not dropped."""
+    import json
+    from src.engine import daily
+    from src.engine.inputs import load_snapshot
+    snap = json.load(open(SNAP))
+    new = ['2026-11-02', '2026-11-03']
+    for d in new:
+        snap['calendar'].append({'trade_date': d, 'fy': 'FY 2027', 'q_fy': 'Q3 FY 2027', 'fy_month': 'FY 2027 November',
+                                 'weekday': 'Monday' if d.endswith('02') else 'Tuesday', 'is_equity_day': True,
+                                 'is_mcx_day': True, 'special_session': None, 'note': 'synthetic (test)'})
+    last = {(r['dataset'], r['metric']): r for r in snap['market_daily'] if r['trade_date'] == '2026-10-19'}
+    for d in new:                                         # test-only volumes: copy 19 Oct
+        snap['market_daily'] += [dict(r, trade_date=d) for r in last.values()]
+    p = tmp_path / 'snap_nov.json'
+    p.write_text(json.dumps(snap))
+    run = live_run(str(p), REVIEWED)
+    assert run['as_of'] == '2026-11-03'                    # coverage passed: no day dropped
+    for seg in ('fo', 'cash', 'comm', 'mtf'):
+        assert all(d in run['daily'][seg] and run['daily'][seg][d]['regime'] == 'projected' for d in new), seg
+    assert 'FY 2027 November' in {r['period_key'] for r in run['rows'] if r['period_type'] == 'M'}
+    # parity mode keeps the workbook's grid (ends October 2026)
+    assert '2026-11-02' not in daily.run(load_snapshot(str(p)))['daily']['fo']
