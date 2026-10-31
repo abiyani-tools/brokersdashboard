@@ -35,6 +35,7 @@ DESCRIPTIONS = {
 HERE = os.path.dirname(__file__)
 CANDIDATES = os.path.join(HERE, '..', '..', 'out', 'groww', 'facts_candidates.json')
 REVIEWED = os.path.join(HERE, '..', '..', 'snapshot', 'groww_facts_reviewed_2026-10-31.json')
+ORDERS_HANDBOOK = os.path.join(HERE, '..', '..', 'snapshot', 'groww_orders_handbook_2026-10-31.json')
 
 YIELD_PERIOD = 'Q1 FY 2027'                      # the call that states 14.95% (latest of the two facts)
 MIX_ORIGINAL = 'cls_pre_q2fy27'

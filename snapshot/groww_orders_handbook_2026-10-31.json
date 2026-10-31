@@ -1,0 +1,60 @@
+{
+ "_about": "CHECK-ONLY series, not facts and not read by any switch: Groww total broking orders (Stocks + Derivatives) per quarter, in Cr and Mn (Cr x 10), read directly from 2026_10_Q2_FY27_KPI_Handbook.xlsx, sheet 'Operational KPIs', row 10 (cells E10:M10), trading days row 36. facts_candidates.json carries only Q1 FY26 and Q2 FY27 (orders_total); the check asserts those two agree with this file. Used by src.engine.groww_bridge.orders_check.",
+ "source": "data/raw/disclosures/groww/ir_site/2026_10_Q2_FY27_KPI_Handbook.xlsx#Operational KPIs!E10:M10",
+ "quarters": {
+  "Q2 FY 2025": {
+   "orders_cr": 53.2394,
+   "orders_mn": 532.394,
+   "trading_days": 64,
+   "cell": "Operational KPIs!M10"
+  },
+  "Q3 FY 2025": {
+   "orders_cr": 45.42094,
+   "orders_mn": 454.2094,
+   "trading_days": 62,
+   "cell": "Operational KPIs!L10"
+  },
+  "Q4 FY 2025": {
+   "orders_cr": 35.77146,
+   "orders_mn": 357.7146,
+   "trading_days": 62,
+   "cell": "Operational KPIs!K10"
+  },
+  "Q1 FY 2026": {
+   "orders_cr": 37.8557,
+   "orders_mn": 378.557,
+   "trading_days": 61,
+   "cell": "Operational KPIs!J10"
+  },
+  "Q2 FY 2026": {
+   "orders_cr": 41.5707,
+   "orders_mn": 415.707,
+   "trading_days": 64,
+   "cell": "Operational KPIs!I10"
+  },
+  "Q3 FY 2026": {
+   "orders_cr": 47.4194,
+   "orders_mn": 474.194,
+   "trading_days": 62,
+   "cell": "Operational KPIs!H10"
+  },
+  "Q4 FY 2026": {
+   "orders_cr": 58.73902,
+   "orders_mn": 587.3902,
+   "trading_days": 60,
+   "cell": "Operational KPIs!G10"
+  },
+  "Q1 FY 2027": {
+   "orders_cr": 56.01558,
+   "orders_mn": 560.1558,
+   "trading_days": 60,
+   "cell": "Operational KPIs!F10"
+  },
+  "Q2 FY 2027": {
+   "orders_cr": 51.7305,
+   "orders_mn": 517.305,
+   "trading_days": 65,
+   "cell": "Operational KPIs!E10"
+  }
+ }
+}

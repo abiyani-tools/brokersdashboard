@@ -1,16 +1,23 @@
 """ADR bridge for one Groww switch (docs/GROWW_LIVE_SPEC.md; same format as src/engine/bridge.py for Angel One).
 
     python3 -m src.engine.bridge --broker GROWW a        # writes out/bridges/groww_a.md
+    python3 -m src.engine.bridge --broker GROWW orders   # writes out/bridges/groww_orders_check.md
 
 Periods: FY 2027 (to date), Q2 FY 2027, FY 2027 October (to date), and the comparison bases FY 2026 and FY 2026 October.
 Rs crore per trading day; MTF is gross. "Before" = the switches earlier in the order a -> g; "after" adds this one.
+
+The orders check (no switch) compares the model's implied quarterly Groww orders (F&O + cash + commodity) with the
+disclosed total broking orders (KPI Handbook, Operational KPIs row 10).
 """
+import json
 import os
 import sys
+from collections import defaultdict
 
 from . import groww, groww_switches as GS
 from . import summary_periods as SP
 from .bridge import daily_changes
+from .inputs import q_of, quarter_seq
 from .parity_groww import ANGEL_SNAPSHOT, GROWW_SNAPSHOT
 
 PERIODS = (('FY', 'FY 2027'), ('Q', 'Q2 FY 2027'), ('M', 'FY 2027 October'),
@@ -206,11 +213,84 @@ def markdown(b):
     return '\n'.join(L) + '\n'
 
 
+# ── implied vs disclosed orders (no switch) ──
+def implied_orders(res):
+    """{quarter: {'fo', 'cash', 'comm', 'total', 'days'}}: model orders, Mn, summed over the quarter's days.
+    Days the segment is not live (zero-filled / blank) contribute nothing."""
+    t = defaultdict(lambda: defaultdict(float))
+    for seg in ('fo', 'cash', 'comm'):
+        for d, r in res['daily'][seg].items():
+            v = r['orders_mn']
+            if v:
+                t[q_of(d)][seg] += v
+                if seg == 'fo':
+                    t[q_of(d)]['days'] += 1
+    return {q: dict(v, total=sum(v[s] for s in ('fo', 'cash', 'comm')), days=int(v['days'])) for q, v in t.items()}
+
+
+def disclosed_orders(reviewed=None, handbook_path=GS.ORDERS_HANDBOOK):
+    """{quarter: Mn}: the check-only handbook series; facts_candidates' `orders_total` (reviewed fixture) must agree."""
+    hb = {q: v['orders_mn'] for q, v in json.load(open(handbook_path))['quarters'].items()}
+    for f in (reviewed if reviewed is not None else GS.load_reviewed()):
+        if f['metric'] == 'orders_total':
+            if abs(f['value'] - hb[f['period_key']]) > 1e-3:
+                raise ValueError(f"orders_total {f['period_key']}: fact {f['value']} != handbook {hb[f['period_key']]}")
+    return hb
+
+
+def orders_check(after='abcdefg', angel_snapshot=ANGEL_SNAPSHOT, groww_snapshot=GROWW_SNAPSHOT):
+    """Rows per reported quarter: disclosed orders, the parity model and the model after `after` (all in Mn)."""
+    disc = disclosed_orders()
+    imp0 = implied_orders(run_switches((), angel_snapshot, groww_snapshot)[2])
+    imp1 = implied_orders(run_switches(after, angel_snapshot, groww_snapshot)[2])
+    rows = []
+    for q in quarter_seq('Q3 FY 2025', 'Q2 FY 2027'):
+        a, b, rep = imp0.get(q), imp1.get(q), disc[q]
+        rows.append(dict(quarter=q, disclosed=rep, parity=a, live=b,
+                         gap_parity=None if not a else a['total'] / rep - 1,
+                         gap_live=None if not b else b['total'] / rep - 1,
+                         live_new_basis=None if not b else b['comm'] + (b['fo'] + b['cash']) / 2))
+    return rows
+
+
+def orders_markdown(rows, after='abcdefg'):
+    L = ['# Groww: model-implied vs disclosed total orders', '',
+         'Implied orders = the model\'s daily Groww orders summed over the quarter: F&O (Angel-calibrated market orders '
+         'x Groww share) + cash (market trades / Angel trades per order x Groww share) + commodity. Disclosed = total '
+         'broking orders (Stocks + Derivatives; no segment split), KPI Handbook Operational KPIs row 10, latest '
+         'handbook (Q2 FY27). Mn orders.', '',
+         f'"Parity" = the workbook (no switches). "Live" = switches {"".join(sorted(after))}. The shares are on the '
+         'legacy basis (denominator = exchange turnover) in both, as in the workbook. "Live, new-basis shares" halves '
+         'the F&O and cash orders: the share on Groww\'s published basis (denominator = exchange turnover x 2).', '',
+         '| Quarter | Disclosed | Parity: F&O | cash | comm | total | gap | Live: F&O | cash | comm | total | gap | '
+         'Live, new-basis shares: total | gap |', '|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|']
+    n = lambda x: '—' if x is None else f'{x:,.1f}'
+    g = lambda x: '—' if x is None else f'{100 * x:+.1f}%'
+    for r in rows:
+        a, b = r['parity'], r['live']
+        nb = r['live_new_basis']
+        L.append(f"| {r['quarter']} | {n(r['disclosed'])} | " + (
+            f"{n(a['fo'])} | {n(a['cash'])} | {n(a['comm'])} | {n(a['total'])} | {g(r['gap_parity'])} | " if a
+            else '— | — | — | — | not live | ') + (
+            f"{n(b['fo'])} | {n(b['cash'])} | {n(b['comm'])} | {n(b['total'])} | {g(r['gap_live'])} | "
+            f"{n(nb)} | {g(None if nb is None else nb / r['disclosed'] - 1)} |" if b
+            else '— | — | — | — | not live | — | — |'))
+    L += ['', 'Q3 FY25 and Q4 FY25: F&O and cash are zero-filled in the workbook and stay so (no backfill before '
+          '1 Apr 2025); commodities are blank before 1 Oct 2025, so the commodity column is 0 up to Q2 FY26 and the '
+          'Q3 FY26 value is the first live quarter. Q3 FY27 is partial (13 trading days) and has no disclosure yet.', '']
+    return '\n'.join(L)
+
+
 def main(argv):
     arg = argv[1]
     os.makedirs('out/bridges', exist_ok=True)
-    text = markdown(bridge(arg))
-    path = f'out/bridges/groww_{arg}.md'
+    if arg == 'orders':
+        rows = orders_check()
+        text = orders_markdown(rows)
+        path = 'out/bridges/groww_orders_check.md'
+    else:
+        text = markdown(bridge(arg))
+        path = f'out/bridges/groww_{arg}.md'
     with open(path, 'w') as fh:
         fh.write(text)
     print(text)

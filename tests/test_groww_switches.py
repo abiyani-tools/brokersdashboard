@@ -49,6 +49,12 @@ def test_reviewed_fixture_is_the_103_candidates_as_reviewed():
     assert json.load(open(GS.REVIEWED)) == GS.build_reviewed_fixture()          # reproducible from the candidates
 
 
+def test_orders_handbook_series_agrees_with_the_candidates():
+    disc = B.disclosed_orders()                                                 # raises on a disagreement
+    assert disc['Q1 FY 2026'] == pytest.approx(378.557) and disc['Q2 FY 2027'] == pytest.approx(517.305)
+    assert len(disc) == 9
+
+
 # ── no switches = parity ──
 def test_no_switches_is_the_workbook():
     I, G, res = run('')
@@ -404,6 +410,22 @@ def test_g_period_rule_is_generalised_by_broker():
 
 
 # ── the orders check ──
+def test_orders_check_matches_an_independent_sum():
+    rows = {r['quarter']: r for r in B.orders_check()}
+    assert list(rows)[0] == 'Q3 FY 2025' and list(rows)[-1] == 'Q2 FY 2027' and len(rows) == 8
+    live = run('abcdefg')[2]['daily']
+    for q in ('Q1 FY 2026', 'Q3 FY 2026', 'Q2 FY 2027'):
+        tot = sum(r['orders_mn'] for seg in ('fo', 'cash', 'comm') for d, r in live[seg].items()
+                  if q_of(d) == q and r['orders_mn'])
+        assert rows[q]['live']['total'] == pytest.approx(tot, rel=1e-12)
+        assert rows[q]['gap_live'] == pytest.approx(tot / B.disclosed_orders()[q] - 1, rel=1e-12)
+    assert rows['Q3 FY 2025']['live'] is None and rows['Q1 FY 2026']['parity'] is None     # not live before 1 Apr 2025 / 1 Jul 2025
+    assert rows['Q2 FY 2026']['parity']['total'] == pytest.approx(rows['Q2 FY 2026']['live']['total'], rel=1e-12)
+    assert rows['Q2 FY 2027']['live_new_basis'] == pytest.approx(
+        rows['Q2 FY 2027']['live']['comm'] + (rows['Q2 FY 2027']['live']['fo'] + rows['Q2 FY 2027']['live']['cash']) / 2)
+    assert all(-0.4 < r['gap_live'] < 0 for r in rows.values() if r['live'])                # the model undershoots, 15-30%
+
+
 # ── bridges ──
 @pytest.mark.parametrize('x', list('abcdefg'))
 def test_each_bridge_builds_and_adds_up(x):
