@@ -83,10 +83,11 @@ class GrowwInputs:
 def load(angel_snapshot, groww_snapshot, switches=(), reviewed_path=None):
     """(Inputs, GrowwInputs) from the Angel snapshot and the Groww snapshot paths.
 
-    switches: Groww switches. The Angel calibration Groww borrows is Angel's parity run."""
+    switches: Groww switches. g-c is Angel switch c on the shared exchange series (its market_overrides); the Angel
+    calibration Groww borrows is otherwise Angel's parity run."""
     switches = GS.check(switches)
     reviewed = GS.load_reviewed(reviewed_path or GS.REVIEWED) if switches else None
-    I = Inputs(json.load(open(angel_snapshot)))
+    I = Inputs(json.load(open(angel_snapshot)), ('c',) if 'c' in switches else ())
     return I, GrowwInputs(json.load(open(groww_snapshot)), switches, reviewed)
 
 
@@ -225,9 +226,11 @@ def mtf_parameters(I, G, last_q):
 # ── daily revenue ──
 def run(I, G, angel=None):
     """Groww's calibration and daily revenue. `angel` = daily.run(I) (Angel's calibration is reused as is).
-    """
-    if I.switches:
-        raise ValueError('Groww needs an Inputs object without Angel live switches')
+    I may carry Angel switch c (g-c) and nothing else."""
+    if I.switches - {'c'}:
+        raise ValueError('Groww needs an Inputs object without live switches (g-c alone may be on)')
+    if ('c' in I.switches) != G.on('c'):
+        raise ValueError('g-c is Angel switch c on the exchange series: load both with the same switches')
     angel = angel or ANGEL.run(I)
     zero_q = G.assume('zero_fill_quarters').split(',')
     live_fo, live_cash, live_comm = (G.assume(f'first_live_date_{s}') for s in ('fo', 'cash', 'comm'))

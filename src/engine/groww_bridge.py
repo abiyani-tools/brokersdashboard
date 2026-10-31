@@ -92,10 +92,15 @@ def bridge(letter, angel_snapshot=ANGEL_SNAPSHOT, groww_snapshot=GROWW_SNAPSHOT)
         for panel in SP.PANELS:
             x, y = t_a[(p, k, panel)], t_b[(p, k, panel)]
             rows.append(dict(period=k, panel=panel, before=x, after=y, delta=y - x, pct=(y / x - 1) if x else None))
+    market = {}
+    if letter == 'c':
+        key = ('bse_fo', 'contracts')
+        ov = I_b.market_overrides.get(key, {})
+        market = {d: (I_a.mkt[key][d], v) for d, v in ov.items()}
     return dict(letter=letter, before=sorted(before), after=sorted(after), rows=rows,
                 facts={k: o for k, o in G_b.overlay.items() if o.switch == letter and o.changed},
                 same={k: o for k, o in G_b.overlay.items() if o.switch == letter and not o.changed},
-                params=moved(params(G_a, r_a), params(G_b, r_b)), days=daily_changes(r_a, r_b))
+                params=moved(params(G_a, r_a), params(G_b, r_b)), days=daily_changes(r_a, r_b), market=market)
 
 
 def _f6(x, sign=''):
@@ -134,6 +139,13 @@ def markdown(b):
             tag = '' if o.changed else ' (same value, source confirmed)'
             L.append(f"| {metric} | {period} | {_num(o.seed)} | {_num(o.value)} | {ids} | {o.vintage}{tag}"
                      f"{' — ' + o.note if o.note else ''} |")
+        L.append('')
+    for d, (v0, v1) in sorted(b.get('market', {}).items()):
+        if d == min(b['market']):
+            L += [f"Exchange series replaced on imputed days: `bse_fo/contracts` ({len(b['market'])} days, lake value)", '',
+                  '| Date | Before | After (lake) |', '|---|---:|---:|']
+        L.append(f"| {d} | {v0[0]:,.0f} ({v0[1]}) | {v1[0]:,.0f} |")
+    if b.get('market'):
         L.append('')
     L += ['ADR, Rs crore per trading day (MTF gross):', '',
           '| Period | Panel | Before | After | Δ | Δ % |', '|---|---|---:|---:|---:|---:|']

@@ -211,13 +211,35 @@ def test_b_fy26_has_every_quarter_and_fy27_is_unchanged():
 
 
 # ── g-c: BSE F&O unfrozen ──
+def test_c_reuses_angel_switch_c_and_changes_only_the_imputed_days():
+    I_a, I_c = run('ab')[0], run('abc')[0]
+    assert I_c.switches == frozenset('c') and I_a.switches == frozenset()
+    from src.engine import switches as ASW
+    want = ASW.market_overrides({'c'}, I_a.mkt, I_a.lake)[('bse_fo', 'contracts')]
+    assert len(want) == 15 and I_c.market_overrides[('bse_fo', 'contracts')] == want   # the Angel code, not a copy
+    assert not hasattr(GS, 'market_overrides')
+    a, c = daily_of('ab', 'fo'), daily_of('abc', 'fo')
+    changed = {d for d in a if a[d]['rev_mn'] != c[d]['rev_mn']}
+    assert changed == set(want)
+    assert c['2026-10-08']['rev_mn'] > a['2026-10-08']['rev_mn'] * 2
+    # Angel's own calibration, which Groww borrows, does not move
+    A0, A1 = daily.run(run('ab')[0]), daily.run(I_c)
+    assert A0['calib']['fo_month'] == A1['calib']['fo_month'] and A0['calib']['cash_quarter'] == A1['calib']['cash_quarter']
+    assert A0['calib']['comm_month'] == A1['calib']['comm_month'] and A0['calib']['take_rates'] == A1['calib']['take_rates']
+
+
+def test_c_leaves_cash_commodity_mtf_alone():
+    for seg in ('cash', 'comm', 'mtf'):
+        assert daily_of('ab', seg) == daily_of('abc', seg)
+
+
 # ── g-d: every reported quarter calibrates ──
 # ── g-e: one estimate rule ──
 # ── g-f: MTF basis ──
 # ── g-g: special sessions, periods ──
 # ── the orders check ──
 # ── bridges ──
-@pytest.mark.parametrize('x', list('ab'))
+@pytest.mark.parametrize('x', list('abc'))
 def test_each_bridge_builds_and_adds_up(x):
     b = B.bridge(x)
     txt = B.markdown(b)
@@ -236,7 +258,7 @@ def test_each_bridge_builds_and_adds_up(x):
 def test_bridges_chain_end_to_end():
     """Each bridge's 'after' is the next one's 'before': the effects add up from parity to all seven switches."""
     prev = None
-    for x in 'ab':
+    for x in 'abc':
         b = B.bridge(x)
         if prev is not None:
             assert {(r['period'], r['panel']): r['before'] for r in b['rows']} == \

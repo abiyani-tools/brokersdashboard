@@ -58,6 +58,7 @@ FACT_SWITCHES = {
     'b': [('mix', 'revmix_fo', ['Q1 FY 2026']), ('mix', 'revmix_cash', ['Q1 FY 2026']),
           ('fact', 'total_income', ['Q1 FY 2026'], 'Rs Mn'),
           ('share', 'share_fo_adto_q', ['Q1 FY 2026']), ('share', 'share_cash_adto_q', ['Q1 FY 2026'])],
+    'c': [],
 }
 
 # switch -> pin / assumption values it sets
@@ -72,8 +73,9 @@ ASSUME_SWITCHES = {
           'zero_fill_quarters': 'Q3 FY 2025,Q4 FY 2025'},
 }
 
+MARKET_SWITCHES = {'c': {('bse_fo', 'contracts')}}   # reuses Angel switch c's market_overrides
 
-IMPLEMENTED = set('ab')
+IMPLEMENTED = set('abc')
 
 
 class SwitchError(ValueError):
