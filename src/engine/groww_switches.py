@@ -1,4 +1,5 @@
-"""Groww parity -> live switches g-a ... g-g (docs/GROWW_LIVE_SPEC.md), applied in order a -> g.
+"""Groww parity -> live switches g-a ... g-g (docs/GROWW_LIVE_SPEC.md), applied in order a -> g, and the two
+optional IR switches g-h and g-i (EXTRA, off in the published chain; they read the archived investor-relations page).
 
 Same discipline as Angel's switches (src/engine/switches.py):
 - a switch is a named, independent addition; with none on, Groww is the workbook (262 / 262 cells);
@@ -20,7 +21,10 @@ from collections import namedtuple
 
 from .inputs import quarter_seq
 
-ORDER = 'abcdefg'
+ORDER = 'abcdefg'                     # the published chain
+EXTRA = 'hi'                          # g-h, g-i: read the IR archive; off until AB signs off
+ALL = ORDER + EXTRA
+REQUIRES = {'h': 'de', 'i': 'f'}      # h replaces g-e's carried shares (needs d, e); i builds on g-f's MTF basis
 
 DESCRIPTIONS = {
     'a': 'Facts from filings: mix on consolidated total income, MTF revenue = MTF mix x total income',
@@ -30,12 +34,18 @@ DESCRIPTIONS = {
     'e': 'One estimate rule: unreported quarters carry the last actual share and take rate; no typed growth',
     'f': 'MTF basis: 14.95% x actual FY trading days; share = disclosed MTF revenue / industry book',
     'g': 'Special sessions out of F&O, cash and commodity averages; labels and comparisons from the calendar',
+    'h': "Quarter-to-date turnover share: an unreported quarter's F&O and cash share = last reported share x "
+         "(Groww QTD share of NSE+BSE turnover / its share in the last reported quarter), take rate carried",
+    'i': "MTF from Groww's own book: daily revenue = Groww MTF net book (IR page: quarter-end levels, interpolated; "
+         "latest level in the open quarter) x 14.95% / FY trading days; reported quarters still tie to disclosed revenue",
 }
 
 HERE = os.path.dirname(__file__)
 CANDIDATES = os.path.join(HERE, '..', '..', 'out', 'groww', 'facts_candidates.json')
 REVIEWED = os.path.join(HERE, '..', '..', 'snapshot', 'groww_facts_reviewed_2026-10-31.json')
 ORDERS_HANDBOOK = os.path.join(HERE, '..', '..', 'snapshot', 'groww_orders_handbook_2026-10-31.json')
+IR_FIXTURE = os.path.join(HERE, '..', '..', 'snapshot', 'groww_ir_2026-10-31.json')              # g-h, g-i
+EXCHANGE_FIXTURE = os.path.join(HERE, '..', '..', 'snapshot', 'groww_exchange_2026-10-31.json')   # g-h
 
 YIELD_PERIOD = 'Q1 FY 2027'                      # the call that states 14.95% (latest of the two facts)
 MIX_ORIGINAL = 'cls_pre_q2fy27'
@@ -89,7 +99,7 @@ ASSUME_SWITCHES = {
 MARKET_SWITCHES = {'c': {('bse_fo', 'contracts')}}   # reuses Angel switch c's market_overrides
 D_SEGMENTS = ('fo', 'cash', 'comm')
 
-IMPLEMENTED = set(ORDER)
+IMPLEMENTED = set(ORDER) | {'h'}
 
 
 class SwitchError(ValueError):
@@ -98,18 +108,22 @@ class SwitchError(ValueError):
 
 def check(switches):
     switches = frozenset(switches)
-    unknown = switches - set(ORDER)
+    unknown = switches - set(ALL)
     if unknown:
         raise SwitchError(f'unknown Groww switch(es) {sorted(unknown)}')
     missing = switches - IMPLEMENTED
     if missing:
         raise SwitchError(f'Groww switch(es) {sorted(missing)} not implemented yet')
+    for sw in sorted(switches & set(REQUIRES)):
+        need = [r for r in REQUIRES[sw] if r not in switches]
+        if need:
+            raise SwitchError(f'switch g-{sw} needs g-{", g-".join(need)} (it changes what those switches produce)')
     return switches
 
 
 def cumulative(letter):
-    i = ORDER.index(letter)
-    return frozenset(ORDER[:i]), frozenset(ORDER[:i + 1])
+    i = ALL.index(letter)
+    return frozenset(ALL[:i]), frozenset(ALL[:i + 1])
 
 
 Override = namedtuple('Override', 'value fact_ids switch unit vintage seed changed note')

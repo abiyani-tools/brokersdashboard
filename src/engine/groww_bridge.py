@@ -28,7 +28,7 @@ SEGMENTS = (('fo', 'F&O', 'rev_mn'), ('cash', 'Cash', 'rev_mn'), ('comm', 'Commo
 
 
 def run_switches(switches, angel_snapshot=ANGEL_SNAPSHOT, groww_snapshot=GROWW_SNAPSHOT):
-    I, G = groww.load(angel_snapshot, groww_snapshot, switches)
+    I, G = groww.load(angel_snapshot, groww_snapshot, switches)           # g-h / g-i read the IR fixtures
     return I, G, groww.run(I, G)
 
 
@@ -126,7 +126,10 @@ def bridge(letter, angel_snapshot=ANGEL_SNAPSHOT, groww_snapshot=GROWW_SNAPSHOT)
         key = ('bse_fo', 'contracts')
         ov = I_b.market_overrides.get(key, {})
         market = {d: (I_a.mkt[key][d], v) for d, v in ov.items()}
-    return dict(letter=letter, before=sorted(before), after=sorted(after), rows=rows,
+    qtd = [dict(p['qtd_ratio'], share_before=r_a['calib'][t][q]['share'], share_after=p['share'])
+           for t in ('cash_quarter', 'fo_quarter') for q, p in r_b['calib'][t].items() if 'qtd_ratio' in p]
+    model_days = sorted({d for d, r in r_b['daily']['fo'].items() if q_of(d) == (qtd[0]['quarter'] if qtd else '')})
+    return dict(letter=letter, before=sorted(before), after=sorted(after), rows=rows, qtd=qtd, qtd_model_days=model_days,
                 facts={k: o for k, o in G_b.overlay.items() if o.switch == letter and o.changed},
                 same={k: o for k, o in G_b.overlay.items() if o.switch == letter and not o.changed},
                 params=moved(params(G_a, r_a), params(G_b, r_b)), days=daily_changes(r_a, r_b), market=market,
@@ -187,6 +190,22 @@ def markdown(b):
         L += [f"F&O and cash days before the segment went live ({b['not_live']} rows) are not statistics under g-g: "
               'a period that starts there is insufficient instead of an average of zeros. '
               'Labels and comparisons come from the calendar (E3, summary_periods, generalised by broker).', '']
+    if b.get('qtd'):
+        L += ['g-h arithmetic (Groww turnover share = Groww turnover / NSE+BSE exchange turnover over the same days; '
+              'cash: stocks turnover vs NSE + BSE cash_traded_value, F&O: equity-derivatives premium vs NSE index + '
+              'stock option premium + BSE options_premium_turnover; both sides Rs Cr):', '',
+              '| Segment | Quarter | Groww Rs Cr | Exchange Rs Cr | Days | Share | Last reported: Groww | Exchange | Share '
+              '| Ratio | Share before | Share after |', '|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|']
+        for r in b['qtd']:
+            L.append(f"| {'F&O' if r['segment'] == 'fo' else 'Cash'} | {r['quarter']} (to {r['through']}) | "
+                     f"{r['groww_q_cr']:,.1f} | {r['exch_q_cr']:,.1f} | {r['days_q']} | {100 * r['share_q']:.3f}% | "
+                     f"{r['groww_last_cr']:,.1f} ({r['last_reported']}) | {r['exch_last_cr']:,.1f} | "
+                     f"{100 * r['share_last']:.3f}% | {r['ratio']:.6f} | {r['share_before']:.4f} | {r['share_after']:.4f} |")
+        L += ['', f"The QTD point runs through {b['qtd'][0]['through']} ({b['qtd'][0]['through_how']}; inferred from the "
+              f"turnover series, see src/engine/groww_ir.py). The model's {b['qtd'][0]['quarter']} has "
+              f"{len(b['qtd_model_days'])} trading days (the snapshot's as-of date), so the ratio built on "
+              f"{b['qtd'][0]['days_q']} days is applied to those {len(b['qtd_model_days'])}. Take rates are unchanged "
+              '(calibrated on reported quarters); reported quarters are untouched.', '']
     if b.get('basis') and b['letter'] == 'f':
         L += ['MTF trading days per FY (calendar equity days): '
               + '; '.join(f"{fy} {n}{'' if full else f' (FY incomplete: {src} count used)'}"

@@ -98,10 +98,26 @@ class GrowwSnapshotReader(EngineSnapshotReader):
         self.tables['sb_disclosure_facts'] = [dict(f, broker_id=BROKER) for f in list(gsnap['facts']) + list(facts)]
 
 
-def live_run_groww(angel_run, gsnap, facts, switches=SWITCHES):
+def ir_inputs(reader, broker=BROKER):
+    """(IR rows, exchange turnover) for g-h / g-i from the DB: the latest archived snapshot of sb_broker_daily plus the
+    QTD rows of earlier days (the MTF book archive), and the exchange turnover of sb_market_daily. Raises IRError
+    when the table is empty."""
+    from ..engine import groww_ir as IR
+    qtd = reader.table('sb_broker_daily', broker_id=broker, is_qtd=True)
+    if not qtd:
+        raise IR.IRError('sb_broker_daily has no archived Groww IR rows (is the migration applied and the archive running?)')
+    latest = max(str(r['snapshot_date'])[:10] for r in qtd)
+    rows = reader.table('sb_broker_daily', broker_id=broker, snapshot_date=latest) + \
+        [r for r in qtd if str(r['snapshot_date'])[:10] != latest]
+    return IR.IR(rows), IR.Turnover.from_market_rows(reader.table('sb_market_daily'))
+
+
+def live_run_groww(angel_run, gsnap, facts, switches=SWITCHES, ir=None, turnover=None):
     """Groww's live run from an Angel live run (its snapshot, reviewed facts, as-of date and calibration).
 
     gsnap: Groww snapshot (seed facts, assumptions, pins); facts: Groww filing facts of any status.
+    switches: the published chain is SWITCHES ('abcdefg'); g-h / g-i (src/engine/groww_ir.py) are added only by the
+    caller, with `ir` (groww_ir.IR) and, for g-h, `turnover` (groww_ir.Turnover).
     Raises GrowwRefused (nothing computed) unless every fact the switches read is reviewed."""
     from ..engine import groww as GW
     from ..engine import groww_switches as GS
@@ -124,7 +140,7 @@ def live_run_groww(angel_run, gsnap, facts, switches=SWITCHES):
     reviewed = [f for f in facts if f['status'] == 'reviewed']
     I = Inputs(snap, ('c',) if 'c' in switches else (), a_reviewed if 'c' in switches else None)
     try:
-        G = GW.GrowwInputs(gsnap, switches, reviewed)
+        G = GW.GrowwInputs(gsnap, switches, reviewed, ir, turnover)
         res = GW.run(I, G, angel=dict(calib=angel_run['calib'], daily=angel_run['daily']))
     except GS.SwitchError as e:
         raise GrowwRefused([str(e)])
@@ -148,5 +164,8 @@ def live_run_groww(angel_run, gsnap, facts, switches=SWITCHES):
     note = (f"Calibration (contracts per order, trades per order, commodity market orders and take rates) is borrowed "
             f"from the Angel One live run of the same snapshot, as of {as_of}. {len(G.overlay)} Groww inputs come from "
             f"{len(used)} reviewed facts; the rest are the workbook's.")
+    if G.switches & set(GS.EXTRA):
+        note += (f" Optional IR switches {''.join(sorted(G.switches & set(GS.EXTRA)))} are on "
+                 f"(archived Groww IR page, snapshot {ir.snapshot_date}).")
     return dict(as_of=as_of, switches=''.join(sorted(G.switches)), report=report, daily=res['daily'], calib=res['calib'],
                 rows=rows, overrides=G.overlay, broker=BROKER, facts_reviewed=True, fact_ids=used, note=note)

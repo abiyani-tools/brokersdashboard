@@ -21,19 +21,27 @@ DEFAULT_SNAPSHOT = 'snapshot/db_snapshot_2026-10-23.json'
 DEFAULT_REVIEWED = 'snapshot/facts_reviewed_2026-10-23.json'
 DEFAULT_GROWW_SNAPSHOT = 'snapshot/groww_snapshot_2026-10-23.json'
 DEFAULT_GROWW_FACTS = 'snapshot/groww_facts_reviewed_2026-10-31.json'
+DEFAULT_GROWW_IR = 'snapshot/groww_ir_2026-10-31.json'
+DEFAULT_GROWW_EXCHANGE = 'snapshot/groww_exchange_2026-10-31.json'
+EXTRA_ENV = 'GROWW_EXTRA'          # same as --groww-extra; the flag wins
 REFUSED_EXIT = 2
 
 
 def parse(argv):
-    """-> dict(db, publish, broker, snapshot, reviewed, groww_snapshot, groww_facts). Positional: snapshot, facts."""
+    """-> dict(db, publish, broker, snapshot, reviewed, groww_snapshot, groww_facts, groww_extra, groww_ir,
+    groww_exchange). Positional: snapshot, facts.
+
+    groww_extra: the optional Groww IR switches ('h', 'i', 'hi'), off by default (env GROWW_EXTRA is the default)."""
     opts = dict(db=False, publish=False, broker=ANGEL, groww_snapshot=DEFAULT_GROWW_SNAPSHOT,
-                groww_facts=DEFAULT_GROWW_FACTS)
+                groww_facts=DEFAULT_GROWW_FACTS, groww_extra=os.environ.get(EXTRA_ENV, ''),
+                groww_ir=DEFAULT_GROWW_IR, groww_exchange=DEFAULT_GROWW_EXCHANGE)
     args, i = [], 0
     while i < len(argv):
         a = argv[i]
         if a in ('--db', '--publish'):
             opts[a[2:]] = True
-        elif a.startswith('--broker') or a in ('--groww-snapshot', '--groww-facts'):
+        elif a.startswith('--broker') or a.split('=')[0] in ('--groww-snapshot', '--groww-facts', '--groww-extra',
+                                                              '--groww-ir', '--groww-exchange'):
             key, eq, val = a.partition('=')
             if not eq:
                 i += 1
@@ -51,6 +59,10 @@ def parse(argv):
         else:
             args.append(a)
         i += 1
+    extra = ''.join(sorted(set(opts['groww_extra'].lower().replace(',', '')))) if opts['groww_extra'] else ''
+    if set(extra) - {'h', 'i'}:
+        sys.exit(f"--groww-extra {opts['groww_extra']!r}: expected h, i or hi")
+    opts['groww_extra'] = extra
     opts['snapshot'] = args[0] if args else DEFAULT_SNAPSHOT
     opts['reviewed'] = args[1] if len(args) > 1 else DEFAULT_REVIEWED
     return opts
@@ -71,6 +83,9 @@ def main(argv=None, reader_factory=None, writer_factory=None):
     broker, publish_on = o['broker'], o['publish']
     if publish_on and not o['db']:
         sys.exit('--publish needs --db (a run from snapshot files is not published)')
+    if publish_on and o['groww_extra'] and broker in (GROWW, 'ALL'):
+        sys.exit(f"--publish with Groww switches g-{o['groww_extra']}: not signed off by AB, nothing is published "
+                 '(drop --groww-extra / unset GROWW_EXTRA for a published run)')
     want_angel, want_groww = broker in (ANGEL, 'ALL'), broker in (GROWW, 'ALL')
     pending = 'Not published yet: the run is published after this report if E5 does not block.' if publish_on else None
 
@@ -116,14 +131,27 @@ def main(argv=None, reader_factory=None, writer_factory=None):
     rc, groww, gout, refused = 0, None, os.path.join(out, 'groww'), None
     if want_groww:
         try:
-            from .groww_run import groww_inputs, live_run_groww
+            from .groww_run import SWITCHES, groww_inputs, ir_inputs, live_run_groww
+            from ..engine import groww_ir as IR
+            extra, ir, turnover = o['groww_extra'], None, None
             if o['db']:
                 gsnap, facts = groww_inputs(reader)
             else:
                 from ..engine import groww_switches as GS
                 gsnap = json.load(open(o['groww_snapshot']))
                 facts = GS.load_reviewed(o['groww_facts'])
-            groww = live_run_groww(angel, gsnap, facts)
+            if extra:                      # off unless asked for: the published chain stays g-a ... g-g
+                try:
+                    if o['db']:
+                        ir, turnover = ir_inputs(reader)
+                    else:
+                        ir = IR.IR(json.load(open(o['groww_ir']))['rows'])
+                        turnover = IR.Turnover.from_fixture(o['groww_exchange'])
+                except IR.IRError as e:
+                    raise GrowwRefused([f'Groww IR switches g-{extra}: {e}'])
+                print(f"Groww optional IR switches ON: g-{extra} (IR snapshot {ir.snapshot_date}); "
+                      'the published chain is g-a ... g-g')
+            groww = live_run_groww(angel, gsnap, facts, SWITCHES + extra, ir, turnover)
         except GrowwRefused as e:
             refused = e
         except Exception:

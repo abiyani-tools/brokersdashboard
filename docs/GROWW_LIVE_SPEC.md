@@ -80,3 +80,9 @@ python3 -m src.live.refresh_groww_ir --write         # upsert into sb_broker_dai
 ```
 
 The raw page lands in `out/groww_ir/` (git-ignored); keep it. A second run on the same IST day replaces that day's rows. The page cannot be back-filled: a day missed is a day without a quarter-to-date value (the quarterly history on any later page still has the closed quarters). To run it every evening on the Mac, a `launchd` job (or `cron`: `15 20 * * 1-5`) calling the two commands above is enough; run it after 19:50 IST so the exchange files for the day are in the DB.
+
+## Optional IR switches g-h and g-i (built 31 Oct 2026; off until AB signs off)
+
+They read the archived IR page (`snapshot/groww_ir_2026-10-31.json` built from the saved page, or the table `sb_broker_daily`) and, for g-h, the exchange turnover (`snapshot/groww_exchange_2026-10-31.json`, or `sb_market_daily`). They are not in the published chain (`SWITCHES = 'abcdefg'`). In the live CLI: `--groww-extra h|i|hi` (or env `GROWW_EXTRA`); `--publish` with them on is refused. Bridges: `out/bridges/groww_h.md`, `groww_i.md`. Backtests: `out/groww/backtest_ir_switches.md`.
+
+- **g-h** (needs g-d, g-e): an unreported quarter's F&O and cash share = last reported share x (Groww QTD turnover share / Groww turnover share in the last reported quarter); Groww turnover share = Groww turnover / NSE+BSE exchange turnover over the same days (cash: stocks turnover vs `cash_traded_value`; F&O: equity-derivatives premium vs NSE index + stock option premium + BSE `options_premium_turnover`). The QTD days are quarter start .. the trading day the page runs through (`covers_through`, inferred). Take rate unchanged. Backtest: it helps cash and does not help F&O; overall not a clear win over g-e's carry.

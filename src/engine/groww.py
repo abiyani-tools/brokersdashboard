@@ -11,7 +11,8 @@ Workbook quirks kept in parity mode (section 8c): zero-fill before 1 Jul 2025 (n
 #N/A for Q2 FY25), blank commodities before 1 Oct 2025, fixed commodity calibration, typed 5% growths, the
 Q1 FY27 F&O not fed, the BSE freeze (it is in the input series), MTF gross only.
 
-Live switches g-a ... g-g (docs/GROWW_LIVE_SPEC.md, src/engine/groww_switches.py) are read from GrowwInputs.switches;
+Live switches g-a ... g-g (docs/GROWW_LIVE_SPEC.md, src/engine/groww_switches.py) and the optional IR switches g-h, g-i
+(src/engine/groww_ir.py; off in the published chain) are read from GrowwInputs.switches;
 each changes inputs (an overlay of reviewed facts, pins, assumptions) or a rule behind `G.on(letter)`. With none on,
 every line below is the parity code path.
 """
@@ -22,6 +23,7 @@ from statistics import mean
 from .inputs import Inputs, fy_month_of, fy_of, months_of_quarter, q_of, quarter_seq
 from . import daily as ANGEL
 from . import groww_switches as GS
+from . import groww_ir as IR
 
 BROKER = 'GROWW'
 
@@ -30,9 +32,11 @@ class GrowwInputs:
     """Groww's own inputs from a groww_snapshot_*.json (facts / assumptions / pins with broker_id = 'GROWW').
 
     switches: Groww live switches g-a ... g-g (src/engine/groww_switches.py); none = parity (the workbook).
-    reviewed_facts: the reviewed Groww fact rows the switches read (needed as soon as one is on)."""
+    reviewed_facts: the reviewed Groww fact rows the switches read (needed as soon as one is on).
+    ir, turnover: the archived IR rows (groww_ir.IR) and the exchange turnover (groww_ir.Turnover) that g-h reads;
+    g-i reads `ir` only. Without them the switch raises SwitchError (no silent fallback to the carried share)."""
 
-    def __init__(self, snap, switches=(), reviewed_facts=None):
+    def __init__(self, snap, switches=(), reviewed_facts=None, ir=None, turnover=None):
         assert snap.get('broker_id') == BROKER, snap.get('broker_id')
         self.snap = snap
         self._facts = {}
@@ -48,6 +52,11 @@ class GrowwInputs:
             assert p['broker_id'] == BROKER, p
             self._pins[(p['key'], p['period_key'])] = p
         self.switches = GS.check(switches)
+        self.ir, self.turnover, self._ratio = ir, turnover, {}
+        if 'h' in self.switches and (ir is None or turnover is None):
+            raise GS.SwitchError('switch g-h needs the archived IR rows and the exchange turnover series')
+        if 'i' in self.switches and ir is None:
+            raise GS.SwitchError('switch g-i needs the archived IR rows (the MTF net book)')
         self.overlay, self._pin_over, self._assume_over = {}, {}, {}
         if self.switches:
             if reviewed_facts is None:
@@ -81,16 +90,37 @@ class GrowwInputs:
     def on(self, letter):
         return letter in self.switches
 
+    def qtd_ratio(self, segment, q, last):
+        """g-h: the QTD turnover-share ratio of unreported quarter q ('fo' | 'cash') against the last reported
+        quarter `last`, with its arithmetic; None for a quarter after the first unreported one that the IR archive
+        has nothing for (it carries). The first unreported quarter without IR data raises: no silent carry."""
+        key = (segment, q, last)
+        if key not in self._ratio:
+            try:
+                r = IR.qtd_share_ratio(self.ir, self.turnover, segment, q, last)
+            except IR.IRError as e:
+                raise GS.SwitchError(f'switch g-h: {e}')
+            if r is None and q == IR.next_quarter(last):
+                raise GS.SwitchError(f'switch g-h: the IR archive (snapshot {self.ir.snapshot_date}) has no '
+                                     f'{IR.SEGMENT_METRIC[segment][0]} for {q}, the quarter after the last reported one')
+            self._ratio[key] = r
+        return self._ratio[key]
 
-def load(angel_snapshot, groww_snapshot, switches=(), reviewed_path=None):
+
+def load(angel_snapshot, groww_snapshot, switches=(), reviewed_path=None, ir_path=None, exchange_path=None):
     """(Inputs, GrowwInputs) from the Angel snapshot and the Groww snapshot paths.
 
     switches: Groww switches. g-c is Angel switch c on the shared exchange series (its market_overrides); the Angel
     calibration Groww borrows is otherwise Angel's parity run."""
     switches = GS.check(switches)
     reviewed = GS.load_reviewed(reviewed_path or GS.REVIEWED) if switches else None
+    ir = turnover = None
+    if switches & set(GS.EXTRA):                                    # the IR archive (fixture; the DB table in the live run)
+        ir = IR.IR(json.load(open(ir_path or GS.IR_FIXTURE))['rows'])
+    if 'h' in switches:
+        turnover = IR.Turnover.from_fixture(exchange_path or GS.EXCHANGE_FIXTURE)
     I = Inputs(json.load(open(angel_snapshot)), ('c',) if 'c' in switches else ())
-    return I, GrowwInputs(json.load(open(groww_snapshot)), switches, reviewed)
+    return I, GrowwInputs(json.load(open(groww_snapshot)), switches, reviewed, ir, turnover)
 
 
 def _qkey(q):
@@ -149,7 +179,8 @@ def segment_revenue(G):
 def fo_parameters(I, G, angel, V_by_q, last_q):
     """backtesting F&O!AM48:AR57: share (row 57) and take rate (row 56) by quarter. Calibrated Q2-Q4 FY26,
     then the last take rate carried and the last share x (1 + typed growth), then carried.
-    Live: g-b starts at Q1 FY26, g-d runs to the last reported quarter, g-e drops the typed growth."""
+    Live: g-b starts at Q1 FY26, g-d runs to the last reported quarter, g-e drops the typed growth, g-h moves the
+    first unreported quarter's share by the QTD turnover-share ratio (take rate carried)."""
     rev = segment_revenue(G)['fo']
     cpo_m = {m: r['cpo'] for m, r in angel['calib']['fo_month'].items()}
     growth = 0.0 if G.on('e') else G.assume('share_growth_fo')
@@ -167,6 +198,11 @@ def fo_parameters(I, G, angel, V_by_q, last_q):
             share = prev['share'] * (1 + growth) if prev['regime'] == 'actual' else prev['share']
             out[q] = {'share': share, 'take_rate': prev['take_rate'], 'regime': 'projected',
                       'rule': 'share = last actual x (1 + growth) then carried; take rate carried'}
+            ratio = G.qtd_ratio('fo', q, last) if G.on('h') else None
+            if ratio is not None:                                                 # g-h: replaces the carried share
+                out[q].update(share=out[last]['share'] * ratio['ratio'], qtd_ratio=ratio,
+                              rule='share = last reported share x (Groww QTD turnover share / its share in the last '
+                                   'reported quarter) (g-h); take rate carried')
     return out
 
 
@@ -193,6 +229,11 @@ def cash_parameters(I, G, angel, N_by_q, last_q):
             else:
                 tr = mean(hist[-3:]) if prev['regime'] == 'actual' else prev['take_rate']   # K42 = AVERAGE(K39:K41), K43 = K42
             out[q] = {'share': prev['share'], 'take_rate': tr, 'tpo': tpo[q], 'regime': 'projected'}
+            ratio = G.qtd_ratio('cash', q, last) if G.on('h') else None
+            if ratio is not None:                                                 # g-h: replaces the carried share
+                out[q].update(share=out[last]['share'] * ratio['ratio'], qtd_ratio=ratio,
+                              rule='share = last reported share x (Groww QTD turnover share / its share in the last '
+                                   'reported quarter) (g-h); take rate carried')
     return out
 
 
