@@ -55,16 +55,25 @@ FACT_SWITCHES = {
           ('share', 'share_fo_adto_q', Q('Q2 FY 2026', 'Q4 FY 2026')),
           ('share', 'share_cash_adto_q', Q('Q2 FY 2026', 'Q1 FY 2027')),
           ('mtf_rev', Q('Q3 FY 2025', 'Q1 FY 2027'))],
+    'b': [('mix', 'revmix_fo', ['Q1 FY 2026']), ('mix', 'revmix_cash', ['Q1 FY 2026']),
+          ('fact', 'total_income', ['Q1 FY 2026'], 'Rs Mn'),
+          ('share', 'share_fo_adto_q', ['Q1 FY 2026']), ('share', 'share_cash_adto_q', ['Q1 FY 2026'])],
 }
 
 # switch -> pin / assumption values it sets
 PIN_SWITCHES = {
     'a': {('revenue_base', 'Q4 FY 2026'): 'total_income', ('revenue_base', 'Q1 FY 2027'): 'total_income'},
+    'b': {('fo_first_calibrated_quarter', ''): 'Q1 FY 2026', ('cash_first_calibrated_quarter', ''): 'Q1 FY 2026',
+          ('revenue_base', 'Q1 FY 2026'): 'total_income'},
 }
-ASSUME_SWITCHES = {}
+ASSUME_SWITCHES = {
+    # F&O and cash are live from the first day of Q1 FY26; only Q3 FY25 and Q4 FY25 stay zero-filled
+    'b': {'first_live_date_fo': '2025-04-01', 'first_live_date_cash': '2025-04-01',
+          'zero_fill_quarters': 'Q3 FY 2025,Q4 FY 2025'},
+}
 
 
-IMPLEMENTED = set('a')
+IMPLEMENTED = set('ab')
 
 
 class SwitchError(ValueError):

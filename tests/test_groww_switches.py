@@ -100,6 +100,12 @@ def test_unreviewed_fact_raises():
         overlay_with(rows, 'a')
 
 
+def test_missing_fact_raises():
+    rows = [r for r in reviewed() if not (r['metric'] == 'total_income' and r['period_key'] == 'Q1 FY 2026')]
+    with pytest.raises(GS.SwitchError, match='total_income Q1 FY 2026'):
+        overlay_with(rows, 'b')
+
+
 # ── g-a: facts from filings ──
 def test_a_vintages_restated_where_it_exists():
     G = run('a')[1]
@@ -162,6 +168,48 @@ def test_a_mtf_share_from_the_fixed_revenue():
 
 
 # ── g-b: Q1 FY26 calibrated ──
+def test_b_vintage():
+    """Q1 FY26 mix exists on the original classification only (the Q2 FY27 restatement starts at Q2 FY26): used as such."""
+    Gb = run('b')[1]
+    assert Gb.overlay[('revmix_fo', 'Q1 FY 2026')].vintage.startswith('original')
+    assert Gb.overlay[('revmix_fo', 'Q1 FY 2026')].value == 0.564 and Gb.overlay[('revmix_cash', 'Q1 FY 2026')].value == 0.193
+
+
+def test_b_f_and_o_and_cash_live_from_1_april_2025_and_nothing_earlier():
+    for seg in ('fo', 'cash'):
+        a, b = daily_of('a', seg), daily_of('ab', seg)
+        assert set(a) == set(b)
+        for d in a:
+            if d < '2025-04-01':
+                assert a[d] == b[d]                                              # no backfill earlier
+        assert b['2024-09-30']['rev_mn'] is None and b['2024-10-01']['rev_mn'] == 0.0 and b['2025-03-28']['rev_mn'] == 0.0
+        assert b['2025-04-01']['rev_mn'] > 0 and a['2025-04-01']['rev_mn'] == 0.0
+        assert all(b[d]['rev_mn'] > 0 for d in b if '2025-04-01' <= d)
+        assert all(a[d] == b[d] for d in a if d >= '2025-07-01')
+
+
+def test_b_q1_fy26_calibrates_on_reported_total_income_and_mix():
+    c = run('ab')[2]['calib']
+    fo, cash = c['fo_quarter']['Q1 FY 2026'], c['cash_quarter']['Q1 FY 2026']
+    assert fo['rev_mn'] == pytest.approx(0.564 * 9484.71, rel=1e-13) and cash['rev_mn'] == pytest.approx(0.193 * 9484.71, rel=1e-13)
+    assert fo['share'] == 0.144 and cash['share'] == 0.236                      # 2 x the printed 7.2% / 11.8%
+    assert fo['take_rate'] * fo['orders_mn'] == pytest.approx(fo['rev_mn'], rel=1e-12)
+    # the daily rows of the quarter add up to the quarter's revenue (the quarter uses the mean contracts per order)
+    tot = sum(r['rev_mn'] for d, r in daily_of('ab', 'fo').items() if q_of(d) == 'Q1 FY 2026')
+    assert tot == pytest.approx(fo['rev_mn'], rel=0.02)
+    tot = sum(r['rev_mn'] for d, r in daily_of('ab', 'cash').items() if q_of(d) == 'Q1 FY 2026')
+    assert tot == pytest.approx(cash['rev_mn'], rel=1e-9)
+
+
+def test_b_fy26_has_every_quarter_and_fy27_is_unchanged():
+    live = [d for d, r in daily_of('ab', 'fo').items() if r['regime'] != 'not_live']
+    assert min(live) == '2025-04-01' and all(d in live for d in daily_of('ab', 'fo') if d >= '2025-04-01')
+    a, b = B.adr(*run('a')), B.adr(*run('ab'))
+    for k in (('FY', 'FY 2027'), ('Q', 'Q2 FY 2027'), ('M', 'FY 2027 October')):
+        assert a[k + ('Consolidated',)] == b[k + ('Consolidated',)]
+    assert b[('FY', 'FY 2026', 'Consolidated')] > a[('FY', 'FY 2026', 'Consolidated')] * 1.2
+
+
 # ── g-c: BSE F&O unfrozen ──
 # ── g-d: every reported quarter calibrates ──
 # ── g-e: one estimate rule ──
@@ -169,7 +217,7 @@ def test_a_mtf_share_from_the_fixed_revenue():
 # ── g-g: special sessions, periods ──
 # ── the orders check ──
 # ── bridges ──
-@pytest.mark.parametrize('x', list('a'))
+@pytest.mark.parametrize('x', list('ab'))
 def test_each_bridge_builds_and_adds_up(x):
     b = B.bridge(x)
     txt = B.markdown(b)
@@ -188,7 +236,7 @@ def test_each_bridge_builds_and_adds_up(x):
 def test_bridges_chain_end_to_end():
     """Each bridge's 'after' is the next one's 'before': the effects add up from parity to all seven switches."""
     prev = None
-    for x in 'a':
+    for x in 'ab':
         b = B.bridge(x)
         if prev is not None:
             assert {(r['period'], r['panel']): r['before'] for r in b['rows']} == \
