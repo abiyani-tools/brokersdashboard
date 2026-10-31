@@ -5,46 +5,21 @@
     python3 run_live.py --db --publish                # ... and write the run to sb_runs / sb_calibration /
                                                       #     sb_daily_revenue / sb_summary_cells (refused if E5 blocks)
 
+    --broker ANGELONE (default) | GROWW | all
+        Groww borrows Angel One's calibration, so every broker choice runs the Angel One live run first and builds
+        Groww from it (same snapshot, same as-of date). Groww's report goes to out/live/<as_of>/groww/.
+        --broker all publishes Angel One, then Groww, each as its own sb_runs row. A Groww run is refused (a warning
+        under `all`, Angel One still publishes) unless every fact it reads is 'reviewed' in the database.
+    --groww-snapshot PATH --groww-facts PATH          # Groww's inputs for a run from files
+                                                      # (default: snapshot/groww_snapshot_2026-10-23.json,
+                                                      #  snapshot/groww_facts_reviewed_2026-10-31.json)
+
 From the DB the run is as of the last day on which every input the engine reads is complete; the series that
 limits it is named in the report and in sb_runs.notes.
 """
-import json
-import os
 import sys
 
-from src.live.run import live_run, live_run_snapshot, report_md, write
+from src.live.cli import main
 
-note = ''
-pending = ('Not published yet: the run is published after this report if E5 does not block.'
-           if '--publish' in sys.argv else None)
-if '--db' in sys.argv:
-    from src.live.db import SupabaseReader
-    from src.live.snapshot import build_snapshot, complete_through, trim
-    snap, reviewed = build_snapshot(SupabaseReader())
-    as_of, limiting = complete_through(snap)
-    note = f'complete through {as_of} (limited by {limiting})'
-    snap = trim(snap, as_of)
-    run = live_run_snapshot(snap, reviewed)
-    out = write(run, f"out/live/{run['as_of']}", pending)
-    with open(os.path.join(out, 'snapshot.json'), 'w') as fh:      # git-ignored; the inputs of this run
-        json.dump({'snapshot': snap, 'reviewed': reviewed}, fh, default=str)
-else:
-    if '--publish' in sys.argv:
-        sys.exit('--publish needs --db (a run from snapshot files is not published)')
-    args = [a for a in sys.argv[1:] if not a.startswith('--')]
-    snap = args[0] if args else 'snapshot/db_snapshot_2026-10-23.json'
-    reviewed = args[1] if len(args) > 1 else 'snapshot/facts_reviewed_2026-10-23.json'
-    run = live_run(snap, reviewed)
-    out = write(run, f"out/live/{run['as_of']}")
-print(report_md(run, pending))
-if note:
-    print(note)
-print('written', out)
-if run['report'].blocking:
-    sys.exit(1)
-if '--publish' in sys.argv:
-    from src.live.db import SupabaseWriter
-    from src.live.publish import publish
-    run_id, counts = publish(run, SupabaseWriter(), notes_extra=note)
-    print(f'published run {run_id}: {counts}')
-    write(run, out, f'Published to the database as run {run_id}: {counts}.')
+if __name__ == '__main__':
+    sys.exit(main())

@@ -71,6 +71,22 @@ class SupabaseReader:
             start += self.page_size
 
 
+class CachingReader:
+    """Reads each (table, filter) once: the Angel run and the Groww run share the calendar and exchange data."""
+
+    def __init__(self, reader):
+        self._reader, self._cache = reader, {}
+
+    def __repr__(self) -> str:
+        return repr(self._reader)
+
+    def table(self, name: str, **eq) -> list[dict]:
+        key = (name, tuple(sorted((k, str(v)) for k, v in eq.items())))
+        if key not in self._cache:
+            self._cache[key] = self._reader.table(name, **eq)
+        return self._cache[key]
+
+
 def reader_from_env(snapshot: str | Path | None = None):
     """Snapshot if a path is given (tests, local runs), else the DB (CI / daily job)."""
     return SnapshotReader(snapshot) if snapshot else SupabaseReader()

@@ -102,8 +102,10 @@ def live_run_snapshot(snap, reviewed, switches=ALL_SWITCHES, as_of=None):
     segs = make_segments(res['daily'], guarded=True, calendar=I.cal, exclude=SW.excluded_dates(I),
                          mtf_split='g' in I.switches, exclude_segments=SW.D_SEGMENTS)
     rows = period_rows(segs)
+    # broker / snapshot / reviewed: Groww borrows this run's calibration, so it is built from the same inputs
     return dict(as_of=as_of, switches=''.join(sorted(I.switches)), report=report, daily=res['daily'],
-                calib=res['calib'], rows=rows, overrides=I.overrides)
+                calib=res['calib'], rows=rows, overrides=I.overrides, broker=BROKER, snapshot=I.snap,
+                reviewed=reviewed)
 
 
 def headline(rows, keys=(('FY', 'FY 2027'), ('Q', 'Q2 FY 2027'), ('M', 'FY 2027 October'))):
@@ -119,8 +121,11 @@ def report_md(run, db_status=None):
     """db_status: what happened in the database (None = a dry run, nothing written)."""
     rep: Report = run['report']
     title = 'Live run (dry run)' if db_status is None else 'Live run'
+    broker = run.get('broker', BROKER)
+    if broker != BROKER:
+        title += f' · {broker}'
     L = [f"# {title} — as of {run['as_of']}", '',
-         f"Switches: {run['switches']} · E5: {'BLOCKING' if rep.blocking else 'pass'} "
+         f"Switches: {run['switches'] if broker == BROKER else 'g-' + run['switches']} · E5: {'BLOCKING' if rep.blocking else 'pass'} "
          f"({len(rep.errors)} blocking, {len(rep.find(severity='warning'))} warnings, "
          f"{len(rep.find(severity='info'))} info) · E1 coverage: pass · Summary rows: {len(run['rows'])}", '',
          db_status or 'Nothing was written to the database.', '', '## Headline (Rs crore per trading day; MTF gross)', '',
@@ -133,6 +138,8 @@ def report_md(run, db_status=None):
         yoy = c.get('YoY', (None, None, None))[1]
         val = '—' if first[0] is None else f'{first[0]:.4f}'
         L.append(f"| {k} | {panel} | {val} | {pct(prev)} | {pct(yoy)} |")
+    if run.get('note'):
+        L += ['', run['note']]
     L += ['', '## E5 integrity report', '', '```', rep.summary(), '```', '']
     return '\n'.join(L)
 

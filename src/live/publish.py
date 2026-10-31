@@ -30,11 +30,15 @@ def code_version():
 
 
 def rows_for(run, run_id):
+    """Every row carries the run's broker_id (sb_runs.broker_id and the three child tables)."""
     from ..engine import publish as P
+    broker = run.get('broker', BROKER)
+    calib = (P.calibration_rows(run_id, run['calib']) if broker == BROKER
+             else P.groww_calibration_rows(run_id, run['calib'], broker))
     return {
-        'sb_calibration': P.calibration_rows(run_id, run['calib']),
-        'sb_daily_revenue': P.daily_rows(run_id, run['daily']),
-        'sb_summary_cells': P.period_summary_rows(run_id, run['rows']),
+        'sb_calibration': calib,
+        'sb_daily_revenue': P.daily_rows(run_id, run['daily'], broker),
+        'sb_summary_cells': P.period_summary_rows(run_id, run['rows'], broker),
     }
 
 
@@ -48,16 +52,20 @@ def _check_finite(tables):
 
 def publish(run, writer, notes_extra=''):
     rep = run['report']
+    broker = run.get('broker', BROKER)
     if rep.blocking:
         raise PublishRefused('E5 blocks this run; nothing written:\n' + rep.summary())
+    if broker != BROKER and not run.get('facts_reviewed'):
+        raise PublishRefused(f'{broker}: the run was not built on reviewed facts only; nothing written')
     run_id = str(uuid.uuid4())
     tables = rows_for(run, run_id)
     _check_finite(tables)
     now = lambda: dt.datetime.now(dt.timezone.utc).isoformat(timespec='seconds')
-    notes = (f"live run, switches {run['switches']}; E5 {len(rep.errors)} blocking / "
+    label = f"switches {run['switches']}" if broker == BROKER else f"{broker} switches g-{run['switches']}"
+    notes = (f"live run, {label}; E5 {len(rep.errors)} blocking / "
              f"{len(rep.find(severity='warning'))} warnings / {len(rep.find(severity='info'))} info"
              + (f'; {notes_extra}' if notes_extra else ''))
-    writer.insert('sb_runs', [dict(run_id=run_id, broker_id=BROKER, mode='live', as_of_date=run['as_of'],
+    writer.insert('sb_runs', [dict(run_id=run_id, broker_id=broker, mode='live', as_of_date=run['as_of'],
                                    started_at=now(), status='running', parity_pass=None,
                                    code_version=code_version(), notes=notes)])
     try:

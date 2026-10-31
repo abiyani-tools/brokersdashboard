@@ -2,6 +2,10 @@ name: daily
 # Daily live run (PLAN 4.1), switched on 23 Oct 2026 with AB's OK.
 # Needs repository secrets: SUPABASE_URL, SUPABASE_SERVICE_KEY (never commit keys); the first step stops the job
 # if either is missing. A run whose E5 checks block is not published (the job fails and keeps the report).
+# Angel One and Groww: `--broker all` runs Angel One, then Groww from the same Angel run (Groww borrows its calibration),
+# then publishes both, each as its own sb_runs row. Groww is refused unless every fact it reads is 'reviewed' (and its
+# workbook inputs are in the database): that is a warning annotation on the job, Angel One still publishes and the job
+# stays green. Any other Groww error fails the job after Angel One has been published.
 on:
   workflow_dispatch:
   schedule:
@@ -26,8 +30,8 @@ jobs:
       - name: Refresh NSE / BSE volumes in sb_market_daily from ExchangesDash
         continue-on-error: true
         run: python -m src.live.refresh_market --write
-      - name: Live run from the DB and publish (E5 -> engine a-i -> E1 coverage -> Summary rows -> sb_*)
-        run: python run_live.py --db --publish
+      - name: Live run from the DB and publish, Angel One then Groww (E5 -> engine -> E1 coverage -> Summary rows -> sb_*)
+        run: python run_live.py --db --publish --broker all
       - name: Keep the run's report and inputs
         if: always()
         uses: actions/upload-artifact@v4

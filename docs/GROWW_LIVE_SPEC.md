@@ -51,3 +51,12 @@ Groww has no monthly update. Two fetchable monthly series could inform intra-qua
 3. g-b: is FY26 starting at Q1 FY26 (1 Apr 2025) right, or should FY26 comparisons start from Q2 FY26?
 4. g-f: keep 14.95% for MTF, or use a filed number if you have one?
 5. Dashboard: a broker selector in the Brokers view (agreed). Show the implied-vs-disclosed orders check there too?
+
+## Live run and daily job (built 31 Oct 2026)
+
+- `python3 run_live.py --broker GROWW|ANGELONE|all` (default ANGELONE, unchanged). Groww borrows Angel One's calibration, so every choice runs the Angel One live run first and builds Groww from that same run (snapshot, as-of date, switch c). Groww's report and Summary rows go to `out/live/<as_of>/groww/`.
+- From the DB, `build_snapshot(reader, broker='GROWW')` loads that broker's facts with the shared calendar and exchange data; `groww_inputs(reader)` gives the Groww engine its seed facts (`source_ref` `excel:...`), `sb_assumptions` and `sb_parity_pins` (`broker_id='GROWW'`), and the filing facts of any status.
+- Only `reviewed` facts move numbers. A Groww run whose required facts are not all `reviewed`, or whose workbook inputs are not in the database, is refused (`GrowwRefused`): nothing is computed or published. `publish()` also refuses a Groww run not built on reviewed facts.
+- Groww's workbook inputs (41 seed facts, 14 assumptions, 10 pins) belong in the database like Angel One's. `out/groww/db_inputs.json` and `out/groww/db_inputs.sql` hold the rows (not applied; AB approves). Until then Groww runs from the snapshot file.
+- `publish()` writes `broker_id` on `sb_runs` and on `sb_calibration`, `sb_daily_revenue` and `sb_summary_cells` (all key by `run_id`, so brokers never collide). Groww daily rows exclude days before a segment went live and carry gross MTF only; regimes are `actual` / `projected` (the tables' check constraints). The dashboard's `/api/brokers?broker=GROWW` finds the latest `mode='live'` run for the broker.
+- `daily.yml` runs `--broker all`: Angel One is published first. A refused Groww run is a warning annotation (exit 0); any other Groww error fails the job after Angel One has published.

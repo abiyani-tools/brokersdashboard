@@ -51,16 +51,60 @@ def calibration_rows(run_id, calib):
     return rows
 
 
-def daily_rows(run_id, daily):
+def _db_regime(regime):
+    """sb_daily_revenue / sb_calibration allow 'actual' and 'projected' only (check constraints)."""
+    return 'actual' if regime == 'actual' else 'projected'
+
+
+def daily_rows(run_id, daily, broker=BROKER):
+    """Daily revenue rows. Groww: a day before the segment went live (regime 'not_live', zero-filled or #N/A in the
+    workbook) is not revenue and is not written; MTF has gross only (no net series)."""
     rows = []
     for seg, key in (('fo', 'rev_mn'), ('cash', 'rev_mn'), ('comm', 'rev_mn')):
         for d, r in daily[seg].items():
-            rows.append(dict(run_id=run_id, broker_id=BROKER, trade_date=d, segment=seg,
-                             orders_mn=r['orders_mn'], revenue_cr=r[key] / 10, regime=r['regime']))
+            if r['regime'] == 'not_live':
+                continue
+            rows.append(dict(run_id=run_id, broker_id=broker, trade_date=d, segment=seg,
+                             orders_mn=r['orders_mn'], revenue_cr=r[key] / 10, regime=_db_regime(r['regime'])))
     for d, r in daily['mtf'].items():
         for seg, k in (('mtf_gross', 'gross_cr'), ('mtf_net', 'net_cr')):
-            rows.append(dict(run_id=run_id, broker_id=BROKER, trade_date=d, segment=seg,
-                             orders_mn=None, revenue_cr=r[k], regime=r['regime']))
+            if k not in r:
+                continue
+            rows.append(dict(run_id=run_id, broker_id=broker, trade_date=d, segment=seg,
+                             orders_mn=None, revenue_cr=r[k], regime=_db_regime(r['regime'])))
+    return rows
+
+
+def groww_calibration_rows(run_id, calib, broker='GROWW'):
+    """sb_calibration rows for a Groww run: quarterly parameters per segment (take_rate_used, share, orders, revenue),
+    the MTF share and book. Parameter names follow Angel One's rows where the meaning is the same."""
+    rows = []
+
+    def add(seg, q, param, value, regime, rule=None, src=None):
+        if value is None:
+            return
+        rows.append(dict(run_id=run_id, broker_id=broker, segment=seg, period_type='Q', period_key=q, param=param,
+                         value=float(value), regime=_db_regime(regime), rule=rule, source_periods=src))
+    for seg, table in (('fo', calib['fo_quarter']), ('cash', calib['cash_quarter']),
+                       ('comm', calib.get('comm_quarter') or {})):
+        for q, p in table.items():
+            rule = p.get('rule')
+            add(seg, q, 'take_rate_used', p.get('take_rate'), p['regime'], rule, p.get('take_rate_from'))
+            add(seg, q, 'share', p.get('share'), p['regime'], rule)
+            add(seg, q, 'orders_mn', p.get('orders_mn'), p['regime'])
+            add(seg, q, 'revenue_mn', p.get('rev_mn'), p['regime'])
+            for k in ('cpo_q', 'tpo', 'mkt_orders_mn'):
+                add(seg, q, {'cpo_q': 'cpo', 'tpo': 'tpo', 'mkt_orders_mn': 'mkt_orders_mn'}[k], p.get(k), p['regime'])
+    if 'comm_quarter' not in calib and 'comm' in calib:
+        c = calib['comm']
+        for param, k in (('take_rate_used', 'take_rate'), ('share', 'share'), ('orders_mn', 'orders_mn'),
+                         ('revenue_mn', 'rev_mn')):
+            add('comm', c['quarter'], param, c.get(k), 'actual', 'one-off calibration quarter (parity)')
+    for q, p in calib['mtf_quarter'].items():
+        add('mtf', q, 'share', p.get('share'), p['regime'], p['regime'])
+        add('mtf', q, 'industry_avg_cr', p.get('industry_avg_cr'), p['regime'])
+        add('mtf', q, 'groww_book_cr', p.get('groww_book_cr'), p['regime'])
+        add('mtf', q, 'revenue_cr', p.get('revenue_cr'), p['regime'])
     return rows
 
 
@@ -99,6 +143,6 @@ def summary_rows(run_id, stats, as_of):
     return rows
 
 
-def period_summary_rows(run_id, rows):
+def period_summary_rows(run_id, rows, broker=BROKER):
     """Live E3 rows (summary_periods.period_rows) for sb_summary_cells. value is NULL when note says why."""
-    return [dict(run_id=run_id, broker_id=BROKER, **r) for r in rows]
+    return [dict(run_id=run_id, broker_id=broker, **r) for r in rows]
