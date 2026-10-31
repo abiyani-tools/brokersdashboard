@@ -106,6 +106,13 @@ def test_missing_fact_raises():
         overlay_with(rows, 'b')
 
 
+def test_yield_unit_alias_is_the_only_unit_leniency():
+    G = overlay_with(reviewed(), 'f')
+    assert G.assume('mtf_yield') == 0.1495
+    with pytest.raises(GS.SwitchError, match='mtf_yield'):
+        overlay_with(_tweak('mtf_yield', 'Q1 FY 2027', '', unit='Rs Mn'), 'f')
+
+
 # ── g-a: facts from filings ──
 def test_a_vintages_restated_where_it_exists():
     G = run('a')[1]
@@ -305,10 +312,42 @@ def test_e_only_unreported_days_move():
 
 
 # ── g-f: MTF basis ──
+def test_f_reported_quarters_tie_to_disclosed_revenue_and_use_actual_fy_days():
+    I, G, res = run('abcdef')
+    mtf, q = res['daily']['mtf'], res['calib']['mtf_quarter']
+    assert q['Q2 FY 2027']['regime'] == 'actual' and G.pin('mtf_last_actual_quarter') == 'Q2 FY 2027'
+    for qq, want in (('Q3 FY 2025', 0.02 * 10044.47 / 10), ('Q4 FY 2026', 0.069 * 15355.35 / 10),
+                     ('Q1 FY 2027', 0.08 * 15486.7 / 10), ('Q2 FY 2027', 0.101 * 15405.4 / 10)):
+        assert sum(r['gross_cr'] for d, r in mtf.items() if q_of(d) == qq) == pytest.approx(want, rel=1e-9), qq
+    fy = res['calib']['fy_days']
+    assert fy['FY 2026'] == (247, True, 'FY 2026') and fy['FY 2025'][0] == 249 and fy['FY 2025'][1]
+    assert fy['FY 2027'] == (247, False, 'FY 2026')                              # incomplete: flagged, not silently 138
+    assert G.assume('mtf_yield') == 0.1495
+    d = '2026-07-06'
+    assert mtf[d]['gross_cr'] == pytest.approx(mtf[d]['groww_book_cr'] * 0.1495 / 247, rel=1e-12)     # book x yield / FY days
+
+
+def test_f_share_is_disclosed_revenue_over_the_industry_book():
+    res = run('abcdef')[2]
+    p = res['calib']['mtf_quarter']['Q2 FY 2027']
+    book = daily_of('', 'mtf')
+    inds = [r['groww_book_cr'] / r['share'] for d, r in res['daily']['mtf'].items() if q_of(d) == 'Q2 FY 2027']
+    n, D, y = p['days_in_quarter'], p['days_in_fy'], 0.1495
+    assert (n, D) == (len(inds), 247)
+    assert p['share'] == pytest.approx((0.101 * 15405.4 / 10) / (y * n / D) / mean(inds), rel=1e-12)
+    assert len(book) == 507
+
+
+def test_f_moves_only_mtf():
+    for seg in ('fo', 'cash', 'comm'):
+        assert daily_of('abcde', seg) == daily_of('abcdef', seg)
+    assert any(daily_of('abcde', 'mtf')[d] != daily_of('abcdef', 'mtf')[d] for d in daily_of('abcde', 'mtf'))
+
+
 # ── g-g: special sessions, periods ──
 # ── the orders check ──
 # ── bridges ──
-@pytest.mark.parametrize('x', list('abcde'))
+@pytest.mark.parametrize('x', list('abcdef'))
 def test_each_bridge_builds_and_adds_up(x):
     b = B.bridge(x)
     txt = B.markdown(b)
@@ -327,7 +366,7 @@ def test_each_bridge_builds_and_adds_up(x):
 def test_bridges_chain_end_to_end():
     """Each bridge's 'after' is the next one's 'before': the effects add up from parity to all seven switches."""
     prev = None
-    for x in 'abcde':
+    for x in 'abcdef':
         b = B.bridge(x)
         if prev is not None:
             assert {(r['period'], r['panel']): r['before'] for r in b['rows']} == \

@@ -68,6 +68,8 @@ class GrowwInputs:
     def assume(self, key):
         if key in self._assume_over:
             return self._assume_over[key]
+        if key == 'mtf_yield' and ('mtf_yield', GS.YIELD_PERIOD) in self.overlay:
+            return self.overlay[('mtf_yield', GS.YIELD_PERIOD)].value
         a = self._assume[key]
         return a['value'] if a['value'] is not None else a['value_text']
 
@@ -238,10 +240,26 @@ def comm_parameters_quarterly(I, G, angel, mkt_orders_by_q, last_q):
     return out
 
 
-def mtf_parameters(I, G, last_q):
+def fy_trading_days(cal):
+    """{fy: (trading days, complete, counted FY)} from the calendar's equity days. An FY the calendar does not cover
+    end to end (FY27 so far) uses the latest complete FY's count and says so."""
+    first, last = min(cal), max(cal)
+    days = defaultdict(int)
+    for d, r in cal.items():
+        if r['is_equity_day']:
+            days[r['fy']] += 1
+    done = {fy: (n, True, fy) for fy, n in days.items()
+            if f'{int(fy[3:]) - 1}-04-01' >= first and f'{fy[3:]}-03-31' <= last}
+    latest = max(done, key=lambda f: int(f[3:]))
+    return {fy: done.get(fy, (done[latest][0], False, latest)) for fy in days}
+
+
+def mtf_parameters(I, G, last_q, book=None, fy_days=None):
     """MTF data!I51:J60: Groww average book = revenue / (yield / 4); share = book / industry average of the
     monthly series; typed shares from Q2 FY27.
-    g-e: unreported quarters carry the last actual share (no typed share)."""
+    g-e: unreported quarters carry the last actual share (no typed share). g-f: see mtf_parameters_by_revenue."""
+    if G.on('f'):
+        return mtf_parameters_by_revenue(I, G, last_q, book, fy_days)
     y, qf = G.assume('mtf_yield'), G.assume('mtf_quarter_fraction')
     last = G.pin('mtf_last_actual_quarter')
     out = {}
@@ -257,6 +275,35 @@ def mtf_parameters(I, G, last_q):
         else:
             out[q] = {'share': G.fact('mtf_share_override', q), 'regime': 'typed'}               # J58:J60
     return out
+
+
+def mtf_parameters_by_revenue(I, G, last_q, book, fy_days):
+    """g-f: the quarter's disclosed revenue is spread over its own days: share = revenue / (yield x days in quarter /
+    days in FY) / industry average book (daily series), so the model's quarter total equals the disclosed revenue.
+    Unreported quarters: the typed share (parity) or, under g-e, the last actual share carried."""
+    y = G.assume('mtf_yield')
+    last = G.pin('mtf_last_actual_quarter')
+    byq = defaultdict(list)
+    for d, v in book.items():
+        byq[q_of(d)].append(v)
+    out = {}
+    for q in quarter_seq('Q3 FY 2025', last_q):
+        if _le(q, last):
+            n, D, ind = len(byq[q]), fy_days[_fy_of_quarter(q)][0], mean(byq[q])
+            book_cr = G.fact('mtf_revenue', q) / (y * n / D)
+            out[q] = {'industry_avg_cr': ind, 'groww_book_cr': book_cr, 'share': book_cr / ind, 'regime': 'actual',
+                      'days_in_quarter': n, 'days_in_fy': D, 'revenue_cr': G.fact('mtf_revenue', q)}
+        elif G.on('e'):
+            prev = out[quarter_seq('Q3 FY 2025', q)[-2]]
+            out[q] = {'share': prev['share'], 'regime': 'carried'}
+        else:
+            out[q] = {'share': G.fact('mtf_share_override', q), 'regime': 'typed'}
+    return out
+
+
+def _fy_of_quarter(q):
+    """'Q3 FY 2026' -> 'FY 2026'"""
+    return q[3:]
 
 
 # ── daily revenue ──
@@ -290,7 +337,8 @@ def run(I, G, angel=None):
     cash_q = cash_parameters(I, G, angel, N_q, last_q)
     cpo_fo = {m: r['cpo'] for m, r in angel['calib']['fo_month'].items()}
     comm_m = angel['calib']['comm_month']
-    mtf_q = mtf_parameters(I, G, last_q)
+    fy_days = fy_trading_days(I.cal) if G.on('f') else None
+    mtf_q = mtf_parameters(I, G, last_q, book, fy_days)
     if G.on('d'):
         mkt_q = defaultdict(float)
         for d in mcx:
@@ -356,9 +404,12 @@ def run(I, G, angel=None):
         q = q_of(d)
         if q not in mtf_q:
             raise ValueError(f'Groww MTF: no share for {q} ({d})')
+        D = fy_days[fy_of(d)][0] if G.on('f') else basis                          # g-f: the FY's actual trading days
         K = mtf_q[q]['share'] * book[d]                                           # Groww book, Rs Cr
-        mtf[d] = {'share': mtf_q[q]['share'], 'groww_book_cr': K, 'gross_cr': K * (y / basis),
+        mtf[d] = {'share': mtf_q[q]['share'], 'groww_book_cr': K, 'gross_cr': K * (y / D),
                   'regime': mtf_q[q]['regime']}
     calib = {'fo_quarter': fo_q, 'cash_quarter': cash_q, 'mtf_quarter': mtf_q, 'revenue': segment_revenue(G)}
     calib['comm_quarter' if G.on('d') else 'comm'] = comm
+    if G.on('f'):
+        calib['fy_days'] = fy_days
     return {'calib': calib, 'daily': {'fo': fo, 'cash': cash, 'comm': comm_d, 'mtf': mtf}}

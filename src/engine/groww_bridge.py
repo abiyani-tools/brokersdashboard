@@ -100,7 +100,8 @@ def bridge(letter, angel_snapshot=ANGEL_SNAPSHOT, groww_snapshot=GROWW_SNAPSHOT)
     return dict(letter=letter, before=sorted(before), after=sorted(after), rows=rows,
                 facts={k: o for k, o in G_b.overlay.items() if o.switch == letter and o.changed},
                 same={k: o for k, o in G_b.overlay.items() if o.switch == letter and not o.changed},
-                params=moved(params(G_a, r_a), params(G_b, r_b)), days=daily_changes(r_a, r_b), market=market)
+                params=moved(params(G_a, r_a), params(G_b, r_b)), days=daily_changes(r_a, r_b), market=market,
+                basis=r_b['calib'].get('fy_days'))
 
 
 def _f6(x, sign=''):
@@ -147,6 +148,12 @@ def markdown(b):
         L.append(f"| {d} | {v0[0]:,.0f} ({v0[1]}) | {v1[0]:,.0f} |")
     if b.get('market'):
         L.append('')
+    if b.get('basis') and b['letter'] == 'f':
+        L += ['MTF trading days per FY (calendar equity days): '
+              + '; '.join(f"{fy} {n}{'' if full else f' (FY incomplete: {src} count used)'}"
+                          for fy, (n, full, src) in sorted(b['basis'].items()) if fy >= 'FY 2025'),
+              '(daily MTF = share x book x yield / days of the FY; the share is calibrated on the same days, so each '
+              "reported quarter's total equals the disclosed revenue whatever the FY count is)", '']
     L += ['ADR, Rs crore per trading day (MTF gross):', '',
           '| Period | Panel | Before | After | Δ | Δ % |', '|---|---|---:|---:|---:|---:|']
     for r in b['rows']:

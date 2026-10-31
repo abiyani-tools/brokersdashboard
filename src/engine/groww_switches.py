@@ -36,9 +36,10 @@ HERE = os.path.dirname(__file__)
 CANDIDATES = os.path.join(HERE, '..', '..', 'out', 'groww', 'facts_candidates.json')
 REVIEWED = os.path.join(HERE, '..', '..', 'snapshot', 'groww_facts_reviewed_2026-10-31.json')
 
+YIELD_PERIOD = 'Q1 FY 2027'                      # the call that states 14.95% (latest of the two facts)
 MIX_ORIGINAL = 'cls_pre_q2fy27'
 SHARE_X1, SHARE_X2 = 'denom_exch_x1', 'denom_exch_x2'
-UNIT_ALIASES = {}
+UNIT_ALIASES = {'p.a.': 'fraction'}              # an annual rate stored as a fraction
 
 # ── what each switch replaces ──
 # ('mix', metric, [quarters])      revenue mix, restated vintage first
@@ -65,6 +66,7 @@ FACT_SWITCHES = {
           ('share', 'share_fo_adto_q', Q('Q1 FY 2027', 'Q2 FY 2027')),
           ('share', 'share_cash_adto_q', ['Q2 FY 2027'])],
     'e': [],
+    'f': [('mtf_rev', ['Q2 FY 2027']), ('fact', 'mtf_yield', ['Q1 FY 2027'], 'fraction')],
 }
 
 # switch -> pin / assumption values it sets
@@ -74,6 +76,7 @@ PIN_SWITCHES = {
           ('revenue_base', 'Q1 FY 2026'): 'total_income'},
     'd': {('fo_last_actual_quarter', ''): 'Q2 FY 2027', ('cash_last_actual_quarter', ''): 'Q2 FY 2027',
           ('comm_first_calibrated_quarter', ''): 'Q3 FY 2026', ('comm_last_actual_quarter', ''): 'Q2 FY 2027'},
+    'f': {('mtf_last_actual_quarter', ''): 'Q2 FY 2027'},
 }
 ASSUME_SWITCHES = {
     # F&O and cash are live from the first day of Q1 FY26; only Q3 FY25 and Q4 FY25 stay zero-filled
@@ -83,7 +86,7 @@ ASSUME_SWITCHES = {
 
 MARKET_SWITCHES = {'c': {('bse_fo', 'contracts')}}   # reuses Angel switch c's market_overrides
 
-IMPLEMENTED = set('abcde')
+IMPLEMENTED = set('abcdef')
 
 
 class SwitchError(ValueError):
@@ -154,6 +157,8 @@ def build_overlay(switches, reviewed_rows, seed_facts, seed_assume):
 
     def put(sw, metric, period, value, fact_ids, unit, vintage, note=''):
         seed = seed_facts.get((metric, period))
+        if seed is None and metric == 'mtf_yield' and metric in seed_assume:      # the workbook's typed 14.95%
+            seed = {'unit': seed_assume[metric]['unit'], 'value': seed_assume[metric]['value']}
         if seed is not None:
             if not _unit_ok(seed['unit'], unit):
                 raise SwitchError(f'switch g-{sw}: unit of {metric} {period} is {seed["unit"]!r}, fact {fact_ids} is {unit!r}')
