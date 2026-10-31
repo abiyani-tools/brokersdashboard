@@ -345,9 +345,67 @@ def test_f_moves_only_mtf():
 
 
 # ── g-g: special sessions, periods ──
+def test_g_special_sessions_leave_the_trading_averages_and_mtf_keeps_them():
+    I, G, res = run('abcdefg')
+    sp = {d for d, r in I.cal.items() if r['special_session']}
+    assert {'2025-10-21', '2026-02-01', '2025-02-01', '2024-11-01'} <= sp
+    segs = B.segments(I, G, res)
+    fo = {d: r['rev_mn'] / 10 for d, r in res['daily']['fo'].items() if r['rev_mn'] is not None}
+    want = mean(v for d, v in fo.items() if fy_of(d) == 'FY 2026' and d not in sp)
+    assert segs['F&O'].fy('FY 2026') == pytest.approx(want, rel=1e-12)
+    assert segs['F&O'].fy('FY 2026') != pytest.approx(mean(v for d, v in fo.items() if fy_of(d) == 'FY 2026'), rel=1e-6)
+    mtf = {d: r['gross_cr'] for d, r in res['daily']['mtf'].items()}
+    assert segs['MTF'].fy('FY 2026') == pytest.approx(mean(v for d, v in mtf.items() if fy_of(d) == 'FY 2026'), rel=1e-12)
+    # without g-g the special sessions stay in
+    assert B.special_dates(*run('abcdef')[:2]) == set()
+
+
+def test_g_changes_only_the_comparison_bases_in_this_data():
+    a, g = B.adr(*run('abcdef')), B.adr(*run('abcdefg'))
+    for k in (('FY', 'FY 2027'), ('Q', 'Q2 FY 2027'), ('M', 'FY 2027 October')):
+        for panel in SP.PANELS:
+            assert a[k + (panel,)] == g[k + (panel,)]
+    assert g[('FY', 'FY 2026', 'Consolidated')] > a[('FY', 'FY 2026', 'Consolidated')]
+    assert g[('M', 'FY 2026 October', 'MTF')] == a[('M', 'FY 2026 October', 'MTF')]
+    for seg in ('fo', 'cash', 'comm', 'mtf'):                                   # daily rows are not touched
+        assert daily_of('abcdef', seg) == daily_of('abcdefg', seg)
+
+
+def test_g_live_rows_come_from_the_calendar_and_guard_the_zero_fill():
+    I, G, res = run('abcdefg')
+    rows = B.live_period_rows(I, G, res)
+    get = lambda panel, ptype, pkey, label: [r for r in rows if (r['panel'], r['period_type'], r['period_key'],
+                                                                 r['row_label']) == (panel, ptype, pkey, label)]
+    q2 = get('Consolidated', 'Q', 'Q2 FY 2027', 'Q2 FY 2027')
+    assert len(q2) == 1 and q2[0]['value'] == pytest.approx(B.adr(I, G, res)[('Q', 'Q2 FY 2027', 'Consolidated')], rel=1e-12)
+    assert q2[0]['comp_value'] is not None                                      # QoQ from the calendar's previous quarter
+    # Q3 FY25 is zero-filled in F&O (not live): insufficient, never an average of zeros
+    fy25 = get('F&O', 'FY', 'FY 2025', 'FY 2025')[0]
+    assert fy25['value'] is None and fy25['note']
+    assert get('F&O', 'Q', 'Q3 FY 2025', 'Q3 FY 2025')[0]['value'] is None
+    assert get('F&O', 'Q', 'Q1 FY 2026', 'Q1 FY 2026')[0]['value'] is not None
+    assert {r['period_key'] for r in rows if r['period_type'] == 'asof'} == {'2026-10-21'}
+    assert get('MTF (net)', 'FY', 'FY 2027', 'FY 2027') == []                   # Groww has no net series
+
+
+def test_g_period_rule_is_generalised_by_broker():
+    """E3's general rule at Groww's default selection reproduces the workbook's Consolidated / Broking / MTF /
+    Commodities panels; the F&O and Cash panels keep stale hand-typed labels no selection reproduces."""
+    I, G, res = run('')
+    segs = SP.make_segments(res['daily'], mtf_weekday_net=False)
+    cells = summary._to_cells(SP.parity_stats(segs, 'GROWW'), None, summary.GROWW_COLS)
+    fixtures = json.load(open(PG.GROWW_FIXTURES))
+    rows = [e for e in fixtures['summary'] if e['panel'] in ('Consolidated', 'Broking', 'MTF', 'Commodities')]
+    assert len(rows) == 4 * 44
+    bad = [(e['cell'], cells[e['cell']][2], e['value']) for e in rows if abs(cells[e['cell']][2] - e['value']) > 1e-9]
+    assert not bad, bad[:5]
+    # Angel is unchanged by the generalisation
+    assert SP.BROKER_SELECTIONS['ANGELONE'] is SP.PARITY_SELECTIONS
+
+
 # ── the orders check ──
 # ── bridges ──
-@pytest.mark.parametrize('x', list('abcdef'))
+@pytest.mark.parametrize('x', list('abcdefg'))
 def test_each_bridge_builds_and_adds_up(x):
     b = B.bridge(x)
     txt = B.markdown(b)
@@ -366,7 +424,7 @@ def test_each_bridge_builds_and_adds_up(x):
 def test_bridges_chain_end_to_end():
     """Each bridge's 'after' is the next one's 'before': the effects add up from parity to all seven switches."""
     prev = None
-    for x in 'abcdef':
+    for x in 'abcdefg':
         b = B.bridge(x)
         if prev is not None:
             assert {(r['period'], r['panel']): r['before'] for r in b['rows']} == \

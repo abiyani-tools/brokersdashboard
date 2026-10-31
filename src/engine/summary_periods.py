@@ -25,6 +25,13 @@ PARITY_SELECTIONS = {
     'default': ('FY 2027', 'Q2 FY 2027', 'FY 2027 September'),
     'Cash': ('FY 2027', 'Q4 FY 2026', 'FY 2026 February'),
 }
+# per broker: the workbook's own selection(s). Groww's latest period is the partial Q3 FY27 / October; its F&O and Cash
+# panels also carry stale hand-typed labels that no selection reproduces (summary.GROWW_LABELS), so only the default
+# selection is general, and parity_stats(segs, 'GROWW') reproduces the Consolidated, Broking, MTF and Commodities panels.
+BROKER_SELECTIONS = {
+    'ANGELONE': PARITY_SELECTIONS,
+    'GROWW': {'default': ('FY 2027', 'Q3 FY 2027', 'FY 2027 October')},
+}
 SEGMENT_PANELS = ('F&O', 'Cash', 'Commodities', 'MTF', 'MTF (net)')
 PANELS = ('Consolidated', 'Broking', 'MTF', 'F&O', 'Cash', 'Commodities')
 
@@ -198,15 +205,17 @@ def _combine(segs, panel, fn):
 
 
 # ── the parity grid from the general rule (E3 exit test) ──
-def parity_stats(segs):
-    """stats in summary.build's shape, built from labels_for at the parity selections."""
+def parity_stats(segs, broker='ANGELONE'):
+    """stats in summary.build's shape, built from labels_for at the parity selections.
+    For Groww every panel is built at its default selection (see BROKER_SELECTIONS)."""
+    sel = BROKER_SELECTIONS[broker]
     def block(seg, lab):
         return {'fy': [seg.fy(x) for x in lab['fy']], 'q': [seg.q(x) for x in lab['q']],
                 'm': [seg.m(x) for x in lab['m']] + [seg.avg6(*lab['avg6'])],
                 'w': [seg.lastn(5), seg.prev5(), seg.lastn(45), seg.lastn(20)],
                 'wd': [[seg.weekday(k, 1), seg.weekday(k, 3), seg.weekday(k, 10)] for k in range(5)]}
-    D = labels_for(*PARITY_SELECTIONS['default'])
-    stats = {n: block(segs[n], labels_for(*PARITY_SELECTIONS.get(n, PARITY_SELECTIONS['default'])))
+    D = labels_for(*sel['default'])
+    stats = {n: block(segs[n], labels_for(*sel.get(n, sel['default'])))
              for n in ('F&O', 'Cash', 'Commodities', 'MTF')}
     parts = [block(segs[n], D) for n in ('F&O', 'Cash', 'Commodities')]
 

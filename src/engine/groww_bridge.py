@@ -25,8 +25,30 @@ def run_switches(switches, angel_snapshot=ANGEL_SNAPSHOT, groww_snapshot=GROWW_S
     return I, G, groww.run(I, G)
 
 
+# ── summary view: g-g rules ──
+def special_dates(I, G):
+    """Special-session dates left out of the F&O, cash and commodity statistics under g-g (MTF keeps them)."""
+    return {d for d, r in I.cal.items() if r.get('special_session')} if G.on('g') else set()
+
+
+def summary_daily(res, G):
+    """The daily rows the summary reads. Under g-g F&O / cash days before the segment went live (zero-filled,
+    regime 'not_live') are not statistics: a period that starts there is insufficient, not an average of zeros."""
+    daily = res['daily']
+    if not G.on('g'):
+        return daily
+    return {seg: ({d: r for d, r in rows.items() if r['regime'] != 'not_live'} if seg in ('fo', 'cash') else rows)
+            for seg, rows in daily.items()}
+
+
 def segments(I, G, res, guarded=False):
-    return SP.make_segments(res['daily'], guarded=guarded, calendar=I.cal if guarded else None, mtf_weekday_net=False)
+    return SP.make_segments(summary_daily(res, G), guarded=guarded, calendar=I.cal if guarded else None,
+                            exclude=special_dates(I, G), exclude_segments=GS.D_SEGMENTS, mtf_weekday_net=False)
+
+
+def live_period_rows(I, G, res):
+    """E3 rows for every FY / quarter / month from the calendar, generalised by broker (Groww: gross MTF, no net)."""
+    return SP.period_rows(segments(I, G, res, guarded=True))
 
 
 def adr(I, G, res):
@@ -101,6 +123,9 @@ def bridge(letter, angel_snapshot=ANGEL_SNAPSHOT, groww_snapshot=GROWW_SNAPSHOT)
                 facts={k: o for k, o in G_b.overlay.items() if o.switch == letter and o.changed},
                 same={k: o for k, o in G_b.overlay.items() if o.switch == letter and not o.changed},
                 params=moved(params(G_a, r_a), params(G_b, r_b)), days=daily_changes(r_a, r_b), market=market,
+                excluded=sorted(special_dates(I_b, G_b) - special_dates(I_a, G_a)),
+                not_live=sum(1 for seg in ('fo', 'cash') for r in r_b['daily'][seg].values()
+                             if r['regime'] == 'not_live'),
                 basis=r_b['calib'].get('fy_days'))
 
 
@@ -148,6 +173,13 @@ def markdown(b):
         L.append(f"| {d} | {v0[0]:,.0f} ({v0[1]}) | {v1[0]:,.0f} |")
     if b.get('market'):
         L.append('')
+    if b.get('excluded'):
+        L += ['Special sessions left out of the F&O, cash and commodity averages (MTF keeps them): '
+              + ', '.join(b['excluded']), '']
+    if b['letter'] == 'g':
+        L += [f"F&O and cash days before the segment went live ({b['not_live']} rows) are not statistics under g-g: "
+              'a period that starts there is insufficient instead of an average of zeros. '
+              'Labels and comparisons come from the calendar (E3, summary_periods, generalised by broker).', '']
     if b.get('basis') and b['letter'] == 'f':
         L += ['MTF trading days per FY (calendar equity days): '
               + '; '.join(f"{fy} {n}{'' if full else f' (FY incomplete: {src} count used)'}"
