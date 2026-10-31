@@ -1,0 +1,113 @@
+kind,item,agree,agree_1e-6,max_rel_diff
+ADR,FY 2027 | Consolidated,True,True,1.6683707239325683e-08
+ADR,FY 2027 | Broking,True,True,1.1159871972150716e-08
+ADR,FY 2027 | MTF,True,True,2.1460773963871794e-07
+ADR,FY 2027 | F&O,True,True,3.72536496481498e-08
+ADR,FY 2027 | Cash,True,True,7.868880958429583e-08
+ADR,FY 2027 | Commodities,True,True,3.008749892119917e-07
+ADR,Q2 FY 2027 | Consolidated,True,True,2.4841554529532936e-08
+ADR,Q2 FY 2027 | Broking,True,True,1.529089496708891e-08
+ADR,Q2 FY 2027 | MTF,True,True,8.627495983029197e-08
+ADR,Q2 FY 2027 | F&O,True,True,4.675857956573508e-08
+ADR,Q2 FY 2027 | Cash,True,True,7.038020845736759e-08
+ADR,Q2 FY 2027 | Commodities,True,True,7.779910082197872e-08
+ADR,FY 2027 October | Consolidated,True,True,2.8233565057284733e-08
+ADR,FY 2027 October | Broking,True,True,1.547625242393196e-08
+ADR,FY 2027 October | MTF,True,True,1.0553273341169341e-07
+ADR,FY 2027 October | F&O,True,True,2.7250422679352195e-08
+ADR,FY 2027 October | Cash,True,True,6.524320980815803e-08
+ADR,FY 2027 October | Commodities,True,True,3.519635260063245e-07
+ADR,FY 2026 | Consolidated,True,True,2.3111074351173982e-08
+ADR,FY 2026 | Broking,True,True,2.0748715219167152e-08
+ADR,FY 2026 | MTF,True,True,3.086028479921624e-07
+ADR,FY 2026 | F&O,True,True,5.2143243168938075e-08
+ADR,FY 2026 | Cash,True,True,1.6608632791892248e-07
+ADR,FY 2026 | Commodities,True,True,4.7063568801279783e-07
+ADR,FY 2026 October | Consolidated,True,True,2.312945079547685e-08
+ADR,FY 2026 October | Broking,True,True,4.860059383249331e-09
+ADR,FY 2026 October | MTF,True,True,3.492418918833942e-07
+ADR,FY 2026 October | F&O,True,True,2.0747551779751106e-08
+ADR,FY 2026 October | Cash,True,True,1.3566492791873208e-07
+ADR,FY 2026 October | Commodities,True,True,6.008787600905343e-07
+param,Cash | revenue Rs Mn | Q2 FY 2026,True,False,2.1135310221282305e-06
+param,Cash | revenue Rs Mn | Q3 FY 2026,True,True,5.76709583545285e-07
+param,Cash | revenue Rs Mn | Q4 FY 2026,True,False,1.920323282337429e-06
+param,Cash | revenue Rs Mn | Q1 FY 2027,True,True,5.213847979838639e-07
+param,Cash | take rate Rs/order | Q2 FY 2026,True,False,1.1979488031552079e-06
+param,Cash | take rate Rs/order | Q3 FY 2026,True,False,2.14927326785889e-06
+param,Cash | take rate Rs/order | Q4 FY 2026,True,False,1.3249057532798885e-06
+param,Cash | take rate Rs/order | Q1 FY 2027,True,False,2.0140820354507326e-06
+param,Cash | take rate Rs/order | Q2 FY 2027,True,False,1.2064021025921965e-06
+param,Cash | take rate Rs/order | Q3 FY 2027,True,False,1.2064021025921965e-06
+param,Commodities | revenue Rs Mn | Q3 FY 2026,True,False,1.0874983007813705e-05
+param,Commodities | share of Angel market orders | Q3 FY 2026,True,False,0.00016932818104374318
+param,Commodities | share of Angel market orders | Q4 FY 2026,True,False,0.00016932818104374318
+param,Commodities | share of Angel market orders | Q1 FY 2027,True,False,0.00016932818104374318
+param,Commodities | share of Angel market orders | Q2 FY 2027,True,False,0.00016932818104374318
+param,Commodities | share of Angel market orders | Q3 FY 2027,True,False,0.00016932818104374318
+param,F&O | revenue Rs Mn | Q2 FY 2026,True,True,8.091478014566308e-07
+param,F&O | revenue Rs Mn | Q3 FY 2026,True,True,7.114547173456508e-07
+param,F&O | revenue Rs Mn | Q4 FY 2026,True,True,2.1391060697394923e-07
+param,F&O | take rate Rs/order | Q2 FY 2026,True,False,1.3633113018472663e-06
+param,F&O | take rate Rs/order | Q3 FY 2026,True,False,1.5907444112356763e-06
+param,F&O | take rate Rs/order | Q4 FY 2026,True,False,1.6462983237977093e-06
+param,F&O | take rate Rs/order | Q1 FY 2027,True,False,1.6462983237977093e-06
+param,F&O | take rate Rs/order | Q2 FY 2027,True,False,1.6462983237977093e-06
+param,F&O | take rate Rs/order | Q3 FY 2027,True,False,1.6462983237977093e-06
+param,MTF | Groww average book Rs Cr | Q3 FY 2025,True,False,6.0978455315117294e-06
+param,MTF | Groww average book Rs Cr | Q4 FY 2025,True,False,3.2941284983915894e-06
+param,MTF | Groww average book Rs Cr | Q1 FY 2026,True,False,5.930632944848232e-06
+param,MTF | Groww average book Rs Cr | Q2 FY 2026,True,False,3.035131648925012e-06
+param,MTF | Groww average book Rs Cr | Q3 FY 2026,True,False,1.6850771255985839e-06
+param,MTF | Groww average book Rs Cr | Q4 FY 2026,True,False,2.4005778139986737e-06
+param,MTF | Groww average book Rs Cr | Q1 FY 2027,True,True,3.2285757351263117e-07
+param,MTF | revenue Rs Cr | Q3 FY 2025,True,False,1.991149341279931e-06
+param,MTF | revenue Rs Cr | Q4 FY 2025,True,False,2.3541320904715566e-06
+param,MTF | revenue Rs Cr | Q1 FY 2026,True,False,1.0543296044810508e-06
+param,MTF | revenue Rs Cr | Q2 FY 2026,True,True,9.338829546125381e-07
+param,MTF | revenue Rs Cr | Q3 FY 2026,True,True,4.531294251553794e-07
+param,MTF | revenue Rs Cr | Q4 FY 2026,True,False,1.807456347344022e-05
+param,MTF | revenue Rs Cr | Q1 FY 2027,True,False,2.9058035354104703e-05
+param,MTF | share of industry book | Q3 FY 2025,True,False,0.006230637727055247
+param,MTF | share of industry book | Q4 FY 2025,True,False,0.004908196789179578
+param,MTF | share of industry book | Q1 FY 2026,True,False,0.0019493508008342016
+param,MTF | share of industry book | Q2 FY 2026,True,False,0.0021563472930572676
+param,MTF | share of industry book | Q3 FY 2026,True,False,0.0015898139127953985
+param,MTF | share of industry book | Q4 FY 2026,True,False,0.0018434902688002077
+param,MTF | share of industry book | Q1 FY 2027,True,False,0.0015725641499091238
+input,mtf_revenue | Q3 FY 2025,True,False,1.991149341279931e-06
+input,mtf_revenue | Q4 FY 2025,True,False,2.3541320904715566e-06
+input,mtf_revenue | Q1 FY 2026,True,False,1.0543296044810508e-06
+input,mtf_revenue | Q2 FY 2026,True,True,9.338829546125381e-07
+input,mtf_revenue | Q3 FY 2026,True,True,4.531294251553794e-07
+input,mtf_revenue | Q4 FY 2026,True,False,1.807456347344022e-05
+input,mtf_revenue | Q1 FY 2027,True,False,2.9058035354104703e-05
+input,revmix_cash | Q2 FY 2026,True,True,0.0
+input,revmix_cash | Q3 FY 2026,True,True,0.0
+input,revmix_cash | Q4 FY 2026,True,True,0.0
+input,revmix_cash | Q1 FY 2027,True,True,0.0
+input,revmix_comm | Q3 FY 2026,True,True,0.0
+input,revmix_fo | Q2 FY 2026,True,True,0.0
+input,revmix_fo | Q3 FY 2026,True,True,0.0
+input,revmix_fo | Q4 FY 2026,True,True,0.0
+input,share_cash_adto_q | Q2 FY 2026,True,True,0.0
+input,share_cash_adto_q | Q3 FY 2026,True,True,0.0
+input,share_cash_adto_q | Q4 FY 2026,True,True,0.0
+input,share_cash_adto_q | Q1 FY 2027,True,True,0.0
+input,share_fo_adto_q | Q2 FY 2026,True,True,0.0
+input,share_fo_adto_q | Q3 FY 2026,True,True,1.5334572163330892e-16
+input,share_fo_adto_q | Q4 FY 2026,True,True,0.0
+input,total_income | Q4 FY 2026,True,True,0.0
+input,total_income | Q1 FY 2027,True,True,0.0
+daily,F&O,True,True,0.0
+daily,Cash,True,True,0.0
+daily,Commodities,True,True,0.0
+daily,MTF,True,True,0.0
+tie,fo | Q2 FY 2026,True,True,0.0007035614213071195
+tie,fo | Q3 FY 2026,True,True,0.0008805299198504368
+tie,fo | Q4 FY 2026,True,True,0.00023882561072330333
+tie,cash | Q2 FY 2026,True,True,4.440892098500626e-16
+tie,cash | Q3 FY 2026,True,True,2.220446049250313e-16
+tie,cash | Q4 FY 2026,True,True,2.220446049250313e-16
+tie,cash | Q1 FY 2027,True,True,2.220446049250313e-16
+tie,comm | Q3 FY 2026,True,True,6.661338147750939e-16

@@ -1,0 +1,40 @@
+kind,item,agree,agree_1e-6,max_rel_diff
+ADR,FY 2027 | Consolidated,True,True,2.1337472390795656e-08
+ADR,FY 2027 | Broking,True,True,2.4431050283522188e-08
+ADR,FY 2027 | MTF,True,True,2.1460773963871794e-07
+ADR,FY 2027 | F&O,True,True,1.722880256007793e-08
+ADR,FY 2027 | Cash,True,True,1.1314228044884904e-07
+ADR,FY 2027 | Commodities,True,True,2.2310382259760546e-07
+ADR,Q2 FY 2027 | Consolidated,True,True,2.6482265259037098e-08
+ADR,Q2 FY 2027 | Broking,True,True,1.7998398146997735e-08
+ADR,Q2 FY 2027 | MTF,True,True,9.625726454667026e-08
+ADR,Q2 FY 2027 | F&O,True,True,2.8978706357228003e-08
+ADR,Q2 FY 2027 | Cash,True,True,1.8652961086946492e-08
+ADR,Q2 FY 2027 | Commodities,True,True,4.187890372168931e-08
+ADR,FY 2027 October | Consolidated,True,True,1.2590858897355703e-08
+ADR,FY 2027 October | Broking,True,True,6.705536579734006e-09
+ADR,FY 2027 October | MTF,True,True,1.2349696797210273e-07
+ADR,FY 2027 October | F&O,True,True,5.350181531466798e-09
+ADR,FY 2027 October | Cash,True,True,8.111748391284333e-08
+ADR,FY 2027 October | Commodities,True,True,2.326867721657495e-07
+ADR,FY 2026 | Consolidated,True,True,2.1321193557476258e-08
+ADR,FY 2026 | Broking,True,True,2.989440595088407e-08
+ADR,FY 2026 | MTF,True,True,2.0962687333360233e-07
+ADR,FY 2026 | F&O,True,True,1.0206949628425082e-09
+ADR,FY 2026 | Cash,True,True,1.388081837790599e-07
+ADR,FY 2026 | Commodities,True,True,1.1480386268369911e-07
+ADR,FY 2026 October | Consolidated,True,True,2.169829029401643e-08
+ADR,FY 2026 October | Broking,True,True,1.694713073466531e-08
+ADR,FY 2026 October | MTF,True,True,3.492418918833942e-07
+ADR,FY 2026 October | F&O,True,True,2.524568343878047e-09
+ADR,FY 2026 October | Cash,True,True,1.3566492791873208e-07
+ADR,FY 2026 October | Commodities,True,True,2.5145574507587713e-07
+param,Cash | take rate Rs/order | Q3 FY 2027,True,False,1.6331075848475927e-06
+param,Commodities | share of Angel market orders | Q3 FY 2027,True,False,6.222741507567262e-05
+param,"F&O | share (ADTO, legacy basis) | Q3 FY 2027",True,True,0.0
+param,MTF | share of industry book | Q2 FY 2027,True,False,0.0015725641499091238
+param,MTF | share of industry book | Q3 FY 2027,True,False,0.0015725641499091238
+daily,F&O,True,True,0.0
+daily,Cash,True,True,0.0
+daily,Commodities,True,True,0.0
+daily,MTF,True,True,0.0

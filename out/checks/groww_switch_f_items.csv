@@ -1,0 +1,67 @@
+kind,item,agree,agree_1e-6,max_rel_diff
+ADR,FY 2027 | Consolidated,True,True,1.824241418438e-08
+ADR,FY 2027 | Broking,True,True,2.4431050283522188e-08
+ADR,FY 2027 | MTF,True,True,6.621484151865995e-08
+ADR,FY 2027 | F&O,True,True,1.722880256007793e-08
+ADR,FY 2027 | Cash,True,True,1.1314228044884904e-07
+ADR,FY 2027 | Commodities,True,True,2.2310382259760546e-07
+ADR,Q2 FY 2027 | Consolidated,True,True,7.40091597212498e-09
+ADR,Q2 FY 2027 | Broking,True,True,1.7998398146997735e-08
+ADR,Q2 FY 2027 | MTF,True,True,9.625726454667026e-08
+ADR,Q2 FY 2027 | F&O,True,True,2.8978706357228003e-08
+ADR,Q2 FY 2027 | Cash,True,True,1.8652961086946492e-08
+ADR,Q2 FY 2027 | Commodities,True,True,4.187890372168931e-08
+ADR,FY 2027 October | Consolidated,True,True,1.2590858897355703e-08
+ADR,FY 2027 October | Broking,True,True,8.696595209209317e-10
+ADR,FY 2027 October | MTF,True,True,1.2349696797210273e-07
+ADR,FY 2027 October | F&O,True,True,5.350181531466798e-09
+ADR,FY 2027 October | Cash,True,True,8.111748391284333e-08
+ADR,FY 2027 October | Commodities,True,True,1.5269878975818323e-07
+ADR,FY 2026 | Consolidated,True,True,2.6953682062846565e-08
+ADR,FY 2026 | Broking,True,True,2.989440595088407e-08
+ADR,FY 2026 | MTF,True,True,2.0962687333360233e-07
+ADR,FY 2026 | F&O,True,True,1.0206949628425082e-09
+ADR,FY 2026 | Cash,True,True,1.388081837790599e-07
+ADR,FY 2026 | Commodities,True,True,1.1480386268369911e-07
+ADR,FY 2026 October | Consolidated,True,True,2.169829029401643e-08
+ADR,FY 2026 October | Broking,True,True,1.694713073466531e-08
+ADR,FY 2026 October | MTF,True,True,3.891218490301755e-07
+ADR,FY 2026 October | F&O,True,True,2.524568343878047e-09
+ADR,FY 2026 October | Cash,True,True,1.3566492791873208e-07
+ADR,FY 2026 October | Commodities,True,True,2.5145574507587713e-07
+param,MTF | Groww average book Rs Cr | Q3 FY 2025,True,False,7.500836837226851e-06
+param,MTF | Groww average book Rs Cr | Q4 FY 2025,True,False,7.92042223443566e-06
+param,MTF | Groww average book Rs Cr | Q1 FY 2026,True,False,6.409248495525825e-06
+param,MTF | Groww average book Rs Cr | Q2 FY 2026,True,False,3.305729602168122e-06
+param,MTF | Groww average book Rs Cr | Q3 FY 2026,True,True,4.3188860093738133e-07
+param,MTF | Groww average book Rs Cr | Q4 FY 2026,True,False,1.3567493805810666e-06
+param,MTF | Groww average book Rs Cr | Q1 FY 2027,True,False,1.1533652424038153e-06
+param,MTF | Groww average book Rs Cr | Q2 FY 2027,True,True,3.501003524031053e-07
+param,MTF | revenue Rs Cr | Q2 FY 2027,True,False,2.917925316531622e-05
+param,MTF | share of industry book | Q3 FY 2025,True,False,0.006230637727055247
+param,MTF | share of industry book | Q4 FY 2025,True,False,0.007099092464042782
+param,MTF | share of industry book | Q1 FY 2026,True,False,0.0019493508008342016
+param,MTF | share of industry book | Q2 FY 2026,True,False,0.0033938040429484085
+param,MTF | share of industry book | Q3 FY 2026,True,False,0.0015898139127953985
+param,MTF | share of industry book | Q4 FY 2026,True,False,0.0017825333939527628
+param,MTF | share of industry book | Q1 FY 2027,True,False,0.0015725641499091238
+param,MTF | share of industry book | Q2 FY 2027,True,False,0.0015725641499091238
+param,MTF | share of industry book | Q3 FY 2027,True,False,0.0015725641499091238
+input,mtf_revenue | Q2 FY 2027,True,False,2.917925316531622e-05
+input,mtf_yield | Q1 FY 2027,True,True,0.0
+daily,F&O,True,True,0.0
+daily,Cash,True,True,0.0
+daily,Commodities,True,True,0.0
+daily,MTF,True,True,0.0
+tie,mtf | Q3 FY 2025,True,True,4.440892098500626e-16
+tie,mtf | Q4 FY 2025,True,True,4.440892098500626e-16
+tie,mtf | Q1 FY 2026,True,True,1.1102230246251565e-16
+tie,mtf | Q2 FY 2026,True,True,2.220446049250313e-16
+tie,mtf | Q3 FY 2026,True,True,6.661338147750939e-16
+tie,mtf | Q4 FY 2026,True,True,2.220446049250313e-16
+tie,mtf | Q1 FY 2027,True,True,4.440892098500626e-16
+tie,mtf | Q2 FY 2027,True,True,0.0
+days,FY 2025 equity days,True,True,0.0
+days,FY 2026 equity days,True,True,0.0
+days,FY 2027 uses FY 2026 count,True,True,0.0
+days,FY 2026 days vs Groww handbook quarter days,True,True,0.0

@@ -1,0 +1,48 @@
+kind,item,agree,agree_1e-6,max_rel_diff
+ADR,FY 2027 | Consolidated,True,True,1.5867737249368735e-08
+ADR,FY 2027 | Broking,True,True,1.1159871972150716e-08
+ADR,FY 2027 | MTF,True,True,2.1460773963871794e-07
+ADR,FY 2027 | F&O,True,True,4.774872861449213e-09
+ADR,FY 2027 | Cash,True,True,4.161373357220568e-08
+ADR,FY 2027 | Commodities,True,True,3.008749892119917e-07
+ADR,Q2 FY 2027 | Consolidated,True,True,1.147873765119901e-08
+ADR,Q2 FY 2027 | Broking,True,True,1.7699062332696164e-11
+ADR,Q2 FY 2027 | MTF,True,True,8.627495983029197e-08
+ADR,Q2 FY 2027 | F&O,True,True,1.25976259893413e-08
+ADR,Q2 FY 2027 | Cash,True,True,5.507367227133959e-08
+ADR,Q2 FY 2027 | Commodities,True,True,7.779910082197872e-08
+ADR,FY 2027 October | Consolidated,True,True,2.8233565057284733e-08
+ADR,FY 2027 October | Broking,True,True,1.3687869399663924e-08
+ADR,FY 2027 October | MTF,True,True,1.0553273341169341e-07
+ADR,FY 2027 October | F&O,True,True,8.42151326719825e-09
+ADR,FY 2027 October | Cash,True,True,4.7234415284738306e-08
+ADR,FY 2027 October | Commodities,True,True,3.519635260063245e-07
+ADR,FY 2026 | Consolidated,True,True,2.3111074351173982e-08
+ADR,FY 2026 | Broking,True,True,1.360075527579409e-08
+ADR,FY 2026 | MTF,True,True,2.0962687333360233e-07
+ADR,FY 2026 | F&O,True,True,3.143138732021688e-08
+ADR,FY 2026 | Cash,True,True,1.6608632791892248e-07
+ADR,FY 2026 | Commodities,True,True,3.093951463550034e-07
+ADR,FY 2026 October | Consolidated,True,True,2.312945079547685e-08
+ADR,FY 2026 October | Broking,True,True,1.937685993920536e-10
+ADR,FY 2026 October | MTF,True,True,3.492418918833942e-07
+ADR,FY 2026 October | F&O,True,True,2.524568343878047e-09
+ADR,FY 2026 October | Cash,True,True,1.3566492791873208e-07
+ADR,FY 2026 October | Commodities,True,True,6.008787600905343e-07
+param,Cash | revenue Rs Mn | Q1 FY 2026,True,True,5.29895386660892e-07
+param,"Cash | share (ADTO, legacy basis) | Q1 FY 2026",True,True,0.0
+param,Cash | take rate Rs/order | Q1 FY 2026,True,False,2.532931293225255e-06
+param,F&O | revenue Rs Mn | Q1 FY 2026,True,True,6.654976840337209e-07
+param,"F&O | share (ADTO, legacy basis) | Q1 FY 2026",True,True,0.0
+param,F&O | take rate Rs/order | Q1 FY 2026,True,True,2.9785331539515537e-07
+input,revmix_cash | Q1 FY 2026,True,True,0.0
+input,revmix_fo | Q1 FY 2026,True,True,0.0
+input,share_cash_adto_q | Q1 FY 2026,True,True,0.0
+input,share_fo_adto_q | Q1 FY 2026,True,True,0.0
+input,total_income | Q1 FY 2026,True,True,0.0
+daily,F&O,True,True,0.0
+daily,Cash,True,True,0.0
+daily,Commodities,True,True,0.0
+daily,MTF,True,True,0.0
+tie,fo | Q1 FY 2026,True,True,0.001689626692768842
+tie,cash | Q1 FY 2026,True,True,2.220446049250313e-16

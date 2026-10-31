@@ -1,0 +1,37 @@
+kind,item,agree,agree_1e-6,max_rel_diff
+ADR,FY 2027 | Consolidated,True,True,1.824241418438e-08
+ADR,FY 2027 | Broking,True,True,2.4431050283522188e-08
+ADR,FY 2027 | MTF,True,True,2.994213858318611e-08
+ADR,FY 2027 | F&O,True,True,1.722880256007793e-08
+ADR,FY 2027 | Cash,True,True,1.1314228044884904e-07
+ADR,FY 2027 | Commodities,True,True,2.2310382259760546e-07
+ADR,Q2 FY 2027 | Consolidated,True,True,7.40091597212498e-09
+ADR,Q2 FY 2027 | Broking,True,True,1.7998398146997735e-08
+ADR,Q2 FY 2027 | MTF,True,True,6.426961142936202e-08
+ADR,Q2 FY 2027 | F&O,True,True,2.8978706357228003e-08
+ADR,Q2 FY 2027 | Cash,True,True,1.8652961086946492e-08
+ADR,Q2 FY 2027 | Commodities,True,True,4.187890372168931e-08
+ADR,FY 2027 October | Consolidated,True,True,1.0533157007826409e-08
+ADR,FY 2027 October | Broking,True,True,8.696595209209317e-10
+ADR,FY 2027 October | MTF,True,True,9.039522956456016e-08
+ADR,FY 2027 October | F&O,True,True,5.350181531466798e-09
+ADR,FY 2027 October | Cash,True,True,8.111748391284333e-08
+ADR,FY 2027 October | Commodities,True,True,1.5269878975818323e-07
+ADR,FY 2026 | Consolidated,True,True,2.6953682062846565e-08
+ADR,FY 2026 | Broking,True,True,2.989440595088407e-08
+ADR,FY 2026 | MTF,True,True,1.5664556357443128e-08
+ADR,FY 2026 | F&O,True,True,1.1098113770547943e-08
+ADR,FY 2026 | Cash,True,True,1.388081837790599e-07
+ADR,FY 2026 | Commodities,True,True,3.591017344478675e-07
+ADR,FY 2026 October | Consolidated,True,True,2.243260845394925e-08
+ADR,FY 2026 October | Broking,True,True,1.694713073466531e-08
+ADR,FY 2026 October | MTF,True,True,3.891218490301755e-07
+ADR,FY 2026 October | F&O,True,True,5.049430932049793e-09
+ADR,FY 2026 October | Cash,True,True,1.3566492791873208e-07
+ADR,FY 2026 October | Commodities,True,True,5.017851926862899e-07
+daily,F&O,True,True,0.0
+daily,Cash,True,True,0.0
+daily,Commodities,True,True,0.0
+daily,MTF,True,True,0.0
+special,eight special-session dates equal the calendar flags,True,True,0.0
+special,pre-live F&O+cash rows = 376,True,True,0.0

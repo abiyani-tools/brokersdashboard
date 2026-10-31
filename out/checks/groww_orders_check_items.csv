@@ -1,0 +1,14 @@
+kind,item,agree,agree_1e-6,max_rel_diff
+orders,Q3 FY 2025,True,False,0.0
+orders,Q4 FY 2025,True,False,0.0
+orders,Q1 FY 2026,True,False,0.0
+orders,Q2 FY 2026,True,False,0.0
+orders,Q3 FY 2026,True,False,0.0
+orders,Q4 FY 2026,True,False,0.0
+orders,Q1 FY 2027,True,False,0.0
+orders,Q2 FY 2027,True,False,0.0
+q2fy27,disclosed total = handbook cell = fact 10095 (517.305 Mn = 51.7305 Cr x 10),True,True,0.0
+q2fy27,Q1 FY26 fact 10100 = handbook,True,True,0.0
+q2fy27,F&O orders = sum(V/CPO) x 0.22 (share fact 10082 legacy),True,True,0.0
+q2fy27,cash orders = sum(N)/TPO x 0.308 (fact 10083 legacy),True,True,0.0
+q2fy27,"F&O / cash / commodity orders 258.9 / 134.8 / 44.4 Mn, gap -15.3%",True,True,0.0
