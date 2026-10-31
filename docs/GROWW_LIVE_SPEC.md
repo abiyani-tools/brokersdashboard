@@ -60,3 +60,23 @@ Groww has no monthly update. Two fetchable monthly series could inform intra-qua
 - Groww's workbook inputs (41 seed facts, 14 assumptions, 10 pins) belong in the database like Angel One's. `out/groww/db_inputs.json` and `out/groww/db_inputs.sql` hold the rows (not applied; AB approves). Until then Groww runs from the snapshot file.
 - `publish()` writes `broker_id` on `sb_runs` and on `sb_calibration`, `sb_daily_revenue` and `sb_summary_cells` (all key by `run_id`, so brokers never collide). Groww daily rows exclude days before a segment went live and carry gross MTF only; regimes are `actual` / `projected` (the tables' check constraints). The dashboard's `/api/brokers?broker=GROWW` finds the latest `mode='live'` run for the broker.
 - `daily.yml` runs `--broker all`: Angel One is published first. A refused Groww run is a warning annotation (exit 0); any other Groww error fails the job after Angel One has published.
+
+## Groww IR archive (built 31 Oct 2026; migration not applied)
+
+groww.in/investor-relations shows the closed quarters and the current quarter-to-date for seven series (users, customer assets, MF SIP inflows, stocks turnover, equity-derivatives premium turnover, commodity-derivatives notional, MTF net book) and overwrites the quarter-to-date every day. `src/live/refresh_groww_ir.py` archives each day's page into `sb_broker_daily` (migration `out/groww/migration_sb_broker_daily.sql`, for AB to apply). `daily.yml` runs it before the live run with `continue-on-error: true`: a blocked fetch or a changed page shows as a red step with an error annotation and a warning in the job summary, never silently. The raw page is the workflow artifact `groww-ir-raw`, not in git.
+
+- Units: the page's chart values are in its own unit, value / 100 = Rs Mn (checked on every run against the page's printed "Rs Mn" string and `rawCurrentValue`; the run fails if they disagree). Money is stored in Rs Mn, user counts as printed.
+- Which trading day the QTD point runs through is not on the page. `src/engine/groww_ir.py: infer_covered_through` cuts the exchange cash and option-premium turnover at each candidate day and picks the cut-off at which Groww's share of NSE+BSE turnover matches the prior quarter's share on both series. It is stored in `covers_through` on the QTD rows when the inference is clear (31 Oct 2026 page: 30 Oct), and can always be re-derived from the stored rows plus `sb_market_daily`.
+
+### Running the archive from AB's Mac
+
+If groww.in blocks GitHub's runners, or a day was missed, run it locally (the page is public; no login):
+
+```
+cd /Users/abhishekbiyani/Documents/brokersdashboard
+python3 -m src.live.refresh_groww_ir                 # dry run: fetch, parse, print rows and the inferred trading day
+export SUPABASE_URL=...  SUPABASE_SERVICE_KEY=...    # from your own secret store; never paste a key into a chat
+python3 -m src.live.refresh_groww_ir --write         # upsert into sb_broker_daily (reads exchange turnover from the DB)
+```
+
+The raw page lands in `out/groww_ir/` (git-ignored); keep it. A second run on the same IST day replaces that day's rows. The page cannot be back-filled: a day missed is a day without a quarter-to-date value (the quarterly history on any later page still has the closed quarters). To run it every evening on the Mac, a `launchd` job (or `cron`: `15 20 * * 1-5`) calling the two commands above is enough; run it after 19:50 IST so the exchange files for the day are in the DB.

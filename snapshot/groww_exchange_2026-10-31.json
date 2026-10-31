@@ -1,0 +1,5134 @@
+{
+"_about": "Exchange turnover in Rs Cr: nse_cash/turnover_cr (cash_traded_value), bse_cash/turnover_cr, nse_fo/io_premium_cr, nse_fo/so_premium_cr, bse_fo/opt_premium_cr. ExchangesDash JSON, the rows of sb_market_daily source 'exchangesdash_json'. Built by seed/build_groww_exchange.py; read only.",
+"unit": "Rs Cr",
+"rows": [
+{
+"trade_date": "2024-04-01",
+"nse_cash": 84466.87,
+"bse_cash": 5602.84,
+"nse_io": 39048.7,
+"nse_so": 6543.12,
+"bse_opt": 5017.47
+},
+{
+"trade_date": "2024-04-02",
+"nse_cash": 101388.12,
+"bse_cash": 6032.57,
+"nse_io": 47698.78,
+"nse_so": 8036.02,
+"bse_opt": 423.37
+},
+{
+"trade_date": "2024-04-03",
+"nse_cash": 107960.11,
+"bse_cash": 6933.54,
+"nse_io": 54529.95,
+"nse_so": 7758.76,
+"bse_opt": 871.11
+},
+{
+"trade_date": "2024-04-04",
+"nse_cash": 113884.78,
+"bse_cash": 6941.97,
+"nse_io": 73044.98,
+"nse_so": 8077.13,
+"bse_opt": 2588.36
+},
+{
+"trade_date": "2024-04-05",
+"nse_cash": 96980.46,
+"bse_cash": 7618.28,
+"nse_io": 39798.55,
+"nse_so": 6806.63,
+"bse_opt": 13053.96
+},
+{
+"trade_date": "2024-04-08",
+"nse_cash": 94971.9,
+"bse_cash": 6984.49,
+"nse_io": 46085.12,
+"nse_so": 7769.19,
+"bse_opt": 4396.29
+},
+{
+"trade_date": "2024-04-09",
+"nse_cash": 89282.32,
+"bse_cash": 10297.27,
+"nse_io": 56471.91,
+"nse_so": 8038.15,
+"bse_opt": 687.83
+},
+{
+"trade_date": "2024-04-10",
+"nse_cash": 95135.13,
+"bse_cash": 6808.05,
+"nse_io": 51159.55,
+"nse_so": 8834.31,
+"bse_opt": 845.73
+},
+{
+"trade_date": "2024-04-12",
+"nse_cash": 115116.19,
+"bse_cash": 7880.65,
+"nse_io": 39164.62,
+"nse_so": 8081.43,
+"bse_opt": 18572.88
+},
+{
+"trade_date": "2024-04-15",
+"nse_cash": 104736.69,
+"bse_cash": 8833.96,
+"nse_io": 54452.34,
+"nse_so": 8644.06,
+"bse_opt": 5165.34
+},
+{
+"trade_date": "2024-04-16",
+"nse_cash": 95437.39,
+"bse_cash": 6288.42,
+"nse_io": 56165.68,
+"nse_so": 7010.45,
+"bse_opt": 528.86
+},
+{
+"trade_date": "2024-04-18",
+"nse_cash": 118491.28,
+"bse_cash": 7394.65,
+"nse_io": 80225.89,
+"nse_so": 8877.44,
+"bse_opt": 2785.13
+},
+{
+"trade_date": "2024-04-19",
+"nse_cash": 100281.11,
+"bse_cash": 8124.18,
+"nse_io": 59696.84,
+"nse_so": 7771.44,
+"bse_opt": 23460.19
+},
+{
+"trade_date": "2024-04-22",
+"nse_cash": 95524.95,
+"bse_cash": 6980.28,
+"nse_io": 50767.11,
+"nse_so": 6196.29,
+"bse_opt": 6387.35
+},
+{
+"trade_date": "2024-04-23",
+"nse_cash": 106029.2,
+"bse_cash": 7110.39,
+"nse_io": 47496.54,
+"nse_so": 5966.63,
+"bse_opt": 449.2
+},
+{
+"trade_date": "2024-04-24",
+"nse_cash": 103160.75,
+"bse_cash": 7021.24,
+"nse_io": 40258.93,
+"nse_so": 6019.14,
+"bse_opt": 548.08
+},
+{
+"trade_date": "2024-04-25",
+"nse_cash": 138700.51,
+"bse_cash": 9907.37,
+"nse_io": 69722.43,
+"nse_so": 8329.15,
+"bse_opt": 2028.28
+},
+{
+"trade_date": "2024-04-26",
+"nse_cash": 122432.11,
+"bse_cash": 10013.11,
+"nse_io": 40160.32,
+"nse_so": 9538.8,
+"bse_opt": 16902.14
+},
+{
+"trade_date": "2024-04-29",
+"nse_cash": 110960.02,
+"bse_cash": 8058.74,
+"nse_io": 57106.33,
+"nse_so": 8026.31,
+"bse_opt": 11954.8
+},
+{
+"trade_date": "2024-04-30",
+"nse_cash": 125255.63,
+"bse_cash": 7935.41,
+"nse_io": 81547.68,
+"nse_so": 9618.26,
+"bse_opt": 720.98
+},
+{
+"trade_date": "2024-05-02",
+"nse_cash": 124577.28,
+"bse_cash": 9191.13,
+"nse_io": 58680.69,
+"nse_so": 10761.46,
+"bse_opt": 1750.64
+},
+{
+"trade_date": "2024-05-03",
+"nse_cash": 126411.94,
+"bse_cash": 8137.79,
+"nse_io": 59754.5,
+"nse_so": 11005.68,
+"bse_opt": 31104.88
+},
+{
+"trade_date": "2024-05-06",
+"nse_cash": 110346.25,
+"bse_cash": 8535.96,
+"nse_io": 57179.62,
+"nse_so": 9885.53,
+"bse_opt": 10916.48
+},
+{
+"trade_date": "2024-05-07",
+"nse_cash": 108066.51,
+"bse_cash": 7747.42,
+"nse_io": 77252.23,
+"nse_so": 9317.07,
+"bse_opt": 698.96
+},
+{
+"trade_date": "2024-05-08",
+"nse_cash": 98921.64,
+"bse_cash": 6315.8,
+"nse_io": 69665.55,
+"nse_so": 8514.79,
+"bse_opt": 985.04
+},
+{
+"trade_date": "2024-05-09",
+"nse_cash": 102204.55,
+"bse_cash": 7232.34,
+"nse_io": 71322.11,
+"nse_so": 9289.74,
+"bse_opt": 2650.89
+},
+{
+"trade_date": "2024-05-10",
+"nse_cash": 89135.61,
+"bse_cash": 6732.73,
+"nse_io": 48417.49,
+"nse_so": 7254.94,
+"bse_opt": 19061.01
+},
+{
+"trade_date": "2024-05-13",
+"nse_cash": 98437.19,
+"bse_cash": 6934.09,
+"nse_io": 72539.86,
+"nse_so": 8233.73,
+"bse_opt": 11094.97
+},
+{
+"trade_date": "2024-05-14",
+"nse_cash": 91459.69,
+"bse_cash": 6020.53,
+"nse_io": 58085.18,
+"nse_so": 7582.05,
+"bse_opt": 612.55
+},
+{
+"trade_date": "2024-05-15",
+"nse_cash": 100589.7,
+"bse_cash": 6317.51,
+"nse_io": 57003.15,
+"nse_so": 7630.56,
+"bse_opt": 835.94
+},
+{
+"trade_date": "2024-05-16",
+"nse_cash": 117014.24,
+"bse_cash": 7213.25,
+"nse_io": 85145.48,
+"nse_so": 9237.09,
+"bse_opt": 3075.61
+},
+{
+"trade_date": "2024-05-17",
+"nse_cash": 112104.57,
+"bse_cash": 7556.73,
+"nse_io": 41042.48,
+"nse_so": 8827.16,
+"bse_opt": 18946.39
+},
+{
+"trade_date": "2024-05-18",
+"nse_cash": 15437.97,
+"bse_cash": 1545.8,
+"nse_io": 4424.69,
+"nse_so": 2273.79,
+"bse_opt": 111.04
+},
+{
+"trade_date": "2024-05-21",
+"nse_cash": 131883.4,
+"bse_cash": 8158.77,
+"nse_io": 49879.4,
+"nse_so": 10240.87,
+"bse_opt": 510.98
+},
+{
+"trade_date": "2024-05-22",
+"nse_cash": 121461.99,
+"bse_cash": 8464.12,
+"nse_io": 59350.68,
+"nse_so": 9443.73,
+"bse_opt": 611.89
+},
+{
+"trade_date": "2024-05-23",
+"nse_cash": 131821.01,
+"bse_cash": 8658.91,
+"nse_io": 69608.8,
+"nse_so": 10267.01,
+"bse_opt": 2364.72
+},
+{
+"trade_date": "2024-05-24",
+"nse_cash": 121758.61,
+"bse_cash": 9187.08,
+"nse_io": 41150.61,
+"nse_so": 10791.4,
+"bse_opt": 16165.07
+},
+{
+"trade_date": "2024-05-27",
+"nse_cash": 121808.13,
+"bse_cash": 8807.7,
+"nse_io": 68894.0,
+"nse_so": 8778.33,
+"bse_opt": 8344.55
+},
+{
+"trade_date": "2024-05-28",
+"nse_cash": 102737.47,
+"bse_cash": 9036.23,
+"nse_io": 58881.05,
+"nse_so": 7075.68,
+"bse_opt": 392.75
+},
+{
+"trade_date": "2024-05-29",
+"nse_cash": 102704.17,
+"bse_cash": 8001.7,
+"nse_io": 62837.97,
+"nse_so": 5669.75,
+"bse_opt": 679.31
+},
+{
+"trade_date": "2024-05-30",
+"nse_cash": 110321.89,
+"bse_cash": 10069.31,
+"nse_io": 67220.13,
+"nse_so": 6031.16,
+"bse_opt": 2859.96
+},
+{
+"trade_date": "2024-05-31",
+"nse_cash": 228737.63,
+"bse_cash": 9727.33,
+"nse_io": 46452.33,
+"nse_so": 8501.8,
+"bse_opt": 25086.95
+},
+{
+"trade_date": "2024-06-03",
+"nse_cash": 172539.88,
+"bse_cash": 13624.83,
+"nse_io": 76346.43,
+"nse_so": 14357.23,
+"bse_opt": 16535.93
+},
+{
+"trade_date": "2024-06-04",
+"nse_cash": 271245.43,
+"bse_cash": 21722.18,
+"nse_io": 213406.13,
+"nse_so": 20682.59,
+"bse_opt": 1044.11
+},
+{
+"trade_date": "2024-06-05",
+"nse_cash": 186799.85,
+"bse_cash": 12475.73,
+"nse_io": 130557.68,
+"nse_so": 15773.91,
+"bse_opt": 924.77
+},
+{
+"trade_date": "2024-06-06",
+"nse_cash": 150441.91,
+"bse_cash": 9618.88,
+"nse_io": 97733.24,
+"nse_so": 12970.97,
+"bse_opt": 2877.17
+},
+{
+"trade_date": "2024-06-07",
+"nse_cash": 136819.7,
+"bse_cash": 11538.83,
+"nse_io": 57551.08,
+"nse_so": 10932.85,
+"bse_opt": 35321.06
+},
+{
+"trade_date": "2024-06-10",
+"nse_cash": 127364.64,
+"bse_cash": 9552.39,
+"nse_io": 66254.86,
+"nse_so": 8733.24,
+"bse_opt": 10471.75
+},
+{
+"trade_date": "2024-06-11",
+"nse_cash": 124793.35,
+"bse_cash": 12353.77,
+"nse_io": 61501.0,
+"nse_so": 8353.87,
+"bse_opt": 594.28
+},
+{
+"trade_date": "2024-06-12",
+"nse_cash": 120081.57,
+"bse_cash": 8195.68,
+"nse_io": 67814.61,
+"nse_so": 7761.15,
+"bse_opt": 724.97
+},
+{
+"trade_date": "2024-06-13",
+"nse_cash": 129492.86,
+"bse_cash": 9906.9,
+"nse_io": 47480.17,
+"nse_so": 8902.86,
+"bse_opt": 1892.22
+},
+{
+"trade_date": "2024-06-14",
+"nse_cash": 134533.33,
+"bse_cash": 10319.47,
+"nse_io": 35131.88,
+"nse_so": 9543.96,
+"bse_opt": 14323.13
+},
+{
+"trade_date": "2024-06-18",
+"nse_cash": 142797.5,
+"bse_cash": 11380.43,
+"nse_io": 49108.89,
+"nse_so": 9042.53,
+"bse_opt": 354.26
+},
+{
+"trade_date": "2024-06-19",
+"nse_cash": 176830.13,
+"bse_cash": 13129.59,
+"nse_io": 106019.55,
+"nse_so": 9882.36,
+"bse_opt": 896.58
+},
+{
+"trade_date": "2024-06-20",
+"nse_cash": 141386.7,
+"bse_cash": 9579.95,
+"nse_io": 68870.45,
+"nse_so": 8665.53,
+"bse_opt": 2075.04
+},
+{
+"trade_date": "2024-06-21",
+"nse_cash": 186714.75,
+"bse_cash": 13531.86,
+"nse_io": 51718.01,
+"nse_so": 8555.51,
+"bse_opt": 31593.87
+},
+{
+"trade_date": "2024-06-24",
+"nse_cash": 120055.27,
+"bse_cash": 10187.02,
+"nse_io": 68105.85,
+"nse_so": 6099.68,
+"bse_opt": 10838.24
+},
+{
+"trade_date": "2024-06-25",
+"nse_cash": 125361.63,
+"bse_cash": 10477.75,
+"nse_io": 81007.39,
+"nse_so": 6584.52,
+"bse_opt": 514.75
+},
+{
+"trade_date": "2024-06-26",
+"nse_cash": 137796.94,
+"bse_cash": 15096.32,
+"nse_io": 76763.63,
+"nse_so": 6849.76,
+"bse_opt": 859.36
+},
+{
+"trade_date": "2024-06-27",
+"nse_cash": 175812.72,
+"bse_cash": 13769.34,
+"nse_io": 80513.64,
+"nse_so": 8165.99,
+"bse_opt": 2973.21
+},
+{
+"trade_date": "2024-06-28",
+"nse_cash": 144358.3,
+"bse_cash": 10540.64,
+"nse_io": 50423.28,
+"nse_so": 9511.38,
+"bse_opt": 25800.72
+},
+{
+"trade_date": "2024-07-01",
+"nse_cash": 120030.56,
+"bse_cash": 10284.49,
+"nse_io": 47094.83,
+"nse_so": 8300.84,
+"bse_opt": 9111.12
+},
+{
+"trade_date": "2024-07-02",
+"nse_cash": 132574.08,
+"bse_cash": 8679.64,
+"nse_io": 69125.76,
+"nse_so": 9075.85,
+"bse_opt": 615.69
+},
+{
+"trade_date": "2024-07-03",
+"nse_cash": 135925.91,
+"bse_cash": 8979.87,
+"nse_io": 64539.01,
+"nse_so": 8217.93,
+"bse_opt": 659.27
+},
+{
+"trade_date": "2024-07-04",
+"nse_cash": 138453.36,
+"bse_cash": 10569.13,
+"nse_io": 53699.45,
+"nse_so": 8578.45,
+"bse_opt": 2050.88
+},
+{
+"trade_date": "2024-07-05",
+"nse_cash": 155674.24,
+"bse_cash": 13464.63,
+"nse_io": 42189.28,
+"nse_so": 8418.6,
+"bse_opt": 18796.59
+},
+{
+"trade_date": "2024-07-08",
+"nse_cash": 144756.56,
+"bse_cash": 15343.29,
+"nse_io": 51457.22,
+"nse_so": 8339.71,
+"bse_opt": 8960.42
+},
+{
+"trade_date": "2024-07-09",
+"nse_cash": 135443.29,
+"bse_cash": 10121.98,
+"nse_io": 43834.02,
+"nse_so": 8571.17,
+"bse_opt": 487.29
+},
+{
+"trade_date": "2024-07-10",
+"nse_cash": 147729.45,
+"bse_cash": 11765.96,
+"nse_io": 58928.5,
+"nse_so": 10362.45,
+"bse_opt": 976.74
+},
+{
+"trade_date": "2024-07-11",
+"nse_cash": 139708.83,
+"bse_cash": 9748.85,
+"nse_io": 57018.25,
+"nse_so": 7815.58,
+"bse_opt": 2325.63
+},
+{
+"trade_date": "2024-07-12",
+"nse_cash": 155554.74,
+"bse_cash": 11956.72,
+"nse_io": 42125.77,
+"nse_so": 10006.5,
+"bse_opt": 25034.54
+},
+{
+"trade_date": "2024-07-15",
+"nse_cash": 131749.37,
+"bse_cash": 9733.25,
+"nse_io": 46285.25,
+"nse_so": 8528.98,
+"bse_opt": 11190.89
+},
+{
+"trade_date": "2024-07-16",
+"nse_cash": 125150.72,
+"bse_cash": 8901.32,
+"nse_io": 47601.28,
+"nse_so": 8570.89,
+"bse_opt": 539.04
+},
+{
+"trade_date": "2024-07-18",
+"nse_cash": 147781.49,
+"bse_cash": 10103.81,
+"nse_io": 70977.19,
+"nse_so": 11294.02,
+"bse_opt": 3690.14
+},
+{
+"trade_date": "2024-07-19",
+"nse_cash": 134887.37,
+"bse_cash": 10699.23,
+"nse_io": 41576.5,
+"nse_so": 9386.05,
+"bse_opt": 20688.53
+},
+{
+"trade_date": "2024-07-22",
+"nse_cash": 122366.74,
+"bse_cash": 9074.18,
+"nse_io": 63260.74,
+"nse_so": 7750.02,
+"bse_opt": 7335.75
+},
+{
+"trade_date": "2024-07-23",
+"nse_cash": 169336.61,
+"bse_cash": 12456.34,
+"nse_io": 113066.14,
+"nse_so": 11030.75,
+"bse_opt": 1067.2
+},
+{
+"trade_date": "2024-07-24",
+"nse_cash": 137297.95,
+"bse_cash": 8909.95,
+"nse_io": 92613.16,
+"nse_so": 7394.28,
+"bse_opt": 928.99
+},
+{
+"trade_date": "2024-07-25",
+"nse_cash": 129363.7,
+"bse_cash": 9747.04,
+"nse_io": 56353.08,
+"nse_so": 7682.06,
+"bse_opt": 2110.66
+},
+{
+"trade_date": "2024-07-26",
+"nse_cash": 136773.59,
+"bse_cash": 12220.58,
+"nse_io": 45045.2,
+"nse_so": 10010.92,
+"bse_opt": 25498.2
+},
+{
+"trade_date": "2024-07-29",
+"nse_cash": 148104.32,
+"bse_cash": 11273.46,
+"nse_io": 70860.59,
+"nse_so": 9916.93,
+"bse_opt": 20933.25
+},
+{
+"trade_date": "2024-07-30",
+"nse_cash": 136558.11,
+"bse_cash": 12376.91,
+"nse_io": 74864.88,
+"nse_so": 9285.57,
+"bse_opt": 680.64
+},
+{
+"trade_date": "2024-07-31",
+"nse_cash": 136355.73,
+"bse_cash": 8737.47,
+"nse_io": 59680.36,
+"nse_so": 9339.4,
+"bse_opt": 753.27
+},
+{
+"trade_date": "2024-08-01",
+"nse_cash": 135582.14,
+"bse_cash": 9429.93,
+"nse_io": 52273.78,
+"nse_so": 10713.45,
+"bse_opt": 2407.62
+},
+{
+"trade_date": "2024-08-02",
+"nse_cash": 130459.19,
+"bse_cash": 10863.17,
+"nse_io": 45009.65,
+"nse_so": 9429.03,
+"bse_opt": 20742.95
+},
+{
+"trade_date": "2024-08-05",
+"nse_cash": 156833.82,
+"bse_cash": 13677.47,
+"nse_io": 89954.33,
+"nse_so": 11597.96,
+"bse_opt": 14581.53
+},
+{
+"trade_date": "2024-08-06",
+"nse_cash": 124789.25,
+"bse_cash": 8818.39,
+"nse_io": 83750.81,
+"nse_so": 8739.42,
+"bse_opt": 1002.9
+},
+{
+"trade_date": "2024-08-07",
+"nse_cash": 118107.97,
+"bse_cash": 7411.51,
+"nse_io": 74743.82,
+"nse_so": 7655.37,
+"bse_opt": 1014.29
+},
+{
+"trade_date": "2024-08-08",
+"nse_cash": 115117.83,
+"bse_cash": 8117.12,
+"nse_io": 80271.08,
+"nse_so": 7794.36,
+"bse_opt": 3547.59
+},
+{
+"trade_date": "2024-08-09",
+"nse_cash": 113940.29,
+"bse_cash": 8383.47,
+"nse_io": 37985.04,
+"nse_so": 8214.62,
+"bse_opt": 17282.33
+},
+{
+"trade_date": "2024-08-12",
+"nse_cash": 124307.1,
+"bse_cash": 9915.28,
+"nse_io": 62718.69,
+"nse_so": 8491.05,
+"bse_opt": 11425.26
+},
+{
+"trade_date": "2024-08-13",
+"nse_cash": 118875.76,
+"bse_cash": 9153.86,
+"nse_io": 69276.36,
+"nse_so": 7086.68,
+"bse_opt": 760.31
+},
+{
+"trade_date": "2024-08-14",
+"nse_cash": 109272.72,
+"bse_cash": 7110.7,
+"nse_io": 49911.79,
+"nse_so": 7175.47,
+"bse_opt": 1081.54
+},
+{
+"trade_date": "2024-08-16",
+"nse_cash": 111622.55,
+"bse_cash": 8407.26,
+"nse_io": 49170.23,
+"nse_so": 6950.02,
+"bse_opt": 27575.28
+},
+{
+"trade_date": "2024-08-19",
+"nse_cash": 108403.03,
+"bse_cash": 8244.27,
+"nse_io": 55956.01,
+"nse_so": 5980.77,
+"bse_opt": 9297.34
+},
+{
+"trade_date": "2024-08-20",
+"nse_cash": 116805.13,
+"bse_cash": 13700.1,
+"nse_io": 59711.44,
+"nse_so": 6501.63,
+"bse_opt": 618.57
+},
+{
+"trade_date": "2024-08-21",
+"nse_cash": 117623.75,
+"bse_cash": 9515.47,
+"nse_io": 71061.32,
+"nse_so": 5877.2,
+"bse_opt": 772.86
+},
+{
+"trade_date": "2024-08-22",
+"nse_cash": 118638.86,
+"bse_cash": 9347.08,
+"nse_io": 46477.01,
+"nse_so": 6683.62,
+"bse_opt": 1682.92
+},
+{
+"trade_date": "2024-08-23",
+"nse_cash": 117927.16,
+"bse_cash": 10736.26,
+"nse_io": 31319.57,
+"nse_so": 6626.93,
+"bse_opt": 14807.67
+},
+{
+"trade_date": "2024-08-26",
+"nse_cash": 111305.26,
+"bse_cash": 9171.98,
+"nse_io": 43754.97,
+"nse_so": 5932.36,
+"bse_opt": 7726.68
+},
+{
+"trade_date": "2024-08-27",
+"nse_cash": 115234.42,
+"bse_cash": 9883.35,
+"nse_io": 63512.53,
+"nse_so": 6114.38,
+"bse_opt": 528.07
+},
+{
+"trade_date": "2024-08-28",
+"nse_cash": 117801.06,
+"bse_cash": 7849.72,
+"nse_io": 51272.15,
+"nse_so": 6565.06,
+"bse_opt": 834.19
+},
+{
+"trade_date": "2024-08-29",
+"nse_cash": 131401.72,
+"bse_cash": 20667.61,
+"nse_io": 69457.48,
+"nse_so": 8791.56,
+"bse_opt": 2896.8
+},
+{
+"trade_date": "2024-08-30",
+"nse_cash": 224107.98,
+"bse_cash": 8944.0,
+"nse_io": 31090.08,
+"nse_so": 9077.31,
+"bse_opt": 19424.43
+},
+{
+"trade_date": "2024-09-02",
+"nse_cash": 110146.86,
+"bse_cash": 8274.16,
+"nse_io": 40866.12,
+"nse_so": 8451.38,
+"bse_opt": 11819.41
+},
+{
+"trade_date": "2024-09-03",
+"nse_cash": 111673.69,
+"bse_cash": 8314.32,
+"nse_io": 56171.98,
+"nse_so": 7083.49,
+"bse_opt": 475.38
+},
+{
+"trade_date": "2024-09-04",
+"nse_cash": 114786.42,
+"bse_cash": 8121.09,
+"nse_io": 49847.16,
+"nse_so": 7110.57,
+"bse_opt": 886.4
+},
+{
+"trade_date": "2024-09-05",
+"nse_cash": 119706.21,
+"bse_cash": 7909.33,
+"nse_io": 39178.98,
+"nse_so": 7575.43,
+"bse_opt": 1611.16
+},
+{
+"trade_date": "2024-09-06",
+"nse_cash": 128602.52,
+"bse_cash": 9851.49,
+"nse_io": 51457.62,
+"nse_so": 8511.78,
+"bse_opt": 30251.72
+},
+{
+"trade_date": "2024-09-09",
+"nse_cash": 106251.5,
+"bse_cash": 7540.59,
+"nse_io": 50931.92,
+"nse_so": 6725.92,
+"bse_opt": 16911.49
+},
+{
+"trade_date": "2024-09-10",
+"nse_cash": 107403.44,
+"bse_cash": 6896.37,
+"nse_io": 60542.45,
+"nse_so": 6707.52,
+"bse_opt": 995.65
+},
+{
+"trade_date": "2024-09-11",
+"nse_cash": 107692.89,
+"bse_cash": 7642.83,
+"nse_io": 64645.14,
+"nse_so": 7150.06,
+"bse_opt": 1368.68
+},
+{
+"trade_date": "2024-09-12",
+"nse_cash": 122765.29,
+"bse_cash": 7072.97,
+"nse_io": 75620.75,
+"nse_so": 8564.88,
+"bse_opt": 4400.12
+},
+{
+"trade_date": "2024-09-13",
+"nse_cash": 110708.86,
+"bse_cash": 8042.75,
+"nse_io": 36639.19,
+"nse_so": 8090.16,
+"bse_opt": 20937.82
+},
+{
+"trade_date": "2024-09-16",
+"nse_cash": 107496.57,
+"bse_cash": 8892.36,
+"nse_io": 42108.02,
+"nse_so": 7941.71,
+"bse_opt": 7032.55
+},
+{
+"trade_date": "2024-09-17",
+"nse_cash": 107675.46,
+"bse_cash": 7420.04,
+"nse_io": 40216.93,
+"nse_so": 7581.45,
+"bse_opt": 514.51
+},
+{
+"trade_date": "2024-09-18",
+"nse_cash": 113945.72,
+"bse_cash": 7016.9,
+"nse_io": 72104.17,
+"nse_so": 8845.12,
+"bse_opt": 1074.15
+},
+{
+"trade_date": "2024-09-19",
+"nse_cash": 133899.52,
+"bse_cash": 10791.91,
+"nse_io": 71498.75,
+"nse_so": 11262.48,
+"bse_opt": 3211.86
+},
+{
+"trade_date": "2024-09-20",
+"nse_cash": 191597.71,
+"bse_cash": 11400.64,
+"nse_io": 62389.56,
+"nse_so": 9732.62,
+"bse_opt": 49002.89
+},
+{
+"trade_date": "2024-09-23",
+"nse_cash": 112766.26,
+"bse_cash": 8286.0,
+"nse_io": 53104.88,
+"nse_so": 8157.83,
+"bse_opt": 11389.57
+},
+{
+"trade_date": "2024-09-24",
+"nse_cash": 125748.06,
+"bse_cash": 7284.92,
+"nse_io": 59761.1,
+"nse_so": 8123.77,
+"bse_opt": 799.15
+},
+{
+"trade_date": "2024-09-25",
+"nse_cash": 109967.0,
+"bse_cash": 9979.04,
+"nse_io": 49775.79,
+"nse_so": 7100.57,
+"bse_opt": 923.9
+},
+{
+"trade_date": "2024-09-26",
+"nse_cash": 126554.83,
+"bse_cash": 11514.99,
+"nse_io": 60926.38,
+"nse_so": 9465.45,
+"bse_opt": 3065.17
+},
+{
+"trade_date": "2024-09-27",
+"nse_cash": 172476.29,
+"bse_cash": 10351.58,
+"nse_io": 37156.28,
+"nse_so": 11803.11,
+"bse_opt": 22081.57
+},
+{
+"trade_date": "2024-09-30",
+"nse_cash": 117510.94,
+"bse_cash": 8077.46,
+"nse_io": 61729.36,
+"nse_so": 8408.03,
+"bse_opt": 11822.03
+},
+{
+"trade_date": "2024-10-01",
+"nse_cash": 104772.07,
+"bse_cash": 7913.65,
+"nse_io": 60287.21,
+"nse_so": 7536.25,
+"bse_opt": 1175.72
+},
+{
+"trade_date": "2024-10-03",
+"nse_cash": 137062.64,
+"bse_cash": 10259.62,
+"nse_io": 78550.12,
+"nse_so": 8772.79,
+"bse_opt": 4110.06
+},
+{
+"trade_date": "2024-10-04",
+"nse_cash": 127530.48,
+"bse_cash": 9721.83,
+"nse_io": 66439.24,
+"nse_so": 8975.13,
+"bse_opt": 43801.43
+},
+{
+"trade_date": "2024-10-07",
+"nse_cash": 127522.35,
+"bse_cash": 9511.35,
+"nse_io": 93295.86,
+"nse_so": 8226.89,
+"bse_opt": 25312.96
+},
+{
+"trade_date": "2024-10-08",
+"nse_cash": 113419.76,
+"bse_cash": 6529.4,
+"nse_io": 75857.93,
+"nse_so": 7742.36,
+"bse_opt": 1427.18
+},
+{
+"trade_date": "2024-10-09",
+"nse_cash": 107912.12,
+"bse_cash": 6908.0,
+"nse_io": 84726.34,
+"nse_so": 8337.6,
+"bse_opt": 1625.95
+},
+{
+"trade_date": "2024-10-10",
+"nse_cash": 93973.46,
+"bse_cash": 12723.68,
+"nse_io": 55325.75,
+"nse_so": 7054.72,
+"bse_opt": 2811.81
+},
+{
+"trade_date": "2024-10-11",
+"nse_cash": 81980.59,
+"bse_cash": 5681.55,
+"nse_io": 36822.35,
+"nse_so": 5899.11,
+"bse_opt": 15113.3
+},
+{
+"trade_date": "2024-10-14",
+"nse_cash": 91179.11,
+"bse_cash": 5810.31,
+"nse_io": 46568.16,
+"nse_so": 5948.88,
+"bse_opt": 7434.18
+},
+{
+"trade_date": "2024-10-15",
+"nse_cash": 103530.06,
+"bse_cash": 5993.8,
+"nse_io": 56452.12,
+"nse_so": 6481.48,
+"bse_opt": 862.92
+},
+{
+"trade_date": "2024-10-16",
+"nse_cash": 103521.3,
+"bse_cash": 6474.32,
+"nse_io": 46936.52,
+"nse_so": 6788.46,
+"bse_opt": 1572.83
+},
+{
+"trade_date": "2024-10-17",
+"nse_cash": 99898.22,
+"bse_cash": 6045.3,
+"nse_io": 49997.15,
+"nse_so": 8125.81,
+"bse_opt": 2586.53
+},
+{
+"trade_date": "2024-10-18",
+"nse_cash": 104145.4,
+"bse_cash": 6920.48,
+"nse_io": 47103.14,
+"nse_so": 7868.64,
+"bse_opt": 22801.05
+},
+{
+"trade_date": "2024-10-21",
+"nse_cash": 102475.68,
+"bse_cash": 6441.19,
+"nse_io": 66289.62,
+"nse_so": 7952.3,
+"bse_opt": 10178.59
+},
+{
+"trade_date": "2024-10-22",
+"nse_cash": 115108.96,
+"bse_cash": 6782.36,
+"nse_io": 82432.15,
+"nse_so": 7686.16,
+"bse_opt": 1331.72
+},
+{
+"trade_date": "2024-10-23",
+"nse_cash": 116764.39,
+"bse_cash": 6975.43,
+"nse_io": 64865.6,
+"nse_so": 9160.47,
+"bse_opt": 1811.12
+},
+{
+"trade_date": "2024-10-24",
+"nse_cash": 96692.7,
+"bse_cash": 4953.11,
+"nse_io": 48018.16,
+"nse_so": 7972.22,
+"bse_opt": 2134.19
+},
+{
+"trade_date": "2024-10-25",
+"nse_cash": 114725.74,
+"bse_cash": 7512.62,
+"nse_io": 55007.21,
+"nse_so": 10406.69,
+"bse_opt": 23028.86
+},
+{
+"trade_date": "2024-10-28",
+"nse_cash": 104980.09,
+"bse_cash": 7444.48,
+"nse_io": 53598.51,
+"nse_so": 8361.71,
+"bse_opt": 14620.24
+},
+{
+"trade_date": "2024-10-29",
+"nse_cash": 103952.51,
+"bse_cash": 6061.55,
+"nse_io": 80398.64,
+"nse_so": 8437.8,
+"bse_opt": 1714.34
+},
+{
+"trade_date": "2024-10-30",
+"nse_cash": 101466.73,
+"bse_cash": 8759.78,
+"nse_io": 67892.68,
+"nse_so": 7089.05,
+"bse_opt": 1987.03
+},
+{
+"trade_date": "2024-10-31",
+"nse_cash": 100483.98,
+"bse_cash": 6039.1,
+"nse_io": 50568.88,
+"nse_so": 7166.89,
+"bse_opt": 11402.16
+},
+{
+"trade_date": "2024-11-01",
+"nse_cash": 18224.98,
+"bse_cash": 2073.05,
+"nse_io": 6391.17,
+"nse_so": 777.31,
+"bse_opt": 562.27
+},
+{
+"trade_date": "2024-11-04",
+"nse_cash": 98171.71,
+"bse_cash": 6144.39,
+"nse_io": 51810.11,
+"nse_so": 6877.2,
+"bse_opt": 8844.87
+},
+{
+"trade_date": "2024-11-05",
+"nse_cash": 99925.82,
+"bse_cash": 5947.9,
+"nse_io": 85544.51,
+"nse_so": 7288.35,
+"bse_opt": 1314.11
+},
+{
+"trade_date": "2024-11-06",
+"nse_cash": 115422.19,
+"bse_cash": 8797.39,
+"nse_io": 58314.45,
+"nse_so": 8418.64,
+"bse_opt": 1926.76
+},
+{
+"trade_date": "2024-11-07",
+"nse_cash": 101311.19,
+"bse_cash": 6474.57,
+"nse_io": 51864.77,
+"nse_so": 7277.81,
+"bse_opt": 2708.95
+},
+{
+"trade_date": "2024-11-08",
+"nse_cash": 100043.17,
+"bse_cash": 6069.48,
+"nse_io": 39976.84,
+"nse_so": 7238.71,
+"bse_opt": 17061.37
+},
+{
+"trade_date": "2024-11-11",
+"nse_cash": 91097.72,
+"bse_cash": 6838.62,
+"nse_io": 48975.58,
+"nse_so": 6646.04,
+"bse_opt": 13134.32
+},
+{
+"trade_date": "2024-11-12",
+"nse_cash": 90244.39,
+"bse_cash": 5535.17,
+"nse_io": 72760.32,
+"nse_so": 6420.19,
+"bse_opt": 1584.07
+},
+{
+"trade_date": "2024-11-13",
+"nse_cash": 101536.12,
+"bse_cash": 6889.37,
+"nse_io": 83757.83,
+"nse_so": 6672.47,
+"bse_opt": 2635.9
+},
+{
+"trade_date": "2024-11-14",
+"nse_cash": 85953.11,
+"bse_cash": 5993.43,
+"nse_io": 52009.19,
+"nse_so": 5893.4,
+"bse_opt": 12026.34
+},
+{
+"trade_date": "2024-11-18",
+"nse_cash": 89842.21,
+"bse_cash": 5619.57,
+"nse_io": 47404.39,
+"nse_so": 5813.19,
+"bse_opt": 9291.79
+},
+{
+"trade_date": "2024-11-19",
+"nse_cash": 92273.39,
+"bse_cash": 5950.64,
+"nse_io": 57417.49,
+"nse_so": 6337.95,
+"bse_opt": 2816.32
+},
+{
+"trade_date": "2024-11-21",
+"nse_cash": 110779.62,
+"bse_cash": 6061.1,
+"nse_io": 56443.58,
+"nse_so": 9168.77,
+"bse_opt": 3219.81
+},
+{
+"trade_date": "2024-11-22",
+"nse_cash": 101525.18,
+"bse_cash": 7029.97,
+"nse_io": 56255.78,
+"nse_so": 7169.57,
+"bse_opt": 32900.78
+},
+{
+"trade_date": "2024-11-25",
+"nse_cash": 199663.96,
+"bse_cash": 7504.05,
+"nse_io": 54979.23,
+"nse_so": 7481.84,
+"bse_opt": 11609.11
+},
+{
+"trade_date": "2024-11-26",
+"nse_cash": 87510.3,
+"bse_cash": 5917.41,
+"nse_io": 48462.76,
+"nse_so": 6311.86,
+"bse_opt": 1837.79
+},
+{
+"trade_date": "2024-11-27",
+"nse_cash": 107332.16,
+"bse_cash": 7467.64,
+"nse_io": 52050.79,
+"nse_so": 6918.97,
+"bse_opt": 1918.65
+},
+{
+"trade_date": "2024-11-28",
+"nse_cash": 116893.73,
+"bse_cash": 7210.1,
+"nse_io": 71384.82,
+"nse_so": 8208.78,
+"bse_opt": 6379.64
+},
+{
+"trade_date": "2024-11-29",
+"nse_cash": 108458.77,
+"bse_cash": 6741.1,
+"nse_io": 35698.03,
+"nse_so": 6575.67,
+"bse_opt": 24395.31
+},
+{
+"trade_date": "2024-12-02",
+"nse_cash": 99059.85,
+"bse_cash": 8329.33,
+"nse_io": 47621.57,
+"nse_so": 6783.75,
+"bse_opt": 4462.64
+},
+{
+"trade_date": "2024-12-03",
+"nse_cash": 115560.45,
+"bse_cash": 8173.53,
+"nse_io": 44328.39,
+"nse_so": 7842.61,
+"bse_opt": 4546.46
+},
+{
+"trade_date": "2024-12-04",
+"nse_cash": 119361.32,
+"bse_cash": 6521.21,
+"nse_io": 55789.32,
+"nse_so": 7806.56,
+"bse_opt": 5435.41
+},
+{
+"trade_date": "2024-12-05",
+"nse_cash": 132760.85,
+"bse_cash": 6909.75,
+"nse_io": 90553.48,
+"nse_so": 9255.45,
+"bse_opt": 8052.89
+},
+{
+"trade_date": "2024-12-06",
+"nse_cash": 108779.08,
+"bse_cash": 6745.03,
+"nse_io": 34060.35,
+"nse_so": 8512.67,
+"bse_opt": 19276.52
+},
+{
+"trade_date": "2024-12-09",
+"nse_cash": 106673.96,
+"bse_cash": 6945.87,
+"nse_io": 37811.73,
+"nse_so": 7360.31,
+"bse_opt": 2814.69
+},
+{
+"trade_date": "2024-12-10",
+"nse_cash": 108764.94,
+"bse_cash": 7149.94,
+"nse_io": 38508.86,
+"nse_so": 6716.32,
+"bse_opt": 3322.12
+},
+{
+"trade_date": "2024-12-11",
+"nse_cash": 97652.67,
+"bse_cash": 6576.25,
+"nse_io": 34132.44,
+"nse_so": 6385.5,
+"bse_opt": 3046.28
+},
+{
+"trade_date": "2024-12-12",
+"nse_cash": 106112.97,
+"bse_cash": 8124.38,
+"nse_io": 34526.87,
+"nse_so": 7103.65,
+"bse_opt": 3402.05
+},
+{
+"trade_date": "2024-12-13",
+"nse_cash": 100830.26,
+"bse_cash": 7036.78,
+"nse_io": 52762.71,
+"nse_so": 8477.33,
+"bse_opt": 37596.8
+},
+{
+"trade_date": "2024-12-16",
+"nse_cash": 89195.79,
+"bse_cash": 6069.58,
+"nse_io": 40976.91,
+"nse_so": 6408.48,
+"bse_opt": 3973.24
+},
+{
+"trade_date": "2024-12-17",
+"nse_cash": 108064.26,
+"bse_cash": 6521.25,
+"nse_io": 55376.55,
+"nse_so": 7225.55,
+"bse_opt": 4978.83
+},
+{
+"trade_date": "2024-12-18",
+"nse_cash": 104385.9,
+"bse_cash": 7507.41,
+"nse_io": 52390.31,
+"nse_so": 6198.72,
+"bse_opt": 4625.3
+},
+{
+"trade_date": "2024-12-19",
+"nse_cash": 103052.83,
+"bse_cash": 6476.92,
+"nse_io": 44183.42,
+"nse_so": 6197.62,
+"bse_opt": 4538.06
+},
+{
+"trade_date": "2024-12-20",
+"nse_cash": 141777.78,
+"bse_cash": 7263.1,
+"nse_io": 44076.27,
+"nse_so": 7496.96,
+"bse_opt": 30159.92
+},
+{
+"trade_date": "2024-12-23",
+"nse_cash": 82921.6,
+"bse_cash": 5706.01,
+"nse_io": 47035.32,
+"nse_so": 5994.69,
+"bse_opt": 3842.52
+},
+{
+"trade_date": "2024-12-24",
+"nse_cash": 76436.14,
+"bse_cash": 5249.17,
+"nse_io": 40515.64,
+"nse_so": 4659.55,
+"bse_opt": 2737.86
+},
+{
+"trade_date": "2024-12-26",
+"nse_cash": 82061.36,
+"bse_cash": 5628.24,
+"nse_io": 41438.22,
+"nse_so": 5576.39,
+"bse_opt": 4635.74
+},
+{
+"trade_date": "2024-12-27",
+"nse_cash": 79107.7,
+"bse_cash": 5470.86,
+"nse_io": 26235.92,
+"nse_so": 4946.91,
+"bse_opt": 17300.8
+},
+{
+"trade_date": "2024-12-30",
+"nse_cash": 140017.26,
+"bse_cash": 6209.88,
+"nse_io": 53787.47,
+"nse_so": 5829.97,
+"bse_opt": 15579.74
+},
+{
+"trade_date": "2024-12-31",
+"nse_cash": 83252.78,
+"bse_cash": 5263.18,
+"nse_io": 44004.04,
+"nse_so": 4971.16,
+"bse_opt": 3682.67
+},
+{
+"trade_date": "2025-01-01",
+"nse_cash": 66507.28,
+"bse_cash": 4519.49,
+"nse_io": 45594.71,
+"nse_so": 4538.51,
+"bse_opt": 4662.11
+},
+{
+"trade_date": "2025-01-02",
+"nse_cash": 99415.85,
+"bse_cash": 5714.39,
+"nse_io": 59482.79,
+"nse_so": 7647.61,
+"bse_opt": 6300.01
+},
+{
+"trade_date": "2025-01-03",
+"nse_cash": 106093.57,
+"bse_cash": 6398.77,
+"nse_io": 33618.25,
+"nse_so": 7760.7,
+"bse_opt": 27402.92
+},
+{
+"trade_date": "2025-01-06",
+"nse_cash": 105241.3,
+"bse_cash": 7398.07,
+"nse_io": 56886.9,
+"nse_so": 8400.37,
+"bse_opt": 15936.57
+},
+{
+"trade_date": "2025-01-07",
+"nse_cash": 94300.11,
+"bse_cash": 5627.9,
+"nse_io": 34234.31,
+"nse_so": 6225.76,
+"bse_opt": 22747.67
+},
+{
+"trade_date": "2025-01-08",
+"nse_cash": 95369.45,
+"bse_cash": 5459.4,
+"nse_io": 55988.43,
+"nse_so": 7385.92,
+"bse_opt": 5025.1
+},
+{
+"trade_date": "2025-01-09",
+"nse_cash": 89207.16,
+"bse_cash": 4579.58,
+"nse_io": 43649.24,
+"nse_so": 7151.05,
+"bse_opt": 3543.41
+},
+{
+"trade_date": "2025-01-10",
+"nse_cash": 93383.55,
+"bse_cash": 5916.14,
+"nse_io": 50058.67,
+"nse_so": 8288.15,
+"bse_opt": 11555.3
+},
+{
+"trade_date": "2025-01-13",
+"nse_cash": 105027.76,
+"bse_cash": 7053.55,
+"nse_io": 46926.45,
+"nse_so": 8490.6,
+"bse_opt": 14596.51
+},
+{
+"trade_date": "2025-01-14",
+"nse_cash": 103214.71,
+"bse_cash": 6551.26,
+"nse_io": 34641.17,
+"nse_so": 8647.48,
+"bse_opt": 17279.81
+},
+{
+"trade_date": "2025-01-15",
+"nse_cash": 92452.92,
+"bse_cash": 5721.71,
+"nse_io": 40359.49,
+"nse_so": 8275.84,
+"bse_opt": 3279.67
+},
+{
+"trade_date": "2025-01-16",
+"nse_cash": 95670.54,
+"bse_cash": 5107.6,
+"nse_io": 34581.97,
+"nse_so": 8316.29,
+"bse_opt": 2764.72
+},
+{
+"trade_date": "2025-01-17",
+"nse_cash": 86331.32,
+"bse_cash": 4764.04,
+"nse_io": 42817.88,
+"nse_so": 8460.47,
+"bse_opt": 10204.43
+},
+{
+"trade_date": "2025-01-20",
+"nse_cash": 91454.57,
+"bse_cash": 5674.9,
+"nse_io": 37208.32,
+"nse_so": 8385.94,
+"bse_opt": 12327.54
+},
+{
+"trade_date": "2025-01-21",
+"nse_cash": 99502.09,
+"bse_cash": 6387.47,
+"nse_io": 54240.96,
+"nse_so": 10224.73,
+"bse_opt": 41716.89
+},
+{
+"trade_date": "2025-01-22",
+"nse_cash": 96643.55,
+"bse_cash": 5502.8,
+"nse_io": 52771.24,
+"nse_so": 8984.96,
+"bse_opt": 3975.27
+},
+{
+"trade_date": "2025-01-23",
+"nse_cash": 94927.46,
+"bse_cash": 4939.37,
+"nse_io": 38602.69,
+"nse_so": 8686.75,
+"bse_opt": 2581.82
+},
+{
+"trade_date": "2025-01-24",
+"nse_cash": 87530.93,
+"bse_cash": 4906.95,
+"nse_io": 45335.37,
+"nse_so": 8653.94,
+"bse_opt": 9441.2
+},
+{
+"trade_date": "2025-01-27",
+"nse_cash": 95150.83,
+"bse_cash": 5636.79,
+"nse_io": 41129.61,
+"nse_so": 8430.26,
+"bse_opt": 12254.06
+},
+{
+"trade_date": "2025-01-28",
+"nse_cash": 115503.17,
+"bse_cash": 6401.46,
+"nse_io": 44244.28,
+"nse_so": 9572.01,
+"bse_opt": 26152.05
+},
+{
+"trade_date": "2025-01-29",
+"nse_cash": 91470.93,
+"bse_cash": 5175.04,
+"nse_io": 50406.23,
+"nse_so": 8484.53,
+"bse_opt": 2471.33
+},
+{
+"trade_date": "2025-01-30",
+"nse_cash": 103561.27,
+"bse_cash": 5688.18,
+"nse_io": 58436.86,
+"nse_so": 10483.34,
+"bse_opt": 2656.02
+},
+{
+"trade_date": "2025-01-31",
+"nse_cash": 103890.63,
+"bse_cash": 6112.87,
+"nse_io": 37317.18,
+"nse_so": 10454.26,
+"bse_opt": 6371.35
+},
+{
+"trade_date": "2025-02-01",
+"nse_cash": 101789.64,
+"bse_cash": 7182.66,
+"nse_io": 51471.6,
+"nse_so": 12101.46,
+"bse_opt": 12291.92
+},
+{
+"trade_date": "2025-02-03",
+"nse_cash": 104886.08,
+"bse_cash": 5384.19,
+"nse_io": 33028.07,
+"nse_so": 9510.17,
+"bse_opt": 11236.09
+},
+{
+"trade_date": "2025-02-04",
+"nse_cash": 104198.6,
+"bse_cash": 5428.64,
+"nse_io": 43013.34,
+"nse_so": 9664.57,
+"bse_opt": 34593.7
+},
+{
+"trade_date": "2025-02-05",
+"nse_cash": 94511.59,
+"bse_cash": 5319.45,
+"nse_io": 34360.97,
+"nse_so": 8782.59,
+"bse_opt": 2666.78
+},
+{
+"trade_date": "2025-02-06",
+"nse_cash": 90769.15,
+"bse_cash": 4824.6,
+"nse_io": 36179.1,
+"nse_so": 7811.22,
+"bse_opt": 2788.08
+},
+{
+"trade_date": "2025-02-07",
+"nse_cash": 88907.85,
+"bse_cash": 4547.69,
+"nse_io": 41836.57,
+"nse_so": 7902.82,
+"bse_opt": 10346.7
+},
+{
+"trade_date": "2025-02-10",
+"nse_cash": 74020.11,
+"bse_cash": 4323.17,
+"nse_io": 30927.88,
+"nse_so": 5577.73,
+"bse_opt": 11185.68
+},
+{
+"trade_date": "2025-02-11",
+"nse_cash": 87197.43,
+"bse_cash": 5100.18,
+"nse_io": 36884.03,
+"nse_so": 6844.6,
+"bse_opt": 27158.72
+},
+{
+"trade_date": "2025-02-12",
+"nse_cash": 104609.92,
+"bse_cash": 6067.12,
+"nse_io": 63745.38,
+"nse_so": 8594.08,
+"bse_opt": 6023.86
+},
+{
+"trade_date": "2025-02-13",
+"nse_cash": 84394.95,
+"bse_cash": 4675.85,
+"nse_io": 55381.47,
+"nse_so": 6415.61,
+"bse_opt": 4673.85
+},
+{
+"trade_date": "2025-02-14",
+"nse_cash": 85658.47,
+"bse_cash": 5490.54,
+"nse_io": 50723.27,
+"nse_so": 7743.97,
+"bse_opt": 13033.39
+},
+{
+"trade_date": "2025-02-17",
+"nse_cash": 82681.35,
+"bse_cash": 4727.28,
+"nse_io": 45232.83,
+"nse_so": 6574.18,
+"bse_opt": 15748.46
+},
+{
+"trade_date": "2025-02-18",
+"nse_cash": 84876.07,
+"bse_cash": 4909.89,
+"nse_io": 36019.69,
+"nse_so": 5979.25,
+"bse_opt": 27747.16
+},
+{
+"trade_date": "2025-02-19",
+"nse_cash": 84203.85,
+"bse_cash": 4916.5,
+"nse_io": 47079.7,
+"nse_so": 6377.08,
+"bse_opt": 4077.48
+},
+{
+"trade_date": "2025-02-20",
+"nse_cash": 80372.2,
+"bse_cash": 4050.74,
+"nse_io": 35848.2,
+"nse_so": 5689.65,
+"bse_opt": 2790.86
+},
+{
+"trade_date": "2025-02-21",
+"nse_cash": 85627.7,
+"bse_cash": 5125.84,
+"nse_io": 37105.18,
+"nse_so": 6659.24,
+"bse_opt": 7285.48
+},
+{
+"trade_date": "2025-02-24",
+"nse_cash": 71947.32,
+"bse_cash": 3530.28,
+"nse_io": 35452.11,
+"nse_so": 5879.33,
+"bse_opt": 9143.66
+},
+{
+"trade_date": "2025-02-25",
+"nse_cash": 75029.98,
+"bse_cash": 4218.78,
+"nse_io": 23495.43,
+"nse_so": 5350.64,
+"bse_opt": 14546.84
+},
+{
+"trade_date": "2025-02-27",
+"nse_cash": 94080.41,
+"bse_cash": 4179.0,
+"nse_io": 31457.37,
+"nse_so": 7348.33,
+"bse_opt": 1582.81
+},
+{
+"trade_date": "2025-02-28",
+"nse_cash": 153463.52,
+"bse_cash": 5484.73,
+"nse_io": 40340.47,
+"nse_so": 7665.02,
+"bse_opt": 10154.35
+},
+{
+"trade_date": "2025-03-03",
+"nse_cash": 94975.36,
+"bse_cash": 6007.31,
+"nse_io": 39161.17,
+"nse_so": 6977.31,
+"bse_opt": 16056.1
+},
+{
+"trade_date": "2025-03-04",
+"nse_cash": 87916.38,
+"bse_cash": 4220.66,
+"nse_io": 28687.8,
+"nse_so": 5595.28,
+"bse_opt": 18053.31
+},
+{
+"trade_date": "2025-03-05",
+"nse_cash": 96043.58,
+"bse_cash": 7210.78,
+"nse_io": 45924.79,
+"nse_so": 7750.07,
+"bse_opt": 4685.04
+},
+{
+"trade_date": "2025-03-06",
+"nse_cash": 94950.1,
+"bse_cash": 5004.9,
+"nse_io": 58635.83,
+"nse_so": 6424.37,
+"bse_opt": 5989.28
+},
+{
+"trade_date": "2025-03-07",
+"nse_cash": 82344.2,
+"bse_cash": 4422.93,
+"nse_io": 41155.09,
+"nse_so": 5815.78,
+"bse_opt": 11583.46
+},
+{
+"trade_date": "2025-03-10",
+"nse_cash": 77908.06,
+"bse_cash": 4385.61,
+"nse_io": 38495.28,
+"nse_so": 6338.04,
+"bse_opt": 12704.24
+},
+{
+"trade_date": "2025-03-11",
+"nse_cash": 86056.6,
+"bse_cash": 4423.2,
+"nse_io": 35397.59,
+"nse_so": 6448.7,
+"bse_opt": 20327.16
+},
+{
+"trade_date": "2025-03-12",
+"nse_cash": 85531.56,
+"bse_cash": 4883.36,
+"nse_io": 48398.15,
+"nse_so": 5927.95,
+"bse_opt": 4902.13
+},
+{
+"trade_date": "2025-03-13",
+"nse_cash": 72307.78,
+"bse_cash": 4387.62,
+"nse_io": 45646.86,
+"nse_so": 4321.67,
+"bse_opt": 4398.85
+},
+{
+"trade_date": "2025-03-17",
+"nse_cash": 75425.05,
+"bse_cash": 4423.38,
+"nse_io": 33797.02,
+"nse_so": 4657.47,
+"bse_opt": 13649.05
+},
+{
+"trade_date": "2025-03-18",
+"nse_cash": 89218.8,
+"bse_cash": 6227.41,
+"nse_io": 35667.42,
+"nse_so": 5507.47,
+"bse_opt": 26317.5
+},
+{
+"trade_date": "2025-03-19",
+"nse_cash": 103795.93,
+"bse_cash": 6424.89,
+"nse_io": 42319.83,
+"nse_so": 7035.68,
+"bse_opt": 3661.09
+},
+{
+"trade_date": "2025-03-20",
+"nse_cash": 104175.74,
+"bse_cash": 5628.95,
+"nse_io": 51673.36,
+"nse_so": 7635.82,
+"bse_opt": 4434.51
+},
+{
+"trade_date": "2025-03-21",
+"nse_cash": 159843.62,
+"bse_cash": 7006.45,
+"nse_io": 46297.65,
+"nse_so": 8237.35,
+"bse_opt": 12775.3
+},
+{
+"trade_date": "2025-03-24",
+"nse_cash": 108223.07,
+"bse_cash": 6702.53,
+"nse_io": 51119.66,
+"nse_so": 8440.67,
+"bse_opt": 16811.65
+},
+{
+"trade_date": "2025-03-25",
+"nse_cash": 108835.63,
+"bse_cash": 6681.81,
+"nse_io": 48333.41,
+"nse_so": 7643.55,
+"bse_opt": 34723.29
+},
+{
+"trade_date": "2025-03-26",
+"nse_cash": 93603.74,
+"bse_cash": 5888.08,
+"nse_io": 59135.6,
+"nse_so": 6182.84,
+"bse_opt": 5694.97
+},
+{
+"trade_date": "2025-03-27",
+"nse_cash": 149836.57,
+"bse_cash": 6608.9,
+"nse_io": 50852.02,
+"nse_so": 6316.47,
+"bse_opt": 3854.99
+},
+{
+"trade_date": "2025-03-28",
+"nse_cash": 104168.33,
+"bse_cash": 6498.51,
+"nse_io": 43413.5,
+"nse_so": 8082.42,
+"bse_opt": 15584.91
+},
+{
+"trade_date": "2025-04-01",
+"nse_cash": 85431.0,
+"bse_cash": 4612.14,
+"nse_io": 38168.81,
+"nse_so": 6633.14,
+"bse_opt": 30179.11
+},
+{
+"trade_date": "2025-04-02",
+"nse_cash": 79816.05,
+"bse_cash": 4711.9,
+"nse_io": 43563.9,
+"nse_so": 6233.83,
+"bse_opt": 5287.17
+},
+{
+"trade_date": "2025-04-03",
+"nse_cash": 90488.87,
+"bse_cash": 5237.83,
+"nse_io": 37342.19,
+"nse_so": 7248.98,
+"bse_opt": 4240.53
+},
+{
+"trade_date": "2025-04-04",
+"nse_cash": 103513.15,
+"bse_cash": 5670.19,
+"nse_io": 44478.13,
+"nse_so": 9007.51,
+"bse_opt": 12531.23
+},
+{
+"trade_date": "2025-04-07",
+"nse_cash": 124335.3,
+"bse_cash": 8462.25,
+"nse_io": 92769.18,
+"nse_so": 12474.94,
+"bse_opt": 31271.78
+},
+{
+"trade_date": "2025-04-08",
+"nse_cash": 94247.4,
+"bse_cash": 5127.07,
+"nse_io": 68904.61,
+"nse_so": 8051.45,
+"bse_opt": 53446.61
+},
+{
+"trade_date": "2025-04-09",
+"nse_cash": 80976.59,
+"bse_cash": 3604.89,
+"nse_io": 49851.38,
+"nse_so": 6938.85,
+"bse_opt": 5524.2
+},
+{
+"trade_date": "2025-04-11",
+"nse_cash": 94849.81,
+"bse_cash": 5308.55,
+"nse_io": 50074.26,
+"nse_so": 7813.95,
+"bse_opt": 17782.44
+},
+{
+"trade_date": "2025-04-15",
+"nse_cash": 101771.39,
+"bse_cash": 5617.09,
+"nse_io": 28127.38,
+"nse_so": 7253.58,
+"bse_opt": 14859.85
+},
+{
+"trade_date": "2025-04-16",
+"nse_cash": 92099.85,
+"bse_cash": 5359.86,
+"nse_io": 45883.26,
+"nse_so": 7464.58,
+"bse_opt": 5016.57
+},
+{
+"trade_date": "2025-04-17",
+"nse_cash": 102749.6,
+"bse_cash": 5953.8,
+"nse_io": 78582.7,
+"nse_so": 7978.67,
+"bse_opt": 8188.65
+},
+{
+"trade_date": "2025-04-21",
+"nse_cash": 105396.09,
+"bse_cash": 6555.77,
+"nse_io": 49448.44,
+"nse_so": 9226.12,
+"bse_opt": 16717.86
+},
+{
+"trade_date": "2025-04-22",
+"nse_cash": 109084.29,
+"bse_cash": 7027.93,
+"nse_io": 36649.85,
+"nse_so": 7876.08,
+"bse_opt": 19571.72
+},
+{
+"trade_date": "2025-04-23",
+"nse_cash": 116245.44,
+"bse_cash": 6783.64,
+"nse_io": 59158.29,
+"nse_so": 8243.83,
+"bse_opt": 4790.7
+},
+{
+"trade_date": "2025-04-24",
+"nse_cash": 108518.96,
+"bse_cash": 5929.68,
+"nse_io": 42559.17,
+"nse_so": 7561.07,
+"bse_opt": 3457.06
+},
+{
+"trade_date": "2025-04-25",
+"nse_cash": 113850.06,
+"bse_cash": 7756.71,
+"nse_io": 64507.87,
+"nse_so": 9955.5,
+"bse_opt": 17606.3
+},
+{
+"trade_date": "2025-04-28",
+"nse_cash": 90099.31,
+"bse_cash": 5642.7,
+"nse_io": 44631.13,
+"nse_so": 7850.38,
+"bse_opt": 16004.66
+},
+{
+"trade_date": "2025-04-29",
+"nse_cash": 102696.54,
+"bse_cash": 7562.27,
+"nse_io": 34988.98,
+"nse_so": 7738.44,
+"bse_opt": 23496.35
+},
+{
+"trade_date": "2025-04-30",
+"nse_cash": 110087.58,
+"bse_cash": 5986.21,
+"nse_io": 42279.95,
+"nse_so": 7374.32,
+"bse_opt": 4132.31
+},
+{
+"trade_date": "2025-05-02",
+"nse_cash": 100895.16,
+"bse_cash": 6769.64,
+"nse_io": 61402.09,
+"nse_so": 8278.45,
+"bse_opt": 19316.43
+},
+{
+"trade_date": "2025-05-05",
+"nse_cash": 89885.27,
+"bse_cash": 6132.07,
+"nse_io": 38609.79,
+"nse_so": 8027.74,
+"bse_opt": 14717.86
+},
+{
+"trade_date": "2025-05-06",
+"nse_cash": 90454.16,
+"bse_cash": 5831.23,
+"nse_io": 27594.85,
+"nse_so": 8146.64,
+"bse_opt": 17152.08
+},
+{
+"trade_date": "2025-05-07",
+"nse_cash": 101223.47,
+"bse_cash": 5314.74,
+"nse_io": 49283.14,
+"nse_so": 8270.28,
+"bse_opt": 5241.53
+},
+{
+"trade_date": "2025-05-08",
+"nse_cash": 105605.86,
+"bse_cash": 5363.13,
+"nse_io": 45447.47,
+"nse_so": 8505.94,
+"bse_opt": 5123.82
+},
+{
+"trade_date": "2025-05-09",
+"nse_cash": 94550.76,
+"bse_cash": 6336.41,
+"nse_io": 54811.87,
+"nse_so": 8645.36,
+"bse_opt": 15249.27
+},
+{
+"trade_date": "2025-05-12",
+"nse_cash": 106751.0,
+"bse_cash": 6858.58,
+"nse_io": 56482.03,
+"nse_so": 9819.5,
+"bse_opt": 21402.21
+},
+{
+"trade_date": "2025-05-13",
+"nse_cash": 114942.87,
+"bse_cash": 10551.46,
+"nse_io": 58917.46,
+"nse_so": 8223.72,
+"bse_opt": 45255.5
+},
+{
+"trade_date": "2025-05-14",
+"nse_cash": 115869.0,
+"bse_cash": 8394.88,
+"nse_io": 59538.64,
+"nse_so": 8340.37,
+"bse_opt": 6666.11
+},
+{
+"trade_date": "2025-05-15",
+"nse_cash": 127890.61,
+"bse_cash": 7969.55,
+"nse_io": 95583.89,
+"nse_so": 8607.05,
+"bse_opt": 10053.83
+},
+{
+"trade_date": "2025-05-16",
+"nse_cash": 149817.59,
+"bse_cash": 10699.18,
+"nse_io": 37439.33,
+"nse_so": 10017.94,
+"bse_opt": 10969.0
+},
+{
+"trade_date": "2025-05-19",
+"nse_cash": 116116.49,
+"bse_cash": 8630.47,
+"nse_io": 35838.0,
+"nse_so": 9311.27,
+"bse_opt": 14048.66
+},
+{
+"trade_date": "2025-05-20",
+"nse_cash": 116850.89,
+"bse_cash": 7875.44,
+"nse_io": 40084.82,
+"nse_so": 8436.81,
+"bse_opt": 32258.67
+},
+{
+"trade_date": "2025-05-21",
+"nse_cash": 98948.36,
+"bse_cash": 7844.08,
+"nse_io": 66025.96,
+"nse_so": 8344.19,
+"bse_opt": 7309.55
+},
+{
+"trade_date": "2025-05-22",
+"nse_cash": 106355.19,
+"bse_cash": 7206.41,
+"nse_io": 62971.32,
+"nse_so": 7614.65,
+"bse_opt": 5821.12
+},
+{
+"trade_date": "2025-05-23",
+"nse_cash": 95245.46,
+"bse_cash": 7552.14,
+"nse_io": 48605.52,
+"nse_so": 6596.47,
+"bse_opt": 14232.29
+},
+{
+"trade_date": "2025-05-26",
+"nse_cash": 93170.47,
+"bse_cash": 6774.6,
+"nse_io": 44739.65,
+"nse_so": 6427.11,
+"bse_opt": 19458.62
+},
+{
+"trade_date": "2025-05-27",
+"nse_cash": 119285.46,
+"bse_cash": 9416.16,
+"nse_io": 59670.69,
+"nse_so": 6044.71,
+"bse_opt": 49445.07
+},
+{
+"trade_date": "2025-05-28",
+"nse_cash": 112538.56,
+"bse_cash": 7403.82,
+"nse_io": 49242.59,
+"nse_so": 5305.16,
+"bse_opt": 4225.39
+},
+{
+"trade_date": "2025-05-29",
+"nse_cash": 107376.52,
+"bse_cash": 6723.08,
+"nse_io": 59536.19,
+"nse_so": 5497.61,
+"bse_opt": 4808.32
+},
+{
+"trade_date": "2025-05-30",
+"nse_cash": 168794.74,
+"bse_cash": 8610.42,
+"nse_io": 34086.12,
+"nse_so": 7019.89,
+"bse_opt": 10930.92
+},
+{
+"trade_date": "2025-06-02",
+"nse_cash": 107705.36,
+"bse_cash": 9293.56,
+"nse_io": 43969.43,
+"nse_so": 6868.47,
+"bse_opt": 21966.21
+},
+{
+"trade_date": "2025-06-03",
+"nse_cash": 116211.91,
+"bse_cash": 11722.58,
+"nse_io": 45579.68,
+"nse_so": 6316.97,
+"bse_opt": 40302.04
+},
+{
+"trade_date": "2025-06-04",
+"nse_cash": 110840.02,
+"bse_cash": 9413.28,
+"nse_io": 30804.35,
+"nse_so": 5831.53,
+"bse_opt": 3413.52
+},
+{
+"trade_date": "2025-06-05",
+"nse_cash": 117115.84,
+"bse_cash": 7795.22,
+"nse_io": 62046.62,
+"nse_so": 6824.12,
+"bse_opt": 6284.17
+},
+{
+"trade_date": "2025-06-06",
+"nse_cash": 132540.83,
+"bse_cash": 8880.17,
+"nse_io": 46327.51,
+"nse_so": 9596.81,
+"bse_opt": 13967.76
+},
+{
+"trade_date": "2025-06-09",
+"nse_cash": 117745.56,
+"bse_cash": 8177.72,
+"nse_io": 23044.34,
+"nse_so": 9233.67,
+"bse_opt": 9707.19
+},
+{
+"trade_date": "2025-06-10",
+"nse_cash": 115862.94,
+"bse_cash": 9436.33,
+"nse_io": 21302.38,
+"nse_so": 8068.42,
+"bse_opt": 20748.5
+},
+{
+"trade_date": "2025-06-11",
+"nse_cash": 124232.01,
+"bse_cash": 8714.59,
+"nse_io": 36651.42,
+"nse_so": 8401.74,
+"bse_opt": 3990.49
+},
+{
+"trade_date": "2025-06-12",
+"nse_cash": 117580.76,
+"bse_cash": 7006.77,
+"nse_io": 61071.82,
+"nse_so": 7263.84,
+"bse_opt": 5844.35
+},
+{
+"trade_date": "2025-06-13",
+"nse_cash": 119525.75,
+"bse_cash": 6974.61,
+"nse_io": 38154.08,
+"nse_so": 7332.57,
+"bse_opt": 12266.89
+},
+{
+"trade_date": "2025-06-16",
+"nse_cash": 91120.68,
+"bse_cash": 6743.62,
+"nse_io": 36444.66,
+"nse_so": 6688.13,
+"bse_opt": 15709.76
+},
+{
+"trade_date": "2025-06-17",
+"nse_cash": 103108.95,
+"bse_cash": 8236.36,
+"nse_io": 25694.34,
+"nse_so": 6414.2,
+"bse_opt": 22033.34
+},
+{
+"trade_date": "2025-06-18",
+"nse_cash": 89892.68,
+"bse_cash": 5506.96,
+"nse_io": 42544.37,
+"nse_so": 6108.11,
+"bse_opt": 4422.65
+},
+{
+"trade_date": "2025-06-19",
+"nse_cash": 90377.46,
+"bse_cash": 5823.13,
+"nse_io": 38570.65,
+"nse_so": 5786.79,
+"bse_opt": 3885.68
+},
+{
+"trade_date": "2025-06-20",
+"nse_cash": 159097.27,
+"bse_cash": 7366.45,
+"nse_io": 41451.12,
+"nse_so": 6702.8,
+"bse_opt": 12649.19
+},
+{
+"trade_date": "2025-06-23",
+"nse_cash": 90775.26,
+"bse_cash": 8228.07,
+"nse_io": 40983.69,
+"nse_so": 7046.49,
+"bse_opt": 15694.61
+},
+{
+"trade_date": "2025-06-24",
+"nse_cash": 111594.12,
+"bse_cash": 11364.06,
+"nse_io": 54592.11,
+"nse_so": 7014.3,
+"bse_opt": 44010.01
+},
+{
+"trade_date": "2025-06-25",
+"nse_cash": 101657.64,
+"bse_cash": 6401.34,
+"nse_io": 43604.21,
+"nse_so": 6521.94,
+"bse_opt": 4116.21
+},
+{
+"trade_date": "2025-06-26",
+"nse_cash": 118579.67,
+"bse_cash": 6822.17,
+"nse_io": 80731.62,
+"nse_so": 6961.83,
+"bse_opt": 7089.3
+},
+{
+"trade_date": "2025-06-27",
+"nse_cash": 153035.0,
+"bse_cash": 7248.34,
+"nse_io": 32185.1,
+"nse_so": 8494.99,
+"bse_opt": 9687.93
+},
+{
+"trade_date": "2025-06-30",
+"nse_cash": 108191.76,
+"bse_cash": 5665.68,
+"nse_io": 34383.23,
+"nse_so": 6428.7,
+"bse_opt": 14529.59
+},
+{
+"trade_date": "2025-07-01",
+"nse_cash": 100839.71,
+"bse_cash": 8504.33,
+"nse_io": 22746.17,
+"nse_so": 6872.66,
+"bse_opt": 20588.09
+},
+{
+"trade_date": "2025-07-02",
+"nse_cash": 105117.16,
+"bse_cash": 6995.9,
+"nse_io": 40450.1,
+"nse_so": 6621.12,
+"bse_opt": 4700.48
+},
+{
+"trade_date": "2025-07-03",
+"nse_cash": 96738.82,
+"bse_cash": 7335.24,
+"nse_io": 61511.19,
+"nse_so": 5745.14,
+"bse_opt": 6548.46
+},
+{
+"trade_date": "2025-07-04",
+"nse_cash": 88820.82,
+"bse_cash": 6224.2,
+"nse_io": 33007.84,
+"nse_so": 6420.12,
+"bse_opt": 11042.05
+},
+{
+"trade_date": "2025-07-07",
+"nse_cash": 76916.2,
+"bse_cash": 5042.19,
+"nse_io": 24501.38,
+"nse_so": 4662.31,
+"bse_opt": 11050.96
+},
+{
+"trade_date": "2025-07-08",
+"nse_cash": 91044.19,
+"bse_cash": 6442.06,
+"nse_io": 21185.61,
+"nse_so": 6406.01,
+"bse_opt": 19683.78
+},
+{
+"trade_date": "2025-07-09",
+"nse_cash": 95305.69,
+"bse_cash": 6354.53,
+"nse_io": 32308.18,
+"nse_so": 6200.75,
+"bse_opt": 3853.67
+},
+{
+"trade_date": "2025-07-10",
+"nse_cash": 86650.23,
+"bse_cash": 6453.52,
+"nse_io": 45884.14,
+"nse_so": 4942.78,
+"bse_opt": 4560.65
+},
+{
+"trade_date": "2025-07-11",
+"nse_cash": 97900.73,
+"bse_cash": 6231.61,
+"nse_io": 30748.9,
+"nse_so": 7235.99,
+"bse_opt": 10805.02
+},
+{
+"trade_date": "2025-07-14",
+"nse_cash": 99597.77,
+"bse_cash": 8161.7,
+"nse_io": 31111.32,
+"nse_so": 5778.14,
+"bse_opt": 14897.48
+},
+{
+"trade_date": "2025-07-15",
+"nse_cash": 96302.03,
+"bse_cash": 7012.26,
+"nse_io": 27817.17,
+"nse_so": 5891.61,
+"bse_opt": 27879.94
+},
+{
+"trade_date": "2025-07-16",
+"nse_cash": 94737.64,
+"bse_cash": 6662.58,
+"nse_io": 35142.51,
+"nse_so": 6382.32,
+"bse_opt": 4387.83
+},
+{
+"trade_date": "2025-07-17",
+"nse_cash": 95271.51,
+"bse_cash": 7040.49,
+"nse_io": 39625.77,
+"nse_so": 5980.94,
+"bse_opt": 4164.05
+},
+{
+"trade_date": "2025-07-18",
+"nse_cash": 93115.96,
+"bse_cash": 9995.2,
+"nse_io": 31250.67,
+"nse_so": 6372.76,
+"bse_opt": 11472.57
+},
+{
+"trade_date": "2025-07-21",
+"nse_cash": 91473.41,
+"bse_cash": 6593.89,
+"nse_io": 33720.96,
+"nse_so": 6414.25,
+"bse_opt": 16711.87
+},
+{
+"trade_date": "2025-07-22",
+"nse_cash": 100573.81,
+"bse_cash": 7596.0,
+"nse_io": 24721.86,
+"nse_so": 6428.51,
+"bse_opt": 26217.3
+},
+{
+"trade_date": "2025-07-23",
+"nse_cash": 93826.24,
+"bse_cash": 9601.73,
+"nse_io": 35179.99,
+"nse_so": 6369.99,
+"bse_opt": 4583.31
+},
+{
+"trade_date": "2025-07-24",
+"nse_cash": 100060.28,
+"bse_cash": 7097.24,
+"nse_io": 48542.75,
+"nse_so": 6707.81,
+"bse_opt": 5286.28
+},
+{
+"trade_date": "2025-07-25",
+"nse_cash": 96122.81,
+"bse_cash": 7996.7,
+"nse_io": 38186.37,
+"nse_so": 6199.32,
+"bse_opt": 13179.29
+},
+{
+"trade_date": "2025-07-28",
+"nse_cash": 92169.65,
+"bse_cash": 7561.05,
+"nse_io": 41779.26,
+"nse_so": 6252.78,
+"bse_opt": 19730.93
+},
+{
+"trade_date": "2025-07-29",
+"nse_cash": 94794.5,
+"bse_cash": 7015.63,
+"nse_io": 34424.94,
+"nse_so": 5497.37,
+"bse_opt": 33184.83
+},
+{
+"trade_date": "2025-07-30",
+"nse_cash": 89523.19,
+"bse_cash": 6133.24,
+"nse_io": 43441.75,
+"nse_so": 5389.94,
+"bse_opt": 5157.87
+},
+{
+"trade_date": "2025-07-31",
+"nse_cash": 107992.32,
+"bse_cash": 7302.2,
+"nse_io": 83630.41,
+"nse_so": 6625.06,
+"bse_opt": 7762.49
+},
+{
+"trade_date": "2025-08-01",
+"nse_cash": 94819.41,
+"bse_cash": 7812.83,
+"nse_io": 45164.6,
+"nse_so": 6600.65,
+"bse_opt": 19179.43
+},
+{
+"trade_date": "2025-08-04",
+"nse_cash": 83320.0,
+"bse_cash": 6400.7,
+"nse_io": 35974.01,
+"nse_so": 6383.38,
+"bse_opt": 20817.57
+},
+{
+"trade_date": "2025-08-05",
+"nse_cash": 88655.41,
+"bse_cash": 10463.59,
+"nse_io": 28319.81,
+"nse_so": 5635.49,
+"bse_opt": 31273.73
+},
+{
+"trade_date": "2025-08-06",
+"nse_cash": 89122.97,
+"bse_cash": 10375.28,
+"nse_io": 41212.33,
+"nse_so": 5903.03,
+"bse_opt": 6131.83
+},
+{
+"trade_date": "2025-08-07",
+"nse_cash": 98041.49,
+"bse_cash": 11918.33,
+"nse_io": 63835.98,
+"nse_so": 5937.86,
+"bse_opt": 7815.3
+},
+{
+"trade_date": "2025-08-08",
+"nse_cash": 100444.68,
+"bse_cash": 15524.03,
+"nse_io": 39092.01,
+"nse_so": 6021.07,
+"bse_opt": 17671.05
+},
+{
+"trade_date": "2025-08-11",
+"nse_cash": 81193.79,
+"bse_cash": 11678.6,
+"nse_io": 36995.02,
+"nse_so": 5608.73,
+"bse_opt": 21124.18
+},
+{
+"trade_date": "2025-08-12",
+"nse_cash": 79108.56,
+"bse_cash": 8035.07,
+"nse_io": 39478.75,
+"nse_so": 4951.09,
+"bse_opt": 46366.83
+},
+{
+"trade_date": "2025-08-13",
+"nse_cash": 87454.46,
+"bse_cash": 8394.79,
+"nse_io": 46007.42,
+"nse_so": 5835.66,
+"bse_opt": 7274.39
+},
+{
+"trade_date": "2025-08-14",
+"nse_cash": 83349.66,
+"bse_cash": 7812.75,
+"nse_io": 47069.45,
+"nse_so": 4835.05,
+"bse_opt": 5735.24
+},
+{
+"trade_date": "2025-08-18",
+"nse_cash": 106993.56,
+"bse_cash": 8903.49,
+"nse_io": 37584.8,
+"nse_so": 7763.75,
+"bse_opt": 20816.89
+},
+{
+"trade_date": "2025-08-19",
+"nse_cash": 87634.99,
+"bse_cash": 7207.96,
+"nse_io": 26943.5,
+"nse_so": 6068.47,
+"bse_opt": 33522.72
+},
+{
+"trade_date": "2025-08-20",
+"nse_cash": 96170.86,
+"bse_cash": 6901.83,
+"nse_io": 37023.3,
+"nse_so": 6437.73,
+"bse_opt": 5213.5
+},
+{
+"trade_date": "2025-08-21",
+"nse_cash": 97000.94,
+"bse_cash": 16671.3,
+"nse_io": 47496.74,
+"nse_so": 5992.74,
+"bse_opt": 5191.75
+},
+{
+"trade_date": "2025-08-22",
+"nse_cash": 82241.48,
+"bse_cash": 6723.96,
+"nse_io": 33280.32,
+"nse_so": 5191.02,
+"bse_opt": 13046.51
+},
+{
+"trade_date": "2025-08-25",
+"nse_cash": 81587.54,
+"bse_cash": 7132.8,
+"nse_io": 30473.26,
+"nse_so": 4997.64,
+"bse_opt": 15652.58
+},
+{
+"trade_date": "2025-08-26",
+"nse_cash": 146510.86,
+"bse_cash": 8241.5,
+"nse_io": 34420.23,
+"nse_so": 5386.65,
+"bse_opt": 32861.5
+},
+{
+"trade_date": "2025-08-28",
+"nse_cash": 102774.47,
+"bse_cash": 7516.26,
+"nse_io": 72659.22,
+"nse_so": 5396.92,
+"bse_opt": 5888.93
+},
+{
+"trade_date": "2025-08-29",
+"nse_cash": 90936.81,
+"bse_cash": 6550.96,
+"nse_io": 46286.72,
+"nse_so": 5139.11,
+"bse_opt": 11029.17
+},
+{
+"trade_date": "2025-09-01",
+"nse_cash": 84799.42,
+"bse_cash": 6230.15,
+"nse_io": 39093.66,
+"nse_so": 5129.16,
+"bse_opt": 7733.99
+},
+{
+"trade_date": "2025-09-02",
+"nse_cash": 93244.72,
+"bse_cash": 6895.11,
+"nse_io": 68710.96,
+"nse_so": 5610.1,
+"bse_opt": 9401.33
+},
+{
+"trade_date": "2025-09-03",
+"nse_cash": 95965.54,
+"bse_cash": 7804.49,
+"nse_io": 37174.15,
+"nse_so": 5509.79,
+"bse_opt": 27554.53
+},
+{
+"trade_date": "2025-09-04",
+"nse_cash": 105477.29,
+"bse_cash": 8507.2,
+"nse_io": 38808.5,
+"nse_so": 6092.4,
+"bse_opt": 49265.4
+},
+{
+"trade_date": "2025-09-05",
+"nse_cash": 81938.01,
+"bse_cash": 7317.33,
+"nse_io": 53153.77,
+"nse_so": 5306.58,
+"bse_opt": 10108.46
+},
+{
+"trade_date": "2025-09-08",
+"nse_cash": 80859.07,
+"bse_cash": 7388.33,
+"nse_io": 46890.1,
+"nse_so": 5314.41,
+"bse_opt": 8745.15
+},
+{
+"trade_date": "2025-09-09",
+"nse_cash": 79908.68,
+"bse_cash": 7068.59,
+"nse_io": 51744.35,
+"nse_so": 4961.59,
+"bse_opt": 7264.24
+},
+{
+"trade_date": "2025-09-10",
+"nse_cash": 102041.4,
+"bse_cash": 8097.78,
+"nse_io": 32437.71,
+"nse_so": 6839.12,
+"bse_opt": 21115.8
+},
+{
+"trade_date": "2025-09-11",
+"nse_cash": 96204.83,
+"bse_cash": 10220.55,
+"nse_io": 21548.74,
+"nse_so": 6673.39,
+"bse_opt": 28115.56
+},
+{
+"trade_date": "2025-09-12",
+"nse_cash": 92241.52,
+"bse_cash": 7329.11,
+"nse_io": 29013.7,
+"nse_so": 6602.7,
+"bse_opt": 5413.83
+},
+{
+"trade_date": "2025-09-15",
+"nse_cash": 85104.65,
+"bse_cash": 7436.49,
+"nse_io": 29454.5,
+"nse_so": 5812.7,
+"bse_opt": 5769.64
+},
+{
+"trade_date": "2025-09-16",
+"nse_cash": 91048.46,
+"bse_cash": 7679.71,
+"nse_io": 44205.76,
+"nse_so": 5711.27,
+"bse_opt": 6823.46
+},
+{
+"trade_date": "2025-09-17",
+"nse_cash": 101041.26,
+"bse_cash": 8463.88,
+"nse_io": 26040.2,
+"nse_so": 7613.12,
+"bse_opt": 16625.63
+},
+{
+"trade_date": "2025-09-18",
+"nse_cash": 97994.78,
+"bse_cash": 8461.21,
+"nse_io": 26029.5,
+"nse_so": 6593.49,
+"bse_opt": 30203.17
+},
+{
+"trade_date": "2025-09-19",
+"nse_cash": 138903.11,
+"bse_cash": 9623.14,
+"nse_io": 37471.99,
+"nse_so": 7732.59,
+"bse_opt": 7068.16
+},
+{
+"trade_date": "2025-09-22",
+"nse_cash": 103101.44,
+"bse_cash": 8555.82,
+"nse_io": 40277.45,
+"nse_so": 8385.25,
+"bse_opt": 8351.31
+},
+{
+"trade_date": "2025-09-23",
+"nse_cash": 105317.21,
+"bse_cash": 7663.53,
+"nse_io": 61870.96,
+"nse_so": 7445.56,
+"bse_opt": 9405.93
+},
+{
+"trade_date": "2025-09-24",
+"nse_cash": 94297.85,
+"bse_cash": 7804.41,
+"nse_io": 33996.05,
+"nse_so": 6354.1,
+"bse_opt": 23411.78
+},
+{
+"trade_date": "2025-09-25",
+"nse_cash": 100235.74,
+"bse_cash": 7188.57,
+"nse_io": 31493.13,
+"nse_so": 5769.63,
+"bse_opt": 36755.04
+},
+{
+"trade_date": "2025-09-26",
+"nse_cash": 97349.73,
+"bse_cash": 7441.23,
+"nse_io": 52662.69,
+"nse_so": 6951.72,
+"bse_opt": 8523.47
+},
+{
+"trade_date": "2025-09-29",
+"nse_cash": 133255.38,
+"bse_cash": 6485.87,
+"nse_io": 62527.22,
+"nse_so": 5601.5,
+"bse_opt": 9990.85
+},
+{
+"trade_date": "2025-09-30",
+"nse_cash": 102544.59,
+"bse_cash": 6690.17,
+"nse_io": 68712.45,
+"nse_so": 5225.49,
+"bse_opt": 8577.32
+},
+{
+"trade_date": "2025-10-01",
+"nse_cash": 99744.74,
+"bse_cash": 8499.16,
+"nse_io": 35689.73,
+"nse_so": 6473.9,
+"bse_opt": 41957.95
+},
+{
+"trade_date": "2025-10-03",
+"nse_cash": 112827.66,
+"bse_cash": 7767.87,
+"nse_io": 42413.88,
+"nse_so": 6214.77,
+"bse_opt": 8551.3
+},
+{
+"trade_date": "2025-10-06",
+"nse_cash": 96871.84,
+"bse_cash": 7189.63,
+"nse_io": 45167.16,
+"nse_so": 6868.0,
+"bse_opt": 8772.94
+},
+{
+"trade_date": "2025-10-07",
+"nse_cash": 98573.03,
+"bse_cash": 8114.75,
+"nse_io": 64278.42,
+"nse_so": 6829.57,
+"bse_opt": 10621.75
+},
+{
+"trade_date": "2025-10-08",
+"nse_cash": 89602.56,
+"bse_cash": 7644.04,
+"nse_io": 42524.69,
+"nse_so": 6369.95,
+"bse_opt": 32002.36
+},
+{
+"trade_date": "2025-10-09",
+"nse_cash": 92463.58,
+"bse_cash": 8140.65,
+"nse_io": 33710.44,
+"nse_so": 6794.1,
+"bse_opt": 44869.06
+},
+{
+"trade_date": "2025-10-10",
+"nse_cash": 94005.11,
+"bse_cash": 7210.83,
+"nse_io": 44914.96,
+"nse_so": 7383.59,
+"bse_opt": 9130.71
+},
+{
+"trade_date": "2025-10-13",
+"nse_cash": 91723.49,
+"bse_cash": 7101.06,
+"nse_io": 49312.0,
+"nse_so": 6197.65,
+"bse_opt": 10314.73
+},
+{
+"trade_date": "2025-10-14",
+"nse_cash": 109664.78,
+"bse_cash": 8826.17,
+"nse_io": 72498.25,
+"nse_so": 7192.11,
+"bse_opt": 11921.78
+},
+{
+"trade_date": "2025-10-15",
+"nse_cash": 100716.49,
+"bse_cash": 6699.06,
+"nse_io": 36291.46,
+"nse_so": 7142.98,
+"bse_opt": 24604.12
+},
+{
+"trade_date": "2025-10-16",
+"nse_cash": 111717.03,
+"bse_cash": 10791.29,
+"nse_io": 35397.0,
+"nse_so": 8283.35,
+"bse_opt": 39773.72
+},
+{
+"trade_date": "2025-10-17",
+"nse_cash": 111763.18,
+"bse_cash": 7426.09,
+"nse_io": 72813.74,
+"nse_so": 8455.35,
+"bse_opt": 14336.83
+},
+{
+"trade_date": "2025-10-20",
+"nse_cash": 100097.49,
+"bse_cash": 6931.55,
+"nse_io": 68496.53,
+"nse_so": 7267.51,
+"bse_opt": 10326.48
+},
+{
+"trade_date": "2025-10-21",
+"nse_cash": 19714.12,
+"bse_cash": 2538.32,
+"nse_io": 6842.41,
+"nse_so": 933.61,
+"bse_opt": 3294.37
+},
+{
+"trade_date": "2025-10-23",
+"nse_cash": 116842.34,
+"bse_cash": 9194.36,
+"nse_io": 43229.69,
+"nse_so": 7744.5,
+"bse_opt": 47482.21
+},
+{
+"trade_date": "2025-10-24",
+"nse_cash": 89132.4,
+"bse_cash": 6834.12,
+"nse_io": 65545.61,
+"nse_so": 6097.94,
+"bse_opt": 10588.84
+},
+{
+"trade_date": "2025-10-27",
+"nse_cash": 96754.8,
+"bse_cash": 7389.89,
+"nse_io": 61709.32,
+"nse_so": 6550.21,
+"bse_opt": 9712.5
+},
+{
+"trade_date": "2025-10-28",
+"nse_cash": 116153.19,
+"bse_cash": 8212.25,
+"nse_io": 91654.73,
+"nse_so": 6596.36,
+"bse_opt": 10833.22
+},
+{
+"trade_date": "2025-10-29",
+"nse_cash": 112298.42,
+"bse_cash": 8521.03,
+"nse_io": 40037.92,
+"nse_so": 8489.08,
+"bse_opt": 27193.23
+},
+{
+"trade_date": "2025-10-30",
+"nse_cash": 102485.84,
+"bse_cash": 8338.3,
+"nse_io": 35763.21,
+"nse_so": 6918.59,
+"bse_opt": 44100.84
+},
+{
+"trade_date": "2025-10-31",
+"nse_cash": 110386.57,
+"bse_cash": 7539.85,
+"nse_io": 53507.84,
+"nse_so": 7887.26,
+"bse_opt": 10038.37
+},
+{
+"trade_date": "2025-11-03",
+"nse_cash": 99211.02,
+"bse_cash": 7517.51,
+"nse_io": 51382.09,
+"nse_so": 7206.85,
+"bse_opt": 10175.47
+},
+{
+"trade_date": "2025-11-04",
+"nse_cash": 103983.71,
+"bse_cash": 6880.97,
+"nse_io": 56381.43,
+"nse_so": 6662.77,
+"bse_opt": 9252.2
+},
+{
+"trade_date": "2025-11-06",
+"nse_cash": 114454.44,
+"bse_cash": 9578.84,
+"nse_io": 33033.86,
+"nse_so": 6862.03,
+"bse_opt": 43094.15
+},
+{
+"trade_date": "2025-11-07",
+"nse_cash": 118390.89,
+"bse_cash": 8091.32,
+"nse_io": 55450.7,
+"nse_so": 8508.64,
+"bse_opt": 10540.47
+},
+{
+"trade_date": "2025-11-10",
+"nse_cash": 101317.69,
+"bse_cash": 8144.45,
+"nse_io": 44912.75,
+"nse_so": 6642.05,
+"bse_opt": 8420.9
+},
+{
+"trade_date": "2025-11-11",
+"nse_cash": 104375.46,
+"bse_cash": 7190.71,
+"nse_io": 70621.49,
+"nse_so": 6960.91,
+"bse_opt": 10581.43
+},
+{
+"trade_date": "2025-11-12",
+"nse_cash": 115992.45,
+"bse_cash": 7934.86,
+"nse_io": 32149.26,
+"nse_so": 9032.06,
+"bse_opt": 22687.09
+},
+{
+"trade_date": "2025-11-13",
+"nse_cash": 110637.5,
+"bse_cash": 9916.57,
+"nse_io": 35847.55,
+"nse_so": 7983.72,
+"bse_opt": 48800.94
+},
+{
+"trade_date": "2025-11-14",
+"nse_cash": 112397.08,
+"bse_cash": 8843.4,
+"nse_io": 65530.55,
+"nse_so": 7171.68,
+"bse_opt": 11277.33
+},
+{
+"trade_date": "2025-11-17",
+"nse_cash": 99600.19,
+"bse_cash": 7981.61,
+"nse_io": 46284.9,
+"nse_so": 6286.75,
+"bse_opt": 8082.56
+},
+{
+"trade_date": "2025-11-18",
+"nse_cash": 117064.74,
+"bse_cash": 14193.17,
+"nse_io": 61404.97,
+"nse_so": 5949.61,
+"bse_opt": 8886.71
+},
+{
+"trade_date": "2025-11-19",
+"nse_cash": 98010.09,
+"bse_cash": 7150.37,
+"nse_io": 37299.41,
+"nse_so": 6441.45,
+"bse_opt": 23349.82
+},
+{
+"trade_date": "2025-11-20",
+"nse_cash": 96628.32,
+"bse_cash": 8897.37,
+"nse_io": 31427.08,
+"nse_so": 6235.68,
+"bse_opt": 39691.85
+},
+{
+"trade_date": "2025-11-21",
+"nse_cash": 90836.23,
+"bse_cash": 8991.71,
+"nse_io": 54557.41,
+"nse_so": 5806.76,
+"bse_opt": 8798.94
+},
+{
+"trade_date": "2025-11-24",
+"nse_cash": 154230.67,
+"bse_cash": 6806.71,
+"nse_io": 54252.45,
+"nse_so": 5038.83,
+"bse_opt": 8067.35
+},
+{
+"trade_date": "2025-11-25",
+"nse_cash": 87713.53,
+"bse_cash": 6570.51,
+"nse_io": 70345.44,
+"nse_so": 5074.42,
+"bse_opt": 8730.95
+},
+{
+"trade_date": "2025-11-26",
+"nse_cash": 94725.02,
+"bse_cash": 6806.62,
+"nse_io": 35509.69,
+"nse_so": 5661.23,
+"bse_opt": 24761.03
+},
+{
+"trade_date": "2025-11-27",
+"nse_cash": 84815.42,
+"bse_cash": 9944.62,
+"nse_io": 35972.95,
+"nse_so": 5102.07,
+"bse_opt": 49681.45
+},
+{
+"trade_date": "2025-11-28",
+"nse_cash": 82568.35,
+"bse_cash": 6181.34,
+"nse_io": 40913.41,
+"nse_so": 4996.6,
+"bse_opt": 8251.62
+},
+{
+"trade_date": "2025-12-01",
+"nse_cash": 85216.3,
+"bse_cash": 6242.15,
+"nse_io": 52638.02,
+"nse_so": 5324.63,
+"bse_opt": 10227.92
+},
+{
+"trade_date": "2025-12-02",
+"nse_cash": 93813.57,
+"bse_cash": 5894.3,
+"nse_io": 59179.47,
+"nse_so": 4385.08,
+"bse_opt": 8382.62
+},
+{
+"trade_date": "2025-12-03",
+"nse_cash": 93381.69,
+"bse_cash": 6821.2,
+"nse_io": 33573.53,
+"nse_so": 5349.74,
+"bse_opt": 26225.79
+},
+{
+"trade_date": "2025-12-04",
+"nse_cash": 88337.0,
+"bse_cash": 7713.84,
+"nse_io": 31035.35,
+"nse_so": 5027.05,
+"bse_opt": 47505.53
+},
+{
+"trade_date": "2025-12-05",
+"nse_cash": 91780.56,
+"bse_cash": 5925.56,
+"nse_io": 50753.95,
+"nse_so": 6932.09,
+"bse_opt": 10381.76
+},
+{
+"trade_date": "2025-12-08",
+"nse_cash": 96755.79,
+"bse_cash": 6989.14,
+"nse_io": 56102.4,
+"nse_so": 7573.93,
+"bse_opt": 10684.94
+},
+{
+"trade_date": "2025-12-09",
+"nse_cash": 106148.28,
+"bse_cash": 7864.96,
+"nse_io": 77379.26,
+"nse_so": 6450.18,
+"bse_opt": 11493.92
+},
+{
+"trade_date": "2025-12-10",
+"nse_cash": 95826.74,
+"bse_cash": 6596.58,
+"nse_io": 42114.56,
+"nse_so": 6297.13,
+"bse_opt": 33805.44
+},
+{
+"trade_date": "2025-12-11",
+"nse_cash": 79300.78,
+"bse_cash": 7253.85,
+"nse_io": 39342.62,
+"nse_so": 5821.24,
+"bse_opt": 53834.16
+},
+{
+"trade_date": "2025-12-12",
+"nse_cash": 86390.02,
+"bse_cash": 7620.57,
+"nse_io": 47867.57,
+"nse_so": 6382.76,
+"bse_opt": 9902.11
+},
+{
+"trade_date": "2025-12-15",
+"nse_cash": 79300.78,
+"bse_cash": 6166.48,
+"nse_io": 48390.25,
+"nse_so": 5272.71,
+"bse_opt": 9599.8
+},
+{
+"trade_date": "2025-12-16",
+"nse_cash": 83984.54,
+"bse_cash": 5685.2,
+"nse_io": 53632.17,
+"nse_so": 4980.32,
+"bse_opt": 8609.33
+},
+{
+"trade_date": "2025-12-17",
+"nse_cash": 85179.75,
+"bse_cash": 6840.06,
+"nse_io": 31167.83,
+"nse_so": 4998.61,
+"bse_opt": 25742.21
+},
+{
+"trade_date": "2025-12-18",
+"nse_cash": 87865.32,
+"bse_cash": 7723.65,
+"nse_io": 31875.63,
+"nse_so": 5426.84,
+"bse_opt": 44660.03
+},
+{
+"trade_date": "2025-12-19",
+"nse_cash": 124141.41,
+"bse_cash": 7843.35,
+"nse_io": 39735.4,
+"nse_so": 6521.6,
+"bse_opt": 8709.54
+},
+{
+"trade_date": "2025-12-22",
+"nse_cash": 97458.45,
+"bse_cash": 6487.67,
+"nse_io": 29849.96,
+"nse_so": 8123.09,
+"bse_opt": 6906.32
+},
+{
+"trade_date": "2025-12-23",
+"nse_cash": 89155.76,
+"bse_cash": 6427.47,
+"nse_io": 45869.0,
+"nse_so": 6077.95,
+"bse_opt": 8173.44
+},
+{
+"trade_date": "2025-12-24",
+"nse_cash": 86241.02,
+"bse_cash": 8328.35,
+"nse_io": 23258.25,
+"nse_so": 6161.43,
+"bse_opt": 32525.35
+},
+{
+"trade_date": "2025-12-26",
+"nse_cash": 81553.79,
+"bse_cash": 6172.0,
+"nse_io": 28262.93,
+"nse_so": 6417.78,
+"bse_opt": 5720.14
+},
+{
+"trade_date": "2025-12-29",
+"nse_cash": 103927.9,
+"bse_cash": 9712.53,
+"nse_io": 37681.46,
+"nse_so": 6316.76,
+"bse_opt": 7001.57
+},
+{
+"trade_date": "2025-12-30",
+"nse_cash": 141795.39,
+"bse_cash": 6826.65,
+"nse_io": 58308.82,
+"nse_so": 6476.03,
+"bse_opt": 8052.32
+},
+{
+"trade_date": "2025-12-31",
+"nse_cash": 100695.76,
+"bse_cash": 8291.64,
+"nse_io": 28904.6,
+"nse_so": 6724.97,
+"bse_opt": 24758.47
+},
+{
+"trade_date": "2026-01-01",
+"nse_cash": 80232.39,
+"bse_cash": 6237.23,
+"nse_io": 19746.32,
+"nse_so": 5523.03,
+"bse_opt": 36788.56
+},
+{
+"trade_date": "2026-01-02",
+"nse_cash": 102438.51,
+"bse_cash": 8126.19,
+"nse_io": 31785.99,
+"nse_so": 8432.95,
+"bse_opt": 7114.55
+},
+{
+"trade_date": "2026-01-05",
+"nse_cash": 104602.45,
+"bse_cash": 8150.27,
+"nse_io": 48890.39,
+"nse_so": 7922.97,
+"bse_opt": 11590.65
+},
+{
+"trade_date": "2026-01-06",
+"nse_cash": 109454.06,
+"bse_cash": 7827.03,
+"nse_io": 54904.36,
+"nse_so": 8753.64,
+"bse_opt": 10460.42
+},
+{
+"trade_date": "2026-01-07",
+"nse_cash": 106463.18,
+"bse_cash": 9166.25,
+"nse_io": 32128.44,
+"nse_so": 8995.07,
+"bse_opt": 27755.87
+},
+{
+"trade_date": "2026-01-08",
+"nse_cash": 108954.13,
+"bse_cash": 10162.09,
+"nse_io": 33760.09,
+"nse_so": 8679.69,
+"bse_opt": 45837.77
+},
+{
+"trade_date": "2026-01-09",
+"nse_cash": 106746.84,
+"bse_cash": 7953.66,
+"nse_io": 58341.07,
+"nse_so": 8921.23,
+"bse_opt": 13034.28
+},
+{
+"trade_date": "2026-01-12",
+"nse_cash": 103691.69,
+"bse_cash": 8012.88,
+"nse_io": 77349.99,
+"nse_so": 7744.18,
+"bse_opt": 15961.84
+},
+{
+"trade_date": "2026-01-13",
+"nse_cash": 101636.97,
+"bse_cash": 7531.63,
+"nse_io": 85854.08,
+"nse_so": 6828.76,
+"bse_opt": 17444.24
+},
+{
+"trade_date": "2026-01-14",
+"nse_cash": 109538.1,
+"bse_cash": 8913.73,
+"nse_io": 38604.15,
+"nse_so": 8746.04,
+"bse_opt": 58291.35
+},
+{
+"trade_date": "2026-01-16",
+"nse_cash": 125067.43,
+"bse_cash": 9177.33,
+"nse_io": 65305.74,
+"nse_so": 9857.72,
+"bse_opt": 14006.51
+},
+{
+"trade_date": "2026-01-19",
+"nse_cash": 111002.74,
+"bse_cash": 7898.24,
+"nse_io": 62463.16,
+"nse_so": 8915.62,
+"bse_opt": 13053.62
+},
+{
+"trade_date": "2026-01-20",
+"nse_cash": 125153.83,
+"bse_cash": 9443.28,
+"nse_io": 74390.62,
+"nse_so": 8368.72,
+"bse_opt": 12505.97
+},
+{
+"trade_date": "2026-01-21",
+"nse_cash": 134135.9,
+"bse_cash": 9489.2,
+"nse_io": 73459.84,
+"nse_so": 9327.41,
+"bse_opt": 55813.76
+},
+{
+"trade_date": "2026-01-22",
+"nse_cash": 129532.89,
+"bse_cash": 9485.58,
+"nse_io": 55061.91,
+"nse_so": 8549.46,
+"bse_opt": 75913.4
+},
+{
+"trade_date": "2026-01-23",
+"nse_cash": 119314.12,
+"bse_cash": 8652.62,
+"nse_io": 78736.32,
+"nse_so": 10038.92,
+"bse_opt": 14587.37
+},
+{
+"trade_date": "2026-01-27",
+"nse_cash": 146643.67,
+"bse_cash": 11128.2,
+"nse_io": 110660.63,
+"nse_so": 9583.87,
+"bse_opt": 16339.68
+},
+{
+"trade_date": "2026-01-28",
+"nse_cash": 139330.51,
+"bse_cash": 10509.54,
+"nse_io": 46603.6,
+"nse_so": 10723.94,
+"bse_opt": 46797.89
+},
+{
+"trade_date": "2026-01-29",
+"nse_cash": 154577.42,
+"bse_cash": 11669.68,
+"nse_io": 40028.43,
+"nse_so": 9652.88,
+"bse_opt": 68278.25
+},
+{
+"trade_date": "2026-01-30",
+"nse_cash": 172680.25,
+"bse_cash": 11523.78,
+"nse_io": 65078.85,
+"nse_so": 10533.8,
+"bse_opt": 13801.85
+},
+{
+"trade_date": "2026-02-01",
+"nse_cash": 116984.25,
+"bse_cash": 9384.73,
+"nse_io": 111933.0,
+"nse_so": 13374.34,
+"bse_opt": 24784.92
+},
+{
+"trade_date": "2026-02-02",
+"nse_cash": 129022.57,
+"bse_cash": 8168.89,
+"nse_io": 93742.85,
+"nse_so": 9321.52,
+"bse_opt": 17543.79
+},
+{
+"trade_date": "2026-02-03",
+"nse_cash": 174055.95,
+"bse_cash": 11841.18,
+"nse_io": 118826.57,
+"nse_so": 11906.89,
+"bse_opt": 19711.6
+},
+{
+"trade_date": "2026-02-04",
+"nse_cash": 135526.9,
+"bse_cash": 10435.04,
+"nse_io": 40191.13,
+"nse_so": 10687.03,
+"bse_opt": 37394.38
+},
+{
+"trade_date": "2026-02-05",
+"nse_cash": 114315.54,
+"bse_cash": 8581.82,
+"nse_io": 32154.33,
+"nse_so": 8317.95,
+"bse_opt": 51557.95
+},
+{
+"trade_date": "2026-02-06",
+"nse_cash": 108655.63,
+"bse_cash": 7514.0,
+"nse_io": 60865.51,
+"nse_so": 8480.38,
+"bse_opt": 12706.37
+},
+{
+"trade_date": "2026-02-09",
+"nse_cash": 114972.5,
+"bse_cash": 8382.87,
+"nse_io": 45572.0,
+"nse_so": 9445.07,
+"bse_opt": 8638.29
+},
+{
+"trade_date": "2026-02-10",
+"nse_cash": 118063.85,
+"bse_cash": 9187.39,
+"nse_io": 56655.15,
+"nse_so": 9779.33,
+"bse_opt": 8797.77
+},
+{
+"trade_date": "2026-02-11",
+"nse_cash": 112625.73,
+"bse_cash": 9358.53,
+"nse_io": 29929.47,
+"nse_so": 10526.16,
+"bse_opt": 25990.81
+},
+{
+"trade_date": "2026-02-12",
+"nse_cash": 119233.39,
+"bse_cash": 10468.66,
+"nse_io": 26991.55,
+"nse_so": 10256.34,
+"bse_opt": 42813.04
+},
+{
+"trade_date": "2026-02-13",
+"nse_cash": 123599.44,
+"bse_cash": 9424.48,
+"nse_io": 49593.77,
+"nse_so": 11035.6,
+"bse_opt": 10429.61
+},
+{
+"trade_date": "2026-02-16",
+"nse_cash": 89436.36,
+"bse_cash": 7505.87,
+"nse_io": 58720.69,
+"nse_so": 8234.55,
+"bse_opt": 11391.63
+},
+{
+"trade_date": "2026-02-17",
+"nse_cash": 95690.63,
+"bse_cash": 6866.89,
+"nse_io": 74624.53,
+"nse_so": 7998.08,
+"bse_opt": 11226.87
+},
+{
+"trade_date": "2026-02-18",
+"nse_cash": 92768.41,
+"bse_cash": 7022.73,
+"nse_io": 37895.94,
+"nse_so": 7532.39,
+"bse_opt": 31391.94
+},
+{
+"trade_date": "2026-02-19",
+"nse_cash": 93811.52,
+"bse_cash": 7645.26,
+"nse_io": 44057.4,
+"nse_so": 6646.56,
+"bse_opt": 59310.34
+},
+{
+"trade_date": "2026-02-20",
+"nse_cash": 92643.79,
+"bse_cash": 7562.21,
+"nse_io": 78240.91,
+"nse_so": 7218.39,
+"bse_opt": 14746.16
+},
+{
+"trade_date": "2026-02-23",
+"nse_cash": 101052.48,
+"bse_cash": 7379.46,
+"nse_io": 75549.88,
+"nse_so": 7416.95,
+"bse_opt": 11966.12
+},
+{
+"trade_date": "2026-02-24",
+"nse_cash": 113004.6,
+"bse_cash": 7307.02,
+"nse_io": 94539.55,
+"nse_so": 7481.46,
+"bse_opt": 12640.23
+},
+{
+"trade_date": "2026-02-25",
+"nse_cash": 108503.78,
+"bse_cash": 10464.47,
+"nse_io": 46575.46,
+"nse_so": 8430.6,
+"bse_opt": 41017.73
+},
+{
+"trade_date": "2026-02-26",
+"nse_cash": 108665.76,
+"bse_cash": 10029.74,
+"nse_io": 40495.09,
+"nse_so": 6831.99,
+"bse_opt": 65720.75
+},
+{
+"trade_date": "2026-02-27",
+"nse_cash": 144962.74,
+"bse_cash": 8002.44,
+"nse_io": 66814.4,
+"nse_so": 6292.6,
+"bse_opt": 12283.45
+},
+{
+"trade_date": "2026-03-02",
+"nse_cash": 135372.72,
+"bse_cash": 11505.69,
+"nse_io": 116117.42,
+"nse_so": 8146.9,
+"bse_opt": 17949.09
+},
+{
+"trade_date": "2026-03-04",
+"nse_cash": 140954.35,
+"bse_cash": 10418.94,
+"nse_io": 70519.9,
+"nse_so": 9249.14,
+"bse_opt": 52828.22
+},
+{
+"trade_date": "2026-03-05",
+"nse_cash": 124022.64,
+"bse_cash": 9258.1,
+"nse_io": 59010.84,
+"nse_so": 8558.09,
+"bse_opt": 82816.91
+},
+{
+"trade_date": "2026-03-06",
+"nse_cash": 110554.19,
+"bse_cash": 8028.4,
+"nse_io": 76982.68,
+"nse_so": 8064.05,
+"bse_opt": 13521.96
+},
+{
+"trade_date": "2026-03-09",
+"nse_cash": 116595.57,
+"bse_cash": 9658.54,
+"nse_io": 103140.25,
+"nse_so": 9923.49,
+"bse_opt": 16419.63
+},
+{
+"trade_date": "2026-03-10",
+"nse_cash": 114279.83,
+"bse_cash": 7631.26,
+"nse_io": 96897.39,
+"nse_so": 7641.22,
+"bse_opt": 12706.07
+},
+{
+"trade_date": "2026-03-11",
+"nse_cash": 110325.31,
+"bse_cash": 7544.78,
+"nse_io": 56501.05,
+"nse_so": 8160.51,
+"bse_opt": 48035.79
+},
+{
+"trade_date": "2026-03-12",
+"nse_cash": 123891.41,
+"bse_cash": 8906.17,
+"nse_io": 52202.93,
+"nse_so": 8393.46,
+"bse_opt": 77891.19
+},
+{
+"trade_date": "2026-03-13",
+"nse_cash": 121547.53,
+"bse_cash": 8802.46,
+"nse_io": 92552.46,
+"nse_so": 9366.18,
+"bse_opt": 13204.79
+},
+{
+"trade_date": "2026-03-16",
+"nse_cash": 124924.28,
+"bse_cash": 7819.1,
+"nse_io": 110013.59,
+"nse_so": 8064.13,
+"bse_opt": 17971.38
+},
+{
+"trade_date": "2026-03-17",
+"nse_cash": 107083.39,
+"bse_cash": 8423.78,
+"nse_io": 110707.17,
+"nse_so": 6707.13,
+"bse_opt": 15473.09
+},
+{
+"trade_date": "2026-03-18",
+"nse_cash": 107541.69,
+"bse_cash": 8020.58,
+"nse_io": 51713.45,
+"nse_so": 7558.92,
+"bse_opt": 42367.33
+},
+{
+"trade_date": "2026-03-19",
+"nse_cash": 112093.07,
+"bse_cash": 8198.28,
+"nse_io": 55123.16,
+"nse_so": 7330.07,
+"bse_opt": 69373.46
+},
+{
+"trade_date": "2026-03-20",
+"nse_cash": 140228.16,
+"bse_cash": 8048.39,
+"nse_io": 91152.42,
+"nse_so": 8859.41,
+"bse_opt": 15001.51
+},
+{
+"trade_date": "2026-03-23",
+"nse_cash": 130437.72,
+"bse_cash": 10048.38,
+"nse_io": 103216.85,
+"nse_so": 8950.26,
+"bse_opt": 15618.1
+},
+{
+"trade_date": "2026-03-24",
+"nse_cash": 128067.97,
+"bse_cash": 10640.32,
+"nse_io": 125450.68,
+"nse_so": 7599.9,
+"bse_opt": 21587.61
+},
+{
+"trade_date": "2026-03-25",
+"nse_cash": 126314.43,
+"bse_cash": 12181.02,
+"nse_io": 52630.92,
+"nse_so": 8137.97,
+"bse_opt": 72196.19
+},
+{
+"trade_date": "2026-03-27",
+"nse_cash": 157107.82,
+"bse_cash": 12496.51,
+"nse_io": 82899.0,
+"nse_so": 7918.84,
+"bse_opt": 10052.94
+},
+{
+"trade_date": "2026-03-30",
+"nse_cash": 146863.59,
+"bse_cash": 10503.06,
+"nse_io": 117835.76,
+"nse_so": 8758.87,
+"bse_opt": 12787.76
+},
+{
+"trade_date": "2026-04-01",
+"nse_cash": 127242.24,
+"bse_cash": 8939.53,
+"nse_io": 52771.17,
+"nse_so": 7876.66,
+"bse_opt": 43456.73
+},
+{
+"trade_date": "2026-04-02",
+"nse_cash": 117090.06,
+"bse_cash": 8541.27,
+"nse_io": 52904.94,
+"nse_so": 7018.65,
+"bse_opt": 85211.36
+},
+{
+"trade_date": "2026-04-06",
+"nse_cash": 116115.39,
+"bse_cash": 8507.39,
+"nse_io": 94250.25,
+"nse_so": 7634.9,
+"bse_opt": 16337.04
+},
+{
+"trade_date": "2026-04-07",
+"nse_cash": 110461.9,
+"bse_cash": 6474.51,
+"nse_io": 100727.61,
+"nse_so": 5937.5,
+"bse_opt": 14206.35
+},
+{
+"trade_date": "2026-04-08",
+"nse_cash": 165926.19,
+"bse_cash": 12222.82,
+"nse_io": 47204.61,
+"nse_so": 10702.6,
+"bse_opt": 41801.03
+},
+{
+"trade_date": "2026-04-09",
+"nse_cash": 133363.65,
+"bse_cash": 10333.62,
+"nse_io": 42532.94,
+"nse_so": 7587.84,
+"bse_opt": 77764.39
+},
+{
+"trade_date": "2026-04-10",
+"nse_cash": 131731.07,
+"bse_cash": 8812.58,
+"nse_io": 59968.94,
+"nse_so": 8381.5,
+"bse_opt": 10064.54
+},
+{
+"trade_date": "2026-04-13",
+"nse_cash": 129987.55,
+"bse_cash": 9178.37,
+"nse_io": 82656.58,
+"nse_so": 7167.94,
+"bse_opt": 11914.66
+},
+{
+"trade_date": "2026-04-15",
+"nse_cash": 145330.45,
+"bse_cash": 9536.61,
+"nse_io": 36788.08,
+"nse_so": 8756.79,
+"bse_opt": 34756.09
+},
+{
+"trade_date": "2026-04-16",
+"nse_cash": 152709.34,
+"bse_cash": 11433.73,
+"nse_io": 36629.99,
+"nse_so": 8385.32,
+"bse_opt": 69735.18
+},
+{
+"trade_date": "2026-04-17",
+"nse_cash": 151704.89,
+"bse_cash": 10101.13,
+"nse_io": 48281.9,
+"nse_so": 9657.04,
+"bse_opt": 9091.8
+},
+{
+"trade_date": "2026-04-20",
+"nse_cash": 129979.03,
+"bse_cash": 7970.05,
+"nse_io": 63091.57,
+"nse_so": 7727.46,
+"bse_opt": 11897.99
+},
+{
+"trade_date": "2026-04-21",
+"nse_cash": 127825.49,
+"bse_cash": 7813.22,
+"nse_io": 65392.39,
+"nse_so": 7389.73,
+"bse_opt": 8994.56
+},
+{
+"trade_date": "2026-04-22",
+"nse_cash": 137113.19,
+"bse_cash": 9851.69,
+"nse_io": 35018.23,
+"nse_so": 9655.53,
+"bse_opt": 33270.03
+},
+{
+"trade_date": "2026-04-23",
+"nse_cash": 135481.34,
+"bse_cash": 10867.86,
+"nse_io": 31802.94,
+"nse_so": 8421.05,
+"bse_opt": 57146.19
+},
+{
+"trade_date": "2026-04-24",
+"nse_cash": 130943.28,
+"bse_cash": 9235.77,
+"nse_io": 56668.27,
+"nse_so": 8819.31,
+"bse_opt": 9331.68
+},
+{
+"trade_date": "2026-04-27",
+"nse_cash": 131255.64,
+"bse_cash": 8993.09,
+"nse_io": 60949.38,
+"nse_so": 8922.42,
+"bse_opt": 8892.28
+},
+{
+"trade_date": "2026-04-28",
+"nse_cash": 138087.33,
+"bse_cash": 8053.92,
+"nse_io": 79191.43,
+"nse_so": 8346.48,
+"bse_opt": 9300.88
+},
+{
+"trade_date": "2026-04-29",
+"nse_cash": 139280.09,
+"bse_cash": 9148.61,
+"nse_io": 39068.58,
+"nse_so": 8964.75,
+"bse_opt": 37082.61
+},
+{
+"trade_date": "2026-04-30",
+"nse_cash": 142553.51,
+"bse_cash": 10445.89,
+"nse_io": 38491.6,
+"nse_so": 8006.71,
+"bse_opt": 72741.93
+},
+{
+"trade_date": "2026-05-04",
+"nse_cash": 136831.09,
+"bse_cash": 17077.73,
+"nse_io": 79431.02,
+"nse_so": 9312.62,
+"bse_opt": 14988.4
+},
+{
+"trade_date": "2026-05-05",
+"nse_cash": 128629.18,
+"bse_cash": 8255.28,
+"nse_io": 85183.48,
+"nse_so": 7407.36,
+"bse_opt": 11977.86
+},
+{
+"trade_date": "2026-05-06",
+"nse_cash": 151681.61,
+"bse_cash": 11283.53,
+"nse_io": 49308.99,
+"nse_so": 10986.23,
+"bse_opt": 51118.18
+},
+{
+"trade_date": "2026-05-07",
+"nse_cash": 153598.59,
+"bse_cash": 11775.29,
+"nse_io": 38371.39,
+"nse_so": 9869.22,
+"bse_opt": 76281.9
+},
+{
+"trade_date": "2026-05-08",
+"nse_cash": 147669.21,
+"bse_cash": 9962.78,
+"nse_io": 54997.3,
+"nse_so": 10628.42,
+"bse_opt": 10973.37
+},
+{
+"trade_date": "2026-05-11",
+"nse_cash": 138987.18,
+"bse_cash": 11272.82,
+"nse_io": 64087.65,
+"nse_so": 9675.67,
+"bse_opt": 11712.96
+},
+{
+"trade_date": "2026-05-12",
+"nse_cash": 144731.74,
+"bse_cash": 10259.15,
+"nse_io": 81012.02,
+"nse_so": 8198.11,
+"bse_opt": 12078.82
+},
+{
+"trade_date": "2026-05-13",
+"nse_cash": 138604.95,
+"bse_cash": 9885.49,
+"nse_io": 49054.03,
+"nse_so": 9553.09,
+"bse_opt": 53287.94
+},
+{
+"trade_date": "2026-05-14",
+"nse_cash": 143017.67,
+"bse_cash": 12362.14,
+"nse_io": 40668.63,
+"nse_so": 10410.52,
+"bse_opt": 78786.0
+},
+{
+"trade_date": "2026-05-15",
+"nse_cash": 133227.25,
+"bse_cash": 9823.35,
+"nse_io": 65859.03,
+"nse_so": 9319.24,
+"bse_opt": 12894.25
+},
+{
+"trade_date": "2026-05-18",
+"nse_cash": 123450.3,
+"bse_cash": 8734.85,
+"nse_io": 80782.81,
+"nse_so": 8245.78,
+"bse_opt": 15773.94
+},
+{
+"trade_date": "2026-05-19",
+"nse_cash": 131116.02,
+"bse_cash": 8324.76,
+"nse_io": 77539.49,
+"nse_so": 8279.26,
+"bse_opt": 11598.34
+},
+{
+"trade_date": "2026-05-20",
+"nse_cash": 114524.98,
+"bse_cash": 9112.41,
+"nse_io": 42552.8,
+"nse_so": 7481.61,
+"bse_opt": 42310.05
+},
+{
+"trade_date": "2026-05-21",
+"nse_cash": 121251.1,
+"bse_cash": 10102.59,
+"nse_io": 36937.23,
+"nse_so": 7389.17,
+"bse_opt": 66686.76
+},
+{
+"trade_date": "2026-05-22",
+"nse_cash": 113338.48,
+"bse_cash": 10139.33,
+"nse_io": 53802.81,
+"nse_so": 7676.74,
+"bse_opt": 9659.01
+},
+{
+"trade_date": "2026-05-25",
+"nse_cash": 119581.17,
+"bse_cash": 8761.59,
+"nse_io": 51655.36,
+"nse_so": 7438.06,
+"bse_opt": 9345.85
+},
+{
+"trade_date": "2026-05-26",
+"nse_cash": 127513.37,
+"bse_cash": 9474.72,
+"nse_io": 75912.89,
+"nse_so": 7058.41,
+"bse_opt": 10355.72
+},
+{
+"trade_date": "2026-05-27",
+"nse_cash": 135899.66,
+"bse_cash": 11947.97,
+"nse_io": 27131.44,
+"nse_so": 7502.31,
+"bse_opt": 51660.1
+},
+{
+"trade_date": "2026-05-29",
+"nse_cash": 287452.34,
+"bse_cash": 12770.8,
+"nse_io": 58583.2,
+"nse_so": 8418.41,
+"bse_opt": 12198.35
+},
+{
+"trade_date": "2026-06-01",
+"nse_cash": 132672.24,
+"bse_cash": 8873.95,
+"nse_io": 65921.23,
+"nse_so": 6353.28,
+"bse_opt": 12300.55
+},
+{
+"trade_date": "2026-06-02",
+"nse_cash": 143327.01,
+"bse_cash": 8827.27,
+"nse_io": 92357.17,
+"nse_so": 6875.41,
+"bse_opt": 13567.71
+},
+{
+"trade_date": "2026-06-03",
+"nse_cash": 135352.0,
+"bse_cash": 8558.73,
+"nse_io": 53079.05,
+"nse_so": 7163.25,
+"bse_opt": 56128.32
+},
+{
+"trade_date": "2026-06-04",
+"nse_cash": 128983.62,
+"bse_cash": 9459.72,
+"nse_io": 36712.33,
+"nse_so": 5930.09,
+"bse_opt": 71679.86
+},
+{
+"trade_date": "2026-06-05",
+"nse_cash": 128870.62,
+"bse_cash": 9914.16,
+"nse_io": 71636.91,
+"nse_so": 7549.6,
+"bse_opt": 14008.57
+},
+{
+"trade_date": "2026-06-08",
+"nse_cash": 109230.2,
+"bse_cash": 9054.54,
+"nse_io": 64505.33,
+"nse_so": 5550.1,
+"bse_opt": 11394.31
+},
+{
+"trade_date": "2026-06-09",
+"nse_cash": 123202.8,
+"bse_cash": 8183.88,
+"nse_io": 74670.55,
+"nse_so": 5609.65,
+"bse_opt": 11390.47
+},
+{
+"trade_date": "2026-06-10",
+"nse_cash": 119714.14,
+"bse_cash": 8413.1,
+"nse_io": 38624.08,
+"nse_so": 6237.6,
+"bse_opt": 37691.29
+},
+{
+"trade_date": "2026-06-11",
+"nse_cash": 112502.22,
+"bse_cash": 9067.6,
+"nse_io": 34962.43,
+"nse_so": 5229.99,
+"bse_opt": 65749.82
+},
+{
+"trade_date": "2026-06-12",
+"nse_cash": 118837.67,
+"bse_cash": 9046.46,
+"nse_io": 65396.03,
+"nse_so": 7478.05,
+"bse_opt": 13080.84
+},
+{
+"trade_date": "2026-06-15",
+"nse_cash": 138642.27,
+"bse_cash": 0.0,
+"nse_io": 61849.71,
+"nse_so": 8478.92,
+"bse_opt": 12080.9
+},
+{
+"trade_date": "2026-06-16",
+"nse_cash": 119619.41,
+"bse_cash": 12762.09,
+"nse_io": 60543.42,
+"nse_so": 6366.66,
+"bse_opt": 9156.99
+},
+{
+"trade_date": "2026-06-17",
+"nse_cash": 133368.61,
+"bse_cash": 10129.88,
+"nse_io": 27850.99,
+"nse_so": 7912.62,
+"bse_opt": 26778.55
+},
+{
+"trade_date": "2026-06-18",
+"nse_cash": 133872.05,
+"bse_cash": 11460.17,
+"nse_io": 26169.6,
+"nse_so": 7295.93,
+"bse_opt": 48803.09
+},
+{
+"trade_date": "2026-06-19",
+"nse_cash": 159981.95,
+"bse_cash": 10879.02,
+"nse_io": 46415.12,
+"nse_so": 8163.13,
+"bse_opt": 8793.2
+},
+{
+"trade_date": "2026-06-22",
+"nse_cash": 118948.0,
+"bse_cash": 9561.06,
+"nse_io": 34667.53,
+"nse_so": 6681.1,
+"bse_opt": 6763.38
+},
+{
+"trade_date": "2026-06-23",
+"nse_cash": 131784.41,
+"bse_cash": 9983.62,
+"nse_io": 72976.33,
+"nse_so": 6468.19,
+"bse_opt": 11679.98
+},
+{
+"trade_date": "2026-06-24",
+"nse_cash": 122776.22,
+"bse_cash": 11802.1,
+"nse_io": 38402.86,
+"nse_so": 7505.61,
+"bse_opt": 38301.27
+},
+{
+"trade_date": "2026-06-25",
+"nse_cash": 136051.69,
+"bse_cash": 11942.76,
+"nse_io": 31566.75,
+"nse_so": 7624.44,
+"bse_opt": 60683.18
+},
+{
+"trade_date": "2026-06-29",
+"nse_cash": 183491.87,
+"bse_cash": 10049.71,
+"nse_io": 65237.84,
+"nse_so": 7388.12,
+"bse_opt": 9933.41
+},
+{
+"trade_date": "2026-06-30",
+"nse_cash": 140407.22,
+"bse_cash": 10973.32,
+"nse_io": 85188.47,
+"nse_so": 7037.99,
+"bse_opt": 10369.49
+},
+{
+"trade_date": "2026-07-01",
+"nse_cash": 119242.61,
+"bse_cash": 9941.31,
+"nse_io": 31245.92,
+"nse_so": 7639.49,
+"bse_opt": 35511.27
+},
+{
+"trade_date": "2026-07-02",
+"nse_cash": 122377.81,
+"bse_cash": 11203.19,
+"nse_io": 25966.41,
+"nse_so": 7342.17,
+"bse_opt": 54702.14
+},
+{
+"trade_date": "2026-07-03",
+"nse_cash": 131653.67,
+"bse_cash": 10591.77,
+"nse_io": 40096.44,
+"nse_so": 8660.0,
+"bse_opt": 9211.55
+},
+{
+"trade_date": "2026-07-06",
+"nse_cash": 112696.35,
+"bse_cash": 8800.84,
+"nse_io": 38844.04,
+"nse_so": 7136.27,
+"bse_opt": 8708.04
+},
+{
+"trade_date": "2026-07-07",
+"nse_cash": 127892.33,
+"bse_cash": 9567.26,
+"nse_io": 59870.52,
+"nse_so": 7618.34,
+"bse_opt": 10159.28
+},
+{
+"trade_date": "2026-07-08",
+"nse_cash": 138389.65,
+"bse_cash": 10854.76,
+"nse_io": 46755.46,
+"nse_so": 9033.29,
+"bse_opt": 49937.06
+},
+{
+"trade_date": "2026-07-09",
+"nse_cash": 124498.75,
+"bse_cash": 11638.5,
+"nse_io": 31074.54,
+"nse_so": 7674.07,
+"bse_opt": 67748.22
+},
+{
+"trade_date": "2026-07-10",
+"nse_cash": 122157.67,
+"bse_cash": 9740.89,
+"nse_io": 41927.4,
+"nse_so": 8833.11,
+"bse_opt": 9616.29
+},
+{
+"trade_date": "2026-07-13",
+"nse_cash": 121684.26,
+"bse_cash": 9691.5,
+"nse_io": 59716.18,
+"nse_so": 8449.72,
+"bse_opt": 13627.58
+},
+{
+"trade_date": "2026-07-14",
+"nse_cash": 120723.96,
+"bse_cash": 11663.34,
+"nse_io": 70300.85,
+"nse_so": 7355.98,
+"bse_opt": 11488.42
+},
+{
+"trade_date": "2026-07-15",
+"nse_cash": 120941.56,
+"bse_cash": 9434.32,
+"nse_io": 32055.27,
+"nse_so": 8320.04,
+"bse_opt": 37874.51
+},
+{
+"trade_date": "2026-07-16",
+"nse_cash": 122437.16,
+"bse_cash": 10536.34,
+"nse_io": 24021.74,
+"nse_so": 8706.81,
+"bse_opt": 51671.18
+},
+{
+"trade_date": "2026-07-17",
+"nse_cash": 114403.0,
+"bse_cash": 9391.3,
+"nse_io": 50151.97,
+"nse_so": 8819.74,
+"bse_opt": 11263.89
+},
+{
+"trade_date": "2026-07-20",
+"nse_cash": 107795.45,
+"bse_cash": 8391.09,
+"nse_io": 53476.07,
+"nse_so": 7539.37,
+"bse_opt": 11659.42
+},
+{
+"trade_date": "2026-07-21",
+"nse_cash": 113350.33,
+"bse_cash": 9230.26,
+"nse_io": 54820.2,
+"nse_so": 6763.69,
+"bse_opt": 9057.45
+},
+{
+"trade_date": "2026-07-22",
+"nse_cash": 111459.97,
+"bse_cash": 8999.27,
+"nse_io": 29933.15,
+"nse_so": 7756.78,
+"bse_opt": 32504.04
+},
+{
+"trade_date": "2026-07-23",
+"nse_cash": 111749.62,
+"bse_cash": 9619.84,
+"nse_io": 29957.46,
+"nse_so": 7529.98,
+"bse_opt": 52092.16
+},
+{
+"trade_date": "2026-07-24",
+"nse_cash": 110468.21,
+"bse_cash": 8933.18,
+"nse_io": 58387.93,
+"nse_so": 7443.76,
+"bse_opt": 10685.42
+},
+{
+"trade_date": "2026-07-27",
+"nse_cash": 106403.84,
+"bse_cash": 7991.64,
+"nse_io": 49777.5,
+"nse_so": 7185.47,
+"bse_opt": 8384.29
+},
+{
+"trade_date": "2026-07-28",
+"nse_cash": 124665.66,
+"bse_cash": 8434.01,
+"nse_io": 58914.47,
+"nse_so": 8579.87,
+"bse_opt": 7517.61
+},
+{
+"trade_date": "2026-07-29",
+"nse_cash": 128099.99,
+"bse_cash": 10766.52,
+"nse_io": 23301.56,
+"nse_so": 9126.65,
+"bse_opt": 23889.76
+},
+{
+"trade_date": "2026-07-30",
+"nse_cash": 125195.58,
+"bse_cash": 11348.28,
+"nse_io": 23760.19,
+"nse_so": 7426.15,
+"bse_opt": 48266.73
+},
+{
+"trade_date": "2026-07-31",
+"nse_cash": 131274.78,
+"bse_cash": 10248.71,
+"nse_io": 36152.43,
+"nse_so": 9411.05,
+"bse_opt": 8648.79
+},
+{
+"trade_date": "2026-08-03",
+"nse_cash": 123775.4,
+"bse_cash": 10264.22,
+"nse_io": 36865.95,
+"nse_so": 9381.06,
+"bse_opt": 7565.29
+},
+{
+"trade_date": "2026-08-04",
+"nse_cash": 124572.29,
+"bse_cash": 9508.06,
+"nse_io": 65365.11,
+"nse_so": 7489.62,
+"bse_opt": 10840.3
+},
+{
+"trade_date": "2026-08-05",
+"nse_cash": 131134.15,
+"bse_cash": 11192.02,
+"nse_io": 35045.64,
+"nse_so": 8263.31,
+"bse_opt": 42337.9
+},
+{
+"trade_date": "2026-08-06",
+"nse_cash": 135611.71,
+"bse_cash": 12226.48,
+"nse_io": 25197.72,
+"nse_so": 8773.34,
+"bse_opt": 48736.61
+},
+{
+"trade_date": "2026-08-07",
+"nse_cash": 118540.8,
+"bse_cash": 10834.3,
+"nse_io": 36195.04,
+"nse_so": 9833.02,
+"bse_opt": 7842.18
+},
+{
+"trade_date": "2026-08-10",
+"nse_cash": 121345.68,
+"bse_cash": 10222.17,
+"nse_io": 37796.31,
+"nse_so": 8699.16,
+"bse_opt": 8072.93
+},
+{
+"trade_date": "2026-08-11",
+"nse_cash": 121035.77,
+"bse_cash": 10110.13,
+"nse_io": 44624.41,
+"nse_so": 7754.63,
+"bse_opt": 7051.02
+},
+{
+"trade_date": "2026-08-12",
+"nse_cash": 130811.4,
+"bse_cash": 11369.1,
+"nse_io": 26419.78,
+"nse_so": 8491.73,
+"bse_opt": 26721.47
+},
+{
+"trade_date": "2026-08-13",
+"nse_cash": 111635.71,
+"bse_cash": 13418.69,
+"nse_io": 19470.7,
+"nse_so": 7135.97,
+"bse_opt": 41518.43
+},
+{
+"trade_date": "2026-08-14",
+"nse_cash": 105584.66,
+"bse_cash": 9238.15,
+"nse_io": 30562.29,
+"nse_so": 7466.35,
+"bse_opt": 7355.79
+},
+{
+"trade_date": "2026-08-17",
+"nse_cash": 108280.21,
+"bse_cash": 9127.63,
+"nse_io": 39001.93,
+"nse_so": 5983.01,
+"bse_opt": 8742.55
+},
+{
+"trade_date": "2026-08-18",
+"nse_cash": 109466.84,
+"bse_cash": 10941.99,
+"nse_io": 47446.48,
+"nse_so": 5953.19,
+"bse_opt": 7976.97
+},
+{
+"trade_date": "2026-08-19",
+"nse_cash": 110315.23,
+"bse_cash": 9328.13,
+"nse_io": 23923.14,
+"nse_so": 5800.2,
+"bse_opt": 24791.79
+},
+{
+"trade_date": "2026-08-20",
+"nse_cash": 110062.15,
+"bse_cash": 9366.7,
+"nse_io": 19684.02,
+"nse_so": 6017.9,
+"bse_opt": 31204.1
+},
+{
+"trade_date": "2026-08-21",
+"nse_cash": 111233.2,
+"bse_cash": 10021.03,
+"nse_io": 25542.22,
+"nse_so": 6102.13,
+"bse_opt": 5393.93
+},
+{
+"trade_date": "2026-08-24",
+"nse_cash": 110202.4,
+"bse_cash": 11505.25,
+"nse_io": 37348.73,
+"nse_so": 6228.05,
+"bse_opt": 7036.59
+},
+{
+"trade_date": "2026-08-25",
+"nse_cash": 106655.03,
+"bse_cash": 7978.71,
+"nse_io": 59935.8,
+"nse_so": 6580.13,
+"bse_opt": 8721.0
+},
+{
+"trade_date": "2026-08-26",
+"nse_cash": 115584.7,
+"bse_cash": 13162.63,
+"nse_io": 23293.0,
+"nse_so": 6087.67,
+"bse_opt": 24931.23
+},
+{
+"trade_date": "2026-08-27",
+"nse_cash": 115071.41,
+"bse_cash": 13353.49,
+"nse_io": 21941.71,
+"nse_so": 5732.44,
+"bse_opt": 47232.4
+},
+{
+"trade_date": "2026-08-28",
+"nse_cash": 110671.11,
+"bse_cash": 9467.02,
+"nse_io": 37293.5,
+"nse_so": 5409.23,
+"bse_opt": 8572.97
+},
+{
+"trade_date": "2026-08-31",
+"nse_cash": 181717.85,
+"bse_cash": 9767.57,
+"nse_io": 46229.41,
+"nse_so": 6615.56,
+"bse_opt": 9473.39
+},
+{
+"trade_date": "2026-09-01",
+"nse_cash": 124032.6,
+"bse_cash": 9027.87,
+"nse_io": 70314.03,
+"nse_so": 6253.43,
+"bse_opt": 11753.51
+},
+{
+"trade_date": "2026-09-02",
+"nse_cash": 115184.52,
+"bse_cash": 21202.72,
+"nse_io": 30683.14,
+"nse_so": 6694.85,
+"bse_opt": 35481.72
+},
+{
+"trade_date": "2026-09-03",
+"nse_cash": 111519.04,
+"bse_cash": 10639.7,
+"nse_io": 26193.46,
+"nse_so": 5734.7,
+"bse_opt": 49476.06
+},
+{
+"trade_date": "2026-09-04",
+"nse_cash": 116163.36,
+"bse_cash": 13164.71,
+"nse_io": 38768.11,
+"nse_so": 6639.52,
+"bse_opt": 8026.61
+},
+{
+"trade_date": "2026-09-07",
+"nse_cash": 102943.51,
+"bse_cash": 8696.71,
+"nse_io": 38773.4,
+"nse_so": 5600.88,
+"bse_opt": 7434.95
+},
+{
+"trade_date": "2026-09-08",
+"nse_cash": 108364.68,
+"bse_cash": 9436.53,
+"nse_io": 54816.66,
+"nse_so": 5630.26,
+"bse_opt": 8039.76
+},
+{
+"trade_date": "2026-09-09",
+"nse_cash": 121444.96,
+"bse_cash": 12340.73,
+"nse_io": 32172.79,
+"nse_so": 7268.77,
+"bse_opt": 33789.28
+},
+{
+"trade_date": "2026-09-10",
+"nse_cash": 104645.48,
+"bse_cash": 9125.43,
+"nse_io": 24367.07,
+"nse_so": 5081.84,
+"bse_opt": 47613.9
+},
+{
+"trade_date": "2026-09-11",
+"nse_cash": 115983.63,
+"bse_cash": 9377.67,
+"nse_io": 54399.73,
+"nse_so": 7227.64,
+"bse_opt": 9822.61
+},
+{
+"trade_date": "2026-09-15",
+"nse_cash": 115198.01,
+"bse_cash": 8888.39,
+"nse_io": 69641.33,
+"nse_so": 7042.05,
+"bse_opt": 10743.3
+},
+{
+"trade_date": "2026-09-16",
+"nse_cash": 110767.64,
+"bse_cash": 8462.82,
+"nse_io": 34419.94,
+"nse_so": 6205.29,
+"bse_opt": 35964.39
+},
+{
+"trade_date": "2026-09-17",
+"nse_cash": 98222.21,
+"bse_cash": 7711.0,
+"nse_io": 30544.07,
+"nse_so": 5540.93,
+"bse_opt": 54297.53
+},
+{
+"trade_date": "2026-09-18",
+"nse_cash": 145409.16,
+"bse_cash": 10290.33,
+"nse_io": 36896.82,
+"nse_so": 5992.03,
+"bse_opt": 7427.19
+},
+{
+"trade_date": "2026-09-21",
+"nse_cash": 101800.94,
+"bse_cash": 8171.71,
+"nse_io": 35393.29,
+"nse_so": 5531.44,
+"bse_opt": 7140.55
+},
+{
+"trade_date": "2026-09-22",
+"nse_cash": 104968.66,
+"bse_cash": 9499.18,
+"nse_io": 61531.11,
+"nse_so": 5567.46,
+"bse_opt": 10315.33
+},
+{
+"trade_date": "2026-09-23",
+"nse_cash": 108643.55,
+"bse_cash": 11228.55,
+"nse_io": 24895.4,
+"nse_so": 5351.21,
+"bse_opt": 26185.04
+},
+{
+"trade_date": "2026-09-24",
+"nse_cash": 115328.21,
+"bse_cash": 20672.36,
+"nse_io": 33926.88,
+"nse_so": 7331.01,
+"bse_opt": 51788.57
+},
+{
+"trade_date": "2026-09-25",
+"nse_cash": 102762.23,
+"bse_cash": 13080.64,
+"nse_io": 48814.76,
+"nse_so": 7097.15,
+"bse_opt": 8060.66
+},
+{
+"trade_date": "2026-09-28",
+"nse_cash": 100535.2,
+"bse_cash": 9383.26,
+"nse_io": 61905.58,
+"nse_so": 6950.71,
+"bse_opt": 8926.85
+},
+{
+"trade_date": "2026-09-29",
+"nse_cash": 161564.73,
+"bse_cash": 10575.75,
+"nse_io": 93855.01,
+"nse_so": 7705.28,
+"bse_opt": 10997.79
+},
+{
+"trade_date": "2026-09-30",
+"nse_cash": 126128.84,
+"bse_cash": 11735.36,
+"nse_io": 39700.81,
+"nse_so": 6192.36,
+"bse_opt": 44864.44
+},
+{
+"trade_date": "2026-10-01",
+"nse_cash": 131806.96,
+"bse_cash": 12096.99,
+"nse_io": 46976.06,
+"nse_so": 7201.37,
+"bse_opt": 78818.08
+},
+{
+"trade_date": "2026-10-05",
+"nse_cash": 116072.71,
+"bse_cash": 10545.13,
+"nse_io": 76090.52,
+"nse_so": 6136.11,
+"bse_opt": 14193.68
+},
+{
+"trade_date": "2026-10-06",
+"nse_cash": 109747.99,
+"bse_cash": 9498.23,
+"nse_io": 66208.36,
+"nse_so": 6126.52,
+"bse_opt": 10656.19
+},
+{
+"trade_date": "2026-10-07",
+"nse_cash": 115268.61,
+"bse_cash": 11076.56,
+"nse_io": 40961.74,
+"nse_so": 6557.05,
+"bse_opt": 45254.39
+},
+{
+"trade_date": "2026-10-08",
+"nse_cash": 117091.26,
+"bse_cash": 20444.39,
+"nse_io": 39535.02,
+"nse_so": 7047.28,
+"bse_opt": 66559.37
+},
+{
+"trade_date": "2026-10-09",
+"nse_cash": 100417.24,
+"bse_cash": 9593.82,
+"nse_io": 62332.59,
+"nse_so": 6852.99,
+"bse_opt": 10918.19
+},
+{
+"trade_date": "2026-10-12",
+"nse_cash": 96863.11,
+"bse_cash": 10478.38,
+"nse_io": 67275.49,
+"nse_so": 5264.91,
+"bse_opt": 12534.65
+},
+{
+"trade_date": "2026-10-13",
+"nse_cash": 105778.88,
+"bse_cash": 9891.58,
+"nse_io": 87584.3,
+"nse_so": 7520.29,
+"bse_opt": 14431.87
+},
+{
+"trade_date": "2026-10-14",
+"nse_cash": 116560.35,
+"bse_cash": 9965.22,
+"nse_io": 45297.41,
+"nse_so": 7636.04,
+"bse_opt": 49418.79
+},
+{
+"trade_date": "2026-10-15",
+"nse_cash": 119050.63,
+"bse_cash": 10041.45,
+"nse_io": 43653.53,
+"nse_so": 8456.42,
+"bse_opt": 74418.14
+},
+{
+"trade_date": "2026-10-16",
+"nse_cash": 122601.09,
+"bse_cash": 9292.14,
+"nse_io": 68141.19,
+"nse_so": 8151.1,
+"bse_opt": 12553.59
+},
+{
+"trade_date": "2026-10-19",
+"nse_cash": 96325.64,
+"bse_cash": 7474.78,
+"nse_io": 88644.39,
+"nse_so": 6372.02,
+"bse_opt": 13066.54
+},
+{
+"trade_date": "2026-10-21",
+"nse_cash": 110806.2,
+"bse_cash": 8718.31,
+"nse_io": 53425.44,
+"nse_so": 7664.38,
+"bse_opt": 58022.16
+},
+{
+"trade_date": "2026-10-22",
+"nse_cash": 108102.47,
+"bse_cash": 8605.19,
+"nse_io": 47327.4,
+"nse_so": 6879.39,
+"bse_opt": 85356.25
+},
+{
+"trade_date": "2026-10-23",
+"nse_cash": 123123.89,
+"bse_cash": 10519.23,
+"nse_io": 90862.89,
+"nse_so": 8749.63,
+"bse_opt": 14631.53
+},
+{
+"trade_date": "2026-10-26",
+"nse_cash": 103411.12,
+"bse_cash": 8657.37,
+"nse_io": 93570.54,
+"nse_so": 8810.03,
+"bse_opt": 13551.3
+},
+{
+"trade_date": "2026-10-27",
+"nse_cash": 119872.12,
+"bse_cash": 9493.7,
+"nse_io": 98554.78,
+"nse_so": 8220.65,
+"bse_opt": 12073.75
+},
+{
+"trade_date": "2026-10-28",
+"nse_cash": 128963.99,
+"bse_cash": 9791.32,
+"nse_io": 46837.27,
+"nse_so": 7479.82,
+"bse_opt": 50356.36
+},
+{
+"trade_date": "2026-10-29",
+"nse_cash": 117989.2,
+"bse_cash": 10389.28,
+"nse_io": 35065.84,
+"nse_so": 7019.98,
+"bse_opt": 61621.4
+},
+{
+"trade_date": "2026-10-30",
+"nse_cash": 120852.45,
+"bse_cash": 9343.43,
+"nse_io": 66203.45,
+"nse_so": 7828.77,
+"bse_opt": 11192.49
+}
+]
+}

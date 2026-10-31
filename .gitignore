@@ -8,3 +8,4 @@ parity_rows.json
 out/live/*/summary_rows.json
 out/live/*/snapshot.json
 out/filings/*/payload.json
+out/groww_ir/

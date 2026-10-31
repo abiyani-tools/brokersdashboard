@@ -6,6 +6,12 @@ name: daily
 # then publishes both, each as its own sb_runs row. Groww is refused unless every fact it reads is 'reviewed' (and its
 # workbook inputs are in the database): that is a warning annotation on the job, Angel One still publishes and the job
 # stays green. Any other Groww error fails the job after Angel One has been published.
+# Groww IR archive (step "Archive Groww's investor-relations page"): groww.in keeps no daily history, so each day's page is
+# stored in sb_broker_daily (src/live/refresh_groww_ir.py; table: out/groww/migration_sb_broker_daily.sql, applied by AB).
+# The step is continue-on-error: if groww.in blocks GitHub's runners (HTTP 403) or the page structure changes, the step shows
+# red in the job, prints an error annotation, and the "Groww IR archive failed" step adds a warning to the job summary; the
+# live run still goes ahead. The raw page is kept as the artifact groww-ir-raw. Fallback from AB's Mac: docs/GROWW_LIVE_SPEC.md,
+# "Running the archive from AB's Mac". Groww's live switches g-h / g-i read this archive but are off in this job.
 on:
   workflow_dispatch:
   schedule:
@@ -30,8 +36,25 @@ jobs:
       - name: Refresh NSE / BSE volumes in sb_market_daily from ExchangesDash
         continue-on-error: true
         run: python -m src.live.refresh_market --write
+      - name: Archive Groww's investor-relations page into sb_broker_daily
+        id: groww_ir
+        continue-on-error: true
+        run: python -m src.live.refresh_groww_ir --write
+      - name: Groww IR archive failed (groww.in blocked, page changed, or table missing)
+        if: steps.groww_ir.outcome == 'failure'
+        run: |
+          echo "::warning title=Groww IR archive failed::today's Groww investor-relations page was NOT archived (see the archive step above); archive it from the Mac: docs/GROWW_LIVE_SPEC.md"
+          echo "### Groww IR archive FAILED today: no sb_broker_daily rows were written" >> "$GITHUB_STEP_SUMMARY"
       - name: Live run from the DB and publish, Angel One then Groww (E5 -> engine -> E1 coverage -> Summary rows -> sb_*)
         run: python run_live.py --db --publish --broker all
+      - name: Keep the raw Groww IR page
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: groww-ir-raw
+          path: out/groww_ir/
+          if-no-files-found: ignore
+          retention-days: 90
       - name: Keep the run's report and inputs
         if: always()
         uses: actions/upload-artifact@v4
