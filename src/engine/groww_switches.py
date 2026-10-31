@@ -99,7 +99,7 @@ ASSUME_SWITCHES = {
 MARKET_SWITCHES = {'c': {('bse_fo', 'contracts')}}   # reuses Angel switch c's market_overrides
 D_SEGMENTS = ('fo', 'cash', 'comm')
 
-IMPLEMENTED = set(ORDER) | {'h'}
+IMPLEMENTED = set(ALL)
 
 
 class SwitchError(ValueError):

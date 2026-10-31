@@ -95,6 +95,8 @@ def params(G, res):
             out[('MTF', 'revenue Rs Cr', q)] = p['revenue_cr']
         if 'groww_book_cr' in p:
             out[('MTF', 'Groww average book Rs Cr', q)] = p['groww_book_cr']
+        if 'k' in p:
+            out[('MTF', 'g-i calibration k (disclosed / own book x yield)', q)] = p['k']
     out[('MTF', 'yield', 'all')] = G.assume('mtf_yield')
     return out
 
@@ -126,17 +128,35 @@ def bridge(letter, angel_snapshot=ANGEL_SNAPSHOT, groww_snapshot=GROWW_SNAPSHOT)
         key = ('bse_fo', 'contracts')
         ov = I_b.market_overrides.get(key, {})
         market = {d: (I_a.mkt[key][d], v) for d, v in ov.items()}
+    alone = []                                   # g-i does not depend on g-h: its effect on top of a-g alone
+    if letter == 'i':
+        I_c, G_c, r_c = run_switches(tuple('abcdefg'), angel_snapshot, groww_snapshot)
+        I_d, G_d, r_d = run_switches(tuple('abcdefgi'), angel_snapshot, groww_snapshot)
+        t_c, t_d = adr(I_c, G_c, r_c), adr(I_d, G_d, r_d)
+        alone = [dict(period=k, panel=panel, before=t_c[(p, k, panel)], after=t_d[(p, k, panel)])
+                 for p, k in PERIODS for panel in SP.PANELS]
     qtd = [dict(p['qtd_ratio'], share_before=r_a['calib'][t][q]['share'], share_after=p['share'])
-           for t in ('cash_quarter', 'fo_quarter') for q, p in r_b['calib'][t].items() if 'qtd_ratio' in p]
+           for t in ('cash_quarter', 'fo_quarter') for q, p in r_b['calib'][t].items()
+           if letter == 'h' and 'qtd_ratio' in p]
     model_days = sorted({d for d, r in r_b['daily']['fo'].items() if q_of(d) == (qtd[0]['quarter'] if qtd else '')})
-    return dict(letter=letter, before=sorted(before), after=sorted(after), rows=rows, qtd=qtd, qtd_model_days=model_days,
+    return dict(letter=letter, before=sorted(before), after=sorted(after), rows=rows, qtd=qtd, qtd_model_days=model_days, alone=alone,
+                book=r_b['calib']['mtf_quarter'] if letter == 'i' else None,
+                book_days=_book_days(r_b) if letter == 'i' else None,
                 facts={k: o for k, o in G_b.overlay.items() if o.switch == letter and o.changed},
                 same={k: o for k, o in G_b.overlay.items() if o.switch == letter and not o.changed},
-                params=moved(params(G_a, r_a), params(G_b, r_b)), days=daily_changes(r_a, r_b), market=market,
+                params=moved(params(G_a, r_a), params(G_b, r_b)), days=daily_changes(r_a, r_b, may_add=('MTF',) if letter == 'i' else ()), market=market,
                 excluded=sorted(special_dates(I_b, G_b) - special_dates(I_a, G_a)),
                 not_live=sum(1 for seg in ('fo', 'cash') for r in r_b['daily'][seg].values()
                              if r['regime'] == 'not_live'),
                 basis=r_b['calib'].get('fy_days'))
+
+
+def _book_days(res):
+    """{basis: days} of the daily MTF rows by how g-i got the book (archived / interpolated / latest)."""
+    out = defaultdict(int)
+    for r in res['daily']['mtf'].values():
+        out[r.get('book_basis', 'industry book')] += 1
+    return dict(out)
 
 
 def _f6(x, sign=''):
@@ -206,6 +226,30 @@ def markdown(b):
               f"{len(b['qtd_model_days'])} trading days (the snapshot's as-of date), so the ratio built on "
               f"{b['qtd'][0]['days_q']} days is applied to those {len(b['qtd_model_days'])}. Take rates are unchanged "
               '(calibrated on reported quarters); reported quarters are untouched.', '']
+    if b.get('book') and b['letter'] == 'i':
+        L += ["g-i: Groww's own MTF net book (IR page; Rs Cr) and the calibration factor k per quarter. A reported quarter's "
+              'daily revenue = k x own book x 14.95% / FY trading days, with k = disclosed MTF revenue / (sum of own book x '
+              '14.95% / FY days), so the quarter total is again the disclosed revenue (g-f\'s calibration, with the own '
+              'book as the daily shape). The open quarter has no disclosed revenue: k = 1, i.e. the formula as stated.', '',
+              '| Quarter | Regime | Days | Own avg book | Industry avg book | k | Quarter revenue at k=1 | Disclosed | '
+              'Groww book after k | Share of industry (after) |', '|---|---|---:|---:|---:|---:|---:|---:|---:|---:|']
+        for q, p in b['book'].items():
+            L.append(f"| {q} | {p['regime']} | {p['days_in_quarter']} | {p['own_avg_book_cr']:,.1f} | "
+                     f"{'—' if p['industry_avg_cr'] is None else format(p['industry_avg_cr'], ',.0f')} | {p['k']:.4f} | "
+                     f"{p['raw_revenue_cr']:,.2f} | {'—' if 'revenue_cr' not in p else format(p['revenue_cr'], ',.2f')} | "
+                     f"{p['groww_book_cr']:,.1f} | {'—' if p['share'] is None else format(100 * p['share'], '.2f') + '%'} |")
+        L += ['', 'Book basis of the MTF days: ' + ', '.join(f'{k} {v}' for k, v in sorted(b['book_days'].items()))
+              + '. Rule: an archived level for the day, else (closed quarter) linear interpolation in calendar days '
+              'between the two quarter-end levels, else (open quarter) the latest level held flat. g-i also covers every '
+              'calendar equity day (509 to the as-of date), so it fills the days the industry-book series lacks '
+              '(2026-04-08, 2026-10-21).', '']
+    if b.get('alone'):
+        L += ['g-i on top of g-a..g-g alone (without g-h), Consolidated, Rs crore per trading day:', '',
+              '| Period | Before | After | Δ % |', '|---|---:|---:|---:|']
+        for r in b['alone']:
+            if r['panel'] == 'Consolidated' and r['period'] in HEADLINE:
+                L.append(f"| {r['period']} | {_f6(r['before'])} | {_f6(r['after'])} | {100 * (r['after'] / r['before'] - 1):+.4f}% |")
+        L.append('')
     if b.get('basis') and b['letter'] == 'f':
         L += ['MTF trading days per FY (calendar equity days): '
               + '; '.join(f"{fy} {n}{'' if full else f' (FY incomplete: {src} count used)'}"
@@ -227,6 +271,8 @@ def markdown(b):
           '| Segment | Days | Changed | First | Last | Ratio min | Ratio max |', '|---|---:|---:|---|---|---:|---:|']
     for name, d in b['days'].items():
         f = (lambda x: '' if x is None else f'{x:.9f}')
+        if d.get('added'):
+            name = f"{name} (+{len(d['added'])} days added: {', '.join(d['added'])})"
         L.append(f"| {name} | {d['days']} | {d['changed']} | {d['first'] or ''} | {d['last'] or ''} | "
                  f"{f(d['rmin'])} | {f(d['rmax'])} |")
     return '\n'.join(L) + '\n'

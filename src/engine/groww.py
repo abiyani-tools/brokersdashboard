@@ -295,10 +295,13 @@ def fy_trading_days(cal):
     return {fy: done.get(fy, (done[latest][0], False, latest)) for fy in days}
 
 
-def mtf_parameters(I, G, last_q, book=None, fy_days=None):
+def mtf_parameters(I, G, last_q, book=None, fy_days=None, days=None, own=None):
     """MTF data!I51:J60: Groww average book = revenue / (yield / 4); share = book / industry average of the
     monthly series; typed shares from Q2 FY27.
-    g-e: unreported quarters carry the last actual share (no typed share). g-f: see mtf_parameters_by_revenue."""
+    g-e: unreported quarters carry the last actual share (no typed share). g-f: see mtf_parameters_by_revenue.
+    g-i: see mtf_parameters_own_book (days / own: the trading days and Groww's own book on them)."""
+    if G.on('i'):
+        return mtf_parameters_own_book(I, G, last_q, book, fy_days, days, own)
     if G.on('f'):
         return mtf_parameters_by_revenue(I, G, last_q, book, fy_days)
     y, qf = G.assume('mtf_yield'), G.assume('mtf_quarter_fraction')
@@ -342,6 +345,46 @@ def mtf_parameters_by_revenue(I, G, last_q, book, fy_days):
     return out
 
 
+def mtf_parameters_own_book(I, G, last_q, book, fy_days, days, own):
+    """g-i: daily MTF revenue = Groww's own MTF net book x yield / trading days of the FY (the g-f convention), the
+    book from the archived IR page (groww_ir.own_book_path: archived level, else quarter-end levels interpolated
+    linearly, else the latest level in the open quarter), on every equity day of the calendar.
+
+    Interaction with g-f. g-f calibrated a share so that a reported quarter's model total equals its disclosed MTF
+    revenue. g-i keeps that tie, with Groww's book path as the daily shape: a reported quarter's book is scaled by
+        k = disclosed revenue / (sum over its days of own book x yield / FY days)
+    so the quarter total is again the disclosed revenue and only the within-quarter shape and level of the book come
+    from the IR page (k is the residual between 'quarter-end book x 14.95%' and the disclosed revenue; in a reported
+    quarter it is the calibration, as the share was). An unreported quarter has no disclosed revenue: k = 1, i.e. the
+    stated formula as is (the backtest compares this with carrying the last k)."""
+    y = G.assume('mtf_yield')
+    last = G.pin('mtf_last_actual_quarter')
+    byq = defaultdict(list)
+    for d in days:
+        byq[q_of(d)].append(d)
+    out = {}
+    for q in quarter_seq('Q3 FY 2025', last_q):
+        ds = byq[q]
+        if not ds:
+            raise ValueError(f'Groww MTF (g-i): no trading days in {q}')
+        D = fy_days[_fy_of_quarter(q)][0]
+        avg_own = mean(own[d][0] for d in ds)
+        raw = sum(own[d][0] for d in ds) * y / D                                  # the quarter at k = 1, Rs Cr
+        ind = [book[d] for d in ds if d in book]
+        row = {'days_in_quarter': len(ds), 'days_in_fy': D, 'raw_revenue_cr': raw, 'own_avg_book_cr': avg_own}
+        if _le(q, last):
+            rev = G.fact('mtf_revenue', q)
+            k, regime = rev / raw, 'actual'
+            row['revenue_cr'] = rev
+        else:
+            k, regime = 1.0, 'projected'
+        row.update(k=k, groww_book_cr=k * avg_own, regime=regime,
+                   industry_avg_cr=mean(ind) if ind else None,
+                   share=k * avg_own / mean(ind) if ind else None)
+        out[q] = row
+    return out
+
+
 def _fy_of_quarter(q):
     """'Q3 FY 2026' -> 'FY 2026'"""
     return q[3:]
@@ -379,7 +422,14 @@ def run(I, G, angel=None):
     cpo_fo = {m: r['cpo'] for m, r in angel['calib']['fo_month'].items()}
     comm_m = angel['calib']['comm_month']
     fy_days = fy_trading_days(I.cal) if G.on('f') else None
-    mtf_q = mtf_parameters(I, G, last_q, book, fy_days)
+    mtf_days, own = sorted(book), None
+    if G.on('i'):                                   # every equity day of the calendar from the book's first day
+        mtf_days = sorted(d for d, r in I.cal.items() if r['is_equity_day'] and d >= min(book))
+        try:
+            own = IR.own_book_path(G.ir, mtf_days)
+        except IR.IRError as e:
+            raise GS.SwitchError(f'switch g-i: {e}')
+    mtf_q = mtf_parameters(I, G, last_q, book, fy_days, mtf_days, own)
     if G.on('d'):
         mkt_q = defaultdict(float)
         for d in mcx:
@@ -441,11 +491,16 @@ def run(I, G, angel=None):
                          'regime': comm_m[m]['regime']}
     y, basis = G.assume('mtf_yield'), G.assume('mtf_day_basis')
     mtf = {}
-    for d in sorted(book):
+    for d in mtf_days:
         q = q_of(d)
         if q not in mtf_q:
             raise ValueError(f'Groww MTF: no share for {q} ({d})')
         D = fy_days[fy_of(d)][0] if G.on('f') else basis                          # g-f: the FY's actual trading days
+        if G.on('i'):                                                             # g-i: Groww's own book (IR page)
+            K = mtf_q[q]['k'] * own[d][0]
+            mtf[d] = {'share': K / book[d] if d in book else None, 'groww_book_cr': K, 'gross_cr': K * (y / D),
+                      'regime': mtf_q[q]['regime'], 'book_basis': own[d][1]}
+            continue
         K = mtf_q[q]['share'] * book[d]                                           # Groww book, Rs Cr
         mtf[d] = {'share': mtf_q[q]['share'], 'groww_book_cr': K, 'gross_cr': K * (y / D),
                   'regime': mtf_q[q]['regime']}

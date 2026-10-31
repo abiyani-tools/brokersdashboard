@@ -34,16 +34,20 @@ def adr(I):
     return table, res, asof
 
 
-def daily_changes(res_a, res_b):
-    """Per segment: days whose revenue changed, and the range of after/before ratios."""
+def daily_changes(res_a, res_b, may_add=()):
+    """Per segment: days whose revenue changed, and the range of after/before ratios.
+    may_add: segment names (e.g. 'MTF') where the switch may add days (never remove); the added days are listed
+    under 'added' and the ratios are over the days both runs have."""
     out = {}
     for seg, name, key in SEGMENTS:
         a, b = res_a['daily'][seg], res_b['daily'][seg]
-        if set(a) != set(b):
+        added = sorted(set(b) - set(a))
+        if set(a) - set(b) or (added and name not in may_add):
             raise AssertionError(f'{name}: the switch changed which days exist')
+        b = {d: b[d] for d in a}
         ratios = [b[d][key] / a[d][key] for d in a if a[d][key] and b[d][key] != a[d][key]]
         changed = sorted(d for d in a if b[d][key] != a[d][key])
-        out[name] = dict(days=len(a), changed=len(changed), first=changed[0] if changed else None,
+        out[name] = dict(days=len(a), added=added, changed=len(changed), first=changed[0] if changed else None,
                          last=changed[-1] if changed else None,
                          rmin=min(ratios) if ratios else None, rmax=max(ratios) if ratios else None)
     return out
