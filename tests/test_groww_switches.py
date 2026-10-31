@@ -234,12 +234,60 @@ def test_c_leaves_cash_commodity_mtf_alone():
 
 
 # ── g-d: every reported quarter calibrates ──
+def test_d_reported_quarters_calibrate_f_and_o_and_cash_to_q2_fy27():
+    c = run('abcd')[2]['calib']
+    for table in (c['fo_quarter'], c['cash_quarter']):
+        assert [q for q, p in table.items() if p['regime'] == 'actual'] == \
+            ['Q1 FY 2026', 'Q2 FY 2026', 'Q3 FY 2026', 'Q4 FY 2026', 'Q1 FY 2027', 'Q2 FY 2027']
+        assert table['Q3 FY 2027']['regime'] == 'projected'
+    fo, cash = c['fo_quarter'], c['cash_quarter']
+    assert fo['Q1 FY 2027']['rev_mn'] == pytest.approx(0.519 * 15486.7, rel=1e-13)
+    assert fo['Q2 FY 2027']['rev_mn'] == pytest.approx(0.448 * 15405.4, rel=1e-13)
+    assert cash['Q2 FY 2027']['rev_mn'] == pytest.approx(0.174 * 15405.4, rel=1e-13)
+    assert fo['Q2 FY 2027']['share'] == 0.22 and cash['Q2 FY 2027']['share'] == 0.308
+    for q in ('Q1 FY 2027', 'Q2 FY 2027'):
+        assert fo[q]['take_rate'] * fo[q]['orders_mn'] == pytest.approx(fo[q]['rev_mn'], rel=1e-12)
+        assert cash[q]['take_rate'] * cash[q]['orders_mn'] == pytest.approx(cash[q]['rev_mn'], rel=1e-12)
+    # cash days of a reported quarter add up to its revenue exactly
+    for q in ('Q1 FY 2027', 'Q2 FY 2027'):
+        tot = sum(r['rev_mn'] for d, r in daily_of('abcd', 'cash').items() if q_of(d) == q)
+        assert tot == pytest.approx(cash[q]['rev_mn'], rel=1e-9)
+    # the projected quarter keeps the parity rules until g-e: F&O share x 1.05, cash take rate = mean of the last 3
+    assert fo['Q3 FY 2027']['share'] == pytest.approx(0.22 * 1.05, rel=1e-13)
+    assert cash['Q3 FY 2027']['take_rate'] == pytest.approx(
+        mean(cash[q]['take_rate'] for q in ('Q4 FY 2026', 'Q1 FY 2027', 'Q2 FY 2027')), rel=1e-13)
+
+
+def test_d_commodities_calibrate_each_quarter_on_their_own_revenue():
+    I, G, res = run('abcd')
+    c = res['calib']['comm_quarter']
+    assert 'comm' not in res['calib']
+    assert [q for q, p in c.items() if p['regime'] == 'actual'] == ['Q3 FY 2026', 'Q4 FY 2026', 'Q1 FY 2027', 'Q2 FY 2027']
+    want = {'Q3 FY 2026': 0.035 * 12610.72, 'Q4 FY 2026': 0.045 * 15355.35, 'Q1 FY 2027': 0.049 * 15486.7,
+            'Q2 FY 2027': 0.062 * 15405.4}
+    comm = daily_of('abcd', 'comm')
+    for q, rev in want.items():
+        assert c[q]['rev_mn'] == pytest.approx(rev, rel=1e-13)
+        assert sum(r['rev_mn'] for d, r in comm.items() if q_of(d) == q) == pytest.approx(rev, rel=1e-9)   # ties exactly
+    # take rate = Angel's own for the quarter; Q2 FY27 has none in Angel's parity run: the latest earlier one
+    tr = daily.run(run('abcd')[0])['calib']['take_rates']
+    assert c['Q4 FY 2026']['take_rate'] == tr['Q4 FY 2026']['take_rate_comm']
+    assert c['Q2 FY 2027']['take_rate'] == tr['Q1 FY 2027']['take_rate_comm'] and c['Q2 FY 2027']['take_rate_from'] == 'Q1 FY 2027'
+    assert c['Q3 FY 2027']['regime'] == 'projected' and c['Q3 FY 2027']['share'] == pytest.approx(c['Q2 FY 2027']['share'] * 1.05)
+
+
+def test_d_does_not_touch_mtf_or_closed_quarters_of_f_and_o():
+    assert daily_of('abc', 'mtf') == daily_of('abcd', 'mtf')
+    a, d = daily_of('abc', 'fo'), daily_of('abcd', 'fo')
+    assert all(a[x] == d[x] for x in a if x < '2026-04-01')                    # Q1 FY27 on is the first change
+
+
 # ── g-e: one estimate rule ──
 # ── g-f: MTF basis ──
 # ── g-g: special sessions, periods ──
 # ── the orders check ──
 # ── bridges ──
-@pytest.mark.parametrize('x', list('abc'))
+@pytest.mark.parametrize('x', list('abcd'))
 def test_each_bridge_builds_and_adds_up(x):
     b = B.bridge(x)
     txt = B.markdown(b)
@@ -258,7 +306,7 @@ def test_each_bridge_builds_and_adds_up(x):
 def test_bridges_chain_end_to_end():
     """Each bridge's 'after' is the next one's 'before': the effects add up from parity to all seven switches."""
     prev = None
-    for x in 'abc':
+    for x in 'abcd':
         b = B.bridge(x)
         if prev is not None:
             assert {(r['period'], r['panel']): r['before'] for r in b['rows']} == \

@@ -206,6 +206,35 @@ def comm_parameters(I, G, angel):
             'rev_mn': rev, 'orders_mn': orders, 'mkt_orders_mn': mkt, 'quarter': qc}
 
 
+def comm_parameters_quarterly(I, G, angel, mkt_orders_by_q, last_q):
+    """g-d: each reported commodity quarter calibrates on its own revenue (mix x total income).
+    Groww discloses no commodity orders, so the take rate is Angel's own for that quarter (the latest earlier one for a
+    quarter Angel has none for); orders = revenue / take rate; share = orders / the quarter's market orders (the sum of
+    the daily market orders, contracts / Angel's contracts per order). Unreported quarters: last actual share
+    x (1 + typed growth) (none under g-e), take rate carried."""
+    rev = segment_revenue(G)['comm']
+    tr_q = angel['calib']['take_rates']
+    first, last = G.pin('comm_first_calibrated_quarter'), G.pin('comm_last_actual_quarter')
+    growth = G.assume('share_growth_comm')
+    out, rate, rate_from = {}, None, None
+    for q in quarter_seq(first, last_q):
+        if _le(q, last):
+            r = tr_q.get(q, {}).get('take_rate_comm')
+            if r is not None:
+                rate, rate_from = r, q
+            elif rate is None:
+                raise ValueError(f'Groww commodities: no Angel take rate for {q} or any earlier quarter')
+            orders = rev[q] / rate
+            out[q] = {'take_rate': rate, 'take_rate_from': rate_from, 'rev_mn': rev[q], 'orders_mn': orders,
+                      'mkt_orders_mn': mkt_orders_by_q[q], 'share': orders / mkt_orders_by_q[q], 'regime': 'actual'}
+        else:
+            prev = out[quarter_seq(first, q)[-2]]
+            share = prev['share'] * (1 + growth) if prev['regime'] == 'actual' else prev['share']
+            out[q] = {'take_rate': prev['take_rate'], 'take_rate_from': prev['take_rate_from'], 'share': share,
+                      'regime': 'projected'}
+    return out
+
+
 def mtf_parameters(I, G, last_q):
     """MTF data!I51:J60: Groww average book = revenue / (yield / 4); share = book / industry average of the
     monthly series; typed shares from Q2 FY27."""
@@ -255,7 +284,14 @@ def run(I, G, angel=None):
     cpo_fo = {m: r['cpo'] for m, r in angel['calib']['fo_month'].items()}
     comm_m = angel['calib']['comm_month']
     mtf_q = mtf_parameters(I, G, last_q)
-    comm = comm_parameters(I, G, angel)
+    if G.on('d'):
+        mkt_q = defaultdict(float)
+        for d in mcx:
+            if d >= live_comm:
+                mkt_q[q_of(d)] += (mcx[d] / 1e6) / comm_m[fy_month_of(d)]['cpo']    # the quarter's market orders
+        comm = comm_parameters_quarterly(I, G, angel, mkt_q, last_q)
+    else:
+        comm = comm_parameters(I, G, angel)
 
     def stub(d, q, live, table, what):
         """Days before first live: None (#N/A) before the zero-fill quarters, 0.0 inside them. Raises if a
@@ -298,9 +334,15 @@ def run(I, G, angel=None):
             continue                                                              # blank, not 0
         m = fy_month_of(d)
         G_ = (mcx[d] / 1e6) / comm_m[m]['cpo']                                    # Commodities!G
-        J = G_ * comm['share']
-        comm_d[d] = {'orders_mn': J, 'rev_mn': J * comm['take_rate'], 'cpo': comm_m[m]['cpo'],
-                     'regime': comm_m[m]['regime']}
+        if G.on('d'):
+            cq = comm[q_of(d)]
+            J = G_ * cq['share']
+            comm_d[d] = {'orders_mn': J, 'rev_mn': J * cq['take_rate'], 'cpo': comm_m[m]['cpo'],
+                         'share': cq['share'], 'regime': cq['regime']}
+        else:
+            J = G_ * comm['share']
+            comm_d[d] = {'orders_mn': J, 'rev_mn': J * comm['take_rate'], 'cpo': comm_m[m]['cpo'],
+                         'regime': comm_m[m]['regime']}
     y, basis = G.assume('mtf_yield'), G.assume('mtf_day_basis')
     mtf = {}
     for d in sorted(book):
@@ -311,5 +353,5 @@ def run(I, G, angel=None):
         mtf[d] = {'share': mtf_q[q]['share'], 'groww_book_cr': K, 'gross_cr': K * (y / basis),
                   'regime': mtf_q[q]['regime']}
     calib = {'fo_quarter': fo_q, 'cash_quarter': cash_q, 'mtf_quarter': mtf_q, 'revenue': segment_revenue(G)}
-    calib['comm'] = comm
+    calib['comm_quarter' if G.on('d') else 'comm'] = comm
     return {'calib': calib, 'daily': {'fo': fo, 'cash': cash, 'comm': comm_d, 'mtf': mtf}}

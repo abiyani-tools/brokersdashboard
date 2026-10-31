@@ -59,6 +59,11 @@ FACT_SWITCHES = {
           ('fact', 'total_income', ['Q1 FY 2026'], 'Rs Mn'),
           ('share', 'share_fo_adto_q', ['Q1 FY 2026']), ('share', 'share_cash_adto_q', ['Q1 FY 2026'])],
     'c': [],
+    'd': [('mix', 'revmix_fo', ['Q1 FY 2027', 'Q2 FY 2027']), ('mix', 'revmix_cash', ['Q2 FY 2027']),
+          ('mix', 'revmix_comm', ['Q4 FY 2026', 'Q1 FY 2027', 'Q2 FY 2027']),
+          ('fact', 'total_income', ['Q2 FY 2027'], 'Rs Mn'),
+          ('share', 'share_fo_adto_q', Q('Q1 FY 2027', 'Q2 FY 2027')),
+          ('share', 'share_cash_adto_q', ['Q2 FY 2027'])],
 }
 
 # switch -> pin / assumption values it sets
@@ -66,6 +71,8 @@ PIN_SWITCHES = {
     'a': {('revenue_base', 'Q4 FY 2026'): 'total_income', ('revenue_base', 'Q1 FY 2027'): 'total_income'},
     'b': {('fo_first_calibrated_quarter', ''): 'Q1 FY 2026', ('cash_first_calibrated_quarter', ''): 'Q1 FY 2026',
           ('revenue_base', 'Q1 FY 2026'): 'total_income'},
+    'd': {('fo_last_actual_quarter', ''): 'Q2 FY 2027', ('cash_last_actual_quarter', ''): 'Q2 FY 2027',
+          ('comm_first_calibrated_quarter', ''): 'Q3 FY 2026', ('comm_last_actual_quarter', ''): 'Q2 FY 2027'},
 }
 ASSUME_SWITCHES = {
     # F&O and cash are live from the first day of Q1 FY26; only Q3 FY25 and Q4 FY25 stay zero-filled
@@ -75,7 +82,7 @@ ASSUME_SWITCHES = {
 
 MARKET_SWITCHES = {'c': {('bse_fo', 'contracts')}}   # reuses Angel switch c's market_overrides
 
-IMPLEMENTED = set('abc')
+IMPLEMENTED = set('abcd')
 
 
 class SwitchError(ValueError):
