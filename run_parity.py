@@ -1,4 +1,13 @@
 import json, sys
+if '--broker' in sys.argv:                              # python3 run_parity.py --broker GROWW
+    broker = sys.argv[sys.argv.index('--broker') + 1].upper()
+    if broker != 'GROWW':
+        sys.exit(f'--broker {broker}: only GROWW has a separate parity run (Angel One is the default)')
+    from src.engine import parity_groww
+    rows, daily, calib = parity_groww.main()
+    bad = (sum(not r['ok'] for r in rows) + sum(bool(r['mismatches']) for r in daily.values())
+           + sum(not r[3] for r in calib))
+    sys.exit(1 if bad else 0)
 from src.engine.inputs import load_snapshot
 from src.engine import daily, summary, parity
 snap = sys.argv[1] if len(sys.argv) > 1 else 'snapshot/db_snapshot_2026-10-23.json'

@@ -32,6 +32,9 @@ src/live/snapshot.py     sb_* tables → engine snapshot; complete-through date;
 src/engine/switches.py   the parity → live switches a–i; src/engine/bridge.py the ADR bridge per switch
 migrations/              SQL migrations for the sb_* tables
 src/engine/parity.py     compare with sb_parity_expected; documented out-of-scope list
+src/engine/groww.py      Groww (parity mode): reuses Angel's calibration, adds Groww's quarterly parameters + daily revenue
+src/engine/parity_groww.py  compare a Groww run with the workbook (`python3 run_parity.py --broker GROWW`)
+seed/build_groww.py      builds snapshot/groww_snapshot_*.json (GROWW facts, assumptions, pins) and groww_fixtures_*.json
 src/engine/publish.py    rows for sb_runs / sb_calibration / sb_daily_revenue / sb_summary_cells
 seed/build_fixtures.py   builds the parity fixtures + data-lake rows (already loaded)
 tests/test_parity.py     the parity gate (pytest)

@@ -33,6 +33,27 @@ LAYOUT = {
 }
 COLS = {'L': ('C', 'D', 'E', 'H', 'I', 'J'), 'R': ('N', 'O', 'P', 'S', 'T', 'U')}
 
+# 'SUMMARY - Groww': the same rows, but the right panels sit in L:T (labels in L / Q, values in M / R), and the
+# latest period is the partial Q3 FY27 / October. The F&O panel (L35:L45) and the Cash panel (B61:B71) keep stale
+# hand-typed labels; Broking and Consolidated read the default labels (L8:L18) for every segment.
+_GROWW_FY = ['FY 2027', 'FY 2026']
+_GROWW_STALE_M = ['FY 2026 February', 'FY 2026 January']
+GROWW_LABELS = {
+    'default': {'fy': _GROWW_FY, 'q': ['Q3 FY 2027', 'Q2 FY 2027', 'Q3 FY 2026'],
+                'm': ['FY 2027 October', 'FY 2027 September'], 'avg6': ['Q2 FY 2027', 'Q3 FY 2027']},
+    'F&O':     {'fy': _GROWW_FY, 'q': ['Q1 FY 2027', 'Q4 FY 2026', 'Q4 FY 2025'], 'm': _GROWW_STALE_M,
+                'avg6': ['Q4 FY 2026', 'Q1 FY 2027']},
+    'Cash':    {'fy': _GROWW_FY, 'q': ['Q1 FY 2027', 'Q4 FY 2026', 'Q1 FY 2026'], 'm': _GROWW_STALE_M,
+                'avg6': ['Q4 FY 2026', 'Q1 FY 2027']},
+}
+GROWW_COLS = {'L': ('C', 'D', 'E', 'H', 'I', 'J'), 'R': ('M', 'N', 'O', 'R', 'S', 'T')}
+
+# per-broker parity spec: labels, comparison columns, whether the MTF weekday tables read net (Angel) or gross (Groww)
+SPECS = {
+    'ANGELONE': {'labels': PARITY_LABELS, 'cols': COLS, 'mtf_weekday_net': True},
+    'GROWW': {'labels': GROWW_LABELS, 'cols': GROWW_COLS, 'mtf_weekday_net': False},
+}
+
 
 class Seg:
     """One segment's daily series with the workbook's statistics."""
@@ -69,13 +90,15 @@ class Seg:
         return mean(s[d] for d in ds)
 
 
-def build(daily):
+def build(daily, broker='ANGELONE'):
+    spec = SPECS[broker]
+    PARITY_LABELS = spec['labels']
+    mtf_w = {d: r['net_cr'] for d, r in daily['mtf'].items()} if spec['mtf_weekday_net'] else None
     segs = {
         'F&O': Seg({d: r['rev_mn'] for d, r in daily['fo'].items()}, 10),
         'Cash': Seg({d: r['rev_mn'] for d, r in daily['cash'].items()}, 10),
         'Commodities': Seg({d: r['rev_mn'] for d, r in daily['comm'].items()}, 10, positive_only=True),
-        'MTF': Seg({d: r['gross_cr'] for d, r in daily['mtf'].items()}, 1,
-                   weekday_series={d: r['net_cr'] for d, r in daily['mtf'].items()}),
+        'MTF': Seg({d: r['gross_cr'] for d, r in daily['mtf'].items()}, 1, weekday_series=mtf_w),
     }
     D = PARITY_LABELS['default']
     stats = {}
@@ -96,7 +119,7 @@ def build(daily):
     parts = [seg_block(n, D) for n in ('F&O', 'Cash', 'Commodities')]
     stats['Broking'] = _sum_blocks(parts)
     stats['Consolidated'] = _sum_blocks([stats['Broking'], seg_block('MTF', D)])
-    return _to_cells(stats, D), stats
+    return _to_cells(stats, D, spec['cols']), stats
 
 
 def _sum_blocks(blocks):
@@ -114,10 +137,10 @@ def _cmp(a, b):
         return None
 
 
-def _to_cells(stats, D):
+def _to_cells(stats, D, cols=COLS):
     cells = {}
     for panel, (side, fyr, qr, mr, wr, wd0) in LAYOUT.items():
-        v, c1, c2, wv, wc1, wc2 = COLS[side]
+        v, c1, c2, wv, wc1, wc2 = cols[side]
         st = stats[panel]
         for rows, key in ((fyr, 'fy'), (qr, 'q'), (mr, 'm'), (wr, 'w')):
             vals = st[key]
