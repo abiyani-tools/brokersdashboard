@@ -103,7 +103,10 @@ def ir_inputs(reader, broker=BROKER):
     QTD rows of earlier days (the MTF book archive), and the exchange turnover of sb_market_daily. Raises IRError
     when the table is empty."""
     from ..engine import groww_ir as IR
-    qtd = reader.table('sb_broker_daily', broker_id=broker, is_qtd=True)
+    try:
+        qtd = reader.table('sb_broker_daily', broker_id=broker, is_qtd=True)
+    except KeyError:                       # a snapshot or test reader without the table
+        raise IR.IRError('sb_broker_daily is not in this reader')
     if not qtd:
         raise IR.IRError('sb_broker_daily has no archived Groww IR rows (is the migration applied and the archive running?)')
     latest = max(str(r['snapshot_date'])[:10] for r in qtd)

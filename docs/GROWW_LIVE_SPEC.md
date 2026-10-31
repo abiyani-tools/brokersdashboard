@@ -87,3 +87,11 @@ They read the archived IR page (`snapshot/groww_ir_2026-10-31.json` built from t
 
 - **g-h** (needs g-d, g-e): an unreported quarter's F&O and cash share = last reported share x (Groww QTD turnover share / Groww turnover share in the last reported quarter); Groww turnover share = Groww turnover / NSE+BSE exchange turnover over the same days (cash: stocks turnover vs `cash_traded_value`; F&O: equity-derivatives premium vs NSE index + stock option premium + BSE `options_premium_turnover`). The QTD days are quarter start .. the trading day the page runs through (`covers_through`, inferred). Take rate unchanged. Backtest: it helps cash and does not help F&O; overall not a clear win over g-e's carry.
 - **g-i** (needs g-f): daily MTF revenue = Groww's MTF net book x 14.95% / FY trading days (the g-f convention), the book from the IR page: an archived level for the day, else (closed quarter) linear interpolation in calendar days between the two quarter-end levels, else (open quarter) the latest level held flat. It covers every calendar equity day, so it also fills the days the industry-book series lacks. Interaction with g-f: a reported quarter's book is scaled by k = disclosed MTF revenue / (sum of own book x 14.95% / FY days), so reported quarters still tie to the disclosed revenue exactly (g-f's calibration, with Groww's book as the daily shape); the open quarter has no disclosed revenue, k = 1. Backtest: the g-i path (k = 1) is closer to the disclosed revenue than g-f's industry-book method (mean abs error 8.7% vs 20.8% over Q4 FY25..Q2 FY27); the open-quarter rule on day 1 (previous quarter-end level held flat) is not (16.5%, understates like the industry method).
+
+## Sign-off, 31 Oct 2026
+
+AB approved:
+- **g-i (MTF from Groww's own book): ON** in the published run, after the independent check (`out/checks/groww_switch_i.md`, 349/349 agree). If the IR archive is missing on a given day, the run publishes g-a…g-g, with a warning and a note in `sb_runs.notes`.
+- **g-h (quarter-to-date turnover share): OFF.** Its backtest showed no clear gain over carry. Revisit once the daily archive has a few quarters.
+
+`src/live/cli.py` `SIGNED_OFF_EXTRA = 'i'`; `--groww-extra none` turns the IR switches off for a run.

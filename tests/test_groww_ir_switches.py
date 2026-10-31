@@ -159,9 +159,12 @@ def test_h_backtest_numbers_and_the_plain_conclusion():
 
 
 # ── live CLI ──
-def test_cli_extras_are_off_by_default_and_never_published(monkeypatch):
+def test_cli_signed_off_extras_are_the_default_and_others_never_published(monkeypatch):
     from src.live import cli
-    assert cli.parse([])['groww_extra'] == ''
+    monkeypatch.delenv('GROWW_EXTRA', raising=False)
+    assert cli.SIGNED_OFF_EXTRA == 'i'                        # AB, 31 Oct 2026: g-i on, g-h off
+    assert cli.parse([])['groww_extra'] == 'i'
+    assert cli.parse(['--groww-extra', 'none'])['groww_extra'] == ''
     assert cli.parse(['--groww-extra', 'ih'])['groww_extra'] == 'hi'
     assert cli.parse(['--groww-extra=h'])['groww_extra'] == 'h'
     monkeypatch.setenv('GROWW_EXTRA', 'h')
@@ -177,15 +180,14 @@ def test_cli_dry_run_with_h_changes_only_groww_q3(tmp_path, monkeypatch, capsys)
     monkeypatch.chdir(ROOT)
     for k in ('GROWW_EXTRA', 'GITHUB_ACTIONS'):
         monkeypatch.delenv(k, raising=False)
-    assert cli.main(['--broker', 'GROWW']) == 0
-    base = json.load(open(os.path.join(ROOT, 'out', 'live', '2026-10-21', 'groww', 'summary_rows.json')))
+    path = os.path.join(ROOT, 'out', 'live', '2026-10-21', 'groww', 'summary_rows.json')
+    assert cli.main(['--broker', 'GROWW', '--groww-extra', 'none']) == 0
+    base = json.load(open(path))
     assert cli.main(['--broker', 'GROWW', '--groww-extra', 'h']) == 0
     out = capsys.readouterr().out
-    assert 'Groww optional IR switches ON: g-h' in out
-    new = json.load(open(os.path.join(ROOT, 'out', 'live', '2026-10-21', 'groww', 'summary_rows.json')))
-    assert new != base
+    assert 'Groww IR switches ON: g-h' in out
+    assert json.load(open(path)) != base
     assert cli.main(['--broker', 'GROWW']) == 0                               # leave the default output in place
-    assert json.load(open(os.path.join(ROOT, 'out', 'live', '2026-10-21', 'groww', 'summary_rows.json'))) == base
 
 
 # ══ g-i: MTF from Groww's own book ══
@@ -328,12 +330,12 @@ def test_cli_dry_run_with_i_and_hi(monkeypatch, capsys):
     for k in ('GROWW_EXTRA', 'GITHUB_ACTIONS'):
         monkeypatch.delenv(k, raising=False)
     path = os.path.join(ROOT, 'out', 'live', '2026-10-21', 'groww', 'summary_rows.json')
-    assert cli.main(['--broker', 'GROWW']) == 0
+    assert cli.main(['--broker', 'GROWW', '--groww-extra', 'none']) == 0
     base = json.load(open(path))
     assert cli.main(['--broker', 'GROWW', '--groww-extra', 'i']) == 0
     only_i = json.load(open(path))
     assert cli.main(['--broker', 'GROWW', '--groww-extra', 'hi']) == 0
     both = json.load(open(path))
     assert only_i != base and both != only_i
-    assert cli.main(['--broker', 'GROWW']) == 0
-    assert json.load(open(path)) == base
+    assert cli.main(['--broker', 'GROWW']) == 0                  # the default is the signed-off chain, g-a..g-g + g-i
+    assert json.load(open(path)) == only_i
