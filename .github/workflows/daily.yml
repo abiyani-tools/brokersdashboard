@@ -21,6 +21,11 @@ jobs:
         run: test -n "$SUPABASE_URL" && test -n "$SUPABASE_SERVICE_KEY"
       - name: Parity gate
         run: python -m pytest tests/ -q
+      # Read only from ExchangesDash's public JSON; if GitHub is unreachable the run goes on with the rows
+      # already in sb_market_daily (the step shows as failed, and E5 still checks every input)
+      - name: Refresh NSE / BSE volumes in sb_market_daily from ExchangesDash
+        continue-on-error: true
+        run: python -m src.live.refresh_market --write
       - name: Live run from the DB and publish (E5 -> engine a-i -> E1 coverage -> Summary rows -> sb_*)
         run: python run_live.py --db --publish
       - name: Keep the run's report and inputs

@@ -115,6 +115,18 @@ class SupabaseWriter:
                 out.extend(resp.json())
         return out if returning else len(rows)
 
+    def upsert(self, table: str, rows: list[dict], on_conflict: tuple[str, ...]) -> int:
+        """Insert rows, replacing any row with the same `on_conflict` key (the table's primary key)."""
+        headers = self._headers()
+        headers["Prefer"] = "resolution=merge-duplicates,return=minimal"
+        params = {"on_conflict": ",".join(on_conflict)}
+        for i in range(0, len(rows), self.chunk):
+            part = rows[i:i + self.chunk]
+            resp = self._session.post(f"{self.url}/rest/v1/{table}", params=params, data=json.dumps(part),
+                                      headers=headers, timeout=120)
+            self._check(resp, f"upsert into {table} (rows {i}..{i + len(part) - 1})")
+        return len(rows)
+
     def update(self, table: str, values: dict, **eq) -> None:
         params = {k: f"eq.{v}" for k, v in eq.items()}
         resp = self._session.patch(f"{self.url}/rest/v1/{table}", params=params, data=json.dumps(values),

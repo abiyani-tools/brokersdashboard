@@ -89,7 +89,8 @@ def test_a_failed_insert_marks_the_run_failed(run, writer_env):
 
 def test_complete_through_names_the_limiting_series():
     snap = json.load(open(SNAP))
-    assert complete_through(snap)[0] == '2026-10-21'
+    as_of, limiting = complete_through(snap)
+    assert as_of == '2026-10-21' and 'nse_cash:trades' in limiting.split(', ')   # every series ending that day
     snap['market_daily'] = [r for r in snap['market_daily']
                             if not (r['dataset'] == 'nse_cash' and r['trade_date'] > '2026-10-16')]
     assert complete_through(snap) == ('2026-10-16', 'nse_cash:trades')

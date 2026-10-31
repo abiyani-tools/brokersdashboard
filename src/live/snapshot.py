@@ -25,10 +25,17 @@ def build_snapshot(reader, broker=BROKER, as_of=None):
     market = [dict(trade_date=v.date.isoformat(), dataset=v.key.split(':')[0], metric=v.key.split(':')[1],
                    value=v.value, status=v.status, source=v.source)
               for series in selected.values() for v in series]
-    lake = [dict(trade_date=str(r['trade_date'])[:10], dataset=r['dataset'], metric=r['metric'],
-                 value=r['value'], source=r['source'])
-            for r in raw if is_lake(r['source']) and f"{r['dataset']}:{r['metric']}" in ADR_MARKET_KEYS
-            and r.get('status', 'ok') == 'ok']
+    # one lake row per day and series; with several lake sources the loader's tie-break applies (lowest
+    # source name, so the daily refresh 'exchangesdash_json' wins over the one-off '...@b2049b5' import)
+    lake_by = {}
+    for r in raw:
+        if is_lake(r['source']) and f"{r['dataset']}:{r['metric']}" in ADR_MARKET_KEYS \
+                and r.get('status', 'ok') == 'ok':
+            k = (str(r['trade_date'])[:10], r['dataset'], r['metric'])
+            if k not in lake_by or r['source'] < lake_by[k]['source']:
+                lake_by[k] = dict(trade_date=k[0], dataset=r['dataset'], metric=r['metric'], value=r['value'],
+                                  source=r['source'])
+    lake = list(lake_by.values())
     snap = {
         'calendar': sorted((dict(r, trade_date=str(r['trade_date'])[:10]) for r in reader.table('sb_calendar')
                             if _le(r['trade_date'], as_of)), key=lambda r: r['trade_date']),
@@ -47,7 +54,8 @@ def build_snapshot(reader, broker=BROKER, as_of=None):
 
 def complete_through(snap, keys=None):
     """(date, limiting series): the last calendar day on which every engine input has an 'ok' value, in the
-    workbook's copy or in the lake (switch c takes the lake's value on imputed days).
+    workbook's copy or in the lake (switch c takes the lake's value on imputed days). Series that end on the
+    same day are all named, comma-separated.
 
     The industry MTF book is published with a lag and is left out (coverage allows its last 3 trading days).
     """
@@ -60,9 +68,10 @@ def complete_through(snap, keys=None):
     missing = [k for k in keys if k not in last]
     if missing:
         raise ValueError(f'no rows for {missing}')
-    key = min(last, key=last.get)
+    first_end = min(last.values())
+    limiting = ', '.join(sorted(k for k, d in last.items() if d == first_end))
     cal_last = max(r['trade_date'] for r in snap['calendar'])
-    return min(last[key], cal_last), key
+    return min(first_end, cal_last), limiting
 
 
 def trim(snap, as_of):

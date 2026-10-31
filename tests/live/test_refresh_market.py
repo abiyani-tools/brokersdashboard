@@ -1,0 +1,101 @@
+import json
+
+import pytest
+
+from src.live.db import KEY_ENV, SupabaseWriter
+from src.live.loader import select_volumes
+from src.live.refresh_market import PK, SOURCE, lake_rows
+
+SECRET = 'sb_secret_TEST_ONLY_not_a_real_key'
+SHAS = {'nse': 'abcdef1234', 'bse': '9876543210'}
+
+NSE = {'daily_all': [
+    {'date': '2023-09-28', 'total_contracts': 1, 'io_contracts': 1, 'so_contracts': 1, 'io_premium': 1,
+     'so_premium': 1, 'if_turnover': 1, 'sf_turnover': 1, 'cash_traded_value': 1},
+    {'date': '2026-10-22', 'total_contracts': 500, 'io_contracts': 0, 'so_contracts': 30, 'io_premium': 2.5,
+     'so_premium': 1.5, 'if_turnover': 10.0, 'sf_turnover': 5.0, 'cash_traded_value': 99.0},
+], 'special_sessions': [
+    {'date': '2025-10-21', 'total_contracts': 7, 'io_contracts': 5, 'so_contracts': 2, 'io_premium': 0.1,
+     'so_premium': 0.1, 'if_turnover': 0.2, 'sf_turnover': 0.3, 'cash_traded_value': 4.0},
+]}
+BSE = {'daily_all': [
+    {'date': '2026-10-22', 'total_contracts': 400, 'options_premium_turnover': 3.0, 'futures_turnover': 0.5,
+     'cash_trades': 0, 'cash_traded_value': 8.0},
+]}
+
+
+def _by_key(rows):
+    return {(r['trade_date'], r['dataset'], r['metric']): r for r in rows}
+
+
+def test_mapping_matches_the_23_oct_import():
+    rows = _by_key(lake_rows(NSE, BSE, SHAS, 'now'))
+    assert ('2023-09-28', 'nse_fo', 'contracts') not in rows          # before START
+    r = rows[('2026-10-22', 'nse_fo', 'fut_turnover_cr')]
+    assert r['value'] == 15.0 and r['unit'] == 'Rs Cr' and r['source'] == SOURCE
+    assert r['source_ref'].startswith('sucaanalytics-max/ExchangesDash@abcdef1:')
+    assert rows[('2026-10-22', 'bse_fo', 'contracts')]['source_ref'].startswith('sucaanalytics-max/ExchangesDash@9876543:')
+    assert rows[('2026-10-22', 'nse_fo', 'io_contracts')]['status'] == 'suspect'
+    assert rows[('2026-10-22', 'bse_cash', 'trades')]['status'] == 'suspect'
+    assert rows[('2026-10-22', 'bse_fo', 'contracts')]['status'] == 'ok'
+    assert ('2025-10-21', 'nse_fo', 'contracts') in rows               # special sessions are kept
+    assert not [k for k in rows if k[1:] == ('nse_cash', 'trades')]   # not in the JSON yet
+
+
+def test_nse_cash_trades_are_picked_up_once_published():
+    nse = json.loads(json.dumps(NSE))
+    nse['daily_all'][1]['cash_trades'] = 45_000_000
+    r = _by_key(lake_rows(nse, BSE, SHAS, 'now'))[('2026-10-22', 'nse_cash', 'trades')]
+    assert r['value'] == 45_000_000 and r['status'] == 'ok' and r['unit'] == 'count'
+
+
+def test_refreshed_rows_win_over_the_one_off_import():
+    old = dict(trade_date='2026-10-15', dataset='nse_fo', metric='contracts', source='exchangesdash_json@b2049b5',
+               value=1.0, status='ok')
+    new = dict(old, source=SOURCE, value=2.0)
+    for policy in ('best_ok', 'excel_first'):
+        vols = select_volumes([old, new], policy, keys=['nse_fo:contracts'])
+        assert [v.value for v in vols['nse_fo:contracts']] == [2.0]
+
+
+class Resp:
+    def __init__(self, status=201, text=''):
+        self.status_code, self.text = status, text
+
+
+class Session:
+    def __init__(self):
+        self.calls = []
+
+    def post(self, url, params, data, headers, timeout):
+        self.calls.append((url, params, json.loads(data), headers))
+        return Resp(201)
+
+
+def test_upsert_merges_on_the_primary_key(monkeypatch):
+    monkeypatch.setenv(KEY_ENV, SECRET)
+    s = Session()
+    rows = lake_rows(NSE, BSE, SHAS, 'now')
+    n = SupabaseWriter(session=s, chunk=5).upsert('sb_market_daily', rows, PK)
+    assert n == len(rows) and len(s.calls) == -(-len(rows) // 5)
+    url, params, part, headers = s.calls[0]
+    assert url.endswith('/rest/v1/sb_market_daily')
+    assert params == {'on_conflict': 'trade_date,dataset,metric,source'}
+    assert 'resolution=merge-duplicates' in headers['Prefer']
+    assert SECRET not in repr(SupabaseWriter(session=s))
+
+
+def test_snapshot_keeps_one_lake_row_per_day():
+    import os
+    from src.live.run import EngineSnapshotReader
+    from src.live.snapshot import build_snapshot
+    root = os.path.join(os.path.dirname(__file__), '..', '..')
+    snap = json.load(open(os.path.join(root, 'snapshot', 'db_snapshot_2026-10-23.json')))
+    rd = EngineSnapshotReader(snap)
+    rd.tables['sb_market_daily'] = rd.tables['sb_market_daily'] + [
+        dict(trade_date='2026-10-01', dataset='bse_fo', metric='contracts', source=s, value=v, status='ok')
+        for s, v in ((SOURCE, 2.0), ('exchangesdash_json@b2049b5', 1.0), ('zzz_later_source', 3.0))]
+    built, _ = build_snapshot(rd)
+    day = [r for r in built['market_daily_lake'] if (r['trade_date'], r['dataset'], r['metric'])
+           == ('2026-10-01', 'bse_fo', 'contracts')]
+    assert [(r['source'], r['value']) for r in day] == [(SOURCE, 2.0)]
