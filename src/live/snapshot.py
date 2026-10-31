@@ -55,7 +55,7 @@ def build_snapshot(reader, broker=BROKER, as_of=None):
 def complete_through(snap, keys=None):
     """(date, limiting series): the last calendar day on which every engine input has an 'ok' value, in the
     workbook's copy or in the lake (switch c takes the lake's value on imputed days). Series that end on the
-    same day are all named, comma-separated.
+    same day are all named, comma-separated; 'sb_calendar' when the calendar ends first.
 
     The industry MTF book is published with a lag and is left out (coverage allows its last 3 trading days).
     """
@@ -71,7 +71,9 @@ def complete_through(snap, keys=None):
     first_end = min(last.values())
     limiting = ', '.join(sorted(k for k, d in last.items() if d == first_end))
     cal_last = max(r['trade_date'] for r in snap['calendar'])
-    return min(first_end, cal_last), limiting
+    if cal_last < first_end:
+        return cal_last, 'sb_calendar'
+    return first_end, limiting
 
 
 def trim(snap, as_of):
