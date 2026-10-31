@@ -155,12 +155,14 @@ def _cmp(a, b, what):
 
 
 # ── segments from the engine's daily output ──
-def make_segments(daily, guarded=False, calendar=None, exclude=(), mtf_split=False, exclude_segments=None):
+def make_segments(daily, guarded=False, calendar=None, exclude=(), mtf_split=False, exclude_segments=None,
+                  mtf_weekday_net=True):
     """Same series and scaling as summary.build. guarded=True needs `calendar` ({iso: sb_calendar row}).
     exclude: dates left out of every statistic (switch d: special sessions) of the segments in
     exclude_segments (daily keys; None = all).
     mtf_split (switch g, decision D4): MTF is gross in every table (the workbook's weekday tables use net),
-    and a separate 'MTF (net)' panel shows net = 45% × gross. Consolidated stays on gross."""
+    and a separate 'MTF (net)' panel shows net = 45% × gross. Consolidated stays on gross.
+    mtf_weekday_net=False (Groww: gross only, no net series): the weekday tables read gross, as its workbook does."""
     exclude = set(exclude)
     if exclude:
         daily = {seg: ({d: r for d, r in rows.items() if d not in exclude}
@@ -172,7 +174,8 @@ def make_segments(daily, guarded=False, calendar=None, exclude=(), mtf_split=Fal
         'Cash': ({d: r['rev_mn'] for d, r in daily['cash'].items()}, 10, None, False, 'is_equity_day'),
         'Commodities': ({d: r['rev_mn'] for d, r in daily['comm'].items()}, 10, None, True, 'is_mcx_day'),
         'MTF': ({d: r['gross_cr'] for d, r in daily['mtf'].items()}, 1,
-                None if mtf_split else {d: r['net_cr'] for d, r in daily['mtf'].items()}, False, 'is_equity_day'),
+                {d: r['net_cr'] for d, r in daily['mtf'].items()} if (mtf_weekday_net and not mtf_split) else None,
+                False, 'is_equity_day'),
     }
     if mtf_split:
         spec['MTF (net)'] = ({d: r['net_cr'] for d, r in daily['mtf'].items()}, 1, None, False, 'is_equity_day')

@@ -10,21 +10,29 @@ Reproduces: backtesting F&O!AD, backtesting cash!V, Commodities!K, MTF data (2)!
 Workbook quirks kept in parity mode (section 8c): zero-fill before 1 Jul 2025 (numeric 0 for Q3 FY25-Q1 FY26,
 #N/A for Q2 FY25), blank commodities before 1 Oct 2025, fixed commodity calibration, typed 5% growths, the
 Q1 FY27 F&O not fed, the BSE freeze (it is in the input series), MTF gross only.
+
+Live switches g-a ... g-g (docs/GROWW_LIVE_SPEC.md, src/engine/groww_switches.py) are read from GrowwInputs.switches;
+each changes inputs (an overlay of reviewed facts, pins, assumptions) or a rule behind `G.on(letter)`. With none on,
+every line below is the parity code path.
 """
 import json
 from collections import defaultdict
 from statistics import mean
 
-from .inputs import Inputs, fy_month_of, months_of_quarter, q_of, quarter_seq
+from .inputs import Inputs, fy_month_of, fy_of, months_of_quarter, q_of, quarter_seq
 from . import daily as ANGEL
+from . import groww_switches as GS
 
 BROKER = 'GROWW'
 
 
 class GrowwInputs:
-    """Groww's own inputs from a groww_snapshot_*.json (facts / assumptions / pins with broker_id = 'GROWW')."""
+    """Groww's own inputs from a groww_snapshot_*.json (facts / assumptions / pins with broker_id = 'GROWW').
 
-    def __init__(self, snap):
+    switches: Groww live switches g-a ... g-g (src/engine/groww_switches.py); none = parity (the workbook).
+    reviewed_facts: the reviewed Groww fact rows the switches read (needed as soon as one is on)."""
+
+    def __init__(self, snap, switches=(), reviewed_facts=None):
         assert snap.get('broker_id') == BROKER, snap.get('broker_id')
         self.snap = snap
         self._facts = {}
@@ -39,25 +47,47 @@ class GrowwInputs:
         for p in snap['pins']:
             assert p['broker_id'] == BROKER, p
             self._pins[(p['key'], p['period_key'])] = p
+        self.switches = GS.check(switches)
+        self.overlay, self._pin_over, self._assume_over = {}, {}, {}
+        if self.switches:
+            if reviewed_facts is None:
+                raise GS.SwitchError('Groww live switches need the reviewed facts')
+            self.overlay = GS.build_overlay(self.switches, reviewed_facts, self._facts, self._assume)
+            self._pin_over = GS.pin_overrides(self.switches)
+            self._assume_over = GS.assume_overrides(self.switches)
 
     def fact(self, metric, period):
+        o = self.overlay.get((metric, period))
+        if o is not None:
+            return o.value
         f = self._facts.get((metric, period))
         if f is None:
             raise KeyError(f'Groww fact {metric} for {period} is not in the snapshot')
         return f['value']
 
     def assume(self, key):
+        if key in self._assume_over:
+            return self._assume_over[key]
         a = self._assume[key]
         return a['value'] if a['value'] is not None else a['value_text']
 
     def pin(self, key, period=''):
+        if (key, period) in self._pin_over:
+            return self._pin_over[(key, period)]
         return self._pins[(key, period)]['value_text']
 
+    def on(self, letter):
+        return letter in self.switches
 
-def load(angel_snapshot, groww_snapshot):
-    """(Inputs, GrowwInputs) from the Angel snapshot and the Groww snapshot paths (parity mode)."""
+
+def load(angel_snapshot, groww_snapshot, switches=(), reviewed_path=None):
+    """(Inputs, GrowwInputs) from the Angel snapshot and the Groww snapshot paths.
+
+    switches: Groww switches. The Angel calibration Groww borrows is Angel's parity run."""
+    switches = GS.check(switches)
+    reviewed = GS.load_reviewed(reviewed_path or GS.REVIEWED) if switches else None
     I = Inputs(json.load(open(angel_snapshot)))
-    return I, GrowwInputs(json.load(open(groww_snapshot)))
+    return I, GrowwInputs(json.load(open(groww_snapshot)), switches, reviewed)
 
 
 def _qkey(q):
@@ -69,25 +99,54 @@ def _le(a, b):
 
 
 # ── quarterly parameters ──
+LIVE_SEGMENTS = ('fo', 'cash', 'comm')
+
+
+def _base_kind(G, q):
+    try:
+        return G.pin('revenue_base', q)
+    except KeyError:
+        if not G.switches:
+            raise
+        return 'total_income'                  # live: a quarter without a pin (Q2 FY27) is on total income
+
+
+def _base(G, q):
+    which = _base_kind(G, q)
+    if which == 'total_income':
+        if ('total_income', q) in G.overlay:
+            return G.fact('total_income', q)                                       # consolidated total income, filed
+        return G.fact('revenue_from_ops', q) + G.fact('other_income', q)           # H105 = H103 + H104
+    return G.fact(which, q)
+
+
 def segment_revenue(G):
     """rev[seg][q] in Rs Mn = revenue-mix % x base (Working sheet - Groww rows 17-19, 22).
-    Base = total income (Q2, Q3 FY26: row 105 = 103 + 104) or income excluding Fisdom/AMC (Q4 FY26, Q1 FY27: row 120)."""
-    def base(q):
-        which = G.pin('revenue_base', q)
-        if which == 'total_income':
-            return G.fact('revenue_from_ops', q) + G.fact('other_income', q)       # H105 = H103 + H104
-        return G.fact(which, q)
+    Base = total income (Q2, Q3 FY26: row 105 = 103 + 104) or income excluding Fisdom/AMC (Q4 FY26, Q1 FY27: row 120).
+    Live: every quarter with a mix and a base (consolidated total income once switch g-a is on)."""
     rev = defaultdict(dict)
-    for q, segs in (('Q2 FY 2026', ('fo', 'cash')), ('Q3 FY 2026', ('fo', 'cash', 'comm')),
-                    ('Q4 FY 2026', ('fo', 'cash')), ('Q1 FY 2027', ('cash',))):
+    if not G.switches:
+        plan = (('Q2 FY 2026', ('fo', 'cash')), ('Q3 FY 2026', ('fo', 'cash', 'comm')),
+                ('Q4 FY 2026', ('fo', 'cash')), ('Q1 FY 2027', ('cash',)))
+    else:
+        last = max((q for m, q in list(G._facts) + list(G.overlay) if m.startswith('revmix_')), key=_qkey)
+        plan = [(q, LIVE_SEGMENTS) for q in quarter_seq('Q1 FY 2026', last)]
+    for q, segs in plan:
         for s in segs:
-            rev[s][q] = G.fact(f'revmix_{s}', q) * base(q)
+            if not G.switches:
+                rev[s][q] = G.fact(f'revmix_{s}', q) * _base(G, q)
+            else:
+                try:
+                    rev[s][q] = G.fact(f'revmix_{s}', q) * _base(G, q)
+                except KeyError:
+                    continue                                                       # no mix or no base: not usable
     return rev
 
 
 def fo_parameters(I, G, angel, V_by_q, last_q):
     """backtesting F&O!AM48:AR57: share (row 57) and take rate (row 56) by quarter. Calibrated Q2-Q4 FY26,
-    then the last take rate carried and the last share x (1 + typed growth), then carried."""
+    then the last take rate carried and the last share x (1 + typed growth), then carried.
+    Live: g-b starts at Q1 FY26, g-d runs to the last reported quarter, g-e drops the typed growth."""
     rev = segment_revenue(G)['fo']
     cpo_m = {m: r['cpo'] for m, r in angel['calib']['fo_month'].items()}
     growth = G.assume('share_growth_fo')
@@ -110,7 +169,8 @@ def fo_parameters(I, G, angel, V_by_q, last_q):
 
 def cash_parameters(I, G, angel, N_by_q, last_q):
     """cash market!F35:L43: trades per order G (Angel's), take rate K, share L by quarter.
-    Calibrated Q2 FY26-Q1 FY27; then the mean of the last 3 quarters (take rate), carried (share), then carried."""
+    Calibrated Q2 FY26-Q1 FY27; then the mean of the last 3 quarters (take rate), carried (share), then carried.
+    Live: g-b starts at Q1 FY26, g-d runs to the last reported quarter, g-e carries the last actual take rate."""
     rev = segment_revenue(G)['cash']
     tpo = {q: r['tpo'] for q, r in angel['calib']['cash_quarter'].items()}
     first, last = G.pin('cash_first_calibrated_quarter'), G.pin('cash_last_actual_quarter')
@@ -154,8 +214,9 @@ def mtf_parameters(I, G, last_q):
     for q in quarter_seq('Q3 FY 2025', last_q):
         if _le(q, last):
             ind = mean(I.monthly[('mtf_industry', 'book_cr', m)] for m in months_of_quarter(q))   # D51:D57
-            book = G.fact('mtf_revenue', q) / (y / qf)                                            # I51:I57
-            out[q] = {'industry_avg_cr': ind, 'groww_book_cr': book, 'share': book / ind, 'regime': 'actual'}
+            book_cr = G.fact('mtf_revenue', q) / (y / qf)                                         # I51:I57
+            out[q] = {'industry_avg_cr': ind, 'groww_book_cr': book_cr, 'share': book_cr / ind, 'regime': 'actual',
+                      'revenue_cr': G.fact('mtf_revenue', q)}
         else:
             out[q] = {'share': G.fact('mtf_share_override', q), 'regime': 'typed'}               # J58:J60
     return out
@@ -163,9 +224,10 @@ def mtf_parameters(I, G, last_q):
 
 # ── daily revenue ──
 def run(I, G, angel=None):
-    """Groww's calibration and daily revenue. `angel` = daily.run(I) (Angel's calibration is reused as is)."""
+    """Groww's calibration and daily revenue. `angel` = daily.run(I) (Angel's calibration is reused as is).
+    """
     if I.switches:
-        raise ValueError('Groww parity mode needs an Inputs object without live switches')
+        raise ValueError('Groww needs an Inputs object without Angel live switches')
     angel = angel or ANGEL.run(I)
     zero_q = G.assume('zero_fill_quarters').split(',')
     live_fo, live_cash, live_comm = (G.assume(f'first_live_date_{s}') for s in ('fo', 'cash', 'comm'))
@@ -187,10 +249,10 @@ def run(I, G, angel=None):
         N_q[q_of(d)] += v
     fo_q = fo_parameters(I, G, angel, V_q, last_q)
     cash_q = cash_parameters(I, G, angel, N_q, last_q)
-    comm = comm_parameters(I, G, angel)
-    mtf_q = mtf_parameters(I, G, last_q)
     cpo_fo = {m: r['cpo'] for m, r in angel['calib']['fo_month'].items()}
     comm_m = angel['calib']['comm_month']
+    mtf_q = mtf_parameters(I, G, last_q)
+    comm = comm_parameters(I, G, angel)
 
     def stub(d, q, live, table, what):
         """Days before first live: None (#N/A) before the zero-fill quarters, 0.0 inside them. Raises if a
@@ -245,6 +307,6 @@ def run(I, G, angel=None):
         K = mtf_q[q]['share'] * book[d]                                           # Groww book, Rs Cr
         mtf[d] = {'share': mtf_q[q]['share'], 'groww_book_cr': K, 'gross_cr': K * (y / basis),
                   'regime': mtf_q[q]['regime']}
-    return {'calib': {'fo_quarter': fo_q, 'cash_quarter': cash_q, 'comm': comm, 'mtf_quarter': mtf_q,
-                      'revenue': segment_revenue(G)},
-            'daily': {'fo': fo, 'cash': cash, 'comm': comm_d, 'mtf': mtf}}
+    calib = {'fo_quarter': fo_q, 'cash_quarter': cash_q, 'mtf_quarter': mtf_q, 'revenue': segment_revenue(G)}
+    calib['comm'] = comm
+    return {'calib': calib, 'daily': {'fo': fo, 'cash': cash, 'comm': comm_d, 'mtf': mtf}}

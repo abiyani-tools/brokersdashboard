@@ -113,6 +113,14 @@ def markdown(b):
 
 
 def main(argv):
+    if '--broker' in argv:                                   # python3 -m src.engine.bridge --broker GROWW a
+        i = argv.index('--broker')
+        broker, argv = argv[i + 1].upper(), argv[:i] + argv[i + 2:]
+        if broker == 'GROWW':
+            from . import groww_bridge
+            return groww_bridge.main(argv)
+        if broker != 'ANGELONE':
+            raise SystemExit(f'--broker {broker}: unknown broker')
     letter = argv[1]
     b = bridge(letter)
     os.makedirs('out/bridges', exist_ok=True)
