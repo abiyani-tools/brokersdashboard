@@ -150,7 +150,7 @@ def fo_parameters(I, G, angel, V_by_q, last_q):
     Live: g-b starts at Q1 FY26, g-d runs to the last reported quarter, g-e drops the typed growth."""
     rev = segment_revenue(G)['fo']
     cpo_m = {m: r['cpo'] for m, r in angel['calib']['fo_month'].items()}
-    growth = G.assume('share_growth_fo')
+    growth = 0.0 if G.on('e') else G.assume('share_growth_fo')
     first, last = G.pin('fo_first_calibrated_quarter'), G.pin('fo_last_actual_quarter')
     out = {}
     for q in quarter_seq(first, last_q):
@@ -186,7 +186,10 @@ def cash_parameters(I, G, angel, N_by_q, last_q):
             hist.append(tr)
         else:
             prev = out[quarter_seq(first, q)[-2]]
-            tr = mean(hist[-3:]) if prev['regime'] == 'actual' else prev['take_rate']   # K42 = AVERAGE(K39:K41), K43 = K42
+            if G.on('e'):
+                tr = prev['take_rate']                                            # one rule: carry the last actual
+            else:
+                tr = mean(hist[-3:]) if prev['regime'] == 'actual' else prev['take_rate']   # K42 = AVERAGE(K39:K41), K43 = K42
             out[q] = {'share': prev['share'], 'take_rate': tr, 'tpo': tpo[q], 'regime': 'projected'}
     return out
 
@@ -215,7 +218,7 @@ def comm_parameters_quarterly(I, G, angel, mkt_orders_by_q, last_q):
     rev = segment_revenue(G)['comm']
     tr_q = angel['calib']['take_rates']
     first, last = G.pin('comm_first_calibrated_quarter'), G.pin('comm_last_actual_quarter')
-    growth = G.assume('share_growth_comm')
+    growth = 0.0 if G.on('e') else G.assume('share_growth_comm')
     out, rate, rate_from = {}, None, None
     for q in quarter_seq(first, last_q):
         if _le(q, last):
@@ -237,7 +240,8 @@ def comm_parameters_quarterly(I, G, angel, mkt_orders_by_q, last_q):
 
 def mtf_parameters(I, G, last_q):
     """MTF data!I51:J60: Groww average book = revenue / (yield / 4); share = book / industry average of the
-    monthly series; typed shares from Q2 FY27."""
+    monthly series; typed shares from Q2 FY27.
+    g-e: unreported quarters carry the last actual share (no typed share)."""
     y, qf = G.assume('mtf_yield'), G.assume('mtf_quarter_fraction')
     last = G.pin('mtf_last_actual_quarter')
     out = {}
@@ -247,6 +251,9 @@ def mtf_parameters(I, G, last_q):
             book_cr = G.fact('mtf_revenue', q) / (y / qf)                                         # I51:I57
             out[q] = {'industry_avg_cr': ind, 'groww_book_cr': book_cr, 'share': book_cr / ind, 'regime': 'actual',
                       'revenue_cr': G.fact('mtf_revenue', q)}
+        elif G.on('e'):
+            prev = out[quarter_seq('Q3 FY 2025', q)[-2]]
+            out[q] = {'share': prev['share'], 'regime': 'carried'}
         else:
             out[q] = {'share': G.fact('mtf_share_override', q), 'regime': 'typed'}               # J58:J60
     return out

@@ -283,11 +283,32 @@ def test_d_does_not_touch_mtf_or_closed_quarters_of_f_and_o():
 
 
 # ── g-e: one estimate rule ──
+def test_e_unreported_quarters_carry_the_last_actual_share_and_take_rate():
+    c = run('abcde')[2]['calib']
+    fo, cash, comm = c['fo_quarter'], c['cash_quarter'], c['comm_quarter']
+    assert fo['Q3 FY 2027']['share'] == fo['Q2 FY 2027']['share'] and fo['Q3 FY 2027']['take_rate'] == fo['Q2 FY 2027']['take_rate']
+    assert cash['Q3 FY 2027']['take_rate'] == cash['Q2 FY 2027']['take_rate']
+    assert cash['Q3 FY 2027']['share'] == cash['Q2 FY 2027']['share']
+    assert comm['Q3 FY 2027']['share'] == comm['Q2 FY 2027']['share'] and comm['Q3 FY 2027']['take_rate'] == comm['Q2 FY 2027']['take_rate']
+    m = c['mtf_quarter']
+    assert m['Q2 FY 2027']['regime'] == m['Q3 FY 2027']['regime'] == 'carried' and m['Q3 FY 2027']['share'] == m['Q1 FY 2027']['share']
+    assert all(p['regime'] != 'typed' for p in m.values())                      # no typed share is read
+
+
+def test_e_only_unreported_days_move():
+    for seg in ('fo', 'cash', 'comm'):
+        a, e = daily_of('abcd', seg), daily_of('abcde', seg)
+        assert all(a[d] == e[d] for d in a if d < '2026-10-01'), seg
+        assert any(a[d] != e[d] for d in a if d >= '2026-10-01'), seg
+    f_a, f_e = daily_of('abcd', 'fo')['2026-10-12'], daily_of('abcde', 'fo')['2026-10-12']
+    assert f_e['rev_mn'] / f_a['rev_mn'] == pytest.approx(1 / 1.05, rel=1e-12)   # the typed 5% growth is gone
+
+
 # ── g-f: MTF basis ──
 # ── g-g: special sessions, periods ──
 # ── the orders check ──
 # ── bridges ──
-@pytest.mark.parametrize('x', list('abcd'))
+@pytest.mark.parametrize('x', list('abcde'))
 def test_each_bridge_builds_and_adds_up(x):
     b = B.bridge(x)
     txt = B.markdown(b)
@@ -306,7 +327,7 @@ def test_each_bridge_builds_and_adds_up(x):
 def test_bridges_chain_end_to_end():
     """Each bridge's 'after' is the next one's 'before': the effects add up from parity to all seven switches."""
     prev = None
-    for x in 'abcd':
+    for x in 'abcde':
         b = B.bridge(x)
         if prev is not None:
             assert {(r['period'], r['panel']): r['before'] for r in b['rows']} == \

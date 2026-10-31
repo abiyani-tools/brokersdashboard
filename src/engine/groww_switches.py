@@ -64,6 +64,7 @@ FACT_SWITCHES = {
           ('fact', 'total_income', ['Q2 FY 2027'], 'Rs Mn'),
           ('share', 'share_fo_adto_q', Q('Q1 FY 2027', 'Q2 FY 2027')),
           ('share', 'share_cash_adto_q', ['Q2 FY 2027'])],
+    'e': [],
 }
 
 # switch -> pin / assumption values it sets
@@ -82,7 +83,7 @@ ASSUME_SWITCHES = {
 
 MARKET_SWITCHES = {'c': {('bse_fo', 'contracts')}}   # reuses Angel switch c's market_overrides
 
-IMPLEMENTED = set('abcd')
+IMPLEMENTED = set('abcde')
 
 
 class SwitchError(ValueError):
