@@ -11,7 +11,9 @@ name: daily
 # The step is continue-on-error: if groww.in blocks GitHub's runners (HTTP 403) or the page structure changes, the step shows
 # red in the job, prints an error annotation, and the "Groww IR archive failed" step adds a warning to the job summary; the
 # live run still goes ahead. The raw page is kept as the artifact groww-ir-raw. Fallback from AB's Mac: docs/GROWW_LIVE_SPEC.md,
-# "Running the archive from AB's Mac". Groww's live switches g-h / g-i read this archive but are off in this job.
+# "Running the archive from AB's Mac". Groww's switch g-i (signed off) reads this archive; g-h is off.
+# Industry MTF book: the ExchangesDash owner's view codex_public_nse_mtf_daily, read with their read-only key
+# (secret NSE_LAKE_ANON_KEY); without it the refresh skips that series and says so.
 on:
   workflow_dispatch:
   schedule:
@@ -22,6 +24,7 @@ jobs:
     env:
       SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
       SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+      NSE_LAKE_ANON_KEY: ${{ secrets.NSE_LAKE_ANON_KEY }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5

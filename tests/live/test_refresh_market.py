@@ -178,3 +178,36 @@ def test_as_of_is_capped_by_the_calendar():
     snap = json.load(open(os.path.join(root, 'snapshot', 'db_snapshot_2026-10-23.json')))
     snap['calendar'] = [r for r in snap['calendar'] if r['trade_date'] <= '2026-10-16']
     assert complete_through(snap) == ('2026-10-16', 'sb_calendar')
+
+
+def test_industry_mtf_book_from_the_owners_view(monkeypatch):
+    from src.live.refresh_market import MTF_SOURCE, fetch_mtf_book, mtf_rows
+    monkeypatch.delenv('NSE_LAKE_ANON_KEY', raising=False)
+    rows, msg = fetch_mtf_book()
+    assert rows == [] and 'skipped' in msg                          # no key: nothing read, run goes on
+    view = [{'reporting_date': '2023-09-28', 'closing_outstanding_cr': 1.0},
+            {'reporting_date': '2024-10-01', 'closing_outstanding_cr': 81823.53},
+            {'reporting_date': '2026-10-29', 'closing_outstanding_cr': 0}]
+    out = {r['trade_date']: r for r in mtf_rows(view, 'now')}
+    assert sorted(out) == ['2024-10-01', '2026-10-29']               # before START dropped
+    r = out['2024-10-01']
+    assert (r['dataset'], r['metric'], r['unit'], r['source'], r['value']) == \
+        ('mtf_industry', 'book_cr', 'Rs Cr', MTF_SOURCE, 81823.53)
+    assert out['2026-10-29']['status'] == 'suspect'
+
+
+def test_industry_mtf_book_pages_through_the_view(monkeypatch):
+    from src.live.refresh_market import fetch_mtf_book
+    monkeypatch.setenv('NSE_LAKE_ANON_KEY', 'anon_TEST_ONLY')
+    days = [{'reporting_date': f'2025-01-{i:02d}', 'closing_outstanding_cr': 1000 + i} for i in range(1, 6)]
+
+    class S:
+        def __init__(self):
+            self.calls = []
+
+        def get(self, url, params, headers, timeout):
+            self.calls.append(params['offset'])
+            return FakeGet(days[params['offset']:params['offset'] + params['limit']])
+    s = S()
+    rows, msg = fetch_mtf_book(s, page=2)
+    assert len(rows) == 5 and s.calls == [0, 2, 4] and 'last 2025-01-05' in msg

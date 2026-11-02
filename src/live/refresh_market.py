@@ -14,7 +14,9 @@ Three series are not public yet; the owner was asked to publish them under these
   1. NSE cash trades     `cash_trades` in nse_dashboard_data.json rows
   2. MCX contracts       `total_contracts` in mcx_dashboard_data.json rows, or mcx_contracts_daily.json
   3. industry MTF book   nse_mtf_daily.json rows {date, book_cr}
-The two new files are optional: a file the repo doesn't have is skipped.
+The two new files are optional: a file the repo doesn't have is skipped. The owner's answer (2 Nov 2026): NSE cash
+trades and MCX total_contracts arrive in those files with their PR #33; the industry MTF book stays in their
+Supabase view `codex_public_nse_mtf_daily`, read with their read-only key (env NSE_LAKE_ANON_KEY; skipped if unset).
 
 sb_calendar is extended the same way: each day after its last date on which NSE or MCX traded (a row in
 the NSE or MCX file) is added, equity / MCX flags from which file has it. A day in a file's
@@ -147,13 +149,64 @@ def summary(rows: list[dict]) -> str:
     return "\n".join(f"  {k:24} last {v}  suspect {suspect[k]}" for k, v in sorted(last.items()))
 
 
+MTF_LAKE_URL_ENV, MTF_LAKE_KEY_ENV = "NSE_LAKE_URL", "NSE_LAKE_ANON_KEY"
+MTF_LAKE_DEFAULT_URL = "https://vuswwmczfrlzjoxfvkzu.supabase.co"
+MTF_VIEW = "codex_public_nse_mtf_daily"   # the owner's public view: reporting_date, closing_outstanding_cr
+MTF_SOURCE = "codex_nse_mtf"
+
+
+def mtf_rows(view_rows: list, loaded_at: str) -> list[dict]:
+    """sb_market_daily rows (mtf_industry / book_cr, Rs Cr) from the owner's daily industry MTF book view."""
+    out = []
+    for r in view_rows:
+        d, v = str(r["reporting_date"])[:10], r.get("closing_outstanding_cr")
+        if v is None or d < START:
+            continue
+        bad = v == 0
+        out.append(dict(trade_date=d, dataset="mtf_industry", metric="book_cr", source=MTF_SOURCE, value=float(v),
+                        unit="Rs Cr", status="suspect" if bad else "ok", note="zero on a trading day" if bad else None,
+                        source_ref=f"{MTF_VIEW}[{d}].closing_outstanding_cr", loaded_at=loaded_at))
+    return out
+
+
+def fetch_mtf_book(session=None, page: int = 1000):
+    """(view rows, message). Reads the owner's view with their read-only key from the environment; without the key
+    nothing is read and the message says so (the run goes on with the rows already in sb_market_daily)."""
+    import os
+    key = os.environ.get(MTF_LAKE_KEY_ENV)
+    if not key:
+        return [], f"industry MTF book: skipped ({MTF_LAKE_KEY_ENV} not set)"
+    if session is None:
+        import requests
+        session = requests.Session()
+    url = f"{os.environ.get(MTF_LAKE_URL_ENV) or MTF_LAKE_DEFAULT_URL}/rest/v1/{MTF_VIEW}"
+    headers = {"apikey": key, "Authorization": f"Bearer {key}", "Accept": "application/json"}
+    rows, offset = [], 0
+    while True:
+        r = session.get(url, params={"select": "reporting_date,closing_outstanding_cr", "order": "reporting_date",
+                                     "reporting_date": f"gte.{START}", "limit": page, "offset": offset},
+                        headers=headers, timeout=60)
+        r.raise_for_status()
+        part = r.json()
+        rows += part
+        if len(part) < page:
+            break
+        offset += page
+    last = max((str(x["reporting_date"])[:10] for x in rows), default="none")
+    return rows, f"industry MTF book: {len(rows)} days from {MTF_VIEW}, last {last}"
+
+
 def main(argv=None) -> int:
     argv = sys.argv[1:] if argv is None else argv
     data, shas = fetch()
-    rows = lake_rows(data, shas, dt.datetime.now(dt.timezone.utc).isoformat())
+    loaded_at = dt.datetime.now(dt.timezone.utc).isoformat()
+    rows = lake_rows(data, shas, loaded_at)
     read = " ".join(f"{k}@{v[:7]}" for k, v in shas.items())
     print(f"{REPO} {read}: {len(rows)} rows from {START}")
     print(f"  not in the repo yet: {', '.join(k for k in FILES if k not in shas) or 'none'}")
+    view, msg = fetch_mtf_book()
+    rows += mtf_rows(view, loaded_at)
+    print(f"  {msg}")
     print(summary(rows))
     if "--write" not in argv:
         print("dry run: nothing written (pass --write to upsert into sb_market_daily and extend sb_calendar)")
@@ -161,7 +214,7 @@ def main(argv=None) -> int:
     from .db import SupabaseReader, SupabaseWriter
     writer = SupabaseWriter()
     n = writer.upsert("sb_market_daily", rows, PK)
-    print(f"upserted {n} rows into sb_market_daily (source {SOURCE})")
+    print(f"upserted {n} rows into sb_market_daily (sources {SOURCE}, {MTF_SOURCE})")
     cal_last = max(str(r["trade_date"])[:10] for r in SupabaseReader().table("sb_calendar"))
     new_days = calendar_rows(data, cal_last)
     if new_days:
