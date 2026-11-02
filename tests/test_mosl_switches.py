@@ -292,3 +292,68 @@ def test_c_zero_and_non_ok_lake_days_get_no_row():
     F = facts()
     assert qsum(with_c['daily']['cash'], 'gross_cr', 'Q1 FY 2027') == pytest.approx(
         F[('gross_brokerage_cash', 'Q1 FY 2027')]['value'] / 10, rel=1e-9)
+
+
+# ── m-d: periods and comparisons from the calendar ──
+def _means(rows, field, scale, in_period, skip=()):
+    v = [r[field] / scale for d, r in rows.items() if in_period(d) and d not in skip]
+    return sum(v) / len(v)
+
+
+def test_d_special_sessions_leave_the_fo_cash_and_commodity_averages_but_not_mtf():
+    M, res = run('abcd')
+    special = {d for d, r in M.cal.items() if r.get('special_session')}
+    assert {'2024-11-01', '2025-02-01', '2025-10-21', '2026-02-01'} <= special
+    segs = B.segments(M, res)
+    fy26 = lambda d: d.startswith(('2025-04', '2025-05', '2025-06', '2025-07', '2025-08', '2025-09', '2025-1', '2026-01',
+                                   '2026-02', '2026-03'))
+    d = res['daily']
+    assert segs['F&O'].fy('FY 2026') == pytest.approx(_means(d['fo'], 'rev_mn', 10, fy26, special), rel=1e-12)
+    assert segs['Cash'].fy('FY 2026') == pytest.approx(_means(d['cash'], 'rev_cr', 1, fy26, special), rel=1e-12)
+    assert segs['MTF'].fy('FY 2026') == pytest.approx(_means(d['mtf'], 'nii_cr', 1, fy26), rel=1e-12)   # MTF keeps them
+    plain = B.segments(*run('abc'))
+    assert plain['F&O'].fy('FY 2026') != segs['F&O'].fy('FY 2026')
+
+
+def test_d_only_the_periods_with_a_special_session_move():
+    t_c, t_d = B.adr(*run('abc')), B.adr(*run('abcd'))
+    for k in t_c:
+        moved = t_d[k] != pytest.approx(t_c[k], rel=1e-12)
+        assert moved == (k[1] == 'FY 2026' and k[2] != 'MTF'), k                  # FY27 has no special session yet
+
+
+def test_d_yoy_is_the_same_period_last_year_not_the_workbooks_typed_row():
+    M, res = run('abcd')
+    rows = B.live_period_rows(M, res)
+    get = lambda panel, label: next(r for r in rows if (r['panel'], r['period_key'], r['row_label']) ==
+                                    (panel, 'Q2 FY 2027', label))
+    yoy = get('Consolidated', 'Q2 FY 2027 | YoY')
+    assert yoy['comparison'] == 'YoY'
+    ly = get('Consolidated', 'Q2 FY 2026')                                           # the comparator row is labelled Q2 FY26
+    assert yoy['comp_value'] == pytest.approx(yoy['value'] / ly['value'] - 1, rel=1e-12)
+    assert get('Consolidated', 'Q1 FY 2027')['value'] is not None                    # QoQ comparator
+    t = B.adr(M, res, (('Q', 'Q2 FY 2027'), ('Q', 'Q2 FY 2026'), ('Q', 'Q4 FY 2026')))
+    assert yoy['value'] == pytest.approx(t[('Q', 'Q2 FY 2027', 'Consolidated')], rel=1e-12)
+    assert ly['value'] == pytest.approx(t[('Q', 'Q2 FY 2026', 'Consolidated')], rel=1e-12)
+    # the workbook's "YoY" (vs Q4 FY26) would have said something else
+    wb = t[('Q', 'Q2 FY 2027', 'Consolidated')] / t[('Q', 'Q4 FY 2026', 'Consolidated')] - 1
+    assert yoy['comp_value'] != pytest.approx(wb, abs=0.01)
+
+
+def test_d_standard_panels_labels_from_the_calendar_and_no_net_mtf():
+    M, res = run('abcd')
+    rows = B.live_period_rows(M, res)
+    panels = list(dict.fromkeys(r['panel'] for r in rows))
+    assert panels == list(SP.PANELS) and 'MTF (net)' not in panels
+    keys = {(r['panel'], r['period_type'], r['period_key'], r['table_name'], r['row_label']) for r in rows}
+    assert len(keys) == len(rows)
+    assert {r['period_key'] for r in rows if r['period_type'] == 'FY'} >= {'FY 2026', 'FY 2027'}
+    assert 'FY 2027 October' in {r['period_key'] for r in rows if r['period_type'] == 'M'}
+    # the same generator as Angel One and Groww (one code path): E3 rows built from the calendar
+    assert rows == SP.period_rows(B.segments(M, res, guarded=True))
+
+
+def test_d_parity_summary_still_reads_the_workbook_layout():
+    cells, _ = summary.build(run('')[1]['daily'], 'MOSL')
+    assert len(cells) == 264
+    assert summary.SPECS['MOSL']['labels']['default']['q'][2] == 'Q4 FY 2026'          # parity keeps the typed row
