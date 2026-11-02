@@ -385,15 +385,31 @@ def test_a_mosl_error_other_than_a_refusal_fails_the_job_after_the_others_publis
 
 # ── Angel One and Groww are unchanged by MOSL's arrival ──
 def test_angel_and_groww_dry_run_output_is_byte_identical_to_before_mosl(monkeypatch, tmp_path):
-    """md5 of the four files `run_live.py --broker all` wrote before MOSL was wired in (2 Nov 2026)."""
+    """md5 of the four files `run_live.py --broker all` wrote before MOSL was wired in (2 Nov 2026). The reports are
+    compared as bytes; the summary rows with every float rounded to 12 significant digits, because Python 3.12's sum()
+    is compensated and moves the last bit of some rows (<= 3e-16 relative) against 3.9's. Both versions give these pins."""
     import hashlib
     for d in ('snapshot',):
         os.symlink(os.path.join(ROOT, d), tmp_path / d)
     monkeypatch.chdir(tmp_path)
     cli.main(['--broker', 'all'])
     out = tmp_path / 'out' / 'live' / '2026-10-21'
-    got = {f: hashlib.md5(open(out / f, 'rb').read()).hexdigest()
-           for f in ('summary_rows.json', 'report.md', 'groww/summary_rows.json', 'groww/report.md')}
-    assert got == {'summary_rows.json': 'ccf693e16e04892a66eb0b420507f51b', 'report.md': 'c586391fe3aacaf5d0673ed9cca799c4',
-                   'groww/summary_rows.json': 'a1448a5756de294354637728565a620b',
+
+    def rounded(x):
+        if isinstance(x, float):
+            return float(f'{x:.12g}')
+        if isinstance(x, list):
+            return [rounded(v) for v in x]
+        if isinstance(x, dict):
+            return {k: rounded(v) for k, v in x.items()}
+        return x
+
+    def digest(f):
+        raw = open(out / f, 'rb').read()
+        if f.endswith('.json'):
+            raw = json.dumps(rounded(json.loads(raw)), sort_keys=True).encode()
+        return hashlib.md5(raw).hexdigest()
+    got = {f: digest(f) for f in ('summary_rows.json', 'report.md', 'groww/summary_rows.json', 'groww/report.md')}
+    assert got == {'summary_rows.json': 'ab06a0b196b3c03dac61e636c7f72dac', 'report.md': 'c586391fe3aacaf5d0673ed9cca799c4',
+                   'groww/summary_rows.json': '60a939b904526f53ba5f7039cf3895a6',
                    'groww/report.md': '1cb10c582088dc06a3dcfce9de0cd0e2'}
