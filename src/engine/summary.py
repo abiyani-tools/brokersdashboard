@@ -7,6 +7,12 @@ Statistics follow the workbook formulas exactly:
 - weekday: latest / last 3 / last 10 distinct dates with that weekday
   (commodities filter revenue > 0 for last-N and weekday; MTF weekday uses NET revenue)
 - Broking and Consolidated = sums of segment statistics.
+
+Per-broker parity specs (SPECS): labels, comparison columns, panel layout, the daily field and scale each segment
+reads, and whether the MTF weekday tables read net. 'MOSL' (SUMMARY - Motilal Oswal) differs from the other two in
+its layout (Broking aligned with Consolidated; Commodities left and Cash right in band 3), in reading Cash and MTF
+in Rs Cr (no /10) and in its error rows: a daily row with `err` set is a cell holding #N/A / #VALUE!, which makes
+AVERAGEIFS (FY / quarter / month) an error and IFERROR turn it into 0, while the last-N and weekday windows drop it.
 """
 import datetime as dt
 from statistics import mean
@@ -48,21 +54,49 @@ GROWW_LABELS = {
 }
 GROWW_COLS = {'L': ('C', 'D', 'E', 'H', 'I', 'J'), 'R': ('M', 'N', 'O', 'R', 'S', 'T')}
 
+# 'SUMMARY - Motilal Oswal': panels L:T like Groww, but Broking sits on the Consolidated rows and band 3 is swapped
+# (Commodities left B58:J81, Cash right L59:T82, one row below). Every panel reads the same typed labels (L7:L17),
+# and the "YoY" quarter row is Q4 FY26 (L13). F&O and Commodities are Rs Mn (/10); Cash (AB) and MTF (X) are Rs Cr.
+MOSL_LABELS = {
+    'default': {'fy': ['FY 2027', 'FY 2026'], 'q': ['Q2 FY 2027', 'Q1 FY 2027', 'Q4 FY 2026'],
+                'm': ['FY 2027 September', 'FY 2027 August'], 'avg6': ['Q1 FY 2027', 'Q2 FY 2027']},
+}
+_MOSL_TOP = ('L', (7, 8), (11, 12, 13), (16, 17, 18), (22, 23, 24, 25), 7)
+_MOSL_MTF = ('L', (35, 36), (39, 40, 41), (44, 45, 46), (50, 51, 52, 53), 35)
+MOSL_LAYOUT = {
+    'Consolidated': _MOSL_TOP,
+    'Broking':      ('R',) + _MOSL_TOP[1:],
+    'MTF':          _MOSL_MTF,
+    'F&O':          ('R',) + _MOSL_MTF[1:],
+    'Commodities':  ('L', (63, 64), (67, 68, 69), (72, 73, 74), (78, 79, 80, 81), 63),
+    'Cash':         ('R', (64, 65), (68, 69, 70), (73, 74, 75), (79, 80, 81, 82), 64),
+}
+# segment -> (daily field, divisor, last-N / weekday windows keep revenue > 0 only)
+DEFAULT_FIELDS = {'F&O': ('rev_mn', 10, False), 'Cash': ('rev_mn', 10, False),
+                  'Commodities': ('rev_mn', 10, True), 'MTF': ('gross_cr', 1, False)}
+MOSL_FIELDS = {'F&O': ('rev_mn', 10, False), 'Cash': ('rev_cr', 1, False),
+               'Commodities': ('rev_mn', 10, False), 'MTF': ('nii_cr', 1, False)}
+
 # per-broker parity spec: labels, comparison columns, whether the MTF weekday tables read net (Angel) or gross (Groww)
 SPECS = {
     'ANGELONE': {'labels': PARITY_LABELS, 'cols': COLS, 'mtf_weekday_net': True},
     'GROWW': {'labels': GROWW_LABELS, 'cols': GROWW_COLS, 'mtf_weekday_net': False},
+    'MOSL': {'labels': MOSL_LABELS, 'cols': GROWW_COLS, 'mtf_weekday_net': False, 'layout': MOSL_LAYOUT,
+             'fields': MOSL_FIELDS},
 }
 
 
 class Seg:
     """One segment's daily series with the workbook's statistics."""
-    def __init__(self, series, scale=1.0, weekday_series=None, positive_only=False):
+    def __init__(self, series, scale=1.0, weekday_series=None, positive_only=False, errors=()):
         self.s = {d: v / scale for d, v in series.items() if v is not None}
         self.w = {d: v / scale for d, v in (weekday_series or series).items() if v is not None}
         self.pos = positive_only
+        self.err = set(errors)                      # dates whose cell holds #N/A / #VALUE! (MOSL)
 
     def _avg(self, keyfn, label):
+        if self.err and any(keyfn(d) == label for d in self.err):
+            return 0.0                              # AVERAGEIFS over an error -> error -> IFERROR(...,0)
         vals = [v for d, v in self.s.items() if keyfn(d) == label]
         return mean(vals) if vals else 0.0          # IFERROR(...,0)
 
@@ -94,12 +128,14 @@ def build(daily, broker='ANGELONE'):
     spec = SPECS[broker]
     PARITY_LABELS = spec['labels']
     mtf_w = {d: r['net_cr'] for d, r in daily['mtf'].items()} if spec['mtf_weekday_net'] else None
-    segs = {
-        'F&O': Seg({d: r['rev_mn'] for d, r in daily['fo'].items()}, 10),
-        'Cash': Seg({d: r['rev_mn'] for d, r in daily['cash'].items()}, 10),
-        'Commodities': Seg({d: r['rev_mn'] for d, r in daily['comm'].items()}, 10, positive_only=True),
-        'MTF': Seg({d: r['gross_cr'] for d, r in daily['mtf'].items()}, 1, weekday_series=mtf_w),
-    }
+    fields = spec.get('fields', DEFAULT_FIELDS)
+    key = {'F&O': 'fo', 'Cash': 'cash', 'Commodities': 'comm', 'MTF': 'mtf'}
+    segs = {}
+    for name, (field, scale, pos) in fields.items():
+        rows = daily[key[name]]
+        segs[name] = Seg({d: r[field] for d, r in rows.items()}, scale, positive_only=pos,
+                         weekday_series=mtf_w if name == 'MTF' else None,
+                         errors=[d for d, r in rows.items() if r.get('err')])
     D = PARITY_LABELS['default']
     stats = {}
 
@@ -119,7 +155,7 @@ def build(daily, broker='ANGELONE'):
     parts = [seg_block(n, D) for n in ('F&O', 'Cash', 'Commodities')]
     stats['Broking'] = _sum_blocks(parts)
     stats['Consolidated'] = _sum_blocks([stats['Broking'], seg_block('MTF', D)])
-    return _to_cells(stats, D, spec['cols']), stats
+    return _to_cells(stats, D, spec['cols'], spec.get('layout', LAYOUT)), stats
 
 
 def _sum_blocks(blocks):
@@ -137,9 +173,9 @@ def _cmp(a, b):
         return None
 
 
-def _to_cells(stats, D, cols=COLS):
+def _to_cells(stats, D, cols=COLS, layout=LAYOUT):
     cells = {}
-    for panel, (side, fyr, qr, mr, wr, wd0) in LAYOUT.items():
+    for panel, (side, fyr, qr, mr, wr, wd0) in layout.items():
         v, c1, c2, wv, wc1, wc2 = cols[side]
         st = stats[panel]
         for rows, key in ((fyr, 'fy'), (qr, 'q'), (mr, 'm'), (wr, 'w')):
