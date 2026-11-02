@@ -1,0 +1,20 @@
+name: prices
+# Share prices only (src/live/refresh_prices.py -> sb_share_prices), on demand: the backfill, or a re-run after a failed
+# daily step. The daily job runs the same step every weekday. Needs SUPABASE_URL, SUPABASE_SERVICE_KEY.
+on:
+  workflow_dispatch:
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    env:
+      SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+      SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - run: pip install -r requirements.txt
+      - name: Check secrets are present
+        run: test -n "$SUPABASE_URL" && test -n "$SUPABASE_SERVICE_KEY"
+      - name: Share prices into sb_share_prices (Yahoo, ANGELONE / MOTILALOFS / GROWW)
+        run: python -m src.live.refresh_prices --write

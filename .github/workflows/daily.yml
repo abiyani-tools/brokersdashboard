@@ -51,6 +51,11 @@ jobs:
         run: |
           echo "::warning title=Groww IR archive failed::today's Groww investor-relations page was NOT archived (see the archive step above); archive it from the Mac: docs/GROWW_LIVE_SPEC.md"
           echo "### Groww IR archive FAILED today: no sb_broker_daily rows were written" >> "$GITHUB_STEP_SUMMARY"
+      # Share prices for the dashboard's price vs ADR-DMA charts (src/live/refresh_prices.py): full Yahoo history each run
+      # (Yahoo restates the past after a split); a failure warns and never stops the ADR run. Also: workflow 'prices'.
+      - name: Share prices into sb_share_prices (Yahoo, ANGELONE / MOTILALOFS / GROWW)
+        continue-on-error: true
+        run: python -m src.live.refresh_prices --write
       - name: Live run from the DB and publish, Angel One then Groww then MOSL (E5 -> engine -> E1 coverage -> Summary rows -> sb_*)
         run: python run_live.py --db --publish --broker all
       - name: Keep the raw Groww IR page
