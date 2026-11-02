@@ -8,8 +8,9 @@ history every run. Yahoo restates every past close after a split or bonus, so ea
 upsert would leave the old rows on the old basis (a step in the series).
 
 Columns: `close` is Yahoo's chart close (split- and bonus-adjusted, not dividend-adjusted): the charts use it.
-`adj_close` is Yahoo's adjclose (also dividend-adjusted), kept for reference. Bars with no close are dropped. The bar of
-a session still open (today before the close) is dropped: intraday it is the last trade, not a close.
+`adj_close` is Yahoo's adjclose (also dividend-adjusted), kept for reference. Bars with no close, or volume 0 (no trade:
+Yahoo repeats the last close on an exchange holiday), are dropped: no row, never a repeated price. The bar of a session
+still open (today before the close) is dropped: intraday it is the last trade, not a close.
 
 A ticker that fails (HTTP error, an empty or changed reply) is reported and skipped; the others are still written, and
 the command exits 1 so the job step shows as failed (the step is continue-on-error: prices never stop the ADR run).
@@ -53,17 +54,19 @@ def price_rows(broker, ticker, result, fetched_at, now=None):
     ts = result.get('timestamp') or []
     ind = result.get('indicators') or {}
     closes = ((ind.get('quote') or [{}])[0]).get('close') or []
+    volumes = ((ind.get('quote') or [{}])[0]).get('volume') or [None] * len(ts)
     adj = ((ind.get('adjclose') or [{}])[0]).get('adjclose') or [None] * len(ts)
-    if not ts or len(closes) != len(ts) or len(adj) != len(ts):
-        raise PriceError(f'{ticker}: {len(ts)} timestamps, {len(closes)} closes, {len(adj)} adjusted closes')
+    if not ts or len(closes) != len(ts) or len(adj) != len(ts) or len(volumes) != len(ts):
+        raise PriceError(f'{ticker}: {len(ts)} timestamps, {len(closes)} closes, {len(adj)} adjusted closes, '
+                         f'{len(volumes)} volumes')
     offset = meta.get('gmtoffset', 19800)
     session_ = (meta.get('currentTradingPeriod') or {}).get('regular') or {}
     now = (now or dt.datetime.now(dt.timezone.utc)).timestamp()
     still_open = session_.get('start') is not None and session_['start'] <= now < session_.get('end', 0)
     ref = f'{URL.format(ticker=ticker)}?range={PARAMS["range"]}&interval={PARAMS["interval"]}'
     out = {}
-    for t, c, a in zip(ts, closes, adj):
-        if c is None or c <= 0:
+    for t, c, a, v in zip(ts, closes, adj, volumes):
+        if c is None or c <= 0 or v == 0:      # volume 0: no trade (Yahoo repeats the last close on a holiday, 2026-01-15)
             continue
         if still_open and t >= session_['start']:
             continue                                                  # today's session is still open: not a close

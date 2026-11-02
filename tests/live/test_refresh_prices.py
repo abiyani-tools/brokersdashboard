@@ -9,10 +9,12 @@ IST = 19800
 D1, D2, D3 = 1793159100, 1793245500, 1793331900        # 09:15 IST on 2026-10-28, 29, 30 (Yahoo stamps the session open)
 
 
-def result(ts=(D1, D2, D3), close=(100.0, None, 102.5), adj=(99.0, None, 101.5), currency='INR', regular=None):
+def result(ts=(D1, D2, D3), close=(100.0, None, 102.5), adj=(99.0, None, 101.5), volume=(10, 0, 12), currency='INR',
+           regular=None):
     return {'meta': {'currency': currency, 'gmtoffset': IST,
                      'currentTradingPeriod': {'regular': regular or {'start': D3 + 86400, 'end': D3 + 86400 + 22500}}},
-            'timestamp': list(ts), 'indicators': {'quote': [{'close': list(close)}], 'adjclose': [{'adjclose': list(adj)}]}}
+            'timestamp': list(ts), 'indicators': {'quote': [{'close': list(close), 'volume': list(volume)}],
+                                                  'adjclose': [{'adjclose': list(adj)}]}}
 
 
 def test_rows_on_ist_dates_and_null_closes_dropped():
@@ -22,6 +24,13 @@ def test_rows_on_ist_dates_and_null_closes_dropped():
     r = rows[0]
     assert (r['broker_id'], r['ticker'], r['source']) == ('ANGELONE', 'ANGELONE.NS', 'yahoo_chart_v8')
     assert r['source_ref'].startswith('https://query1.finance.yahoo.com/v8/finance/chart/ANGELONE.NS?range=10y')
+
+
+def test_a_bar_with_no_volume_is_a_holiday_not_a_price():
+    # Yahoo's 2026-01-15 (exchange holiday): the last close repeated with volume 0
+    rows = R.price_rows('GROWW', 'GROWW.NS', result(close=(164.34, 164.34, 173.23), adj=(164.34, 164.34, 173.23),
+                                                    volume=(5, 0, 7)), 'now')
+    assert [r['trade_date'] for r in rows] == ['2026-10-28', '2026-10-30']
 
 
 def test_the_bar_of_a_session_still_open_is_not_a_close():
