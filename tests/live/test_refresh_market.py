@@ -11,7 +11,7 @@ SHAS = {'nse': 'abcdef1234', 'bse': '9876543210', 'mcx': '1111111aaa', 'mcx_cont
         'mtf': '3333333ccc'}
 
 NSE = {'daily_all': [
-    {'date': '2023-09-28', 'total_contracts': 1, 'io_contracts': 1, 'so_contracts': 1, 'io_premium': 1,
+    {'date': '2023-05-31', 'total_contracts': 1, 'io_contracts': 1, 'so_contracts': 1, 'io_premium': 1,
      'so_premium': 1, 'if_turnover': 1, 'sf_turnover': 1, 'cash_traded_value': 1},
     {'date': '2026-10-22', 'total_contracts': 500, 'io_contracts': 0, 'so_contracts': 30, 'io_premium': 2.5,
      'so_premium': 1.5, 'if_turnover': 10.0, 'sf_turnover': 5.0, 'cash_traded_value': 99.0},
@@ -33,7 +33,7 @@ def _by_key(rows):
 
 def test_mapping_matches_the_23_oct_import():
     rows = _by_key(lake_rows(DATA, SHAS, 'now'))
-    assert ('2023-09-28', 'nse_fo', 'contracts') not in rows          # before START
+    assert ('2023-05-31', 'nse_fo', 'contracts') not in rows          # before START
     r = rows[('2026-10-22', 'nse_fo', 'fut_turnover_cr')]
     assert r['value'] == 15.0 and r['unit'] == 'Rs Cr' and r['source'] == SOURCE
     assert r['source_ref'].startswith('sucaanalytics-max/ExchangesDash@abcdef1:')
@@ -185,7 +185,7 @@ def test_industry_mtf_book_from_the_owners_view(monkeypatch):
     monkeypatch.delenv('NSE_LAKE_ANON_KEY', raising=False)
     rows, msg = fetch_mtf_book()
     assert rows == [] and 'skipped' in msg                          # no key: nothing read, run goes on
-    view = [{'reporting_date': '2023-09-28', 'closing_outstanding_cr': 1.0},
+    view = [{'reporting_date': '2023-05-31', 'closing_outstanding_cr': 1.0},
             {'reporting_date': '2024-10-01', 'closing_outstanding_cr': 81823.53},
             {'reporting_date': '2026-10-29', 'closing_outstanding_cr': 0}]
     out = {r['trade_date']: r for r in mtf_rows(view, 'now')}
@@ -239,3 +239,23 @@ def test_industry_mtf_book_pages_through_the_view(monkeypatch):
     s = S()
     rows, msg = fetch_mtf_book(s, page=2)
     assert len(rows) == 5 and s.calls == [0, 2, 4] and 'last 2025-01-05' in msg
+
+
+def test_calendar_is_backfilled_to_start():
+    """A1 (2 Nov 2026): the refresh adds the days from START up to the calendar's first day, nothing before START."""
+    from src.live import db, refresh_market as R
+    nse = {'daily_all': [{'date': d} for d in ('2023-05-31', '2023-06-01', '2023-06-02', '2023-09-29', '2026-10-22')]}
+    mcx = {'daily_all': [{'date': d} for d in ('2023-06-01', '2023-06-03', '2023-09-29', '2026-10-22')]}
+    data = {'nse': nse, 'bse': {'daily_all': []}, 'mcx': mcx}
+    early = R.calendar_rows(data, R._day_before(R.START), '2023-09-29')
+    assert [r['trade_date'] for r in early] == ['2023-06-01', '2023-06-02', '2023-06-03']
+    assert [(r['is_equity_day'], r['is_mcx_day']) for r in early] == [(True, True), (True, False), (False, True)]
+    assert early[0]['fy_month'] == 'FY 2024 June'
+
+
+def test_new_years_day_2024_on_mcx_is_a_known_thin_day():
+    from src.live.integrity import KNOWN_ISSUES, Issue, _known
+    import datetime as dt
+    i = _known(Issue('jump', 'mcx:contracts', 'error', (dt.date(2024, 1, 1),), '206,227 outside ...'))
+    assert i.severity == 'info' and 'evening session from 5 pm closed' in i.detail
+    assert ('jump', 'mcx:contracts', '2025-01-01') in KNOWN_ISSUES

@@ -41,7 +41,8 @@ FILES = {
 }
 REQUIRED = ("nse", "bse", "mcx")
 SOURCE = "exchangesdash_json"
-START = "2023-09-29"
+START = "2023-06-01"   # A1 (AB, 2 Nov 2026): June 2023. Before it BSE F&O is zero / ramping up after its 15 May 2023
+                       # relaunch, which E5 blocks on. Was 2023-09-29.
 PK = ("trade_date", "dataset", "metric", "source")
 
 
@@ -96,15 +97,16 @@ def lake_rows(data: dict, shas: dict, loaded_at: str) -> list[dict]:
     return sorted(out.values(), key=lambda x: (x["trade_date"], x["dataset"], x["metric"]))
 
 
-def calendar_rows(data: dict, after: str) -> list[dict]:
-    """sb_calendar rows for the days after `after` on which NSE or MCX traded, per the dashboard files."""
+def calendar_rows(data: dict, after: str, before: str | None = None) -> list[dict]:
+    """sb_calendar rows for the days after `after` (and before `before`, if given) on which NSE or MCX traded, per the
+    dashboard files."""
     def dates(key):
         d = data.get(key, {})
         return {r["date"] for r in _rows(d)}, {r["date"] for r in d.get("special_sessions", [])}
     eq, eq_special = dates("nse")
     mcx, mcx_special = dates("mcx")
     out = []
-    for day in sorted(d for d in eq | mcx if d > after):
+    for day in sorted(d for d in eq | mcx if d > after and (before is None or d < before)):
         date = dt.date.fromisoformat(day)
         labels = fy_labels(date)
         special = day in eq_special | mcx_special
@@ -114,6 +116,10 @@ def calendar_rows(data: dict, after: str) -> list[dict]:
                         note=("in ExchangesDash special_sessions; type to classify (muhurat, dr_test, budget, ...)"
                               if special else None)))
     return out
+
+
+def _day_before(day: str) -> str:
+    return (dt.date.fromisoformat(day) - dt.timedelta(days=1)).isoformat()
 
 
 def fetch(session=None):
@@ -223,7 +229,12 @@ def main(argv=None) -> int:
     writer = SupabaseWriter()
     n = writer.upsert("sb_market_daily", rows, PK)
     print(f"upserted {n} rows into sb_market_daily (sources {SOURCE}, {MTF_SOURCE})")
-    cal_last = max(str(r["trade_date"])[:10] for r in SupabaseReader().table("sb_calendar"))
+    cal_days = [str(r["trade_date"])[:10] for r in SupabaseReader().table("sb_calendar")]
+    cal_first, cal_last = min(cal_days), max(cal_days)
+    early_days = calendar_rows(data, _day_before(START), cal_first)      # back to START (the calendar began 2023-09-29)
+    if early_days:
+        writer.insert("sb_calendar", early_days)
+        print(f"sb_calendar: first day was {cal_first}; added {len(early_days)} days from {early_days[0]['trade_date']}")
     new_days = calendar_rows(data, cal_last)
     if new_days:
         writer.insert("sb_calendar", new_days)

@@ -46,6 +46,11 @@ RULES: dict[str, Rule] = {
 # Reviewed exceptions: (check, key, date) -> reason. A matching issue is reported as 'info' with the reason,
 # never dropped. Add an entry only after the day has been looked at; say what is and is not known.
 KNOWN_ISSUES = {
+    ("jump", "mcx:contracts", "2024-01-01"):
+        "206,227 contracts against a trailing 20-day minimum of 1,530,602: New Year's Day, MCX traded the "
+        "morning session only (evening session from 5 pm closed; Zerodha bulletin 367799, 1 Jan 2024). Genuine thin "
+        "day, not a data error; checked once sb_calendar marked the day open (it said MCX closed, 29 Sep 2023 - "
+        "28 Mar 2024, until 2 Nov 2026)",
     ("jump", "mcx:contracts", "2025-01-01"):
         "406,749 contracts against a trailing 20-day minimum of 2,205,346: New Year's Day, MCX traded the "
         "morning session only (evening session from 5 pm closed; Zerodha bulletin 31 Dec 2024). Genuine thin "
