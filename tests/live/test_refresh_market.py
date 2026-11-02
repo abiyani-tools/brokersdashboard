@@ -196,6 +196,34 @@ def test_industry_mtf_book_from_the_owners_view(monkeypatch):
     assert out['2026-10-29']['status'] == 'suspect'
 
 
+def test_a_failed_mtf_view_still_writes_the_exchangesdash_rows(monkeypatch, capsys):
+    """2 Nov 2026: the owner's view answered 401 and the whole refresh stopped, so the lake rows were never upserted."""
+    from src.live import db, refresh_market as R
+    monkeypatch.setattr(R, 'fetch', lambda: (DATA, SHAS))
+
+    def boom():
+        raise RuntimeError('401 Client Error: Unauthorized')
+    monkeypatch.setattr(R, 'fetch_mtf_book', boom)
+    written = {}
+
+    class W:
+        def upsert(self, table, rows, pk):
+            written[table] = rows
+            return len(rows)
+
+        def insert(self, table, rows):
+            written[table] = rows
+
+    class Rd:
+        def table(self, name):
+            return [{'trade_date': '2099-01-01'}]
+    monkeypatch.setattr(db, 'SupabaseWriter', W)
+    monkeypatch.setattr(db, 'SupabaseReader', Rd)
+    assert R.main(['--write']) == 1                                        # the step shows as failed ...
+    assert len(written['sb_market_daily']) == len(lake_rows(DATA, SHAS, 'now'))   # ... after the lake rows are written
+    assert 'industry MTF book: NOT read (RuntimeError: 401' in capsys.readouterr().out
+
+
 def test_industry_mtf_book_pages_through_the_view(monkeypatch):
     from src.live.refresh_market import fetch_mtf_book
     monkeypatch.setenv('NSE_LAKE_ANON_KEY', 'anon_TEST_ONLY')

@@ -26,6 +26,7 @@ budget, ...). Existing calendar days are never changed.
 from __future__ import annotations
 
 import datetime as dt
+import os
 import sys
 
 from .periods import fy_labels
@@ -204,13 +205,20 @@ def main(argv=None) -> int:
     read = " ".join(f"{k}@{v[:7]}" for k, v in shas.items())
     print(f"{REPO} {read}: {len(rows)} rows from {START}")
     print(f"  not in the repo yet: {', '.join(k for k in FILES if k not in shas) or 'none'}")
-    view, msg = fetch_mtf_book()
+    try:                       # the owner's view is optional: a failure there never stops the ExchangesDash rows
+        view, msg = fetch_mtf_book()
+        mtf_failed = False
+    except Exception as e:
+        view, msg, mtf_failed = [], f"industry MTF book: NOT read ({type(e).__name__}: {e}); the other rows are still written", True
+        if os.environ.get("GITHUB_ACTIONS"):
+            print(f"::warning title=Industry MTF book not read::{msg}")
     rows += mtf_rows(view, loaded_at)
     print(f"  {msg}")
     print(summary(rows))
+    rc = 1 if mtf_failed else 0                      # the step still shows as failed, after the rows are written
     if "--write" not in argv:
         print("dry run: nothing written (pass --write to upsert into sb_market_daily and extend sb_calendar)")
-        return 0
+        return rc
     from .db import SupabaseReader, SupabaseWriter
     writer = SupabaseWriter()
     n = writer.upsert("sb_market_daily", rows, PK)
@@ -223,7 +231,7 @@ def main(argv=None) -> int:
     print(f"sb_calendar: last day was {cal_last}; added {len(new_days)} days"
           + (f" through {new_days[-1]['trade_date']}" if new_days else "")
           + (f"; special sessions to classify: {', '.join(special)}" if special else ""))
-    return 0
+    return rc
 
 
 if __name__ == "__main__":
