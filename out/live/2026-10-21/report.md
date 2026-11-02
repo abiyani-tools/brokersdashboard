@@ -1,6 +1,6 @@
 # Live run (dry run) — as of 2026-10-21
 
-Switches: abcdefghi · E5: pass (0 blocking, 4 warnings, 5 info) · E1 coverage: pass · Summary rows: 1827
+Switches: abcdefghij · E5: pass (0 blocking, 4 warnings, 5 info) · E1 coverage: pass · Summary rows: 1827
 
 Nothing was written to the database.
 
@@ -11,24 +11,24 @@ Nothing was written to the database.
 | FY 2027 | Broking | 13.2863 | — | +6.6% |
 | FY 2027 | Cash | 1.9849 | — | +15.8% |
 | FY 2027 | Commodities | 1.5178 | — | +26.1% |
-| FY 2027 | Consolidated | 17.5103 | — | +12.3% |
+| FY 2027 | Consolidated | 17.4965 | — | +11.5% |
 | FY 2027 | F&O | 9.7836 | — | +2.4% |
-| FY 2027 | MTF | 4.2240 | — | +35.5% |
-| FY 2027 | MTF (net) | 1.9008 | — | +35.5% |
+| FY 2027 | MTF | 4.2102 | — | +30.6% |
+| FY 2027 | MTF (net) | 1.8946 | — | +30.6% |
 | FY 2027 October | Broking | 15.4738 | +25.2% | +14.8% |
 | FY 2027 October | Cash | 2.0058 | -0.9% | +15.1% |
 | FY 2027 October | Commodities | 1.7978 | +16.6% | +31.9% |
-| FY 2027 October | Consolidated | 20.2160 | +18.2% | +20.0% |
+| FY 2027 October | Consolidated | 20.3181 | +18.8% | +19.8% |
 | FY 2027 October | F&O | 11.6703 | +32.8% | +12.5% |
-| FY 2027 October | MTF | 4.7422 | +0.0% | +40.7% |
-| FY 2027 October | MTF (net) | 2.1340 | +0.0% | +40.7% |
+| FY 2027 October | MTF | 4.8442 | +2.2% | +39.3% |
+| FY 2027 October | MTF (net) | 2.1799 | +2.2% | +39.3% |
 | Q2 FY 2027 | Broking | 11.9666 | -16.0% | +6.6% |
 | Q2 FY 2027 | Cash | 1.9160 | -6.8% | +21.2% |
 | Q2 FY 2027 | Commodities | 1.5400 | +7.4% | +48.3% |
-| Q2 FY 2027 | Consolidated | 16.4960 | -8.5% | +15.4% |
+| Q2 FY 2027 | Consolidated | 16.4960 | -8.2% | +14.1% |
 | Q2 FY 2027 | F&O | 8.5106 | -20.9% | -1.1% |
-| Q2 FY 2027 | MTF | 4.5294 | +19.8% | +47.4% |
-| Q2 FY 2027 | MTF (net) | 2.0382 | +19.8% | +47.4% |
+| Q2 FY 2027 | MTF | 4.5294 | +21.4% | +40.5% |
+| Q2 FY 2027 | MTF (net) | 2.0382 | +21.4% | +40.5% |
 
 ## E5 integrity report
 

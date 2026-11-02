@@ -14,7 +14,7 @@ from .integrity import Report, run_checks
 from .loader import load_inputs
 from .periods import MissingCalibration
 
-ALL_SWITCHES = 'abcdefghi'
+ALL_SWITCHES = 'abcdefghij'
 BROKER = 'ANGELONE'
 # segment -> (daily key, value field, calendar flag, trading days allowed missing at the end)
 SEGMENTS = {'fo': ('rev_mn', 'is_equity_day', 0), 'cash': ('rev_mn', 'is_equity_day', 0),

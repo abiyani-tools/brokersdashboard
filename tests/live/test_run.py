@@ -61,7 +61,7 @@ def test_report_says_whether_the_run_was_published(run):
 def test_live_dry_run_on_the_snapshot(run):
     rep = run['report']
     assert not rep.blocking, rep.summary()
-    assert run['switches'] == 'abcdefghi' and run['as_of'] == '2026-10-21'
+    assert run['switches'] == 'abcdefghij' and run['as_of'] == '2026-10-21'
     # known exceptions are reported, not dropped
     assert {i.dates[0].isoformat() for i in rep.find('jump', 'mcx:contracts', 'info') if not i.source} == {'2025-01-01'}
     # 1 Feb 2025 is a special session ('budget', AB 23 Oct 2026): not jump-tested at all
@@ -73,10 +73,11 @@ def test_live_dry_run_on_the_snapshot(run):
 
 
 def test_live_headline_equals_the_cumulative_bridge(run):
+    # out/bridges/j.md, the 'After' column (switches a-j)
     get = {(r['panel'], r['row_label']): r['value'] for r in run['rows'] if r['period_type'] in ('FY', 'Q', 'M')}
-    assert get[('Consolidated', 'FY 2027')] == pytest.approx(17.510302, abs=5e-7)
+    assert get[('Consolidated', 'FY 2027')] == pytest.approx(17.496484, abs=5e-7)
     assert get[('Consolidated', 'Q2 FY 2027')] == pytest.approx(16.495983, abs=5e-7)
-    assert get[('Consolidated', 'FY 2027 October')] == pytest.approx(20.216017, abs=5e-7)
+    assert get[('Consolidated', 'FY 2027 October')] == pytest.approx(20.318078, abs=5e-7)
 
 
 def test_new_month_after_the_workbook_grid_is_calibrated_in_live_mode(tmp_path):
@@ -115,7 +116,7 @@ def test_snapshot_built_from_sb_tables_gives_the_same_engine_run():
     reviewed = json.load(open(REVIEWED))['facts']
     built, rev = build_snapshot(EngineSnapshotReader(snap, reviewed))
     assert len(rev) == 178 and len(built['facts']) == 477
-    for sw in ('', 'abcdefghi'):
+    for sw in ('', 'abcdefghij'):
         a = daily.run(Inputs(snap, sw, reviewed if sw else None))['daily']
         b = daily.run(Inputs(built, sw, rev if sw else None))['daily']
         assert a == b, sw
