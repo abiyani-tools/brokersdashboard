@@ -357,3 +357,93 @@ def test_d_parity_summary_still_reads_the_workbook_layout():
     cells, _ = summary.build(run('')[1]['daily'], 'MOSL')
     assert len(cells) == 264
     assert summary.SPECS['MOSL']['labels']['default']['q'][2] == 'Q4 FY 2026'          # parity keeps the typed row
+
+
+# ── m-e: one estimate rule for the open quarter ──
+def _per_unit(rows, field, key, q):
+    """net revenue per unit of key over a quarter: sum(net) / sum(key)."""
+    days = [d for d in rows if q_of(d) == q]
+    return sum(rows[d][field] for d in days) / sum(key[d] for d in days)
+
+
+def _keys():
+    L = lake()
+    g = lambda k: {d: v for d, v, s in L[k]}
+    io, bse, nc, bc = (g(k) for k in ('nse_fo/io_contracts', 'bse_fo/contracts', 'nse_cash/turnover_cr', 'bse_cash/turnover_cr'))
+    shared = json.load(open(PM.SHARED_SNAPSHOT))
+    mcx = {m['trade_date']: m['value'] for m in shared['market_daily'] if (m['dataset'], m['metric']) == ('mcx', 'contracts')}
+    return ({d: io[d] + bse[d] for d in io}, {d: nc[d] + bc[d] for d in nc}, mcx)
+
+
+def test_e_open_quarter_carries_the_last_reported_quarters_net_revenue_per_unit_of_key():
+    _, res = run('abcde')
+    fo_k, cash_k, mcx = _keys()
+    d = res['daily']
+    for seg, field, key in (('fo', 'rev_mn', fo_k), ('cash', 'rev_cr', cash_k), ('comm', 'rev_mn', mcx)):
+        q2 = _per_unit(d[seg], field, key, 'Q2 FY 2027')
+        days = [x for x in d[seg] if q_of(x) == 'Q3 FY 2027']
+        assert len(days) >= 13, seg
+        for x in days:
+            assert d[seg][x][field] == pytest.approx(q2 * key[x], rel=1e-9), (seg, x)
+            assert d[seg][x]['regime'] == 'projected'
+    F = facts()
+    for seg, gf in (('cash', 'gross_cr'), ('fo', 'gross_mn'), ('comm', 'gross_mn')):                # and its net / gross
+        for x in [x for x in d[seg] if q_of(x) == 'Q3 FY 2027'][:3]:
+            n, g = F[(f'net_brokerage_{seg}', 'Q2 FY 2027')]['value'], F[(f'gross_brokerage_{seg}', 'Q2 FY 2027')]['value']
+            fld = 'rev_cr' if seg == 'cash' else 'rev_mn'
+            assert d[seg][x][fld] / d[seg][x][gf] == pytest.approx(n / g, rel=1e-9)
+
+
+def test_e_no_error_rows_and_no_typed_values_in_the_open_quarter():
+    _, res = run('abcde')
+    d = res['daily']
+    assert not any(r.get('err') for seg in d.values() for r in seg.values())
+    assert len([x for x in d['cash'] if q_of(x) == 'Q3 FY 2027']) == 13 and len([x for x in d['comm'] if q_of(x) == 'Q3 FY 2027']) == 14
+    m = res['calib']['mtf']
+    assert m['share']['Q3 FY 2027'] == m['share']['Q2 FY 2027'] and m['nii']['Q3 FY 2027'] == m['nii']['Q2 FY 2027']
+    assert max(d['mtf']) == '2026-10-19' and len([x for x in d['mtf'] if q_of(x) == 'Q3 FY 2027']) == 12   # to the last book day
+    book = {x: r['book_cr'] for x, r in d['mtf'].items()}
+    ind = {m_['trade_date']: m_['value'] for m_ in json.load(open(PM.SHARED_SNAPSHOT))['market_daily']
+           if (m_['dataset'], m_['metric']) == ('mtf_industry', 'book_cr')}
+    assert book['2026-10-15'] == pytest.approx(m['share']['Q2 FY 2027'] * ind['2026-10-15'], rel=1e-12)
+
+
+def test_e_reported_quarters_are_untouched():
+    a, b = run('abcd')[1]['daily'], run('abcde')[1]['daily']
+    for seg in a:
+        for d, r in a[seg].items():
+            if q_of(d) != 'Q3 FY 2027':
+                assert b[seg][d] == r, (seg, d)
+
+
+def test_e_alone_carries_q1_fy27_into_q2_fy27_and_the_ratio_without_averaging():
+    M, res = run('e')
+    F = facts()
+    for seg in ('fo', 'cash', 'comm'):
+        assert M.pin(f'{seg}_last_actual_quarter') == 'Q1 FY 2027'
+    r = {s: mosl.net_gross(M, s, 'Q2 FY 2027') for s in ('fo', 'cash', 'comm')}
+    assert r['cash'] == M.fact('net_gross_cash', 'Q1 FY 2027') != (M.fact('net_gross_cash', 'Q1 FY 2027')
+                                                                  + M.fact('net_gross_cash', 'Q4 FY 2026')) / 2
+    assert r['comm'] == M.fact('net_gross_comm', 'Q1 FY 2027') and r['fo'] == M.fact('net_gross_fo', 'Q1 FY 2027')
+    cash = res['daily']['cash']
+    assert all(q_of(d) != 'Q3 FY 2027' or cash[d]['err'] is None for d in cash)
+    assert set(d for d in cash if q_of(d) in ('Q2 FY 2027', 'Q3 FY 2027')) and all(
+        cash[d]['regime'] == 'projected' for d in cash if q_of(d) in ('Q2 FY 2027', 'Q3 FY 2027'))
+
+
+def test_e_rolls_into_the_next_quarter_without_a_table():
+    """A day in Q4 FY27 (an extended lake) is carried from Q2 FY27 too: no range, no typed column."""
+    L = mosl.load_lake()
+    for k, s in L.items():
+        s['2027-01-05'] = s['2026-10-21']
+    M = mosl.MoslInputs(json.load(open(PM.MOSL_SNAPSHOT)), json.load(open(PM.SHARED_SNAPSHOT)), tuple('abcde'), reviewed(), L,
+                        '2027-01-05')
+    res = mosl.run(M)
+    assert M.qs[-1] == 'Q4 FY 2027'
+    fo_k, cash_k, _ = _keys()
+    q2 = _per_unit(res['daily']['fo'], 'rev_mn', fo_k, 'Q2 FY 2027')
+    k = L['nse_fo/io_contracts']['2027-01-05'][0] + L['bse_fo/contracts']['2027-01-05'][0]
+    assert res['daily']['fo']['2027-01-05']['rev_mn'] == pytest.approx(q2 * k, rel=1e-9)
+    q2c = _per_unit(res['daily']['cash'], 'rev_cr', cash_k, 'Q2 FY 2027')
+    kc = L['nse_cash/turnover_cr']['2027-01-05'][0] + L['bse_cash/turnover_cr']['2027-01-05'][0]
+    assert res['daily']['cash']['2027-01-05']['rev_cr'] == pytest.approx(q2c * kc, rel=1e-9)
