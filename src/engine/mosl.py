@@ -82,6 +82,8 @@ class MoslInputs:
                 raise MS.SwitchError('MOSL live switches need the reviewed facts')
             self.overlay = MS.build_overlay(self.switches, reviewed_facts, self._facts)
             self._pin_over = MS.pin_overrides(self.switches)
+        if 'f' in self.switches and YIELD_KEY not in self._assume:
+            raise MS.SwitchError(f'switch m-f: the sb_assumptions row {YIELD_KEY} ({MS.YIELD_LABEL}) is not in the inputs')
         self._lake = {}
         if 'b' in self.switches:
             if lake is None:
@@ -135,6 +137,7 @@ class MoslInputs:
         return self._lake[f'{dataset}/{metric}']
 
 
+YIELD_KEY = MS.YIELD_ASSUMPTION
 LAKE_KEYS = ('nse_fo/io_contracts', 'bse_fo/contracts', 'nse_cash/turnover_cr', 'bse_cash/turnover_cr')
 
 

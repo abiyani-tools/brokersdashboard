@@ -447,3 +447,94 @@ def test_e_rolls_into_the_next_quarter_without_a_table():
     q2c = _per_unit(res['daily']['cash'], 'rev_cr', cash_k, 'Q2 FY 2027')
     kc = L['nse_cash/turnover_cr']['2027-01-05'][0] + L['bse_cash/turnover_cr']['2027-01-05'][0]
     assert res['daily']['cash']['2027-01-05']['rev_cr'] == pytest.approx(q2c * kc, rel=1e-9)
+
+
+# ── m-f: MTF yield ──
+def _mosl_snap(**edit):
+    snap = copy.deepcopy(json.load(open(PM.MOSL_SNAPSHOT)))
+    if edit.get('drop_yield'):
+        snap['assumptions'] = [a for a in snap['assumptions'] if a['key'] != MS.YIELD_ASSUMPTION]
+    for a in snap['assumptions']:
+        if a['key'] == MS.YIELD_ASSUMPTION and 'value' in edit:
+            a['value'] = edit['value']
+    return snap
+
+
+def test_f_the_carried_yield_is_a_labelled_assumption_equal_to_the_workbooks_own_carry():
+    snap = json.load(open(PM.MOSL_SNAPSHOT))
+    a = next(x for x in snap['assumptions'] if x['key'] == MS.YIELD_ASSUMPTION)
+    typed = {f['period_key']: f['value'] for f in snap['facts'] if f['metric'] == 'mtf_nii_yield'}
+    assert a['broker_id'] == 'MOSL' and a['unit'] == 'fraction' and a['source_ref'].startswith('excel:')
+    assert '[SOURCE NEEDED: MOSL does not publish an MTF yield]' in a['note'] and MS.YIELD_LABEL in a['note']
+    assert a['value'] == typed['Q1 FY 2027'] and len(typed) == 9 and a['value'] == pytest.approx(0.1294, abs=5e-5)
+
+
+def test_f_typed_yields_are_kept_per_quarter_and_the_last_is_carried():
+    M, res = run('abcdef')
+    nii = res['calib']['mtf']['nii']
+    typed = {f['period_key']: f['value'] for f in json.load(open(PM.MOSL_SNAPSHOT))['facts'] if f['metric'] == 'mtf_nii_yield'}
+    assert [q for q in typed if q in nii] == quarter_seq('Q3 FY 2025', 'Q1 FY 2027')
+    for q in nii:
+        if q in typed:
+            assert nii[q] == typed[q]
+    assert nii['Q2 FY 2027'] == nii['Q3 FY 2027'] == M.assume(MS.YIELD_ASSUMPTION) == typed['Q1 FY 2027']
+    # Q2 FY27 MTF NII, recomputed: closing share x industry book x yield / 247 per day
+    ind = {m['trade_date']: m['value'] for m in json.load(open(PM.SHARED_SNAPSHOT))['market_daily']
+           if (m['dataset'], m['metric']) == ('mtf_industry', 'book_cr')}
+    share = 9600.0 / ind['2026-09-30']
+    want = sum(share * v * typed['Q1 FY 2027'] / 247 for d, v in ind.items() if q_of(d) == 'Q2 FY 2027')
+    assert qsum(res['daily']['mtf'], 'nii_cr', 'Q2 FY 2027') == pytest.approx(want, rel=1e-12)
+
+
+def test_f_moves_no_number_when_the_assumption_equals_the_workbooks_carry():
+    a, b = run('abcde')[1]['daily'], run('abcdef')[1]['daily']
+    assert a == b
+    t_a, t_b = B.adr(*run('abcde')), B.adr(*run('abcdef'))
+    assert t_a == t_b
+
+
+def test_f_reads_the_assumption_row_for_the_quarters_after_the_last_typed_yield():
+    rows = reviewed()
+    snap = _mosl_snap(value=0.10)
+    M = mosl.MoslInputs(snap, json.load(open(PM.SHARED_SNAPSHOT)), tuple('abcdef'), rows, mosl.load_lake(), '2026-10-21')
+    res = mosl.run(M)
+    base = run('abcdef')[1]['daily']['mtf']
+    for d, r in res['daily']['mtf'].items():
+        q = q_of(d)
+        if q in ('Q2 FY 2027', 'Q3 FY 2027'):
+            assert r['nii_cr'] == pytest.approx(base[d]['nii_cr'] * 0.10 / base_yield(), rel=1e-12)
+        else:
+            assert r['nii_cr'] == base[d]['nii_cr']                       # typed yields kept
+
+
+def base_yield():
+    return run('abcdef')[0].assume(MS.YIELD_ASSUMPTION)
+
+
+def test_f_without_the_assumption_row_the_switch_raises():
+    with pytest.raises(MS.SwitchError, match='mtf_nii_yield_carry'):
+        mosl.MoslInputs(_mosl_snap(drop_yield=True), json.load(open(PM.SHARED_SNAPSHOT)), tuple('abcdef'), reviewed(),
+                        mosl.load_lake(), '2026-10-21')
+    # without m-f the workbook's own carry (F15 = F14) needs no assumption row
+    M = mosl.MoslInputs(_mosl_snap(drop_yield=True), json.load(open(PM.SHARED_SNAPSHOT)), tuple('abcde'), reviewed(),
+                        mosl.load_lake(), '2026-10-21')
+    assert mosl.run(M)['calib']['mtf']['nii']['Q2 FY 2027'] == M.fact('mtf_nii_yield', 'Q1 FY 2027')
+
+
+# ── the six switches together ──
+def test_every_bridge_file_is_reproducible_and_the_chain_adds_up():
+    for letter in MS.ORDER:
+        text = open(os.path.join(ROOT, 'out', 'bridges', f'mosl_{letter}.md')).read()
+        assert B.markdown(B.bridge(letter)) == text, letter
+    chain = ['', 'a', 'ab', 'abc', 'abcd', 'abcde', 'abcdef']
+    for i, letter in enumerate(MS.ORDER):                    # each bridge's before / after is the cumulative run
+        rows = {(r['period'], r['panel']): r for r in B.bridge(letter)['rows']}
+        for p, k in B.PERIODS:
+            for panel in SP.PANELS:
+                assert rows[(k, panel)]['before'] == B.adr(*run(chain[i]))[(p, k, panel)]
+                assert rows[(k, panel)]['after'] == B.adr(*run(chain[i + 1]))[(p, k, panel)]
+
+
+def test_parity_is_still_exact_with_the_switch_machinery_loaded():
+    rows, daily, calib = PM.main()
+    assert sum(r['ok'] for r in rows) == len(rows) == 264

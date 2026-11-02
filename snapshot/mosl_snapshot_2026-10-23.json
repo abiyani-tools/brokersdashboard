@@ -1618,6 +1618,15 @@
    "unit": null,
    "source_ref": "excel:Motilal Oswal assumptions!E15:F15",
    "note": "share and NII carried from Q1 FY27"
+  },
+  {
+   "broker_id": "MOSL",
+   "key": "mtf_nii_yield_carry",
+   "value": 0.12938330773959208,
+   "value_text": null,
+   "unit": "fraction",
+   "source_ref": "excel:Motilal Oswal assumptions!F14 (typed Q1 FY27 yield; the workbook carries it to Q2 FY27 as F15 = F14)",
+   "note": "[SOURCE NEEDED: MOSL does not publish an MTF yield] The workbook's typed 12.94% (unrounded), carried to every quarter after the last typed yield (MOSL data book has no MTF NII or yield line; docs/MOSL_ADR_Methodology.md section 2b). Read by live switch m-f."
   }
  ],
  "pins": [

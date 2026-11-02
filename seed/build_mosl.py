@@ -121,6 +121,12 @@ def build_snapshot(wbv, wbf, tag, databook, series):
           text='avg_Q4FY26_Q1FY27; fo_carry_to_Q3FY27'),
         A('rule_mtf', None, None, 'excel:Motilal Oswal assumptions!E15:F15', 'share and NII carried from Q1 FY27',
           text='carry_last_actual_quarter'),
+        # live switch m-f: the typed Q1 FY27 yield as a labelled assumption, carried to later quarters
+        A('mtf_nii_yield_carry', next(f['value'] for f in facts if f['metric'] == 'mtf_nii_yield' and f['period_key'] == 'Q1 FY 2027'),
+          'fraction', 'excel:Motilal Oswal assumptions!F14 (typed Q1 FY27 yield; the workbook carries it to Q2 FY27 as F15 = F14)',
+          "[SOURCE NEEDED: MOSL does not publish an MTF yield] The workbook's typed 12.94% (unrounded), carried to every quarter "
+          'after the last typed yield (MOSL data book has no MTF NII or yield line; docs/MOSL_ADR_Methodology.md section 2b). '
+          'Read by live switch m-f.'),
     ]
     pins = []
     P = lambda key, period, text, cell, note=None: pins.append(dict(
