@@ -8,7 +8,7 @@ Compiled 31 Oct 2026 (research only; no DB writes, no commits). Status was verif
 
 2 Nov 2026: MOSL added (M-01 to M-18; switches m-a to m-f approved by AB on 2 Nov and committed, 17f35db to 990eb5d). First live publish: run `1eb13055-cb3d-4080-aec0-7a1944cca218` (daily job 41420521105, as of 30 Oct 2026; Consolidated FY27 8.741, Q2 FY27 8.967, Oct-26 9.872 Rs Cr/day), alongside Angel One `72fd08c6` and Groww `89466064`.
 
-Total: **86 items** (64 model / workbook, 13 data source, 9 build / process): 68 for Angel One, Groww and shared feeds, plus 18 for MOSL.
+Total: **87 items** (64 model / workbook, 14 data source, 9 build / process): 69 for Angel One, Groww and shared feeds, plus 18 for MOSL.
 
 ### Status by severity (all brokers)
 
@@ -16,8 +16,8 @@ Total: **86 items** (64 model / workbook, 13 data source, 9 build / process): 68
 |---|---:|---:|---:|---:|---:|---:|
 | High | 24 | 1 | 1 | 3 | 0 | 29 |
 | Med | 8 | 7 | 4 | 3 | 1 | 23 |
-| Low | 11 | 7 | 9 | 2 | 5 | 34 |
-| **Total** | **43** | **15** | **14** | **8** | **6** | 86 |
+| Low | 12 | 7 | 9 | 2 | 5 | 35 |
+| **Total** | **44** | **15** | **14** | **8** | **6** | 87 |
 
 ### Broker x severity x status
 
@@ -34,8 +34,8 @@ Angel One Med / Low rows corrected on 2 Nov: A-08 and A-09 were already fixed by
 | Groww | Low | 4 | 2 | 5 | 0 | 0 | 11 |
 | **Groww** | all | **17** | **10** | **7** | **1** | **1** | **36** |
 | Shared / lake | High | 4 | 0 | 0 | 3 | 0 | 7 |
-| Shared / lake | Low | 0 | 2 | 1 | 2 | 1 | 6 |
-| **Shared / lake** | all | **4** | **2** | **1** | **5** | **1** | **13** |
+| Shared / lake | Low | 1 | 2 | 1 | 2 | 1 | 7 |
+| **Shared / lake** | all | **5** | **2** | **1** | **5** | **1** | **14** |
 | MOSL | High | 5 | 0 | 1 | 0 | 0 | 6 |
 | MOSL | Med | 2 | 0 | 2 | 1 | 0 | 5 |
 | MOSL | Low | 2 | 2 | 1 | 0 | 2 | 7 |
@@ -205,6 +205,7 @@ Angel One (A), Groww (G, incl. its PAT sheet), shared workbook feeds (X) and MOS
 | X-08 | codex_nse_mtf_daily (NSE-BSE project); MTF data (2)!I; MTF data!E | Industry MTF book: daily series ends 19 Oct 2026 (507 rows, 8 Apr 2026 missing), writer repo unknown, anon read denied; the monthly industry series has no named source. | Data Lake Review s2, s2c; Prompt_for_MTF_pipeline_owner.md; Prompt_for_ExchangesDash_owner.md item 3; DB (mtf_industry/book_cr max 19 Oct) | MTF stops two equity days before the other series; Groww g-i fills 8 Apr and 21 Oct from its own book, Angel does not. MTF is about 25% of Angel consolidated (4.2094 / 17.0967, derived) and about 12% of Groww (2.2867 / 19.0633). | High | open: needs outside owner ([SOURCE NEEDED] writer, continuity and read access; Angel MTF cannot advance) |
 | X-09 | nse_daily io/so_contracts; bse_daily cash_trades; codex_artifacts; BSE options premium | Lake gaps: NSE IO/SO contracts 0 on 12-15 Oct and unpublished after 15 Oct; BSE cash trades 0 on 15 Jun 2026 (4.08 Mn elsewhere); codex_artifacts has 0 for BSE F&O 1 Jun-4 Sep and BSE cash 28-31 Jul; BSE premium 2 Apr 85,211.36 vs 85,205.45. | Data Lake Review s2, s2b; Prompt_for_ExchangesDash_owner.md s5; DB (suspect rows verified: bse_cash 15 Jun, nse_fo io/so 12-15 Oct, lake last 15 Oct) | None on the ADR today (another source holds an ok value; E5 audit info). BSE premium gap 0.007%. | Low | open: needs outside owner (which source is the record is unresolved; codex_* confirmed a parallel experiment, not a source) |
 | X-10 | ExchangesDash special_sessions list; sb_calendar special_session | JSON special_sessions lists the first five only; 1 Feb 2025 (Saturday budget day) classification and 2024-01-20 "weekend" are to confirm against the exchange circular. Calendar equity-day flags are not re-checked against holiday lists (20 Oct 2026 is non-equity). | Prompt_for_ExchangesDash_owner.md s5; LIVE_SPEC s7 Q10; DB sb_calendar (8 specials) | Not quantified (affects which days X-02 removes). | Low | open: needs outside owner |
+| X-11 | sb_calendar is_mcx_day, 29 Sep 2023 - 28 Mar 2024 (seeded from the workbook) | 121 days marked MCX closed although MCX traded (ExchangesDash mcx JSON has contracts > 0 on each; E5 reported "value on a day sb_calendar marks closed"). | out/calendar/fix_mcx_flags_2026-11-02.sql; simulation of A1 (2 Nov) | None today (commodity revenue starts 2024-04-01). With A1's earlier calendar it would have filled 5 Commodities "Avg of last 6 months" cells per broker (FY 2025 April - August) from April 2024 alone, e.g. Angel One April 0.557 instead of insufficient data. Correcting it also exposed MCX 1 Jan 2024 (morning session only), now an E5 known event. | Low | **fixed** (data correction applied with AB's OK, 2 Nov 2026: 121 flags set true; 4 days stay closed, no MCX trades: 2023-11-12 muhurat, 2024-01-20, 2024-03-02, 2024-05-18) |
 | G-28 | Q4 FY26 Shareholders' Letter p7 (SL-Q4FY26); Working sheet - Groww MTF data!H56 | Legend order transposes PL+LAS and MTF for Q4 FY26 (letter shows MTF 5%, PL+LAS 7%); later letters give MTF 6.9%, PL+LAS 5.2% (Q1 FY27 letter p7: "MTF +1.1pp QoQ"). | backsource.md s2 (H56), s4; Groww Methodology s11 | Workbook Q4 FY26 MTF revenue 73.4 vs 105.95 Cr (-30.7%; part of this is the base error G-02/G-03). | High | fixed in live (g-a (mtf_rev Q4 FY26 = 6.9% x 15,355.35)) |
 | G-29 | Q2 FY27 Shareholders' Letter p6 (reclassification) | Revenue mix restated: IPO/BDSA moved from Stocks to Other operating income, Treasury to Other income, delayed payment charges to Float, so older letters' mix is not comparable (stocks 19.4/18.2/16.4/16.4% -> 17.8/16.5/15.6/16.1%). | backsource.md s1 finding 4; disclosure_map.md s4 | Workbook cash revenue on the old classification: for example Q1 FY27 cash Rs 2,416 -> 2,540 Mn on the right base (partly G-02). | Med | fixed in live (g-a uses the restated set wherever it exists; residual G-14) |
 | G-30 | Letters p6/p7, integer-percent prints | Early letters print mix as integers (F&O 53 vs 53.5; commodity 4 vs 3.5, Q3 FY26; 4 vs 4.5, Q4 FY26); typed values inherit the rounding. | backsource.md s2 rows I7, I9, J9, G7, G8 | Q3 FY26 commodity 504.43 Mn (4%) vs 441.4 Mn (3.5%), +14.3%; Q3 FY26 F&O 0.5 pp about Rs 63 Mn. | High | fixed in live (g-a (one-decimal restated values)) |
