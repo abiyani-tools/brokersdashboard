@@ -171,3 +171,66 @@ def test_a_overlay_is_declared_in_the_data_books_units():
     same = M.overlay[('gross_fo_cr', 'Q1 FY 2026')]
     assert not same.changed and same.value == same.seed                      # identical to the workbook: seed value kept
     assert len(M.overlay) == 8 * 10 + 3 * 10
+
+
+# ── m-b: keys on the right dates (the lake) ──
+def lake():
+    return json.load(open(MS.LAKE_FIXTURE))['series']
+
+
+def test_b_cash_day_is_the_lake_turnover_on_its_own_date():
+    """Independent recompute: a calibrated quarter's daily cash gross = quarter gross x K_d / sum K, K = lake NSE + BSE."""
+    _, res = run('ab')
+    L = lake()
+    nse, bse = {d: v for d, v, s in L['nse_cash/turnover_cr']}, {d: v for d, v, s in L['bse_cash/turnover_cr']}
+    F = facts()
+    for q in ('Q4 FY 2025', 'Q1 FY 2026', 'Q2 FY 2026', 'Q2 FY 2027'):
+        days = [d for d in res['daily']['cash'] if q_of(d) == q]
+        tot = sum(nse[d] + bse[d] for d in days)
+        gross = F[('gross_brokerage_cash', q)]['value'] / 10
+        for d in days[::7]:
+            assert res['daily']['cash'][d]['gross_cr'] == pytest.approx(gross * (nse[d] + bse[d]) / tot, rel=1e-9), d
+
+
+def test_b_the_workbook_column_was_two_rows_off_from_9_jun_2025():
+    a, b = run('a')[1]['daily']['cash'], run('ab')[1]['daily']['cash']
+    assert a['2025-03-20']['gross_cr'] == pytest.approx(b['2025-03-20']['gross_cr'], rel=1e-12)         # a quarter before 9 Jun: same
+    assert a['2025-06-10']['gross_cr'] != pytest.approx(b['2025-06-10']['gross_cr'], rel=1e-3)           # after: own date
+    moved = [abs(b[d]['gross_cr'] / a[d]['gross_cr'] - 1) for d in a if d >= '2025-06-09']
+    assert sorted(moved)[len(moved) // 2] > 0.05                                                         # median day moves > 5%
+    for q in MS.REPORTED[2:]:                                                                            # quarter totals tie
+        assert qsum(a, 'gross_cr', q) == pytest.approx(qsum(b, 'gross_cr', q), rel=1e-9) or q == 'Q3 FY 2027'
+
+
+def test_b_f_and_o_key_equals_the_workbooks_except_the_text_cell():
+    snap = json.load(open(PM.MOSL_SNAPSHOT))
+    wb = {m['trade_date']: m['value'] for m in snap['market_daily'] if m['metric'] == 'index_opt_contracts'}
+    L = lake()
+    lk = {d: v for d, v, s in L['nse_fo/io_contracts']}
+    assert [d for d in wb if wb[d] is not None and wb[d] != lk[d]] == []
+    a, b = run('a')[1]['daily']['fo'], run('ab')[1]['daily']['fo']
+    assert a['2024-05-31']['err'] == '#VALUE!' and b['2024-05-31']['err'] is None and b['2024-05-31']['rev_mn'] > 0
+    assert '2023-09-29' in b and '2023-09-29' not in a and b['2023-09-29']['err'] == '#N/A'
+    for d in a:                                                       # every other F&O day is bit-identical
+        if d not in ('2024-05-31', '2024-04-01') and q_of(d) != 'Q1 FY 2025' and a[d]['rev_mn'] is not None:
+            assert b[d]['rev_mn'] == pytest.approx(a[d]['rev_mn'], rel=1e-12), d
+
+
+def test_b_moves_days_not_quarter_totals():
+    t_a, t_b = (B.adr(*run(s), periods=B.PERIODS) for s in ('a', 'ab'))
+    for k in t_a:
+        assert t_b[k] == pytest.approx(t_a[k], rel=1e-9), k
+
+
+def test_b_needs_the_lake_series():
+    with pytest.raises(MS.SwitchError, match='lake'):
+        mosl.MoslInputs(json.load(open(PM.MOSL_SNAPSHOT)), json.load(open(PM.SHARED_SNAPSHOT)), ('a', 'b'), reviewed())
+    L = mosl.load_lake()
+    del L['nse_cash/turnover_cr']
+    with pytest.raises(MS.SwitchError, match='nse_cash/turnover_cr'):
+        mosl.MoslInputs(json.load(open(PM.MOSL_SNAPSHOT)), json.load(open(PM.SHARED_SNAPSHOT)), ('a', 'b'), reviewed(), L)
+    L = mosl.load_lake()
+    del L['bse_cash/turnover_cr']['2025-06-10']
+    M = mosl.MoslInputs(json.load(open(PM.MOSL_SNAPSHOT)), json.load(open(PM.SHARED_SNAPSHOT)), ('a', 'b'), reviewed(), L)
+    with pytest.raises(KeyError, match='2025-06-10'):                  # a missing day is loud, never a silent drop
+        mosl.run(M)
