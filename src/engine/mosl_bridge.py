@@ -231,7 +231,9 @@ def markdown(b):
                   f"or a missing / non-ok / zero key): {_span(ds)}", '']
         L += ['Before m-c an FY / quarter / month statistic that contained one error day was the workbook\'s IFERROR 0 '
               '(Methodology issue 1). After it the error days are left out and the average runs over the days that have a value; '
-              'a period with no value at all is flagged insufficient in the live rows.', '']
+              'a period with no value at all is flagged insufficient in the live rows. The ADR tables below are the unguarded '
+              'statistics (a segment with no value in a month adds 0 to the sum, as FY 2027 October does for cash and commodities '
+              'until m-e); the live rows flag such a period as insufficient instead.', '']
     if b['letter'] == 'd':
         if b['excluded']:
             L += ['Special sessions left out of the F&O, cash and commodity averages (MTF keeps them): '

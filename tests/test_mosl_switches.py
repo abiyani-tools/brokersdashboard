@@ -234,3 +234,61 @@ def test_b_needs_the_lake_series():
     M = mosl.MoslInputs(json.load(open(PM.MOSL_SNAPSHOT)), json.load(open(PM.SHARED_SNAPSHOT)), ('a', 'b'), reviewed(), L)
     with pytest.raises(KeyError, match='2025-06-10'):                  # a missing day is loud, never a silent drop
         mosl.run(M)
+
+
+# ── m-c: no silent zeros ──
+def test_c_error_rows_are_not_days_and_nothing_else_moves():
+    _, a = run('ab')
+    _, b = run('abc')
+    for seg in ('fo', 'cash', 'comm', 'mtf'):
+        assert not any(r.get('err') for r in b['daily'][seg].values())
+        assert set(b['daily'][seg]) == {d for d, r in a['daily'][seg].items() if not r.get('err')}
+        for d, r in b['daily'][seg].items():                          # every surviving day is bit-identical
+            assert r == a['daily'][seg][d]
+    errs = {seg: sorted(d for d, r in a['daily'][seg].items() if r.get('err')) for seg in ('fo', 'cash', 'comm')}
+    assert len(errs['fo']) == 124 and errs['cash'][0] == '2026-10-01' and len(errs['cash']) == 13
+    assert len(errs['comm']) == 7 and errs['comm'][-1] == '2026-10-12'
+
+
+def test_c_fy27_cash_and_commodities_are_averages_of_the_days_that_have_a_value_not_zero():
+    M, res = run('abc')
+    segs = B.segments(M, res)
+    before = B.segments(*run('ab'))
+    assert before['Cash'].fy('FY 2027') == 0.0 and before['Commodities'].fy('FY 2027') == 0.0       # IFERROR 0 (issue 1)
+    cash = [r['rev_cr'] for d, r in res['daily']['cash'].items() if d >= '2026-04-01']
+    comm = [r['rev_mn'] / 10 for d, r in res['daily']['comm'].items() if d >= '2026-04-01']
+    assert len(cash) == 125 and len(comm) == 130              # April - September: October has no cash or commodity row until m-e
+    assert segs['Cash'].fy('FY 2027') == pytest.approx(sum(cash) / len(cash), rel=1e-12)
+    assert segs['Commodities'].fy('FY 2027') == pytest.approx(sum(comm) / len(comm), rel=1e-12)
+    t = B.adr(M, res)
+    assert t[('FY', 'FY 2027', 'Broking')] == pytest.approx(
+        t[('FY', 'FY 2027', 'F&O')] + t[('FY', 'FY 2027', 'Cash')] + t[('FY', 'FY 2027', 'Commodities')], rel=1e-12)
+    assert t[('FY', 'FY 2027', 'Consolidated')] > 8.0                # the workbook shows 5.79
+
+
+def test_c_a_period_with_no_value_is_flagged_insufficient_not_zero():
+    M, res = run('abc')
+    rows = B.live_period_rows(M, res)
+    cash_oct = [r for r in rows if r['panel'] == 'Cash' and r['period_key'] == 'FY 2027 October'
+                and r['row_label'] == 'FY 2027 October']
+    assert len(cash_oct) == 1 and cash_oct[0]['value'] is None and 'no trading days' in cash_oct[0]['note']
+    cons = [r for r in rows if r['panel'] == 'Consolidated' and r['row_label'] == 'FY 2027 October'][0]
+    assert cons['value'] is None                                      # a sum with an insufficient part is insufficient
+
+
+DB_LAKE = os.path.join(ROOT, 'snapshot', 'mosl_lake_db_2026-11-02.json')
+
+
+def test_c_zero_and_non_ok_lake_days_get_no_row():
+    """The database as read on 2 Nov 2026: io_contracts zero (suspect) on 12-15 Oct, BSE cash 0.0 (ok) on 15 Jun 2026."""
+    _, no_c = B.run_switches('ab', lake_path=DB_LAKE)
+    _, with_c = B.run_switches('abc', lake_path=DB_LAKE)
+    assert no_c['daily']['cash']['2026-06-15']['gross_cr'] > 0                 # b alone: the zero is averaged in as NSE only
+    assert '2026-06-15' not in with_c['daily']['cash']
+    for d in ('2026-10-12', '2026-10-13', '2026-10-14', '2026-10-15'):
+        assert d in no_c['daily']['fo'] and d not in with_c['daily']['fo']
+    assert max(with_c['daily']['fo']) == '2026-10-09' and max(no_c['daily']['fo']) == '2026-10-15'
+    # the reported quarter still ties to the data book without the dropped day
+    F = facts()
+    assert qsum(with_c['daily']['cash'], 'gross_cr', 'Q1 FY 2027') == pytest.approx(
+        F[('gross_brokerage_cash', 'Q1 FY 2027')]['value'] / 10, rel=1e-9)

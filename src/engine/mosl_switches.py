@@ -81,7 +81,7 @@ YIELD_ASSUMPTION = 'mtf_nii_yield_carry'
 YIELD_LABEL = '[SOURCE NEEDED: MOSL does not publish an MTF yield]'
 
 D_SEGMENTS = ('fo', 'cash', 'comm')       # d: special sessions leave these averages; MTF keeps them
-IMPLEMENTED = set('ab')              # one switch per commit: later letters are added with their commits
+IMPLEMENTED = set('abc')             # one switch per commit: later letters are added with their commits
 
 
 class SwitchError(ValueError):
