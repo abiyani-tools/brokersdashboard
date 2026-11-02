@@ -1,11 +1,11 @@
-"""Parity → live switches (LIVE_SPEC §4), one per letter, applied in order a → i.
+"""Parity → live switches (LIVE_SPEC §4), one per letter, applied in order a → j.
 
 A cell switch replaces workbook cells (as read through Inputs.ws) with reviewed disclosure facts.
 Every replacement must resolve to a fact with status 'reviewed' and the same unit as the seed it
 replaces; anything else raises. With no switches on, Inputs behaves exactly as in parity mode.
 """
 WS = 'Working sheet - Angel One'
-ORDER = 'abcdefghi'
+ORDER = 'abcdefghij'
 
 # switch -> {(sheet, col, row): (metric, period_key)}
 CELL_SWITCHES = {
@@ -83,8 +83,17 @@ MONTHLY_SWITCHES = {
     'i': ('share_fo', 'total_orders', 'share_comm'),
 }
 
+# switch -> MTF share basis for every reported quarter (Q1 FY25 .. the last actual quarter)
+MTF_SWITCHES = {
+    # (j) decisions Q5 / Q6 for every reported quarter, not only where the workbook has no value (A-08, A-09):
+    #     Angel book = the reviewed 'avg_funding_book' fact (Rs Mn / 10 = Rs Cr), else the workbook's pinned
+    #     book; industry average = mean of the daily lake book over the quarter's days where daily data
+    #     exists (from 2024-10-01), else the monthly average; the Q3 FY25 share override (0.0485) is dropped.
+    'j': 'mtf_disclosed_book_daily_average',
+}
+
 IMPLEMENTED = (set(CELL_SWITCHES) | set(MARKET_SWITCHES) | set(SUMMARY_SWITCHES) | set(PROJECTION_SWITCHES)
-               | set(QUARTER_SWITCHES) | set(MONTHLY_SWITCHES))
+               | set(QUARTER_SWITCHES) | set(MONTHLY_SWITCHES) | set(MTF_SWITCHES))
 
 
 class SwitchError(ValueError):
@@ -236,3 +245,17 @@ def extend_monthly(I, metric, series, also_present=()):
         if m == metric and f.period_type == 'M' and f.status == 'reviewed' and not seg and period not in taken:
             out[period] = f.value
     return out
+
+
+def mtf_basis(I, q, pin_book, override):
+    """(Angel book Rs Cr, source label, share override) for reported quarter q under switch (j).
+
+    The book is the reviewed avg_funding_book fact (Rs Mn -> Rs Cr) when there is one, else the pinned book
+    (label 'pin'); a quarter with neither returns book None (the caller then falls back to any fact, as (h)).
+    The share override is always dropped (None): the share is computed as book / industry average."""
+    f = I.facts.fact('avg_funding_book', q) if I.facts.has('avg_funding_book', q) else None
+    if f is not None and f.status == 'reviewed':
+        if f.unit != 'Rs Mn':
+            raise SwitchError(f'switch j: avg_funding_book {q} is in {f.unit!r}, expected Rs Mn (fact {f.fact_id})')
+        return f.value / 10, f'fact {f.fact_id}', None
+    return pin_book, 'pin', None

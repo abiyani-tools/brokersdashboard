@@ -223,6 +223,12 @@ def calib_mtf(I, daily_book_by_quarter=None):
         if _q_le(q, last_q):
             ov = I.pin('mtf_share_override', q)[0]
             book = I.pin('mtf_angel_book_cr', q)[0]
+            if 'j' in I.switches:                                           # live (j): Q5 / Q6 for every reported quarter
+                from .switches import mtf_basis
+                book, r['angel_book_src'], ov = mtf_basis(I, q, book, ov)       # Q5: disclosed book; override dropped
+                if q in daily_book_by_quarter:                                  # Q6: daily lake average where it exists
+                    r['industry_avg_monthly_cr'] = r.get('industry_avg_cr')
+                    r['industry_avg_cr'] = daily_book_by_quarter[q]
             if book is None and getattr(I, 'facts', None) is not None:      # live (h): disclosed book, Q5
                 f = I.facts.fact('avg_funding_book', q)
                 book = f.value / 10 if f.unit == 'Rs Mn' else None             # Rs Mn -> Rs Cr
@@ -231,6 +237,9 @@ def calib_mtf(I, daily_book_by_quarter=None):
             r['angel_book_cr'] = book                                      # P (pinned: as the workbook used it)
             r['share'] = ov if ov is not None else book / r['industry_avg_cr']   # Q = P / D (Q51 hard-coded)
             r['regime'], r['rule'] = 'actual', 'override' if ov is not None else 'Q = P / D'
+            if 'j' in I.switches:
+                r['rule'] = (f"Q = P / D (switch j: book {r['angel_book_src']}, "
+                             f"industry {'daily' if 'industry_avg_monthly_cr' in r else 'monthly'} average)")
             if _q_le('Q4 FY 2025', q):
                 hist.append(r['share'])                                    # Q52:Q57 feed Q58
         elif out[list(out)[-1]]['regime'] == 'actual':

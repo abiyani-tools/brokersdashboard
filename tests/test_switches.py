@@ -278,3 +278,101 @@ def test_switch_i_monthly_inputs_run_to_september():
     # cash and MTF untouched
     dh, di = daily.run(I_h)['daily'], daily.run(I_i)['daily']
     assert dh['cash'] == di['cash'] and dh['mtf'] == di['mtf']
+
+
+# ── switch j: MTF basis per Q5 / Q6 for every reported quarter (A-08, A-09) ──
+def _mtf_q(switches):
+    return daily.run(load_snapshot(SNAP, switches, REVIEWED))['calib']['mtf_quarter']
+
+
+def _daily_avg(I, q):
+    from statistics import mean
+    from src.engine.inputs import q_of
+    return mean(v for d, v in I.series('mtf_industry', 'book_cr').items() if q_of(d) == q)
+
+
+def test_switch_j_takes_the_book_from_the_reviewed_facts():
+    before, after = _mtf_q('abcdefghi'), _mtf_q('abcdefghij')
+    facts = {'Q1 FY 2026': (581, 42060), 'Q2 FY 2026': (582, 53050), 'Q4 FY 2026': (580, 58490),
+             'Q1 FY 2027': (498, 61370), 'Q2 FY 2027': (566, 74530)}
+    for q, (fid, mn) in facts.items():
+        assert after[q]['angel_book_cr'] == pytest.approx(mn / 10, rel=1e-12)           # Rs Mn -> Rs Cr
+        assert after[q]['angel_book_src'] == f'fact {fid}'
+    assert before['Q4 FY 2026']['angel_book_cr'] == pytest.approx(5796.1333, rel=1e-6)   # back-solved pin
+    assert after['Q4 FY 2026']['angel_book_cr'] == 5849.0
+
+
+def test_switch_j_keeps_the_pin_where_there_is_no_reviewed_fact():
+    before, after = _mtf_q('abcdefghi'), _mtf_q('abcdefghij')
+    # Q3 FY26 has only a staged workbook fact (58,590): not reviewed, so the pin stays
+    for q in ('Q1 FY 2025', 'Q2 FY 2025', 'Q3 FY 2025', 'Q4 FY 2025', 'Q3 FY 2026'):
+        assert after[q]['angel_book_src'] == 'pin'
+        assert after[q]['angel_book_cr'] == before[q]['angel_book_cr']
+
+
+def test_switch_j_uses_the_daily_average_where_daily_data_exists():
+    I = load_snapshot(SNAP, 'abcdefghij', REVIEWED)
+    before, after = _mtf_q('abcdefghi'), daily.run(I)['calib']['mtf_quarter']
+    for q in ('Q3 FY 2025', 'Q4 FY 2025', 'Q1 FY 2026', 'Q2 FY 2026', 'Q3 FY 2026', 'Q4 FY 2026', 'Q1 FY 2027', 'Q2 FY 2027'):
+        assert after[q]['industry_avg_cr'] == pytest.approx(_daily_avg(I, q), rel=1e-12)
+    assert after['Q1 FY 2027']['industry_avg_cr'] == pytest.approx(120750.79, abs=0.01)   # LIVE_SPEC Q6
+    assert before['Q1 FY 2027']['industry_avg_cr'] == 119000                              # monthly
+    # the daily series starts 2024-10-01: Q1, Q2 FY25 keep the monthly average
+    for q in ('Q1 FY 2025', 'Q2 FY 2025'):
+        assert min(d for d in I.series('mtf_industry', 'book_cr')) == '2024-10-01'
+        assert after[q]['industry_avg_cr'] == before[q]['industry_avg_cr'] and 'industry_avg_monthly_cr' not in after[q]
+
+
+def test_switch_j_drops_the_q3_fy25_override_and_the_projection_follows():
+    from statistics import mean
+    before, after = _mtf_q('abcdefghi'), _mtf_q('abcdefghij')
+    assert before['Q3 FY 2025']['share'] == 0.0485 and before['Q3 FY 2025']['rule'] == 'override'
+    r = after['Q3 FY 2025']
+    assert r['share'] == pytest.approx(4050 / r['industry_avg_cr'], rel=1e-12) and r['share'] != 0.0485
+    assert r['rule'].startswith('Q = P / D')
+    for q in ('Q4 FY 2025', 'Q1 FY 2026', 'Q2 FY 2026', 'Q3 FY 2026', 'Q4 FY 2026', 'Q1 FY 2027', 'Q2 FY 2027'):
+        assert after[q]['share'] == pytest.approx(after[q]['angel_book_cr'] / after[q]['industry_avg_cr'], rel=1e-12)
+    six = ('Q1 FY 2026', 'Q2 FY 2026', 'Q3 FY 2026', 'Q4 FY 2026', 'Q1 FY 2027', 'Q2 FY 2027')
+    assert after['Q3 FY 2027']['share'] == pytest.approx(mean(after[q]['share'] for q in six), rel=1e-12)
+    assert after['Q3 FY 2027']['share'] != before['Q3 FY 2027']['share']
+
+
+def test_switch_j_moves_only_mtf_and_only_before_q3_fy27_through_the_share():
+    ra = daily.run(load_snapshot(SNAP, 'abcdefghi', REVIEWED))['daily']
+    rb = daily.run(load_snapshot(SNAP, 'abcdefghij', REVIEWED))['daily']
+    for seg in ('fo', 'cash', 'comm'):
+        assert ra[seg] == rb[seg]
+    assert set(ra['mtf']) == set(rb['mtf'])
+    from src.engine.inputs import q_of
+    for d in ra['mtf']:                            # Q2 FY27 is unchanged (same book and daily average)
+        if q_of(d) == 'Q2 FY 2027':
+            assert ra['mtf'][d]['gross_cr'] == pytest.approx(rb['mtf'][d]['gross_cr'], rel=1e-12)
+    assert any(ra['mtf'][d]['gross_cr'] != rb['mtf'][d]['gross_cr'] for d in ra['mtf'])
+
+
+def test_switch_j_does_not_touch_parity_or_the_other_switches():
+    assert SW.ORDER == 'abcdefghij' and SW.check('j') == frozenset('j')
+    SW.check('abcdefghij')
+    # j off: switches a-i give the previous MTF calibration (no new keys, override kept)
+    q = _mtf_q('abcdefghi')
+    assert q['Q3 FY 2025']['share'] == 0.0485 and all('angel_book_src' not in r for r in q.values())
+    assert q['Q1 FY 2027']['angel_book_cr'] == pytest.approx(6133.3333, rel=1e-6)
+    # parity: no switches, MTF calibration unchanged and exact
+    p = daily.run(load_snapshot(SNAP))['calib']['mtf_quarter']
+    assert p['Q3 FY 2025']['share'] == 0.0485 and p['Q1 FY 2027']['industry_avg_cr'] == 119000
+    # j without the other switches still builds (it needs only the reviewed facts)
+    only_j = load_snapshot(SNAP, 'j', REVIEWED)
+    assert daily.run(only_j)['calib']['mtf_quarter']['Q4 FY 2026']['angel_book_cr'] == 5849.0
+
+
+def test_bridge_j_is_reproducible_and_lists_the_pins_kept():
+    from src.engine import bridge as B
+    b = B.bridge('j', SNAP, REVIEWED)
+    md = B.markdown(b)
+    assert b['before'] == list('abcdefghi') and b['after'] == list('abcdefghij')
+    assert 'Q1 FY 2025, Q2 FY 2025, Q3 FY 2025, Q4 FY 2025, Q3 FY 2026' in md
+    assert 'monthly (the daily series starts 2024-10-01)' in md or 'stays monthly' in md
+    assert any(r['period'] == 'Q1 FY 2027' for r in b['rows'])
+    assert {r['period'] for r in b['rows']} >= {'FY 2027', 'Q2 FY 2027', 'FY 2027 October', 'FY 2026', 'Q1 FY 2027'}
+    non_mtf = [r for r in b['rows'] if r['panel'] in ('Broking', 'F&O', 'Cash', 'Commodities')]
+    assert all(r['delta'] == 0 for r in non_mtf)
