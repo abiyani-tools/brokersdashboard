@@ -108,6 +108,60 @@ def groww_calibration_rows(run_id, calib, broker='GROWW'):
     return rows
 
 
+def mosl_daily_rows(run_id, daily, broker='MOSL'):
+    """MOSL daily revenue rows: net brokerage per segment in Rs Cr (F&O and commodities Rs Mn / 10) and MTF net interest
+    income (segment 'mtf_nii'); MOSL has no orders. Only rows the engine wrote: an excluded day has no row."""
+    rows = []
+    for seg, field, scale in (('fo', 'rev_mn', 10), ('cash', 'rev_cr', 1), ('comm', 'rev_mn', 10), ('mtf', 'nii_cr', 1)):
+        for d, r in daily[seg].items():
+            rows.append(dict(run_id=run_id, broker_id=broker, trade_date=d, segment='mtf_nii' if seg == 'mtf' else seg,
+                             orders_mn=None, revenue_cr=r[field] / scale, regime=_db_regime(r['regime'])))
+    return rows
+
+
+def mosl_calibration_rows(run_id, calib, broker='MOSL'):
+    """sb_calibration rows for a MOSL run: per quarter and segment the rate, share, net / gross and the key totals."""
+    rows = []
+    last = calib['last_actual']
+
+    def add(seg, q, param, value, rule=None):
+        if value is None:
+            return
+        regime = 'actual' if _qkey(q) <= _qkey(last[seg]) else 'projected'
+        rows.append(dict(run_id=run_id, broker_id=broker, segment=seg, period_type='Q', period_key=q, param=param,
+                         value=float(value), regime=regime, rule=rule, source_periods=None))
+    for q, v in calib['fo']['rate'].items():
+        add('fo', q, 'gross_rs_per_contract', v / 10, 'reported gross brokerage / index-option + BSE contracts')
+    for q, v in calib['fo']['share'].items():
+        add('fo', q, 'share', v, 'premium share (cancels in a calibrated quarter)')
+    for q, t in calib['fo']['table'].items():
+        add('fo', q, 'key_contracts_cr', t.get('F'), 'NSE index-option + BSE contracts, Cr')
+    for q, t in calib['cash']['table'].items():
+        add('cash', q, 'share', t.get('share'))
+        add('cash', q, 'take_rate_used', t.get('J'), 'gross brokerage / reported ADTO (per quarter)')
+        add('cash', q, 'gross_brokerage_cr', t.get('gross'), 'the quarter\'s gross brokerage the day shape is spread over')
+    for q, v in calib['comm']['share'].items():
+        add('comm', q, 'share', v)
+    for q, v in calib['comm']['take'].items():
+        add('comm', q, 'take_rate_used', v, 'gross Rs per MOSL contract')
+    for q, v in calib['comm']['contracts_mn'].items():
+        add('comm', q, 'mcx_contracts_mn', v)
+    for q, v in calib['mtf']['share'].items():
+        add('mtf', q, 'share', v, 'closing MOSL book / industry book on the quarter\'s last day')
+    for q, v in calib['mtf']['nii'].items():
+        add('mtf', q, 'nii_yield', v, 'typed yield, carried: [SOURCE NEEDED: MOSL does not publish an MTF yield]')
+    for q, v in calib['mtf']['industry_close'].items():
+        add('mtf', q, 'industry_close_cr', v)
+    for q, r in calib['ratio'].items():
+        for seg, v in r.items():
+            add(seg, q, 'net_gross', v)
+    return rows
+
+
+def _qkey(q):
+    return int(q[-4:]), int(q[1])
+
+
 def summary_rows(run_id, stats, as_of):
     """Parity grid rows. period_type/period_key name the selection each table was built for (E3 columns)."""
     rows = []

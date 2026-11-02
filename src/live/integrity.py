@@ -176,10 +176,11 @@ def series_issues(key: str, series: list[Volume], calendar: Calendar, as_of: dt.
     return out
 
 
-def check_selected(inputs: Inputs) -> list[Issue]:
-    """Blocking checks on the series the engine reads; a series with no rows at all is an error."""
+def check_selected(inputs: Inputs, keys=ADR_MARKET_KEYS) -> list[Issue]:
+    """Blocking checks on the series the engine reads (`keys`: Angel One / Groww's by default, MOSL's own for a MOSL run);
+    a series with no rows at all is an error."""
     out = []
-    for key in ADR_MARKET_KEYS:
+    for key in keys:
         series = inputs.volumes.get(key, [])
         if not series:
             out.append(Issue("missing", key, "error", (), "no rows at all for an input the engine reads"))
@@ -229,8 +230,8 @@ def check_take_rates(rates: dict[tuple[str, str], float | Insufficient]) -> list
     return out
 
 
-def run_checks(inputs: Inputs, take_rates: dict | None = None) -> Report:
-    issues = check_selected(inputs) + check_facts(inputs.facts) + audit_sources(inputs)
+def run_checks(inputs: Inputs, take_rates: dict | None = None, keys=ADR_MARKET_KEYS) -> Report:
+    issues = check_selected(inputs, keys) + check_facts(inputs.facts) + audit_sources(inputs)
     if take_rates:
         issues += check_take_rates(take_rates)
     return Report(issues)

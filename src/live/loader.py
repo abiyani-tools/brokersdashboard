@@ -27,10 +27,16 @@ ADR_MARKET_KEYS = (
 )
 # ... and series E5 only audits (the engine uses total NSE F&O contracts, not the index / stock option split)
 AUDIT_ONLY_KEYS = ("nse_fo:io_contracts", "nse_fo:so_contracts")
+# MOSL's engine inputs (docs/MOSL_LIVE_SPEC.md): the F&O key is NSE index-option + BSE contracts, the cash key NSE + BSE
+# turnover (all read from the lake, on their own dates); MCX contracts and the industry MTF book are shared with the others.
+# E5 blocks on all of them for a MOSL run; a zero on a trading day is suspect (turnover too, not only counts).
+MOSL_LAKE_KEYS = ("nse_fo:io_contracts", "bse_fo:contracts", "nse_cash:turnover_cr", "bse_cash:turnover_cr")
+MOSL_SHARED_KEYS = ("mcx:contracts", "mtf_industry:book_cr")
+MOSL_MARKET_KEYS = MOSL_LAKE_KEYS + MOSL_SHARED_KEYS
 
 MONEY = {"Rs Mn": 1e6, "Rs Bn": 1e9, "Rs Cr": 1e7}
 FRACTION_UNITS = {"fraction"}
-KNOWN_UNITS = set(MONEY) | FRACTION_UNITS | {"Mn", "days", "'000", "count", "p.a."}
+KNOWN_UNITS = set(MONEY) | FRACTION_UNITS | {"Mn", "days", "'000", "count", "p.a.", "Rs Mn/day", "Rs Cr/day", "Rs"}
 
 
 class MissingInput(KeyError):
@@ -162,13 +168,13 @@ def _volume(row: Mapping) -> Volume:
 
 def select_volumes(rows: Iterable[Mapping], policy: str, keys: Iterable[str] = ADR_MARKET_KEYS + AUDIT_ONLY_KEYS
                    ) -> dict[str, list[Volume]]:
-    if policy not in ("excel_first", "best_ok"):
+    if policy not in ("excel_first", "best_ok", "lake_ok"):
         raise ValueError(f"unknown volume policy {policy!r}")
     keys = set(keys)
     cands: dict[tuple[str, dt.date], list[Volume]] = {}
     for r in rows:
         v = r if isinstance(r, Volume) else _volume(r)
-        if v.key in keys:
+        if v.key in keys and not (policy == "lake_ok" and not is_lake(v.source)):     # lake_ok: the workbook's copy is never read
             cands.setdefault((v.key, v.date), []).append(v)
 
     def excel_first(v: Volume) -> tuple:
@@ -177,7 +183,7 @@ def select_volumes(rows: Iterable[Mapping], policy: str, keys: Iterable[str] = A
     def best_ok(v: Volume) -> tuple:
         return (not v.ok, not is_lake(v.source), v.source)
 
-    rank = excel_first if policy == "excel_first" else best_ok
+    rank = excel_first if policy == "excel_first" else best_ok          # lake_ok: best_ok over the lake rows only
     out: dict[str, list[Volume]] = {k: [] for k in keys}
     for (key, _), vs in cands.items():
         out[key].append(min(vs, key=rank))
@@ -205,13 +211,22 @@ def volume_policy(switches: Iterable[str]) -> str:
     return "best_ok" if "c" in set(switches) else "excel_first"
 
 
-def load_inputs(reader, broker: str, as_of: dt.date, switches: Iterable[str] = ()) -> Inputs:
+def load_inputs(reader, broker: str, as_of: dt.date, switches: Iterable[str] = (), policy=None, keys=None) -> Inputs:
+    """policy: None = the switches' policy (volume_policy); a string, or {key: policy} to choose per series (MOSL:
+    the lake's own rows for its four keys, the workbook-first selection for MCX and the MTF book). keys: the series to
+    select (default: the ADR keys and the audit-only ones)."""
     switches = frozenset(switches)
     calendar = Calendar.from_rows(r for r in reader.table("sb_calendar")
                                   if _date(r["trade_date"]) <= as_of)
     facts = Facts.from_rows(reader.table("sb_disclosure_facts", broker_id=broker))
     raw = [_volume(r) for r in reader.table("sb_market_daily") if _date(r["trade_date"]) <= as_of]
-    volumes = select_volumes(raw, volume_policy(switches))
+    policy = policy or volume_policy(switches)
+    if isinstance(policy, dict):
+        volumes: dict[str, list[Volume]] = {}
+        for pol in sorted(set(policy.values())):
+            volumes.update(select_volumes(raw, pol, [k for k, v in policy.items() if v == pol]))
+    else:
+        volumes = select_volumes(raw, policy) if keys is None else select_volumes(raw, policy, keys)
     return Inputs(calendar, facts, volumes, raw, as_of, switches)
 
 

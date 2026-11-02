@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import datetime as dt
 
-from .loader import ADR_MARKET_KEYS, is_lake, select_volumes
+from .loader import ADR_MARKET_KEYS, MOSL_LAKE_KEYS, is_lake, select_volumes
 
 BROKER = 'ANGELONE'
 
@@ -83,3 +83,41 @@ def trim(snap, as_of):
     out['market_daily'] = [r for r in snap['market_daily'] if r['trade_date'] <= as_of]
     out['market_daily_lake'] = [r for r in snap['market_daily_lake'] if r['trade_date'] <= as_of]
     return out
+
+
+# ── MOSL: its own inputs (docs/MOSL_LIVE_SPEC.md) ──
+def mosl_lake_rows(rows, as_of=None):
+    """sb_market_daily rows of MOSL's four lake series (source other than the workbook's `excel_seed`), up to as_of."""
+    keys = {k.replace(':', '/') for k in MOSL_LAKE_KEYS}
+    return [dict(r) for r in rows if is_lake(r['source']) and f"{r['dataset']}/{r['metric']}" in keys and _le(r['trade_date'], as_of)]
+
+
+def mosl_lake_series(rows):
+    """{'dataset/metric': {date: (value, status)}} from lake rows: one per date, an 'ok' row before a suspect one, then the
+    lowest source name (the daily refresh 'exchangesdash_json' before the one-off '...@b2049b5' import)."""
+    best = {}
+    for r in rows:
+        k, d = f"{r['dataset']}/{r['metric']}", str(r['trade_date'])[:10]
+        rank = (r.get('status', 'ok') != 'ok', r['source'])
+        if (k, d) not in best or rank < best[(k, d)][0]:
+            best[(k, d)] = (rank, (float(r['value']), r.get('status', 'ok')))
+    out = {k.replace(':', '/'): {} for k in MOSL_LAKE_KEYS}
+    for (k, d), (_, vs) in best.items():
+        out.setdefault(k, {})[d] = vs
+    return out
+
+
+def complete_through_mosl(snap, lake):
+    """(date, limiting series): the last calendar day on which every input of a MOSL run has an 'ok', non-zero value:
+    its four lake series (zero on a trading day is suspect) and MCX contracts; the industry MTF book is left out (published
+    with a lag, coverage allows its last 3 trading days). Like complete_through, with MOSL's own series: the NSE
+    index-option contracts end on the last 'ok' day, so until the lake has them again MOSL's date is earlier than Angel One's."""
+    mcx_end, mcx_lim = complete_through(snap, keys=['mcx:contracts'])
+    ends = {mcx_lim if mcx_lim == 'sb_calendar' else 'mcx:contracts': mcx_end}
+    for key in MOSL_LAKE_KEYS:
+        ok = [d for d, (v, st) in lake.get(key.replace(':', '/'), {}).items() if st == 'ok' and v > 0]
+        if not ok:
+            raise ValueError(f'no rows for {key}')
+        ends[key] = max(ok)
+    first_end = min(ends.values())
+    return first_end, ', '.join(sorted(k for k, d in ends.items() if d == first_end))

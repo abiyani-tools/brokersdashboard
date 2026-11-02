@@ -449,5 +449,8 @@ def run(M):
     comm, comm_c = comm_daily(M)
     mtf, mtf_c = mtf_daily(M)
     ratio = {q: {s: net_gross(M, s, q) for s in ('cash', 'fo', 'comm')} for q in M.qs}
-    return dict(daily=dict(fo=fo, cash=cash, comm=comm, mtf=mtf),
-                calib=dict(fo=fo_c, cash=cash_c, comm=comm_c, mtf=mtf_c, ratio=ratio))
+    calib = dict(fo=fo_c, cash=cash_c, comm=comm_c, mtf=mtf_c, ratio=ratio)
+    if M.switches:                                                           # which quarters are reported, per segment
+        calib['last_actual'] = dict({s: M.pin(f'{s}_last_actual_quarter') for s in ('fo', 'cash', 'comm')},
+                                    mtf=M.pin('mtf_last_actual_quarter'))
+    return dict(daily=dict(fo=fo, cash=cash, comm=comm, mtf=mtf), calib=calib)

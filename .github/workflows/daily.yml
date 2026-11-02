@@ -2,10 +2,13 @@ name: daily
 # Daily live run (PLAN 4.1), switched on 23 Oct 2026 with AB's OK.
 # Needs repository secrets: SUPABASE_URL, SUPABASE_SERVICE_KEY (never commit keys); the first step stops the job
 # if either is missing. A run whose E5 checks block is not published (the job fails and keeps the report).
-# Angel One and Groww: `--broker all` runs Angel One, then Groww from the same Angel run (Groww borrows its calibration),
-# then publishes both, each as its own sb_runs row. Groww is refused unless every fact it reads is 'reviewed' (and its
-# workbook inputs are in the database): that is a warning annotation on the job, Angel One still publishes and the job
-# stays green. Any other Groww error fails the job after Angel One has been published.
+# Angel One, Groww and MOSL: `--broker all` runs Angel One, then Groww from the same Angel run (Groww borrows its calibration),
+# then MOSL (own inputs, same snapshot, no Angel calibration), then publishes the three, each as its own sb_runs row.
+# Groww and MOSL are each refused unless every fact they read is 'reviewed' (and their workbook inputs are in the database):
+# that is a warning annotation on the job, the others still publish and the job stays green. Any other Groww / MOSL error
+# fails the job after the others have been published. MOSL has its own as-of date (the last day its inputs are complete:
+# NSE index-option contracts, BSE contracts, NSE / BSE cash turnover, MCX), possibly earlier than the others'; a MOSL run
+# whose E5 checks block (a zero or non-ok day in one of its series) is not published, warns, and fails the job.
 # Groww IR archive (step "Archive Groww's investor-relations page"): groww.in keeps no daily history, so each day's page is
 # stored in sb_broker_daily (src/live/refresh_groww_ir.py; table: out/groww/migration_sb_broker_daily.sql, applied by AB).
 # The step is continue-on-error: if groww.in blocks GitHub's runners (HTTP 403) or the page structure changes, the step shows
@@ -48,7 +51,7 @@ jobs:
         run: |
           echo "::warning title=Groww IR archive failed::today's Groww investor-relations page was NOT archived (see the archive step above); archive it from the Mac: docs/GROWW_LIVE_SPEC.md"
           echo "### Groww IR archive FAILED today: no sb_broker_daily rows were written" >> "$GITHUB_STEP_SUMMARY"
-      - name: Live run from the DB and publish, Angel One then Groww (E5 -> engine -> E1 coverage -> Summary rows -> sb_*)
+      - name: Live run from the DB and publish, Angel One then Groww then MOSL (E5 -> engine -> E1 coverage -> Summary rows -> sb_*)
         run: python run_live.py --db --publish --broker all
       - name: Keep the raw Groww IR page
         if: always()

@@ -124,11 +124,14 @@ def report_md(run, db_status=None):
     broker = run.get('broker', BROKER)
     if broker != BROKER:
         title += f' · {broker}'
+    prefix = 'm-' if broker == 'MOSL' else 'g-'
     L = [f"# {title} — as of {run['as_of']}", '',
-         f"Switches: {run['switches'] if broker == BROKER else 'g-' + run['switches']} · E5: {'BLOCKING' if rep.blocking else 'pass'} "
+         f"Switches: {run['switches'] if broker == BROKER else prefix + run['switches']} · E5: {'BLOCKING' if rep.blocking else 'pass'} "
          f"({len(rep.errors)} blocking, {len(rep.find(severity='warning'))} warnings, "
-         f"{len(rep.find(severity='info'))} info) · E1 coverage: pass · Summary rows: {len(run['rows'])}", '',
-         db_status or 'Nothing was written to the database.', '', '## Headline (Rs crore per trading day; MTF gross)', '',
+         f"{len(rep.find(severity='info'))} info) · E1 coverage: {run.get('coverage', 'pass')} · Summary rows: {len(run['rows'])}", '',
+         db_status or 'Nothing was written to the database.', '',
+         '## Headline (Rs crore per trading day; net brokerage + MTF NII)' if broker == 'MOSL'
+         else '## Headline (Rs crore per trading day; MTF gross)', '',
          '| Period | Panel | ADR | vs previous | YoY |', '|---|---|---:|---:|---:|']
     h = headline(run['rows'])
     pct = lambda x: '—' if x is None else f'{100 * x:+.1f}%'

@@ -33,11 +33,15 @@ def rows_for(run, run_id):
     """Every row carries the run's broker_id (sb_runs.broker_id and the three child tables)."""
     from ..engine import publish as P
     broker = run.get('broker', BROKER)
-    calib = (P.calibration_rows(run_id, run['calib']) if broker == BROKER
-             else P.groww_calibration_rows(run_id, run['calib'], broker))
+    if broker == 'MOSL':
+        calib, daily = P.mosl_calibration_rows(run_id, run['calib'], broker), P.mosl_daily_rows(run_id, run['daily'], broker)
+    else:
+        calib = (P.calibration_rows(run_id, run['calib']) if broker == BROKER
+                 else P.groww_calibration_rows(run_id, run['calib'], broker))
+        daily = P.daily_rows(run_id, run['daily'], broker)
     return {
         'sb_calibration': calib,
-        'sb_daily_revenue': P.daily_rows(run_id, run['daily'], broker),
+        'sb_daily_revenue': daily,
         'sb_summary_cells': P.period_summary_rows(run_id, run['rows'], broker),
     }
 
@@ -61,7 +65,8 @@ def publish(run, writer, notes_extra=''):
     tables = rows_for(run, run_id)
     _check_finite(tables)
     now = lambda: dt.datetime.now(dt.timezone.utc).isoformat(timespec='seconds')
-    label = f"switches {run['switches']}" if broker == BROKER else f"{broker} switches g-{run['switches']}"
+    label = (f"switches {run['switches']}" if broker == BROKER
+             else f"{broker} switches {'m' if broker == 'MOSL' else 'g'}-{run['switches']}")
     notes = (f"live run, {label}; E5 {len(rep.errors)} blocking / "
              f"{len(rep.find(severity='warning'))} warnings / {len(rep.find(severity='info'))} info"
              + (f'; {notes_extra}' if notes_extra else ''))
