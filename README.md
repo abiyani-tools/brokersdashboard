@@ -35,6 +35,9 @@ src/engine/parity.py     compare with sb_parity_expected; documented out-of-scop
 src/engine/groww.py      Groww (parity mode): reuses Angel's calibration, adds Groww's quarterly parameters + daily revenue
 src/engine/parity_groww.py  compare a Groww run with the workbook (`python3 run_parity.py --broker GROWW`)
 seed/build_groww.py      builds snapshot/groww_snapshot_*.json (GROWW facts, assumptions, pins) and groww_fixtures_*.json
+src/engine/mosl.py       Motilal Oswal (parity mode): quarterly gross brokerage spread over days by an exchange key, x net/gross; borrows nothing from Angel
+src/engine/parity_mosl.py  compare a MOSL run with the workbook (`python3 run_parity.py --broker MOSL`: 264/264 Summary cells, 4 feeder columns)
+seed/build_mosl.py       builds snapshot/mosl_snapshot_*.json (MOSL facts, assumptions, pins + the NSE index-option / BSE / cash-turnover series) and mosl_fixtures_*.json
 src/engine/publish.py    rows for sb_runs / sb_calibration / sb_daily_revenue / sb_summary_cells
 seed/build_fixtures.py   builds the parity fixtures + data-lake rows (already loaded)
 tests/test_parity.py     the parity gate (pytest)

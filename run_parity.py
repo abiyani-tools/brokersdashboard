@@ -1,8 +1,14 @@
 import json, sys
-if '--broker' in sys.argv:                              # python3 run_parity.py --broker GROWW
+if '--broker' in sys.argv:                              # python3 run_parity.py --broker GROWW | MOSL
     broker = sys.argv[sys.argv.index('--broker') + 1].upper()
-    if broker != 'GROWW':
-        sys.exit(f'--broker {broker}: only GROWW has a separate parity run (Angel One is the default)')
+    if broker not in ('GROWW', 'MOSL'):
+        sys.exit(f'--broker {broker}: only GROWW and MOSL have a separate parity run (Angel One is the default)')
+    if broker == 'MOSL':                                # python3 run_parity.py --broker MOSL
+        from src.engine import parity_mosl
+        rows, daily, calib = parity_mosl.main()
+        bad = (sum(not r['ok'] for r in rows) + sum(bool(r['mismatches']) for r in daily.values())
+               + sum(not r[3] for r in calib))
+        sys.exit(1 if bad else 0)
     from src.engine import parity_groww
     rows, daily, calib = parity_groww.main()
     bad = (sum(not r['ok'] for r in rows) + sum(bool(r['mismatches']) for r in daily.values())
