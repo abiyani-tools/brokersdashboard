@@ -1,0 +1,2114 @@
+[
+ {
+  "cell": "C7",
+  "panel": "Consolidated",
+  "section": "Financial Year",
+  "label": "FY 2027",
+  "header": "Total",
+  "value": 5.793068871132473
+ },
+ {
+  "cell": "D7",
+  "panel": "Consolidated",
+  "section": "Financial Year",
+  "label": "FY 2027",
+  "header": "YoY",
+  "value": -0.242124036493648
+ },
+ {
+  "cell": "H7",
+  "panel": "Consolidated",
+  "section": "Weekday",
+  "label": "Monday",
+  "header": "Val (In Cr)",
+  "value": 9.70680767286294
+ },
+ {
+  "cell": "I7",
+  "panel": "Consolidated",
+  "section": "Weekday",
+  "label": "Monday",
+  "header": "Do 3D",
+  "value": 0.13765577427211428
+ },
+ {
+  "cell": "J7",
+  "panel": "Consolidated",
+  "section": "Weekday",
+  "label": "Monday",
+  "header": "Do 10D",
+  "value": 0.20617702630314705
+ },
+ {
+  "cell": "M7",
+  "panel": "Broking",
+  "section": "Financial Year",
+  "label": "FY 2027",
+  "header": "Total",
+  "value": 1.8054292577213396
+ },
+ {
+  "cell": "N7",
+  "panel": "Broking",
+  "section": "Financial Year",
+  "label": "FY 2027",
+  "header": "YoY",
+  "value": -0.5830816701274878
+ },
+ {
+  "cell": "R7",
+  "panel": "Broking",
+  "section": "Weekday",
+  "label": "Monday",
+  "header": "Val (In Cr)",
+  "value": 5.1450587950681745
+ },
+ {
+  "cell": "S7",
+  "panel": "Broking",
+  "section": "Weekday",
+  "label": "Monday",
+  "header": "Do 3D",
+  "value": 0.2752596184528826
+ },
+ {
+  "cell": "T7",
+  "panel": "Broking",
+  "section": "Weekday",
+  "label": "Monday",
+  "header": "Do 10D",
+  "value": 0.37924919706475513
+ },
+ {
+  "cell": "C8",
+  "panel": "Consolidated",
+  "section": "Financial Year",
+  "label": "FY 2026",
+  "header": "Total",
+  "value": 7.643821878623175
+ },
+ {
+  "cell": "H8",
+  "panel": "Consolidated",
+  "section": "Weekday",
+  "label": "Average of Last 3 Mondays",
+  "header": "Val (In Cr)",
+  "value": 8.532288845519613
+ },
+ {
+  "cell": "M8",
+  "panel": "Broking",
+  "section": "Financial Year",
+  "label": "FY 2026",
+  "header": "Total",
+  "value": 4.330414684030358
+ },
+ {
+  "cell": "R8",
+  "panel": "Broking",
+  "section": "Weekday",
+  "label": "Average of Last 3 Mondays",
+  "header": "Val (In Cr)",
+  "value": 4.03451871338171
+ },
+ {
+  "cell": "H9",
+  "panel": "Consolidated",
+  "section": "Weekday",
+  "label": "Average of Last 10 Mondays",
+  "header": "Val (In Cr)",
+  "value": 8.04758129294973
+ },
+ {
+  "cell": "R9",
+  "panel": "Broking",
+  "section": "Weekday",
+  "label": "Average of Last 10 Mondays",
+  "header": "Val (In Cr)",
+  "value": 3.730333000024662
+ },
+ {
+  "cell": "C11",
+  "panel": "Consolidated",
+  "section": "Quarter",
+  "label": "Q2 FY 2027",
+  "header": "Val (In Cr)",
+  "value": 8.30628734420295
+ },
+ {
+  "cell": "D11",
+  "panel": "Consolidated",
+  "section": "Quarter",
+  "label": "Q2 FY 2027",
+  "header": "QoQ",
+  "value": 0.01612798275980576
+ },
+ {
+  "cell": "E11",
+  "panel": "Consolidated",
+  "section": "Quarter",
+  "label": "Q2 FY 2027",
+  "header": "YoY",
+  "value": 0.07567786587865322
+ },
+ {
+  "cell": "H11",
+  "panel": "Consolidated",
+  "section": "Weekday",
+  "label": "Tuesday",
+  "header": "Val (In Cr)",
+  "value": 9.4067217698302
+ },
+ {
+  "cell": "I11",
+  "panel": "Consolidated",
+  "section": "Weekday",
+  "label": "Tuesday",
+  "header": "Do 3D",
+  "value": -0.015537126389572498
+ },
+ {
+  "cell": "J11",
+  "panel": "Consolidated",
+  "section": "Weekday",
+  "label": "Tuesday",
+  "header": "Do 10D",
+  "value": 0.06293107092034012
+ },
+ {
+  "cell": "M11",
+  "panel": "Broking",
+  "section": "Quarter",
+  "label": "Q2 FY 2027",
+  "header": "Val (In Cr)",
+  "value": 4.015205317573669
+ },
+ {
+  "cell": "N11",
+  "panel": "Broking",
+  "section": "Quarter",
+  "label": "Q2 FY 2027",
+  "header": "QoQ",
+  "value": -0.11189859188734441
+ },
+ {
+  "cell": "O11",
+  "panel": "Broking",
+  "section": "Quarter",
+  "label": "Q2 FY 2027",
+  "header": "YoY",
+  "value": -0.09567526207718524
+ },
+ {
+  "cell": "R11",
+  "panel": "Broking",
+  "section": "Weekday",
+  "label": "Tuesday",
+  "header": "Val (In Cr)",
+  "value": 4.843084665287369
+ },
+ {
+  "cell": "S11",
+  "panel": "Broking",
+  "section": "Weekday",
+  "label": "Tuesday",
+  "header": "Do 3D",
+  "value": -0.03730303586038153
+ },
+ {
+  "cell": "T11",
+  "panel": "Broking",
+  "section": "Weekday",
+  "label": "Tuesday",
+  "header": "Do 10D",
+  "value": 0.08123176508763374
+ },
+ {
+  "cell": "C12",
+  "panel": "Consolidated",
+  "section": "Quarter",
+  "label": "Q1 FY 2027",
+  "header": "Val (In Cr)",
+  "value": 8.17444995623785
+ },
+ {
+  "cell": "H12",
+  "panel": "Consolidated",
+  "section": "Weekday",
+  "label": "Average of Last 3 Tuesdays",
+  "header": "Val (In Cr)",
+  "value": 9.555181837718175
+ },
+ {
+  "cell": "M12",
+  "panel": "Broking",
+  "section": "Quarter",
+  "label": "Q1 FY 2027",
+  "header": "Val (In Cr)",
+  "value": 4.521111306541629
+ },
+ {
+  "cell": "R12",
+  "panel": "Broking",
+  "section": "Weekday",
+  "label": "Average of Last 3 Tuesdays",
+  "header": "Val (In Cr)",
+  "value": 5.030746793323204
+ },
+ {
+  "cell": "C13",
+  "panel": "Consolidated",
+  "section": "Quarter",
+  "label": "Q4 FY 2026",
+  "header": "Val (In Cr)",
+  "value": 7.7219096977681785
+ },
+ {
+  "cell": "H13",
+  "panel": "Consolidated",
+  "section": "Weekday",
+  "label": "Average of Last 10 Tuesdays",
+  "header": "Val (In Cr)",
+  "value": 8.849794711227492
+ },
+ {
+  "cell": "M13",
+  "panel": "Broking",
+  "section": "Quarter",
+  "label": "Q4 FY 2026",
+  "header": "Val (In Cr)",
+  "value": 4.440003849498112
+ },
+ {
+  "cell": "R13",
+  "panel": "Broking",
+  "section": "Weekday",
+  "label": "Average of Last 10 Tuesdays",
+  "header": "Val (In Cr)",
+  "value": 4.479228988333355
+ },
+ {
+  "cell": "H15",
+  "panel": "Consolidated",
+  "section": "Weekday",
+  "label": "Wednesday",
+  "header": "Val (In Cr)",
+  "value": 8.106164850155626
+ },
+ {
+  "cell": "I15",
+  "panel": "Consolidated",
+  "section": "Weekday",
+  "label": "Wednesday",
+  "header": "Do 3D",
+  "value": -0.07637548812094197
+ },
+ {
+  "cell": "J15",
+  "panel": "Consolidated",
+  "section": "Weekday",
+  "label": "Wednesday",
+  "header": "Do 10D",
+  "value": 0.012653977466192456
+ },
+ {
+  "cell": "R15",
+  "panel": "Broking",
+  "section": "Weekday",
+  "label": "Wednesday",
+  "header": "Val (In Cr)",
+  "value": 3.5335767460387526
+ },
+ {
+  "cell": "S15",
+  "panel": "Broking",
+  "section": "Weekday",
+  "label": "Wednesday",
+  "header": "Do 3D",
+  "value": -0.16898779248267282
+ },
+ {
+  "cell": "T15",
+  "panel": "Broking",
+  "section": "Weekday",
+  "label": "Wednesday",
+  "header": "Do 10D",
+  "value": -0.025652127145370796
+ },
+ {
+  "cell": "C16",
+  "panel": "Consolidated",
+  "section": "Month",
+  "label": "FY 2027 September",
+  "header": "Val (In Cr)",
+  "value": 8.59930862649386
+ },
+ {
+  "cell": "D16",
+  "panel": "Consolidated",
+  "section": "Month",
+  "label": "FY 2027 September",
+  "header": "MoM",
+  "value": 0.06865591775604885
+ },
+ {
+  "cell": "E16",
+  "panel": "Consolidated",
+  "section": "Month",
+  "label": "FY 2027 September",
+  "header": "Mo 6M",
+  "value": 0.04355872795373772
+ },
+ {
+  "cell": "H16",
+  "panel": "Consolidated",
+  "section": "Weekday",
+  "label": "Average of Last 3 Wednesdays",
+  "header": "Val (In Cr)",
+  "value": 8.776472198279066
+ },
+ {
+  "cell": "M16",
+  "panel": "Broking",
+  "section": "Month",
+  "label": "FY 2027 September",
+  "header": "Val (In Cr)",
+  "value": 4.1070013580392715
+ },
+ {
+  "cell": "N16",
+  "panel": "Broking",
+  "section": "Month",
+  "label": "FY 2027 September",
+  "header": "MoM",
+  "value": 0.09164867080007566
+ },
+ {
+  "cell": "O16",
+  "panel": "Broking",
+  "section": "Month",
+  "label": "FY 2027 September",
+  "header": "Mo 6M",
+  "value": -0.03775796074927795
+ },
+ {
+  "cell": "R16",
+  "panel": "Broking",
+  "section": "Weekday",
+  "label": "Average of Last 3 Wednesdays",
+  "header": "Val (In Cr)",
+  "value": 4.252135785821263
+ },
+ {
+  "cell": "C17",
+  "panel": "Consolidated",
+  "section": "Month",
+  "label": "FY 2027 August",
+  "header": "Val (In Cr)",
+  "value": 8.046845091683569
+ },
+ {
+  "cell": "H17",
+  "panel": "Consolidated",
+  "section": "Weekday",
+  "label": "Average of Last 10 Wednesdays",
+  "header": "Val (In Cr)",
+  "value": 8.004871387992203
+ },
+ {
+  "cell": "M17",
+  "panel": "Broking",
+  "section": "Month",
+  "label": "FY 2027 August",
+  "header": "Val (In Cr)",
+  "value": 3.762200667573045
+ },
+ {
+  "cell": "R17",
+  "panel": "Broking",
+  "section": "Weekday",
+  "label": "Average of Last 10 Wednesdays",
+  "header": "Val (In Cr)",
+  "value": 3.626606928063726
+ },
+ {
+  "cell": "C18",
+  "panel": "Consolidated",
+  "section": "Month",
+  "label": "Avg Of Last 6 Months",
+  "header": "Val (In Cr)",
+  "value": 8.2403686502204
+ },
+ {
+  "cell": "M18",
+  "panel": "Broking",
+  "section": "Month",
+  "label": "Avg Of Last 6 Months",
+  "header": "Val (In Cr)",
+  "value": 4.268158312057649
+ },
+ {
+  "cell": "H19",
+  "panel": "Consolidated",
+  "section": "Weekday",
+  "label": "Thursday",
+  "header": "Val (In Cr)",
+  "value": 10.954807925665591
+ },
+ {
+  "cell": "I19",
+  "panel": "Consolidated",
+  "section": "Weekday",
+  "label": "Thursday",
+  "header": "Do 3D",
+  "value": -0.055203281808307914
+ },
+ {
+  "cell": "J19",
+  "panel": "Consolidated",
+  "section": "Weekday",
+  "label": "Thursday",
+  "header": "Do 10D",
+  "value": 0.11866459235534177
+ },
+ {
+  "cell": "R19",
+  "panel": "Broking",
+  "section": "Weekday",
+  "label": "Thursday",
+  "header": "Val (In Cr)",
+  "value": 6.41265412775632
+ },
+ {
+  "cell": "S19",
+  "panel": "Broking",
+  "section": "Weekday",
+  "label": "Thursday",
+  "header": "Do 3D",
+  "value": -0.09545019624189832
+ },
+ {
+  "cell": "T19",
+  "panel": "Broking",
+  "section": "Weekday",
+  "label": "Thursday",
+  "header": "Do 10D",
+  "value": 0.1776583637258995
+ },
+ {
+  "cell": "H20",
+  "panel": "Consolidated",
+  "section": "Weekday",
+  "label": "Average of Last 3 Thursdays",
+  "header": "Val (In Cr)",
+  "value": 11.594883549799697
+ },
+ {
+  "cell": "R20",
+  "panel": "Broking",
+  "section": "Weekday",
+  "label": "Average of Last 3 Thursdays",
+  "header": "Val (In Cr)",
+  "value": 7.0893322856451775
+ },
+ {
+  "cell": "H21",
+  "panel": "Consolidated",
+  "section": "Weekday",
+  "label": "Average of Last 10 Thursdays",
+  "header": "Val (In Cr)",
+  "value": 9.792754683153337
+ },
+ {
+  "cell": "R21",
+  "panel": "Broking",
+  "section": "Weekday",
+  "label": "Average of Last 10 Thursdays",
+  "header": "Val (In Cr)",
+  "value": 5.445258425769452
+ },
+ {
+  "cell": "C22",
+  "panel": "Consolidated",
+  "section": "Week",
+  "label": "Last 5 Trading Days",
+  "header": "Val (In Cr)",
+  "value": 9.081893521856028
+ },
+ {
+  "cell": "D22",
+  "panel": "Consolidated",
+  "section": "Week",
+  "label": "Last 5 Trading Days",
+  "header": "WoW",
+  "value": -0.04695365008653474
+ },
+ {
+  "cell": "E22",
+  "panel": "Consolidated",
+  "section": "Week",
+  "label": "Last 5 Trading Days",
+  "header": "Wo 10W",
+  "value": 0.06512933335116511
+ },
+ {
+  "cell": "M22",
+  "panel": "Broking",
+  "section": "Week",
+  "label": "Last 5 Trading Days",
+  "header": "Val (In Cr)",
+  "value": 4.52628566210264
+ },
+ {
+  "cell": "N22",
+  "panel": "Broking",
+  "section": "Week",
+  "label": "Last 5 Trading Days",
+  "header": "WoW",
+  "value": -0.10202603411446476
+ },
+ {
+  "cell": "O22",
+  "panel": "Broking",
+  "section": "Week",
+  "label": "Last 5 Trading Days",
+  "header": "Wo 10W",
+  "value": 0.08957598823123525
+ },
+ {
+  "cell": "C23",
+  "panel": "Consolidated",
+  "section": "Week",
+  "label": "Previous 5 Trading Days",
+  "header": "Val (In Cr)",
+  "value": 9.529330365391615
+ },
+ {
+  "cell": "H23",
+  "panel": "Consolidated",
+  "section": "Weekday",
+  "label": "Friday",
+  "header": "Val (In Cr)",
+  "value": 8.609751212426893
+ },
+ {
+  "cell": "I23",
+  "panel": "Consolidated",
+  "section": "Weekday",
+  "label": "Friday",
+  "header": "Do 3D",
+  "value": 0.08997672410512503
+ },
+ {
+  "cell": "J23",
+  "panel": "Consolidated",
+  "section": "Weekday",
+  "label": "Friday",
+  "header": "Do 10D",
+  "value": 0.1470162978520111
+ },
+ {
+  "cell": "M23",
+  "panel": "Broking",
+  "section": "Week",
+  "label": "Previous 5 Trading Days",
+  "header": "Val (In Cr)",
+  "value": 5.040553327889692
+ },
+ {
+  "cell": "R23",
+  "panel": "Broking",
+  "section": "Weekday",
+  "label": "Friday",
+  "header": "Val (In Cr)",
+  "value": 4.071839798023694
+ },
+ {
+  "cell": "S23",
+  "panel": "Broking",
+  "section": "Weekday",
+  "label": "Friday",
+  "header": "Do 3D",
+  "value": 0.19822049646681683
+ },
+ {
+  "cell": "T23",
+  "panel": "Broking",
+  "section": "Weekday",
+  "label": "Friday",
+  "header": "Do 10D",
+  "value": 0.2880853641583083
+ },
+ {
+  "cell": "C24",
+  "panel": "Consolidated",
+  "section": "Week",
+  "label": "last 45 trading days",
+  "header": "Val (In Cr)",
+  "value": 8.526564087088001
+ },
+ {
+  "cell": "H24",
+  "panel": "Consolidated",
+  "section": "Weekday",
+  "label": "Average of Last 3 Fridays",
+  "header": "Val (In Cr)",
+  "value": 7.899022999317285
+ },
+ {
+  "cell": "M24",
+  "panel": "Broking",
+  "section": "Week",
+  "label": "last 45 trading days",
+  "header": "Val (In Cr)",
+  "value": 4.154171632811395
+ },
+ {
+  "cell": "R24",
+  "panel": "Broking",
+  "section": "Weekday",
+  "label": "Average of Last 3 Fridays",
+  "header": "Val (In Cr)",
+  "value": 3.3982391471605564
+ },
+ {
+  "cell": "C25",
+  "panel": "Consolidated",
+  "section": "Week",
+  "label": "last 20 trading days",
+  "header": "Val (In Cr)",
+  "value": 9.053290224627332
+ },
+ {
+  "cell": "H25",
+  "panel": "Consolidated",
+  "section": "Weekday",
+  "label": "Average of Last 10 Fridays",
+  "header": "Val (In Cr)",
+  "value": 7.506215237351169
+ },
+ {
+  "cell": "M25",
+  "panel": "Broking",
+  "section": "Week",
+  "label": "last 20 trading days",
+  "header": "Val (In Cr)",
+  "value": 4.558529420462385
+ },
+ {
+  "cell": "R25",
+  "panel": "Broking",
+  "section": "Weekday",
+  "label": "Average of Last 10 Fridays",
+  "header": "Val (In Cr)",
+  "value": 3.1611567923407105
+ },
+ {
+  "cell": "C35",
+  "panel": "MTF",
+  "section": "Financial Year",
+  "label": "FY 2027",
+  "header": "Total",
+  "value": 3.9876396134111327
+ },
+ {
+  "cell": "D35",
+  "panel": "MTF",
+  "section": "Financial Year",
+  "label": "FY 2027",
+  "header": "YoY",
+  "value": 0.2034861335240059
+ },
+ {
+  "cell": "H35",
+  "panel": "MTF",
+  "section": "Weekday",
+  "label": "Monday",
+  "header": "Val (In Cr)",
+  "value": 4.561748877794765
+ },
+ {
+  "cell": "I35",
+  "panel": "MTF",
+  "section": "Weekday",
+  "label": "Monday",
+  "header": "Do 3D",
+  "value": 0.014224547670792731
+ },
+ {
+  "cell": "J35",
+  "panel": "MTF",
+  "section": "Weekday",
+  "label": "Monday",
+  "header": "Do 10D",
+  "value": 0.05663343136191079
+ },
+ {
+  "cell": "M35",
+  "panel": "F&O",
+  "section": "Financial Year",
+  "label": "FY 2027",
+  "header": "Total",
+  "value": 1.8054292577213396
+ },
+ {
+  "cell": "N35",
+  "panel": "F&O",
+  "section": "Financial Year",
+  "label": "FY 2027",
+  "header": "YoY",
+  "value": -0.02401379371506296
+ },
+ {
+  "cell": "R35",
+  "panel": "F&O",
+  "section": "Weekday",
+  "label": "Monday",
+  "header": "Val (In Cr)",
+  "value": 2.8562317283296137
+ },
+ {
+  "cell": "S35",
+  "panel": "F&O",
+  "section": "Weekday",
+  "label": "Monday",
+  "header": "Do 3D",
+  "value": 0.541676663665507
+ },
+ {
+  "cell": "T35",
+  "panel": "F&O",
+  "section": "Weekday",
+  "label": "Monday",
+  "header": "Do 10D",
+  "value": 1.3698158277929058
+ },
+ {
+  "cell": "C36",
+  "panel": "MTF",
+  "section": "Financial Year",
+  "label": "FY 2026",
+  "header": "Total",
+  "value": 3.313407194592817
+ },
+ {
+  "cell": "H36",
+  "panel": "MTF",
+  "section": "Weekday",
+  "label": "Average of Last 3 Mondays",
+  "header": "Val (In Cr)",
+  "value": 4.4977701321379016
+ },
+ {
+  "cell": "M36",
+  "panel": "F&O",
+  "section": "Financial Year",
+  "label": "FY 2026",
+  "header": "Total",
+  "value": 1.8498512029116203
+ },
+ {
+  "cell": "R36",
+  "panel": "F&O",
+  "section": "Weekday",
+  "label": "Average of Last 3 Mondays",
+  "header": "Val (In Cr)",
+  "value": 1.8526788370387641
+ },
+ {
+  "cell": "H37",
+  "panel": "MTF",
+  "section": "Weekday",
+  "label": "Average of Last 10 Mondays",
+  "header": "Val (In Cr)",
+  "value": 4.317248292925067
+ },
+ {
+  "cell": "R37",
+  "panel": "F&O",
+  "section": "Weekday",
+  "label": "Average of Last 10 Mondays",
+  "header": "Val (In Cr)",
+  "value": 1.205254726899906
+ },
+ {
+  "cell": "C39",
+  "panel": "MTF",
+  "section": "Quarter",
+  "label": "Q2 FY 2027",
+  "header": "Val (In Cr)",
+  "value": 4.29108202662928
+ },
+ {
+  "cell": "D39",
+  "panel": "MTF",
+  "section": "Quarter",
+  "label": "Q2 FY 2027",
+  "header": "QoQ",
+  "value": 0.1745645389282724
+ },
+ {
+  "cell": "E39",
+  "panel": "MTF",
+  "section": "Quarter",
+  "label": "Q2 FY 2027",
+  "header": "YoY",
+  "value": 0.307496992606038
+ },
+ {
+  "cell": "H39",
+  "panel": "MTF",
+  "section": "Weekday",
+  "label": "Tuesday",
+  "header": "Val (In Cr)",
+  "value": 4.563637104542831
+ },
+ {
+  "cell": "I39",
+  "panel": "MTF",
+  "section": "Weekday",
+  "label": "Tuesday",
+  "header": "Do 3D",
+  "value": 0.008664520490005767
+ },
+ {
+  "cell": "J39",
+  "panel": "MTF",
+  "section": "Weekday",
+  "label": "Tuesday",
+  "header": "Do 10D",
+  "value": 0.04417537542962413
+ },
+ {
+  "cell": "M39",
+  "panel": "F&O",
+  "section": "Quarter",
+  "label": "Q2 FY 2027",
+  "header": "Val (In Cr)",
+  "value": 1.5817624056457729
+ },
+ {
+  "cell": "N39",
+  "panel": "F&O",
+  "section": "Quarter",
+  "label": "Q2 FY 2027",
+  "header": "QoQ",
+  "value": -0.1959213829312192
+ },
+ {
+  "cell": "O39",
+  "panel": "F&O",
+  "section": "Quarter",
+  "label": "Q2 FY 2027",
+  "header": "YoY",
+  "value": -0.18688148639217916
+ },
+ {
+  "cell": "R39",
+  "panel": "F&O",
+  "section": "Weekday",
+  "label": "Tuesday",
+  "header": "Val (In Cr)",
+  "value": 2.958524955803024
+ },
+ {
+  "cell": "S39",
+  "panel": "F&O",
+  "section": "Weekday",
+  "label": "Tuesday",
+  "header": "Do 3D",
+  "value": 0.1524711391845901
+ },
+ {
+  "cell": "T39",
+  "panel": "F&O",
+  "section": "Weekday",
+  "label": "Tuesday",
+  "header": "Do 10D",
+  "value": 0.3205277212834232
+ },
+ {
+  "cell": "C40",
+  "panel": "MTF",
+  "section": "Quarter",
+  "label": "Q1 FY 2027",
+  "header": "Val (In Cr)",
+  "value": 3.6533386496962224
+ },
+ {
+  "cell": "H40",
+  "panel": "MTF",
+  "section": "Weekday",
+  "label": "Average of Last 3 Tuesdays",
+  "header": "Val (In Cr)",
+  "value": 4.524435044394971
+ },
+ {
+  "cell": "M40",
+  "panel": "F&O",
+  "section": "Quarter",
+  "label": "Q1 FY 2027",
+  "header": "Val (In Cr)",
+  "value": 1.9671738211519547
+ },
+ {
+  "cell": "R40",
+  "panel": "F&O",
+  "section": "Weekday",
+  "label": "Average of Last 3 Tuesdays",
+  "header": "Val (In Cr)",
+  "value": 2.567114138664049
+ },
+ {
+  "cell": "C41",
+  "panel": "MTF",
+  "section": "Quarter",
+  "label": "Q4 FY 2026",
+  "header": "Val (In Cr)",
+  "value": 3.2819058482700667
+ },
+ {
+  "cell": "H41",
+  "panel": "MTF",
+  "section": "Weekday",
+  "label": "Average of Last 10 Tuesdays",
+  "header": "Val (In Cr)",
+  "value": 4.370565722894137
+ },
+ {
+  "cell": "M41",
+  "panel": "F&O",
+  "section": "Quarter",
+  "label": "Q4 FY 2026",
+  "header": "Val (In Cr)",
+  "value": 1.9453036416886706
+ },
+ {
+  "cell": "R41",
+  "panel": "F&O",
+  "section": "Weekday",
+  "label": "Average of Last 10 Tuesdays",
+  "header": "Val (In Cr)",
+  "value": 2.2404110933223182
+ },
+ {
+  "cell": "H43",
+  "panel": "MTF",
+  "section": "Weekday",
+  "label": "Wednesday",
+  "header": "Val (In Cr)",
+  "value": 4.572588104116872
+ },
+ {
+  "cell": "I43",
+  "panel": "MTF",
+  "section": "Weekday",
+  "label": "Wednesday",
+  "header": "Do 3D",
+  "value": 0.010664921274688766
+ },
+ {
+  "cell": "J43",
+  "panel": "MTF",
+  "section": "Weekday",
+  "label": "Wednesday",
+  "header": "Do 10D",
+  "value": 0.044383715503464316
+ },
+ {
+  "cell": "R43",
+  "panel": "F&O",
+  "section": "Weekday",
+  "label": "Wednesday",
+  "header": "Val (In Cr)",
+  "value": 1.691304841771825
+ },
+ {
+  "cell": "S43",
+  "panel": "F&O",
+  "section": "Weekday",
+  "label": "Wednesday",
+  "header": "Do 3D",
+  "value": 0.07541831718152392
+ },
+ {
+  "cell": "T43",
+  "panel": "F&O",
+  "section": "Weekday",
+  "label": "Wednesday",
+  "header": "Do 10D",
+  "value": 0.3545813555261399
+ },
+ {
+  "cell": "C44",
+  "panel": "MTF",
+  "section": "Month",
+  "label": "FY 2027 September",
+  "header": "Val (In Cr)",
+  "value": 4.492307268454589
+ },
+ {
+  "cell": "D44",
+  "panel": "MTF",
+  "section": "Month",
+  "label": "FY 2027 September",
+  "header": "MoM",
+  "value": 0.04846676265024619
+ },
+ {
+  "cell": "E44",
+  "panel": "MTF",
+  "section": "Month",
+  "label": "FY 2027 September",
+  "header": "Mo 6M",
+  "value": 0.1309338846674457
+ },
+ {
+  "cell": "H44",
+  "panel": "MTF",
+  "section": "Weekday",
+  "label": "Average of Last 3 Wednesdays",
+  "header": "Val (In Cr)",
+  "value": 4.524336412457802
+ },
+ {
+  "cell": "M44",
+  "panel": "F&O",
+  "section": "Month",
+  "label": "FY 2027 September",
+  "header": "Val (In Cr)",
+  "value": 1.5913918521278
+ },
+ {
+  "cell": "N44",
+  "panel": "F&O",
+  "section": "Month",
+  "label": "FY 2027 September",
+  "header": "MoM",
+  "value": 0.17089621415457468
+ },
+ {
+  "cell": "O44",
+  "panel": "F&O",
+  "section": "Month",
+  "label": "FY 2027 September",
+  "header": "Mo 6M",
+  "value": -0.10317247173317445
+ },
+ {
+  "cell": "R44",
+  "panel": "F&O",
+  "section": "Weekday",
+  "label": "Average of Last 3 Wednesdays",
+  "header": "Val (In Cr)",
+  "value": 1.5726948432535797
+ },
+ {
+  "cell": "C45",
+  "panel": "MTF",
+  "section": "Month",
+  "label": "FY 2027 August",
+  "header": "Val (In Cr)",
+  "value": 4.284644424110523
+ },
+ {
+  "cell": "H45",
+  "panel": "MTF",
+  "section": "Weekday",
+  "label": "Average of Last 10 Wednesdays",
+  "header": "Val (In Cr)",
+  "value": 4.378264459928478
+ },
+ {
+  "cell": "M45",
+  "panel": "F&O",
+  "section": "Month",
+  "label": "FY 2027 August",
+  "header": "Val (In Cr)",
+  "value": 1.359122894830467
+ },
+ {
+  "cell": "R45",
+  "panel": "F&O",
+  "section": "Weekday",
+  "label": "Average of Last 10 Wednesdays",
+  "header": "Val (In Cr)",
+  "value": 1.2485812202212814
+ },
+ {
+  "cell": "C46",
+  "panel": "MTF",
+  "section": "Month",
+  "label": "Avg Of Last 6 Months",
+  "header": "Val (In Cr)",
+  "value": 3.9722103381627516
+ },
+ {
+  "cell": "M46",
+  "panel": "F&O",
+  "section": "Month",
+  "label": "Avg Of Last 6 Months",
+  "header": "Val (In Cr)",
+  "value": 1.7744681133988638
+ },
+ {
+  "cell": "H47",
+  "panel": "MTF",
+  "section": "Weekday",
+  "label": "Thursday",
+  "header": "Val (In Cr)",
+  "value": 4.542153797909272
+ },
+ {
+  "cell": "I47",
+  "panel": "MTF",
+  "section": "Weekday",
+  "label": "Thursday",
+  "header": "Do 3D",
+  "value": 0.008123874662342878
+ },
+ {
+  "cell": "J47",
+  "panel": "MTF",
+  "section": "Weekday",
+  "label": "Thursday",
+  "header": "Do 10D",
+  "value": 0.04477463096023948
+ },
+ {
+  "cell": "R47",
+  "panel": "F&O",
+  "section": "Weekday",
+  "label": "Thursday",
+  "header": "Val (In Cr)",
+  "value": 3.6542952414078393
+ },
+ {
+  "cell": "S47",
+  "panel": "F&O",
+  "section": "Weekday",
+  "label": "Thursday",
+  "header": "Do 3D",
+  "value": 0.015324893121337224
+ },
+ {
+  "cell": "T47",
+  "panel": "F&O",
+  "section": "Weekday",
+  "label": "Thursday",
+  "header": "Do 10D",
+  "value": 0.2677508262101185
+ },
+ {
+  "cell": "H48",
+  "panel": "MTF",
+  "section": "Weekday",
+  "label": "Average of Last 3 Thursdays",
+  "header": "Val (In Cr)",
+  "value": 4.50555126415452
+ },
+ {
+  "cell": "R48",
+  "panel": "F&O",
+  "section": "Weekday",
+  "label": "Average of Last 3 Thursdays",
+  "header": "Val (In Cr)",
+  "value": 3.5991388236072033
+ },
+ {
+  "cell": "H49",
+  "panel": "MTF",
+  "section": "Weekday",
+  "label": "Average of Last 10 Thursdays",
+  "header": "Val (In Cr)",
+  "value": 4.347496257383886
+ },
+ {
+  "cell": "R49",
+  "panel": "F&O",
+  "section": "Weekday",
+  "label": "Average of Last 10 Thursdays",
+  "header": "Val (In Cr)",
+  "value": 2.8825027488502477
+ },
+ {
+  "cell": "C50",
+  "panel": "MTF",
+  "section": "Week",
+  "label": "Last 5 Trading Days",
+  "header": "Val (In Cr)",
+  "value": 4.555607859753388
+ },
+ {
+  "cell": "D50",
+  "panel": "MTF",
+  "section": "Week",
+  "label": "Last 5 Trading Days",
+  "header": "WoW",
+  "value": 0.014888425442636022
+ },
+ {
+  "cell": "E50",
+  "panel": "MTF",
+  "section": "Week",
+  "label": "Last 5 Trading Days",
+  "header": "Wo 10W",
+  "value": 0.0419027814618016
+ },
+ {
+  "cell": "M50",
+  "panel": "F&O",
+  "section": "Week",
+  "label": "Last 5 Trading Days",
+  "header": "Val (In Cr)",
+  "value": 2.1957946146110685
+ },
+ {
+  "cell": "N50",
+  "panel": "F&O",
+  "section": "Week",
+  "label": "Last 5 Trading Days",
+  "header": "WoW",
+  "value": 0.10054546659120756
+ },
+ {
+  "cell": "O50",
+  "panel": "F&O",
+  "section": "Week",
+  "label": "Last 5 Trading Days",
+  "header": "Wo 10W",
+  "value": 0.2800670326381305
+ },
+ {
+  "cell": "C51",
+  "panel": "MTF",
+  "section": "Week",
+  "label": "Previous 5 Trading Days",
+  "header": "Val (In Cr)",
+  "value": 4.488777037501924
+ },
+ {
+  "cell": "H51",
+  "panel": "MTF",
+  "section": "Weekday",
+  "label": "Friday",
+  "header": "Val (In Cr)",
+  "value": 4.537911414403198
+ },
+ {
+  "cell": "I51",
+  "panel": "MTF",
+  "section": "Weekday",
+  "label": "Friday",
+  "header": "Do 3D",
+  "value": 0.008249132476930265
+ },
+ {
+  "cell": "J51",
+  "panel": "MTF",
+  "section": "Weekday",
+  "label": "Friday",
+  "header": "Do 10D",
+  "value": 0.04438443621263555
+ },
+ {
+  "cell": "M51",
+  "panel": "F&O",
+  "section": "Week",
+  "label": "Previous 5 Trading Days",
+  "header": "Val (In Cr)",
+  "value": 1.9951875513260244
+ },
+ {
+  "cell": "R51",
+  "panel": "F&O",
+  "section": "Weekday",
+  "label": "Friday",
+  "header": "Val (In Cr)",
+  "value": 1.1934021274041495
+ },
+ {
+  "cell": "S51",
+  "panel": "F&O",
+  "section": "Weekday",
+  "label": "Friday",
+  "header": "Do 3D",
+  "value": 0.2543254467903091
+ },
+ {
+  "cell": "T51",
+  "panel": "F&O",
+  "section": "Weekday",
+  "label": "Friday",
+  "header": "Do 10D",
+  "value": 0.6201933182505945
+ },
+ {
+  "cell": "C52",
+  "panel": "MTF",
+  "section": "Week",
+  "label": "last 45 trading days",
+  "header": "Val (In Cr)",
+  "value": 4.372392454276605
+ },
+ {
+  "cell": "H52",
+  "panel": "MTF",
+  "section": "Weekday",
+  "label": "Average of Last 3 Fridays",
+  "header": "Val (In Cr)",
+  "value": 4.5007838521567285
+ },
+ {
+  "cell": "M52",
+  "panel": "F&O",
+  "section": "Week",
+  "label": "last 45 trading days",
+  "header": "Val (In Cr)",
+  "value": 1.7153747097803826
+ },
+ {
+  "cell": "R52",
+  "panel": "F&O",
+  "section": "Weekday",
+  "label": "Average of Last 3 Fridays",
+  "header": "Val (In Cr)",
+  "value": 0.9514294160721557
+ },
+ {
+  "cell": "C53",
+  "panel": "MTF",
+  "section": "Week",
+  "label": "last 20 trading days",
+  "header": "Val (In Cr)",
+  "value": 4.494760804164947
+ },
+ {
+  "cell": "H53",
+  "panel": "MTF",
+  "section": "Weekday",
+  "label": "Average of Last 10 Fridays",
+  "header": "Val (In Cr)",
+  "value": 4.345058445010459
+ },
+ {
+  "cell": "M53",
+  "panel": "F&O",
+  "section": "Week",
+  "label": "last 20 trading days",
+  "header": "Val (In Cr)",
+  "value": 1.9920761577706592
+ },
+ {
+  "cell": "R53",
+  "panel": "F&O",
+  "section": "Weekday",
+  "label": "Average of Last 10 Fridays",
+  "header": "Val (In Cr)",
+  "value": 0.7365800821180566
+ },
+ {
+  "cell": "C63",
+  "panel": "Commodities",
+  "section": "Financial Year",
+  "label": "FY 2027",
+  "header": "Total",
+  "value": 0
+ },
+ {
+  "cell": "D63",
+  "panel": "Commodities",
+  "section": "Financial Year",
+  "label": "FY 2027",
+  "header": "YoY",
+  "value": -1
+ },
+ {
+  "cell": "H63",
+  "panel": "Commodities",
+  "section": "Weekday",
+  "label": "Monday",
+  "header": "Val (In Cr)",
+  "value": 0.5393264852067005
+ },
+ {
+  "cell": "I63",
+  "panel": "Commodities",
+  "section": "Weekday",
+  "label": "Monday",
+  "header": "Do 3D",
+  "value": -0.1309886271525591
+ },
+ {
+  "cell": "J63",
+  "panel": "Commodities",
+  "section": "Weekday",
+  "label": "Monday",
+  "header": "Do 10D",
+  "value": -0.38989860695679057
+ },
+ {
+  "cell": "C64",
+  "panel": "Commodities",
+  "section": "Financial Year",
+  "label": "FY 2026",
+  "header": "Total",
+  "value": 0.5990527692718285
+ },
+ {
+  "cell": "H64",
+  "panel": "Commodities",
+  "section": "Weekday",
+  "label": "Average of Last 3 Mondays",
+  "header": "Val (In Cr)",
+  "value": 0.620620744512836
+ },
+ {
+  "cell": "M64",
+  "panel": "Cash",
+  "section": "Financial Year",
+  "label": "FY 2027",
+  "header": "Total",
+  "value": 0
+ },
+ {
+  "cell": "N64",
+  "panel": "Cash",
+  "section": "Financial Year",
+  "label": "FY 2027",
+  "header": "YoY",
+  "value": -1
+ },
+ {
+  "cell": "R64",
+  "panel": "Cash",
+  "section": "Weekday",
+  "label": "Monday",
+  "header": "Val (In Cr)",
+  "value": 1.74950058153186
+ },
+ {
+  "cell": "S64",
+  "panel": "Cash",
+  "section": "Weekday",
+  "label": "Monday",
+  "header": "Do 3D",
+  "value": 0.12059898950958958
+ },
+ {
+  "cell": "T64",
+  "panel": "Cash",
+  "section": "Weekday",
+  "label": "Monday",
+  "header": "Do 10D",
+  "value": 0.06606437521897335
+ },
+ {
+  "cell": "H65",
+  "panel": "Commodities",
+  "section": "Weekday",
+  "label": "Average of Last 10 Mondays",
+  "header": "Val (In Cr)",
+  "value": 0.8839948430809492
+ },
+ {
+  "cell": "M65",
+  "panel": "Cash",
+  "section": "Financial Year",
+  "label": "FY 2026",
+  "header": "Total",
+  "value": 1.8815107118469092
+ },
+ {
+  "cell": "R65",
+  "panel": "Cash",
+  "section": "Weekday",
+  "label": "Average of Last 3 Mondays",
+  "header": "Val (In Cr)",
+  "value": 1.56121913183011
+ },
+ {
+  "cell": "R66",
+  "panel": "Cash",
+  "section": "Weekday",
+  "label": "Average of Last 10 Mondays",
+  "header": "Val (In Cr)",
+  "value": 1.6410834300438062
+ },
+ {
+  "cell": "C67",
+  "panel": "Commodities",
+  "section": "Quarter",
+  "label": "Q2 FY 2027",
+  "header": "Val (In Cr)",
+  "value": 0.7687463498457752
+ },
+ {
+  "cell": "D67",
+  "panel": "Commodities",
+  "section": "Quarter",
+  "label": "Q2 FY 2027",
+  "header": "QoQ",
+  "value": 0.46911641013009775
+ },
+ {
+  "cell": "E67",
+  "panel": "Commodities",
+  "section": "Quarter",
+  "label": "Q2 FY 2027",
+  "header": "YoY",
+  "value": -0.03289291784315762
+ },
+ {
+  "cell": "H67",
+  "panel": "Commodities",
+  "section": "Weekday",
+  "label": "Tuesday",
+  "header": "Val (In Cr)",
+  "value": 0.3943661872710214
+ },
+ {
+  "cell": "I67",
+  "panel": "Commodities",
+  "section": "Weekday",
+  "label": "Tuesday",
+  "header": "Do 3D",
+  "value": -0.513979902683714
+ },
+ {
+  "cell": "J67",
+  "panel": "Commodities",
+  "section": "Weekday",
+  "label": "Tuesday",
+  "header": "Do 10D",
+  "value": -0.36028963399056
+ },
+ {
+  "cell": "C68",
+  "panel": "Commodities",
+  "section": "Quarter",
+  "label": "Q1 FY 2027",
+  "header": "Val (In Cr)",
+  "value": 0.5232712292538471
+ },
+ {
+  "cell": "H68",
+  "panel": "Commodities",
+  "section": "Weekday",
+  "label": "Average of Last 3 Tuesdays",
+  "header": "Val (In Cr)",
+  "value": 0.8114195060011701
+ },
+ {
+  "cell": "M68",
+  "panel": "Cash",
+  "section": "Quarter",
+  "label": "Q2 FY 2027",
+  "header": "Val (In Cr)",
+  "value": 1.6646965620821206
+ },
+ {
+  "cell": "N68",
+  "panel": "Cash",
+  "section": "Quarter",
+  "label": "Q2 FY 2027",
+  "header": "QoQ",
+  "value": -0.18022148787271097
+ },
+ {
+  "cell": "O68",
+  "panel": "Cash",
+  "section": "Quarter",
+  "label": "Q2 FY 2027",
+  "header": "YoY",
+  "value": -0.02065584224684902
+ },
+ {
+  "cell": "R68",
+  "panel": "Cash",
+  "section": "Weekday",
+  "label": "Tuesday",
+  "header": "Val (In Cr)",
+  "value": 1.4901935222133234
+ },
+ {
+  "cell": "S68",
+  "panel": "Cash",
+  "section": "Weekday",
+  "label": "Tuesday",
+  "header": "Do 3D",
+  "value": -0.09806218197468242
+ },
+ {
+  "cell": "T68",
+  "panel": "Cash",
+  "section": "Weekday",
+  "label": "Tuesday",
+  "header": "Do 10D",
+  "value": -0.08145522844670938
+ },
+ {
+  "cell": "C69",
+  "panel": "Commodities",
+  "section": "Quarter",
+  "label": "Q4 FY 2026",
+  "header": "Val (In Cr)",
+  "value": 0.7948926897849997
+ },
+ {
+  "cell": "H69",
+  "panel": "Commodities",
+  "section": "Weekday",
+  "label": "Average of Last 10 Tuesdays",
+  "header": "Val (In Cr)",
+  "value": 0.616476155812679
+ },
+ {
+  "cell": "M69",
+  "panel": "Cash",
+  "section": "Quarter",
+  "label": "Q1 FY 2027",
+  "header": "Val (In Cr)",
+  "value": 2.030666256135827
+ },
+ {
+  "cell": "R69",
+  "panel": "Cash",
+  "section": "Weekday",
+  "label": "Average of Last 3 Tuesdays",
+  "header": "Val (In Cr)",
+  "value": 1.6522131486579859
+ },
+ {
+  "cell": "M70",
+  "panel": "Cash",
+  "section": "Quarter",
+  "label": "Q4 FY 2026",
+  "header": "Val (In Cr)",
+  "value": 1.6998075180244414
+ },
+ {
+  "cell": "R70",
+  "panel": "Cash",
+  "section": "Weekday",
+  "label": "Average of Last 10 Tuesdays",
+  "header": "Val (In Cr)",
+  "value": 1.6223417391983574
+ },
+ {
+  "cell": "H71",
+  "panel": "Commodities",
+  "section": "Weekday",
+  "label": "Wednesday",
+  "header": "Val (In Cr)",
+  "value": 0.42828952396450326
+ },
+ {
+  "cell": "I71",
+  "panel": "Commodities",
+  "section": "Weekday",
+  "label": "Wednesday",
+  "header": "Do 3D",
+  "value": -0.6427966877694893
+ },
+ {
+  "cell": "J71",
+  "panel": "Commodities",
+  "section": "Weekday",
+  "label": "Wednesday",
+  "header": "Do 10D",
+  "value": -0.4270590735382964
+ },
+ {
+  "cell": "C72",
+  "panel": "Commodities",
+  "section": "Month",
+  "label": "FY 2027 September",
+  "header": "Val (In Cr)",
+  "value": 0.8947913321437154
+ },
+ {
+  "cell": "D72",
+  "panel": "Commodities",
+  "section": "Month",
+  "label": "FY 2027 September",
+  "header": "MoM",
+  "value": 0.19652500919132487
+ },
+ {
+  "cell": "E72",
+  "panel": "Commodities",
+  "section": "Month",
+  "label": "FY 2027 September",
+  "header": "Mo 6M",
+  "value": 0.3851070552264084
+ },
+ {
+  "cell": "H72",
+  "panel": "Commodities",
+  "section": "Weekday",
+  "label": "Average of Last 3 Wednesdays",
+  "header": "Val (In Cr)",
+  "value": 1.1990077059759154
+ },
+ {
+  "cell": "R72",
+  "panel": "Cash",
+  "section": "Weekday",
+  "label": "Wednesday",
+  "header": "Val (In Cr)",
+  "value": 1.4139823803024245
+ },
+ {
+  "cell": "S72",
+  "panel": "Cash",
+  "section": "Weekday",
+  "label": "Wednesday",
+  "header": "Do 3D",
+  "value": -0.04488608783353609
+ },
+ {
+  "cell": "T72",
+  "panel": "Cash",
+  "section": "Weekday",
+  "label": "Wednesday",
+  "header": "Do 10D",
+  "value": -0.13279081348777522
+ },
+ {
+  "cell": "C73",
+  "panel": "Commodities",
+  "section": "Month",
+  "label": "FY 2027 August",
+  "header": "Val (In Cr)",
+  "value": 0.7478250143291721
+ },
+ {
+  "cell": "H73",
+  "panel": "Commodities",
+  "section": "Weekday",
+  "label": "Average of Last 10 Wednesdays",
+  "header": "Val (In Cr)",
+  "value": 0.7475282427622683
+ },
+ {
+  "cell": "M73",
+  "panel": "Cash",
+  "section": "Month",
+  "label": "FY 2027 September",
+  "header": "Val (In Cr)",
+  "value": 1.620818173767756
+ },
+ {
+  "cell": "N73",
+  "panel": "Cash",
+  "section": "Month",
+  "label": "FY 2027 September",
+  "header": "MoM",
+  "value": -0.02080321840312538
+ },
+ {
+  "cell": "O73",
+  "panel": "Cash",
+  "section": "Month",
+  "label": "FY 2027 September",
+  "header": "Mo 6M",
+  "value": -0.12278265842952885
+ },
+ {
+  "cell": "R73",
+  "panel": "Cash",
+  "section": "Weekday",
+  "label": "Average of Last 3 Wednesdays",
+  "header": "Val (In Cr)",
+  "value": 1.4804332365917687
+ },
+ {
+  "cell": "C74",
+  "panel": "Commodities",
+  "section": "Month",
+  "label": "Avg Of Last 6 Months",
+  "header": "Val (In Cr)",
+  "value": 0.6460087895498111
+ },
+ {
+  "cell": "M74",
+  "panel": "Cash",
+  "section": "Month",
+  "label": "FY 2027 August",
+  "header": "Val (In Cr)",
+  "value": 1.6552527584134058
+ },
+ {
+  "cell": "R74",
+  "panel": "Cash",
+  "section": "Weekday",
+  "label": "Average of Last 10 Wednesdays",
+  "header": "Val (In Cr)",
+  "value": 1.6304974650801765
+ },
+ {
+  "cell": "H75",
+  "panel": "Commodities",
+  "section": "Weekday",
+  "label": "Thursday",
+  "header": "Val (In Cr)",
+  "value": 1.285853641357994
+ },
+ {
+  "cell": "I75",
+  "panel": "Commodities",
+  "section": "Weekday",
+  "label": "Thursday",
+  "header": "Do 3D",
+  "value": -0.3446713074433565
+ },
+ {
+  "cell": "J75",
+  "panel": "Commodities",
+  "section": "Weekday",
+  "label": "Thursday",
+  "header": "Do 10D",
+  "value": 0.338415931043091
+ },
+ {
+  "cell": "M75",
+  "panel": "Cash",
+  "section": "Month",
+  "label": "Avg Of Last 6 Months",
+  "header": "Val (In Cr)",
+  "value": 1.8476814091089737
+ },
+ {
+  "cell": "H76",
+  "panel": "Commodities",
+  "section": "Weekday",
+  "label": "Average of Last 3 Thursdays",
+  "header": "Val (In Cr)",
+  "value": 1.9621506824941146
+ },
+ {
+  "cell": "R76",
+  "panel": "Cash",
+  "section": "Weekday",
+  "label": "Thursday",
+  "header": "Val (In Cr)",
+  "value": 1.4725052449904872
+ },
+ {
+  "cell": "S76",
+  "panel": "Cash",
+  "section": "Weekday",
+  "label": "Thursday",
+  "header": "Do 3D",
+  "value": -0.03634553645805061
+ },
+ {
+  "cell": "T76",
+  "panel": "Cash",
+  "section": "Weekday",
+  "label": "Thursday",
+  "header": "Do 10D",
+  "value": -0.08084906834542482
+ },
+ {
+  "cell": "H77",
+  "panel": "Commodities",
+  "section": "Weekday",
+  "label": "Average of Last 10 Thursdays",
+  "header": "Val (In Cr)",
+  "value": 0.9607279856239213
+ },
+ {
+  "cell": "R77",
+  "panel": "Cash",
+  "section": "Weekday",
+  "label": "Average of Last 3 Thursdays",
+  "header": "Val (In Cr)",
+  "value": 1.5280427795438596
+ },
+ {
+  "cell": "C78",
+  "panel": "Commodities",
+  "section": "Week",
+  "label": "Last 5 Trading Days",
+  "header": "Val (In Cr)",
+  "value": 0.7968496580000252
+ },
+ {
+  "cell": "D78",
+  "panel": "Commodities",
+  "section": "Week",
+  "label": "Last 5 Trading Days",
+  "header": "WoW",
+  "value": -0.45544476346478946
+ },
+ {
+  "cell": "E78",
+  "panel": "Commodities",
+  "section": "Week",
+  "label": "Last 5 Trading Days",
+  "header": "Wo 10W",
+  "value": -0.0033356683972324275
+ },
+ {
+  "cell": "R78",
+  "panel": "Cash",
+  "section": "Weekday",
+  "label": "Average of Last 10 Thursdays",
+  "header": "Val (In Cr)",
+  "value": 1.6020276912952827
+ },
+ {
+  "cell": "C79",
+  "panel": "Commodities",
+  "section": "Week",
+  "label": "Previous 5 Trading Days",
+  "header": "Val (In Cr)",
+  "value": 1.4633036366890237
+ },
+ {
+  "cell": "H79",
+  "panel": "Commodities",
+  "section": "Weekday",
+  "label": "Friday",
+  "header": "Val (In Cr)",
+  "value": 1.336412452199906
+ },
+ {
+  "cell": "I79",
+  "panel": "Commodities",
+  "section": "Weekday",
+  "label": "Friday",
+  "header": "Do 3D",
+  "value": 0.5761909016865743
+ },
+ {
+  "cell": "J79",
+  "panel": "Commodities",
+  "section": "Weekday",
+  "label": "Friday",
+  "header": "Do 10D",
+  "value": 0.7810777483875835
+ },
+ {
+  "cell": "M79",
+  "panel": "Cash",
+  "section": "Week",
+  "label": "Last 5 Trading Days",
+  "header": "Val (In Cr)",
+  "value": 1.5336413894915466
+ },
+ {
+  "cell": "N79",
+  "panel": "Cash",
+  "section": "Week",
+  "label": "Last 5 Trading Days",
+  "header": "WoW",
+  "value": -0.030606098940547333
+ },
+ {
+  "cell": "O79",
+  "panel": "Cash",
+  "section": "Week",
+  "label": "Last 5 Trading Days",
+  "header": "Wo 10W",
+  "value": -0.06444227420352866
+ },
+ {
+  "cell": "C80",
+  "panel": "Commodities",
+  "section": "Week",
+  "label": "last 45 trading days",
+  "header": "Val (In Cr)",
+  "value": 0.799516580189627
+ },
+ {
+  "cell": "H80",
+  "panel": "Commodities",
+  "section": "Weekday",
+  "label": "Average of Last 3 Fridays",
+  "header": "Val (In Cr)",
+  "value": 0.8478747407879986
+ },
+ {
+  "cell": "M80",
+  "panel": "Cash",
+  "section": "Week",
+  "label": "Previous 5 Trading Days",
+  "header": "Val (In Cr)",
+  "value": 1.582062139874644
+ },
+ {
+  "cell": "R80",
+  "panel": "Cash",
+  "section": "Weekday",
+  "label": "Friday",
+  "header": "Val (In Cr)",
+  "value": 1.5420252184196381
+ },
+ {
+  "cell": "S80",
+  "panel": "Cash",
+  "section": "Weekday",
+  "label": "Friday",
+  "header": "Do 3D",
+  "value": -0.035592298765112385
+ },
+ {
+  "cell": "T80",
+  "panel": "Cash",
+  "section": "Weekday",
+  "label": "Friday",
+  "header": "Do 10D",
+  "value": -0.07896865966663347
+ },
+ {
+  "cell": "C81",
+  "panel": "Commodities",
+  "section": "Week",
+  "label": "last 20 trading days",
+  "header": "Val (In Cr)",
+  "value": 0.9418665506010699
+ },
+ {
+  "cell": "H81",
+  "panel": "Commodities",
+  "section": "Weekday",
+  "label": "Average of Last 10 Fridays",
+  "header": "Val (In Cr)",
+  "value": 0.750339199627734
+ },
+ {
+  "cell": "M81",
+  "panel": "Cash",
+  "section": "Week",
+  "label": "last 45 trading days",
+  "header": "Val (In Cr)",
+  "value": 1.6392803428413856
+ },
+ {
+  "cell": "R81",
+  "panel": "Cash",
+  "section": "Weekday",
+  "label": "Average of Last 3 Fridays",
+  "header": "Val (In Cr)",
+  "value": 1.5989349903004022
+ },
+ {
+  "cell": "M82",
+  "panel": "Cash",
+  "section": "Week",
+  "label": "last 20 trading days",
+  "header": "Val (In Cr)",
+  "value": 1.624586712090656
+ },
+ {
+  "cell": "R82",
+  "panel": "Cash",
+  "section": "Weekday",
+  "label": "Average of Last 10 Fridays",
+  "header": "Val (In Cr)",
+  "value": 1.67423751059492
+ }
+]
