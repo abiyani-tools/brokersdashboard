@@ -1,0 +1,325 @@
+kind,item,agree,agree_1e-6,max_rel_diff
+ADR,FY 2027 | Consolidated,True,True,2.521157226770695e-08
+ADR,FY 2027 | Broking,True,True,1.4274797823822918e-07
+ADR,FY 2027 | MTF,True,True,9.694678234258926e-08
+ADR,FY 2027 | F&O,True,True,1.4274797823822918e-07
+ADR,FY 2027 | Cash,True,True,0.0
+ADR,FY 2027 | Commodities,True,True,0.0
+ADR,Q2 FY 2027 | Consolidated,True,True,4.88030512532785e-08
+ADR,Q2 FY 2027 | Broking,True,True,9.10428880440774e-08
+ADR,Q2 FY 2027 | MTF,True,True,3.721737752287108e-08
+ADR,Q2 FY 2027 | F&O,True,True,2.564518386418417e-07
+ADR,Q2 FY 2027 | Cash,True,True,2.6306161392398473e-07
+ADR,Q2 FY 2027 | Commodities,True,True,4.5508630305354425e-07
+ADR,Q1 FY 2027 | Consolidated,True,True,5.9117159238191594e-08
+ADR,Q1 FY 2027 | Broking,True,True,6.78022786074269e-08
+ADR,Q1 FY 2027 | MTF,True,True,9.588592176662837e-08
+ADR,Q1 FY 2027 | F&O,True,True,9.091623095189285e-08
+ADR,Q1 FY 2027 | Cash,True,True,1.2613390226188432e-07
+ADR,Q1 FY 2027 | Commodities,True,True,4.4613272039598156e-07
+ADR,FY 2027 October | Consolidated,True,True,6.816828685077081e-08
+ADR,FY 2027 October | Broking,True,True,6.816828685077081e-08
+ADR,FY 2027 October | MTF,True,True,0.0
+ADR,FY 2027 October | F&O,True,True,6.816828685077081e-08
+ADR,FY 2027 October | Cash,True,True,0.0
+ADR,FY 2027 October | Commodities,True,True,0.0
+ADR,FY 2026 | Consolidated,True,True,1.5879075289196057e-08
+ADR,FY 2026 | Broking,True,True,7.296521059769046e-08
+ADR,FY 2026 | MTF,True,True,5.87289207064195e-08
+ADR,FY 2026 | F&O,True,True,2.7006899827081586e-07
+ADR,FY 2026 | Cash,True,True,2.5724956730994505e-07
+ADR,FY 2026 | Commodities,True,True,3.8515524418263676e-07
+summary,Consolidated FY 2027,True,True,2.521157226770695e-08
+summary,Consolidated Q2 FY 2027,True,True,4.88030512532785e-08
+summary,Consolidated Q1 FY 2027,True,True,5.9117159238191594e-08
+summary,Consolidated FY 2027 October,True,True,6.816828685077081e-08
+summary,Consolidated FY 2026,True,True,1.5879075289196057e-08
+param,Cash | 'delivery ratio' H | Q1 FY 2025,True,False,1.6493972027953163e-06
+param,Cash | 'delivery ratio' H | Q2 FY 2025,True,False,1.7448980587317064e-05
+param,Cash | 'delivery ratio' H | Q3 FY 2025,True,False,1.658127474086213e-05
+param,Cash | 'delivery ratio' H | Q4 FY 2025,True,False,3.5533119340228396e-06
+param,Cash | 'delivery ratio' H | Q4 FY 2026,True,False,1.583374774051296e-05
+param,Cash | 'delivery ratio' H | Q1 FY 2027,True,False,1.0547735138969162e-05
+param,Cash | 'delivery ratio' H | Q2 FY 2027,True,False,1.2455368320440215e-05
+param,Cash | 'delivery ratio' H | Q3 FY 2027,True,False,1.184747171138049e-05
+param,Cash | gross per Rs of reported ADTO J | Q1 FY 2025,True,False,0.0003711730461264083
+param,Cash | gross per Rs of reported ADTO J | Q2 FY 2025,True,False,0.0005056876142179544
+param,Cash | gross per Rs of reported ADTO J | Q3 FY 2025,True,False,0.0006485629779070855
+param,Cash | gross per Rs of reported ADTO J | Q4 FY 2025,True,False,0.0003489905890843816
+param,Cash | gross per Rs of reported ADTO J | Q4 FY 2026,True,False,0.0007613692772331475
+param,Cash | gross per Rs of reported ADTO J | Q1 FY 2027,True,False,0.0005971818100962697
+param,Cash | gross per Rs of reported ADTO J | Q2 FY 2027,True,False,0.0005971818100962697
+param,Cash | gross per Rs of reported ADTO J | Q3 FY 2027,True,False,0.0005971818100962697
+param,Cash | model gross brokerage Rs Cr | Q1 FY 2025,True,False,1.380477041950619e-05
+param,Cash | model gross brokerage Rs Cr | Q2 FY 2025,True,False,1.1822146951238693e-05
+param,Cash | model gross brokerage Rs Cr | Q3 FY 2025,True,True,9.053382329568247e-07
+param,Cash | model gross brokerage Rs Cr | Q4 FY 2025,True,False,1.9837598725704133e-05
+param,Cash | model gross brokerage Rs Cr | Q4 FY 2026,True,False,2.140667108189887e-05
+param,Cash | model gross brokerage Rs Cr | Q1 FY 2027,True,False,1.8351348240444732e-05
+param,Cash | model gross brokerage Rs Cr | Q2 FY 2027,True,False,1.549885066647561e-05
+param,Cash | model gross brokerage Rs Cr | Q3 FY 2027,True,False,8.177764166405443e-06
+param,Cash | model net brokerage Rs Cr | Q1 FY 2025,True,False,2.2040554708876396e-05
+param,Cash | model net brokerage Rs Cr | Q2 FY 2025,True,False,9.326077711268701e-06
+param,Cash | model net brokerage Rs Cr | Q3 FY 2025,True,False,1.894885246781166e-05
+param,Cash | model net brokerage Rs Cr | Q4 FY 2025,True,True,5.384931261411251e-07
+param,Cash | model net brokerage Rs Cr | Q4 FY 2026,True,False,1.518696473689161e-05
+param,Cash | model net brokerage Rs Cr | Q1 FY 2027,True,False,4.1185425427031915e-06
+param,Cash | model net brokerage Rs Cr | Q2 FY 2027,True,False,4.365090714489431e-05
+param,Cash | net / gross | Q2 FY 2027,True,False,8.812855591722563e-05
+param,Cash | share (cancels) | Q1 FY 2025,True,False,0.00040672435105068317
+param,Cash | share (cancels) | Q2 FY 2025,True,False,0.0004877075588600152
+param,Cash | share (cancels) | Q4 FY 2026,True,False,0.0002672713864306187
+param,Cash | share (cancels) | Q1 FY 2027,True,False,0.0002307079646017149
+param,Cash | share (cancels) | Q2 FY 2027,True,False,0.0005855708908408097
+param,Cash | share (cancels) | Q3 FY 2027,True,False,0.0005855708908408097
+param,Commodities | gross Rs per MOSL contract | Q1 FY 2027,True,False,1.2274268166155507e-06
+param,Commodities | gross Rs per MOSL contract | Q2 FY 2027,True,False,2.5728869618507302e-06
+param,Commodities | model gross brokerage Rs Cr | Q1 FY 2027,True,True,6.008801422874617e-07
+param,Commodities | model gross brokerage Rs Cr | Q2 FY 2027,True,True,4.539229606243383e-07
+param,Commodities | model net brokerage Rs Cr | Q1 FY 2027,True,False,1.2340547693186537e-06
+param,Commodities | model net brokerage Rs Cr | Q2 FY 2027,True,False,1.4242582546931339e-06
+param,Commodities | net / gross | Q2 FY 2027,True,False,6.001845717461935e-05
+param,Commodities | share | Q1 FY 2027,True,False,0.0001942616580309433
+param,Commodities | share | Q2 FY 2027,True,False,0.0002827343202716512
+param,F&O | gross Rs per contract | Q1 FY 2025,True,False,6.38556387207333e-06
+param,F&O | gross Rs per contract | Q2 FY 2025,True,False,6.778865983651742e-05
+param,F&O | gross Rs per contract | Q3 FY 2025,True,False,5.5259905473433016e-05
+param,F&O | gross Rs per contract | Q4 FY 2025,True,False,9.397247104664667e-06
+param,F&O | gross Rs per contract | Q4 FY 2026,True,False,4.357990585005241e-06
+param,F&O | gross Rs per contract | Q1 FY 2027,True,False,2.5863012435788506e-05
+param,F&O | gross Rs per contract | Q2 FY 2027,True,False,3.588008542523122e-05
+param,F&O | gross Rs per contract | Q3 FY 2027,True,False,3.588008542523122e-05
+param,F&O | model gross brokerage Rs Cr | Q1 FY 2025,True,False,7.846769822152707e-06
+param,F&O | model gross brokerage Rs Cr | Q2 FY 2025,True,False,1.7037703868691013e-05
+param,F&O | model gross brokerage Rs Cr | Q3 FY 2025,True,False,9.115269885110999e-06
+param,F&O | model gross brokerage Rs Cr | Q4 FY 2025,True,False,1.913224562549949e-05
+param,F&O | model gross brokerage Rs Cr | Q4 FY 2026,True,False,8.539161077007222e-06
+param,F&O | model gross brokerage Rs Cr | Q1 FY 2027,True,False,1.6885682879092864e-05
+param,F&O | model gross brokerage Rs Cr | Q2 FY 2027,True,False,1.3000143258781414e-05
+param,F&O | model gross brokerage Rs Cr | Q3 FY 2027,True,True,8.695029640180783e-07
+param,F&O | model net brokerage Rs Cr | Q1 FY 2025,True,False,1.932648749847448e-06
+param,F&O | model net brokerage Rs Cr | Q2 FY 2025,True,False,2.2715796071442085e-05
+param,F&O | model net brokerage Rs Cr | Q3 FY 2025,True,False,3.694877092864477e-05
+param,F&O | model net brokerage Rs Cr | Q4 FY 2025,True,False,3.0008094660006126e-05
+param,F&O | model net brokerage Rs Cr | Q4 FY 2026,True,False,1.5263011307074532e-05
+param,F&O | model net brokerage Rs Cr | Q1 FY 2027,True,False,6.325848047277854e-06
+param,F&O | model net brokerage Rs Cr | Q2 FY 2027,True,False,4.431832482479204e-05
+param,F&O | model net brokerage Rs Cr | Q3 FY 2027,True,False,1.6983478752819695e-06
+param,F&O | net / gross | Q2 FY 2027,True,False,8.29360057854765e-05
+param,F&O | net / gross | Q3 FY 2027,True,False,8.29360057854765e-05
+param,F&O | premium share (cancels) | Q4 FY 2026,True,False,0.0005186913229018483
+param,F&O | premium share (cancels) | Q1 FY 2027,True,False,0.00015202365308808065
+param,F&O | premium share (cancels) | Q2 FY 2027,True,False,0.0003185746864310673
+param,F&O | premium share (cancels) | Q3 FY 2027,True,False,0.0003185746864310673
+param,MTF | NII yield | Q3 FY 2027,True,False,0.0001289973756406668
+param,MTF | share of industry book | Q2 FY 2027,True,False,0.0007116419230655779
+param,MTF | share of industry book | Q3 FY 2027,True,False,0.0003117919756014557
+week/weekday,Week | Last 5 trading days,True,True,5.2648045926931475e-08
+week/weekday,Week | Last 5 trading days | vs 45D,True,True,5.2648045926931475e-08
+week/weekday,Week | Previous 5 trading days,True,True,3.834389360332608e-08
+week/weekday,Week | Last 45 trading days,True,True,1.0213727453498127e-08
+week/weekday,Week | Last 20 trading days,True,True,2.481167951870459e-08
+week/weekday,Weekday | Monday,True,True,4.467083790695231e-08
+week/weekday,Weekday | Monday | vs 10,True,True,4.467083790695231e-08
+week/weekday,Weekday | Average of last 3 Mondays,True,True,1.810538641733566e-08
+week/weekday,Weekday | Average of last 10 Mondays,True,True,4.852004807393118e-08
+week/weekday,Weekday | Tuesday,True,True,3.388892863620769e-08
+week/weekday,Weekday | Tuesday | vs 10,True,True,3.388892863620769e-08
+week/weekday,Weekday | Average of last 3 Tuesdays,True,True,1.698364566065655e-08
+week/weekday,Weekday | Average of last 10 Tuesdays,True,True,3.2630418182646094e-08
+week/weekday,Weekday | Wednesday,True,True,1.9612644834746712e-08
+week/weekday,Weekday | Wednesday | vs 10,True,True,1.9612644834746712e-08
+week/weekday,Weekday | Average of last 3 Wednesdays,True,True,2.6414845533727532e-08
+week/weekday,Weekday | Average of last 10 Wednesdays,True,True,4.8469513587248654e-08
+week/weekday,Weekday | Thursday,True,True,1.2750415870704544e-08
+week/weekday,Weekday | Thursday | vs 10,True,True,1.2750415870704544e-08
+week/weekday,Weekday | Average of last 3 Thursdays,True,True,3.882749511999293e-08
+week/weekday,Weekday | Average of last 10 Thursdays,True,True,3.864587676754345e-08
+week/weekday,Weekday | Friday,True,True,3.6755566688483205e-08
+week/weekday,Weekday | Friday | vs 10,True,True,3.6755566688483205e-08
+week/weekday,Weekday | Average of last 3 Fridays,True,True,1.0578524644344025e-08
+week/weekday,Weekday | Average of last 10 Fridays,True,True,3.162061969041395e-08
+daily,F&O,True,True,0.0
+daily,Cash,True,True,0.0
+daily,Commodities,True,True,0.0
+daily,MTF,True,True,0.0
+count,inputs that change the workbook value,True,True,0.0
+count,inputs already equal (1e-6 relative),True,True,0.0
+count,inputs listed in the bridge table = the changed set,True,True,0.0
+input,adto_cash_mosl | Q1 FY 2025,True,False,1.0560852278377071e-06
+input,adto_cash_mosl | Q2 FY 2025,True,True,6.97869484845912e-07
+input,adto_cash_mosl | Q3 FY 2025,True,True,6.152539783178943e-08
+input,adto_cash_mosl | Q4 FY 2025,True,True,6.598209609073465e-07
+input,adto_cash_mosl | Q4 FY 2026,True,True,1.0960871432993441e-07
+input,adto_cash_mosl | Q1 FY 2027,True,True,8.133410557638969e-07
+input,adto_cash_mosl | Q2 FY 2027,True,False,1.2016331879334496e-06
+input,gross_cash_cr | Q1 FY 2025,True,False,1.3804770419687693e-05
+input,gross_cash_cr | Q2 FY 2025,True,False,1.182214695076426e-05
+input,gross_cash_cr | Q3 FY 2025,True,True,9.053382327125262e-07
+input,gross_cash_cr | Q4 FY 2025,True,False,1.9837598725033056e-05
+input,gross_cash_cr | Q4 FY 2026,True,False,2.140667108174828e-05
+input,gross_cash_cr | Q1 FY 2027,True,False,2.3336916336461348e-06
+input,gross_cash_cr | Q2 FY 2027,True,False,1.549885066671466e-05
+input,gross_comm_cr | Q1 FY 2027,True,True,6.008801428068795e-07
+input,gross_comm_cr | Q2 FY 2027,True,True,4.481081135784411e-07
+input,gross_fo_cr | Q1 FY 2025,True,False,7.846769822152707e-06
+input,gross_fo_cr | Q2 FY 2025,True,False,1.7037703869113957e-05
+input,gross_fo_cr | Q3 FY 2025,True,False,9.115269885110999e-06
+input,gross_fo_cr | Q4 FY 2025,True,False,1.9132245625655387e-05
+input,gross_fo_cr | Q4 FY 2026,True,False,8.539161077147396e-06
+input,gross_fo_cr | Q1 FY 2027,True,False,1.6885682879369342e-05
+input,gross_fo_cr | Q2 FY 2027,True,False,1.3000143258932216e-05
+input,mtf_book_closing | Q2 FY 2027,True,True,0.0
+input,net_gross_cash | Q2 FY 2027,True,False,8.812855591722563e-05
+input,net_gross_comm | Q2 FY 2027,True,False,1.747726138871903e-05
+input,net_gross_fo | Q2 FY 2027,True,False,8.29360057854765e-05
+input,share_cash | Q1 FY 2025,True,False,0.00040672435105068317
+input,share_cash | Q2 FY 2025,True,False,0.0004877075588600152
+input,share_cash | Q4 FY 2026,True,False,0.0002672713864306187
+input,share_cash | Q1 FY 2027,True,False,0.0002307079646017149
+input,share_cash | Q2 FY 2027,True,False,0.0005855708908408097
+input,share_comm | Q1 FY 2027,True,False,0.0001942616580309433
+input,share_comm | Q2 FY 2027,True,False,3.3426751592264243e-05
+input,share_fo | Q4 FY 2026,True,False,0.0005186913229018483
+input,share_fo | Q1 FY 2027,True,False,0.00015202365308808065
+input,share_fo | Q2 FY 2027,True,False,0.0003185746864310673
+input-equal,adto_cash_mosl | Q1 FY 2026,True,True,6.328271240363392e-15
+input-equal,adto_cash_mosl | Q2 FY 2026,True,True,1.2434497875801753e-14
+input-equal,adto_cash_mosl | Q3 FY 2026,True,True,7.216449660063518e-15
+input-equal,gross_cash_cr | Q1 FY 2026,True,True,1.978417429882029e-13
+input-equal,gross_cash_cr | Q2 FY 2026,True,True,9.758860386455126e-14
+input-equal,gross_cash_cr | Q3 FY 2026,True,True,1.5198953207118393e-13
+input-equal,gross_fo_cr | Q1 FY 2026,True,True,2.1471713296250527e-13
+input-equal,gross_fo_cr | Q2 FY 2026,True,True,2.220446049250313e-16
+input-equal,gross_fo_cr | Q3 FY 2026,True,True,1.4921397450962104e-13
+input-equal,gross_comm_cr | Q1 FY 2025,True,True,6.009637232295972e-13
+input-equal,gross_comm_cr | Q2 FY 2025,True,True,2.7255975254547593e-13
+input-equal,gross_comm_cr | Q3 FY 2025,True,True,7.515099653687685e-13
+input-equal,gross_comm_cr | Q4 FY 2025,True,True,7.601697049608447e-13
+input-equal,gross_comm_cr | Q1 FY 2026,True,True,6.45039577307216e-13
+input-equal,gross_comm_cr | Q2 FY 2026,True,True,5.938582958719962e-13
+input-equal,gross_comm_cr | Q3 FY 2026,True,True,1.1879386363489175e-13
+input-equal,gross_comm_cr | Q4 FY 2026,True,True,1.1080025785759062e-13
+input-equal,mtf_book_closing | Q1 FY 2025,True,True,0.0
+input-equal,mtf_book_closing | Q2 FY 2025,True,True,0.0
+input-equal,mtf_book_closing | Q3 FY 2025,True,True,0.0
+input-equal,mtf_book_closing | Q4 FY 2025,True,True,0.0
+input-equal,mtf_book_closing | Q1 FY 2026,True,True,0.0
+input-equal,mtf_book_closing | Q2 FY 2026,True,True,0.0
+input-equal,mtf_book_closing | Q3 FY 2026,True,True,1.1102230246251565e-16
+input-equal,mtf_book_closing | Q4 FY 2026,True,True,0.0
+input-equal,mtf_book_closing | Q1 FY 2027,True,True,0.0
+input-equal,share_cash | Q3 FY 2025,True,True,6.323533030538897e-09
+input-equal,share_cash | Q4 FY 2025,True,True,1.5776306927506312e-09
+input-equal,share_cash | Q1 FY 2026,True,True,1.8982568850134385e-09
+input-equal,share_cash | Q2 FY 2026,True,True,7.396103729462311e-10
+input-equal,share_cash | Q3 FY 2026,True,True,3.8614915709445086e-09
+input-equal,share_fo | Q1 FY 2025,True,True,3.196528042259672e-09
+input-equal,share_fo | Q2 FY 2025,True,True,1.2798038184769212e-09
+input-equal,share_fo | Q3 FY 2025,True,True,4.479831394732514e-09
+input-equal,share_fo | Q4 FY 2025,True,True,1.0990335308491694e-09
+input-equal,share_fo | Q1 FY 2026,True,True,3.9287373354568444e-10
+input-equal,share_fo | Q2 FY 2026,True,True,4.654693630534723e-09
+input-equal,share_fo | Q3 FY 2026,True,True,2.9618539842957148e-09
+input-equal,share_comm | Q1 FY 2025,True,True,5.559753990524996e-09
+input-equal,share_comm | Q2 FY 2025,True,True,5.911880540665493e-09
+input-equal,share_comm | Q3 FY 2025,True,True,1.6783034961775911e-09
+input-equal,share_comm | Q4 FY 2025,True,True,3.6266425418318704e-09
+input-equal,share_comm | Q1 FY 2026,True,True,3.057285091756512e-09
+input-equal,share_comm | Q2 FY 2026,True,True,1.7444272693012408e-09
+input-equal,share_comm | Q3 FY 2026,True,True,4.260952257695294e-09
+input-equal,share_comm | Q4 FY 2026,True,True,2.424891509811289e-09
+input-equal,net_gross_cash | Q1 FY 2025,True,True,2.3092638912203256e-14
+input-equal,net_gross_cash | Q2 FY 2025,True,True,3.6970426720017713e-13
+input-equal,net_gross_cash | Q3 FY 2025,True,True,2.220446049250313e-16
+input-equal,net_gross_cash | Q4 FY 2025,True,True,1.1790568521519162e-13
+input-equal,net_gross_cash | Q1 FY 2026,True,True,5.323519403077626e-13
+input-equal,net_gross_cash | Q2 FY 2026,True,True,1.8962609260597674e-13
+input-equal,net_gross_cash | Q3 FY 2026,True,True,3.432809592140984e-13
+input-equal,net_gross_cash | Q4 FY 2026,True,True,1.27675647831893e-13
+input-equal,net_gross_cash | Q1 FY 2027,True,True,3.064215547965432e-14
+input-equal,net_gross_fo | Q1 FY 2025,True,True,1.1501910535116622e-13
+input-equal,net_gross_fo | Q2 FY 2025,True,True,7.460698725481052e-14
+input-equal,net_gross_fo | Q3 FY 2025,True,True,2.964295475749168e-13
+input-equal,net_gross_fo | Q4 FY 2025,True,True,1.8685053504441385e-13
+input-equal,net_gross_fo | Q1 FY 2026,True,True,2.446931546273845e-13
+input-equal,net_gross_fo | Q2 FY 2026,True,True,8.981704269217516e-14
+input-equal,net_gross_fo | Q3 FY 2026,True,True,2.327027459614328e-13
+input-equal,net_gross_fo | Q4 FY 2026,True,True,1.971756091734278e-13
+input-equal,net_gross_fo | Q1 FY 2027,True,True,1.4510614931850796e-13
+input-equal,net_gross_comm | Q1 FY 2025,True,True,1.099120794378905e-12
+input-equal,net_gross_comm | Q2 FY 2025,True,True,2.724487302430134e-13
+input-equal,net_gross_comm | Q3 FY 2025,True,True,7.511768984613809e-13
+input-equal,net_gross_comm | Q4 FY 2025,True,True,1.9457768729580494e-12
+input-equal,net_gross_comm | Q1 FY 2026,True,True,1.7240653349404056e-12
+input-equal,net_gross_comm | Q2 FY 2026,True,True,9.958700530887654e-14
+input-equal,net_gross_comm | Q3 FY 2026,True,True,5.271338920920243e-13
+input-equal,net_gross_comm | Q4 FY 2026,True,True,8.972822485020515e-13
+input-equal,net_gross_comm | Q1 FY 2027,True,True,4.827249711070181e-13
+facts-tie,Q1 FY 2025 gross,True,True,1.6367272335460418e-13
+facts-tie,Q1 FY 2025 net,True,True,2.9893771693729567e-13
+facts-tie,Q2 FY 2025 gross,True,True,0.0
+facts-tie,Q2 FY 2025 net,True,True,1.2232252565454883e-16
+facts-tie,Q3 FY 2025 gross,True,True,0.0
+facts-tie,Q3 FY 2025 net,True,True,0.0
+facts-tie,Q4 FY 2025 gross,True,True,0.0
+facts-tie,Q4 FY 2025 net,True,True,0.0
+facts-tie,Q1 FY 2026 gross,True,True,2.0554712057293994e-13
+facts-tie,Q1 FY 2026 net,True,True,0.0
+facts-tie,Q2 FY 2026 gross,True,True,0.0
+facts-tie,Q2 FY 2026 net,True,True,1.8223596295986416e-16
+facts-tie,Q3 FY 2026 gross,True,True,1.8815552805823168e-16
+facts-tie,Q3 FY 2026 net,True,True,3.6782120445234213e-13
+facts-tie,Q4 FY 2026 gross,True,True,2.0689523053327936e-13
+facts-tie,Q4 FY 2026 net,True,True,0.0
+facts-tie,Q1 FY 2027 gross,True,True,0.0
+facts-tie,Q1 FY 2027 net,True,True,1.648516528717518e-16
+facts-tie,Q2 FY 2027 gross,True,True,2.0587584667276474e-13
+facts-tie,Q2 FY 2027 net,True,True,3.6046796256713175e-13
+tie,F&O Q1 FY 2025,True,True,0.0
+tie,F&O Q2 FY 2025,True,True,4.229493107042147e-16
+tie,F&O Q3 FY 2025,True,True,0.0
+tie,F&O Q4 FY 2025,True,True,1.5590068132265752e-16
+tie,F&O Q1 FY 2026,True,True,3.0493187965179375e-16
+tie,F&O Q2 FY 2026,True,True,0.0
+tie,F&O Q3 FY 2026,True,True,4.2435879652189844e-16
+tie,F&O Q4 FY 2026,True,True,1.401753409451143e-16
+tie,F&O Q1 FY 2027,True,True,2.7648044123035266e-16
+tie,F&O Q2 FY 2027,True,True,1.5080426020853028e-16
+tie,Cash Q1 FY 2025,True,True,1.8150649333286976e-16
+tie,Cash Q2 FY 2025,True,True,4.744275555656153e-16
+tie,Cash Q3 FY 2025,True,True,2.4429846741591125e-16
+tie,Cash Q4 FY 2025,True,True,6.710884424781488e-16
+tie,Cash Q1 FY 2026,True,True,2.2506671534030663e-16
+tie,Cash Q2 FY 2026,True,True,2.777094968223085e-16
+tie,Cash Q3 FY 2026,True,True,2.8876145205928606e-16
+tie,Cash Q4 FY 2026,True,True,1.5058334761705252e-16
+tie,Cash Q1 FY 2027,True,True,4.979700937898079e-16
+tie,Cash Q2 FY 2027,True,True,2.3904511487784223e-16
+tie,Commodities Q1 FY 2025,True,True,2.1342142818127432e-16
+tie,Commodities Q2 FY 2025,True,True,1.9356316403137298e-16
+tie,Commodities Q3 FY 2025,True,True,3.5600225307694664e-16
+tie,Commodities Q4 FY 2025,True,True,1.8005604897238106e-16
+tie,Commodities Q1 FY 2026,True,True,3.0547094505976054e-16
+tie,Commodities Q2 FY 2026,True,True,1.4065166511351324e-16
+tie,Commodities Q3 FY 2026,True,True,1.6871784490999262e-16
+tie,Commodities Q4 FY 2026,True,True,4.73121929387319e-16
+tie,Commodities Q1 FY 2027,True,True,5.194180843821291e-16
+tie,Commodities Q2 FY 2027,True,True,4.902946887523783e-16
+spec,F&O gross Q2 FY27 model (Rs Cr),True,False,2.140023494095661e-06
+spec,F&O gross model vs reported (%),True,False,0.0008599719990730715
+spec,Cash gross Q2 FY27 model (Rs Cr),True,False,2.495343204258507e-06
+spec,Cash gross model vs reported (%),True,False,0.000227280758018232
+spec,Commodities gross Q2 FY27 model (Rs Cr),True,False,4.464840420142056e-05
+spec,Commodities gross model vs reported (%),True,False,7.2321028447266e-05
+spec,MTF closing book Q2 FY27 model (Rs Cr),True,False,3.751456495644607e-05
+spec,MTF book model vs reported (%),True,False,0.0033510355282791553
+pin,fo_zero_quarters = none,True,True,0.0
+pin,"fo_zero_quarters (parity) = Q1, Q2 FY25",True,True,0.0
+pin,cash_table_first_quarter = Q1 FY 2025,True,True,0.0
+pin,fo_last_actual_quarter = Q2 FY 2027,True,True,0.0
+pin,cash_last_actual_quarter = Q2 FY 2027,True,True,0.0
+pin,comm_last_actual_quarter = Q2 FY 2027,True,True,0.0
+pin,mtf_last_actual_quarter = Q2 FY 2027,True,True,0.0
+pin,cash take rate Q1 FY27 own (J52 = J51 dropped),True,True,0.0
+pin,"Q3 FY27 keeps the workbook rules (cash #N/A, commodities #N/A / blank, F&O carried)",True,True,0.0
