@@ -1,4 +1,4 @@
-# PLAN — Angel One ADR tracker (status 23 Oct 2026)
+# PLAN — Broker ADR tracker: Angel One, Groww, MOSL (status 2 Nov 2026)
 
 Legend: `[ ]` to do · `[x]` done · `[~]` waiting on someone · **owner** = agent (see §4) or AB / an outside owner.
 Each to-do ends with an **exit test**. A to-do is done only when its test passes.
@@ -13,7 +13,9 @@ Each to-do ends with an **exit test**. A to-do is done only when its test passes
 | Catch-up facts (Jun–Sep 26, Q1/Q2 FY27, Q3 FY26 fix, Q2 FY27 deck mix) | 178 **reviewed** (fact_ids 478–655, all approved 23 Oct; 477 seeds staged) |
 | Review page | "Angel One Figure Review" artifact; decisions in its `reviews` collection |
 | Repo | `abiyani-tools/brokersdashboard` (`main`); CI secrets not yet added |
-| Blocked on outside owners | NSE cash trades; MTF table access; anon read (RLS) policies on the lake |
+| Live brokers (2 Nov) | Angel One `abcdefghij`, Groww `g-abcdefgi`, **MOSL `m-abcdef` (first publish 2 Nov: run `1eb13055`)**; all three as of 30 Oct 2026, daily job 41420521105 |
+| MOSL | parity 264 / 264; switches m-a…m-f (independent check `out/checks/mosl_summary.md`: a 324/324, b 102/104 (bridge row-count only), c–f all agree); 290 reviewed data-book facts (846–1135) + 101 seed facts, 12 assumptions, 11 pins in the DB |
+| Blocked on outside owners | industry MTF view `codex_public_nse_mtf_daily` answers 401 with `NSE_LAKE_ANON_KEY` (key or anon grant; MTF ends 19 Oct for every broker); anon read (RLS) policies on the lake |
 
 ## 1. Decisions in force (AB, 22–23 Oct)
 D1 summary laid out exactly like the Excel sheet, with FY / quarter / month dropdowns. Comparisons follow the selected period (YoY, QoQ, MoM, 6M ending at the selected month) · D2 cash projection uses the latest **monthly** cash share · D3 commodity take rate = each quarter's own · D4 MTF gross section, net = 45% × gross ([SOURCE NEEDED: basis for 45%]) · D5 daily job on GitHub Actions · D6 review page; live mode uses only `reviewed` facts (seeds as fallback) · D7 catch-up started · special sessions (Muhurat / DR test) excluded from averages in live mode · Angel One first, keyed by broker.
@@ -56,11 +58,12 @@ D1 summary laid out exactly like the Excel sheet, with FY / quarter / month drop
 ### Phase 5 — dashboard
 - [ ] **5.1 "Brokers" toggle in ExchangesDash.** That repo belongs to sucaanalytics-max and is read-only for us: build it on a fork or branch and send a PR or a prompt to the owner. The page reads `sb_summary_cells`, `sb_daily_revenue` and `sb_calibration` with the publishable key. Layout = the Summary sheet: Consolidated, Broking, MTF, F&O, Cash and Commodities panels; FY / Q / M dropdowns; Actual / Estimate tags. *Owner: dashboard-builder.* Exit: a screenshot diff against the Excel for the parity run.
 - [ ] **5.2 Estimate-vs-reported page** from 3.2.
-- [ ] **5.3 Second broker** (Groww / Motilal): copy the fact metrics, add `broker_id` rows, write a broker-specific calibration module. *Main (Opus) decides the method.*
+- [x] **5.3 More brokers.** *Groww live 31 Oct (g-abcdefgi). MOSL live 2 Nov: `run_live.py --broker all` runs Angel One → Groww → MOSL; MOSL has its own as-of date and E5 on its own series (NSE index-option + BSE contracts, NSE / BSE cash turnover, MCX); first run `1eb13055` (Consolidated FY27 8.741, Q2 FY27 8.967, Oct-26 9.872 Rs Cr/day; net brokerage + MTF NII). Replica shows it (MTF as `mtf_nii`).*
+- [ ] **5.4 MOSL follow-ups (AB decisions in `docs/Mistakes_Register.md` M-xx):** currency brokerage left out of Broking (M-15, about 0.012–0.018 Rs Cr/day); fix the m-b bridge's row-change count (M-17); filing watcher for MOSL's quarterly data book (`motilaloswal.com/spreadsheets/investor-relations.json`, column "Data Book").
 
 ### Waiting on outside owners (prompts in `docs/`)
-- [~] NSE cash trades into the lake. Without them the cash ADR can't move past 21 Oct 2026. `Prompt_for_ExchangesDash_owner.md`
-- [~] Read access to the MTF table (`codex_nse_mtf_daily`), with the check values in `Prompt_for_MTF_pipeline_owner.md`.
+- [x] NSE cash trades into the lake: in ExchangesDash's JSON by 2 Nov (with NSE io/so contracts to 30 Oct and BSE cash 15 Jun fixed); all brokers now run to 30 Oct.
+- [~] Read access to the MTF table: view `codex_public_nse_mtf_daily` exists and AB set `NSE_LAKE_ANON_KEY` (2 Nov), but the view answers **401** (wrong key, or no `select` grant to anon). Check values once it loads: 2024-10-01 81,823.53; 2025-06-09 80,962.95; 2026-05-14 121,761.47; 2026-10-19 148,568.87. A failed read no longer stops the refresh (2a2858a).
 - [~] Anon read (RLS) policies on the lake tables; fix lake gaps and junk 1999 rows.
 
 ## 3. How to run work cheaply (token rules)

@@ -1,30 +1,34 @@
-# Mistakes register: Angel One and Groww ADR models
+# Mistakes register: Angel One, Groww and Motilal Oswal (MOSL) ADR models
 
-Compiled 31 Oct 2026 (research only; no DB writes, no commits). Status was verified on 31 Oct against the code (`src/engine/switches.py`, `groww_switches.py`, `groww.py`, `calibrate.py`) and the DB (`everjfpbnlbcpuarnhob`, read-only SELECTs). Repo `abiyani-tools/brokersdashboard`, branch `main`.
+Compiled 31 Oct 2026 (research only; no DB writes, no commits). Status was verified on 31 Oct against the code (`src/engine/switches.py`, `groww_switches.py`, `groww.py`, `calibrate.py`) and the DB (`everjfpbnlbcpuarnhob`, read-only SELECTs). Repo `abiyani-tools/brokersdashboard`, branch `main`. MOSL (M-01 to M-18) was added on 2 Nov 2026 on branch `mosl-parity`; its statuses come from the MOSL spec, bridges and independent checks, not from a code or DB read (see section 5).
 
 **Severity rule.** High = moves a published ADR (any FY, quarter, month or weekday figure, or a published period) by more than 2%, or breaks a period; Med = 0.5-2% or one quarter; Low = cosmetic or memo. For PAT items the same thresholds apply to the target price. **Impact** numbers are copied from the bridge / check / filing named; "derived" means computed here from those figures; "not quantified" means no document has a number.
 
 ## 1. Summary
 
-Total: **68 items** (49 model / workbook, 12 data source, 7 build / process).
+2 Nov 2026: MOSL added (M-01 to M-18; switches m-a to m-f approved by AB on 2 Nov and committed, 17f35db to 990eb5d). First live publish: run `1eb13055-cb3d-4080-aec0-7a1944cca218` (daily job 41420521105, as of 30 Oct 2026; Consolidated FY27 8.741, Q2 FY27 8.967, Oct-26 9.872 Rs Cr/day), alongside Angel One `72fd08c6` and Groww `89466064`.
+
+Total: **86 items** (64 model / workbook, 13 data source, 9 build / process): 68 for Angel One, Groww and shared feeds, plus 18 for MOSL.
 
 ### Status by severity (all brokers)
 
 | Severity | fixed in live | parity only | open: AB decision | open: needs outside owner | open: not started | Total |
 |---|---:|---:|---:|---:|---:|---:|
-| High | 19 | 1 | 0 | 3 | 0 | 23 |
-| Med | 5 | 7 | 3 | 2 | 1 | 18 |
-| Low | 8 | 5 | 9 | 2 | 3 | 27 |
-| **Total** | **32** | **13** | **12** | **7** | **4** | 68 |
+| High | 24 | 1 | 1 | 3 | 0 | 29 |
+| Med | 8 | 7 | 4 | 3 | 1 | 23 |
+| Low | 10 | 7 | 10 | 2 | 5 | 34 |
+| **Total** | **42** | **15** | **15** | **8** | **6** | 86 |
 
 ### Broker x severity x status
+
+Angel One Med / Low rows corrected on 2 Nov: A-08 and A-09 were already fixed by switch j but the counts still showed them as open: AB decision.
 
 | Broker | Severity | fixed in live | parity only | open: AB decision | open: needs outside owner | open: not started | Total |
 |---|---|---:|---:|---:|---:|---:|---:|
 | Angel One | High | 7 | 0 | 0 | 0 | 0 | 7 |
-| Angel One | Med | 0 | 0 | 1 | 1 | 0 | 2 |
-| Angel One | Low | 4 | 1 | 3 | 0 | 2 | 10 |
-| **Angel One** | all | **11** | **1** | **4** | **1** | **2** | **19** |
+| Angel One | Med | 1 | 0 | 0 | 1 | 0 | 2 |
+| Angel One | Low | 5 | 1 | 2 | 0 | 2 | 10 |
+| **Angel One** | all | **13** | **1** | **2** | **1** | **2** | **19** |
 | Groww | High | 8 | 1 | 0 | 0 | 0 | 9 |
 | Groww | Med | 5 | 7 | 2 | 1 | 1 | 16 |
 | Groww | Low | 4 | 2 | 5 | 0 | 0 | 11 |
@@ -32,6 +36,10 @@ Total: **68 items** (49 model / workbook, 12 data source, 7 build / process).
 | Shared / lake | High | 4 | 0 | 0 | 3 | 0 | 7 |
 | Shared / lake | Low | 0 | 2 | 1 | 2 | 1 | 6 |
 | **Shared / lake** | all | **4** | **2** | **1** | **5** | **1** | **13** |
+| MOSL | High | 5 | 0 | 1 | 0 | 0 | 6 |
+| MOSL | Med | 2 | 0 | 2 | 1 | 0 | 5 |
+| MOSL | Low | 1 | 2 | 2 | 0 | 2 | 7 |
+| **MOSL** | all | **8** | **2** | **5** | **1** | **2** | **18** |
 
 ### Still open (not fixed, not parity-kept)
 
@@ -58,6 +66,14 @@ Total: **68 items** (49 model / workbook, 12 data source, 7 build / process).
 - **X-10** (Low, answered by owner (2 Nov): the five are all the Muhurat / DR sessions; budget days are ordinary days in daily_all): JSON special_sessions lists the first five only; 1 Feb 2025 (Saturday budget day) classification and 2024-01-2...
 - **G-32** (Low, open: AB decision): 14.95% MTF yield exists only as a spoken CFO statement; no MTF revenue in Rs is published; book-yield check gi...
 - **X-13** (Low, open: not started): Stale statements: Q11 unticked though PLAN says closed; "sb_broker_daily migration not applied" though the tab...
+- **M-02** (High, open: AB decision): `SUMMARY - Brokers` MOSL panel about 17% below reported (reads gross F&O and cash, cash divided by 10 again, commodities typed 0)
+- **M-08** (Low, open: AB decision): MOSL calibration spreads a quarter over special sessions that the averages skip (follow-up to M-07)
+- **M-09** (Med, open: AB decision): MOSL F&O activity key is NSE index options + BSE contracts only; weekday / last-N F&O statistics follow expiry-day mix
+- **M-10** (Med, open: needs outside owner): MOSL MTF NII yields (11.9-15.5%) have no source; m-f keeps them as a labelled assumption
+- **M-11** (Med, open: AB decision): MOSL windows add segments over different dates; day bases differ by segment
+- **M-15** (Low, open: AB decision): MOSL currency brokerage is in no panel (Broking and Consolidated ADR about 0.012-0.018 Cr/day low)
+- **M-17** (Low, open: not started): m-b bridge counts 385 changed F&O rows; 61 are real
+- **M-18** (Low, open: not started): m-d bridge's "Workbook YoY" column does not reproduce from its printed columns
 
 ### Top 10 by impact
 
@@ -72,6 +88,8 @@ Total: **68 items** (49 model / workbook, 12 data source, 7 build / process).
 9. **G-06** Groww typed 5% growth and MTF shares: Consolidated Oct-26 -5.22%, MTF FY27 -3.1%. Status: fixed in live.
 10. **X-06** NSE cash trades missing: every run as-of 21 Oct, 7 equity days short (the largest open item; no ADR delta can be stated). Status: open: needs outside owner.
 
+MOSL (added 2 Nov; all moves are Consolidated or Broking ADR from the m-a..m-f bridges): M-06 Oct-26 +323.4% (cash, commodities and MTF October rows added) and FY27 +0.79%; M-01 FY27 Broking +137.2% (Consolidated +42.2%); M-04 Q2 FY27 Consolidated +7.96%; M-03 Q2 FY27 commodities "YoY" -34.3% -> +17.6%; M-16 Tuesday Consolidated +8.7%. All fixed in live except M-02 (open: AB decision).
+
 Next in line: X-02 special sessions (Angel Oct-25 +3.42%), G-02 revenue-mix base (Groww Consolidated FY27 +2.13%), A-03 J8 typo (commodity +2.86%), A-04 whole-percent mix (cash FY27 -2.87%), G-25 Groww PAT discount rates (target -8.8%).
 
 ### Cumulative effect of the Angel fixes (out/bridges/summary.md)
@@ -84,6 +102,18 @@ Next in line: X-02 special sessions (Angel Oct-25 +3.42%), G-02 revenue-mix base
 
 Groww (bridges g-a..g-g, Consolidated): FY27 19.063 -> 20.005, FY26 13.040 -> 16.075, Oct-26 17.407 -> 23.298; g-i then -0.09% / -0.18% (FY27 / Oct).
 
+MOSL (bridges mosl_a..mosl_f, Consolidated ADR, Rs Cr per trading day; parity = workbook, live = m-a..m-f; change is derived from the first and last bridge):
+
+| Consolidated ADR, Rs Cr | Parity | Live (m-a..m-f) | Change |
+|---|---:|---:|---:|
+| FY 2027 | 5.793069 | 8.718295 | +50.50% |
+| Q2 FY 2027 | 8.306287 | 8.967060 | +7.96% |
+| Q1 FY 2027 | 8.174450 | 8.197926 | +0.29% |
+| Oct 2026 | 2.177250 | 9.876513 | +353.62% |
+| FY 2026 | 7.643822 | 7.662290 | +0.24% |
+
+The FY27 and Oct-26 jumps are mostly missing segments added (M-01, M-06), not a change in level.
+
 ### Verification of the current state (31 Oct 2026, DB read-only)
 
 - Latest `sb_runs`: Angel One live `abcdefghi` and Groww live `g-abcdefgi`, all as-of **2026-10-21**, status success, "complete through 2026-10-21 (limited by mcx:contracts, nse_cash:trades)", E5 0 blocking (Angel 4 warnings, Groww 1). 13 Angel live runs, 1 parity run, 3 Groww live runs.
@@ -91,11 +121,13 @@ Groww (bridges g-a..g-g, Consolidated): FY27 19.063 -> 20.005, FY26 13.040 -> 16
 - `sb_market_daily` reach: NSE F&O contracts, BSE F&O contracts, BSE cash trades 30 Oct; NSE cash trades 21 Oct (758 rows); MCX contracts 21 Oct; industry MTF book 19 Oct (507 rows). Suspect/imputed rows: BSE F&O 15 imputed (excel_seed 29 Sep-21 Oct), BSE cash 15 Jun, MCX 27-28 May, NSE io/so 12-15 Oct; turnover_cr 340 suspect each (NSE, BSE).
 - Facts: Angel 184 reviewed + 477 staged; Groww 103 reviewed + 41 staged (workbook seeds). `sb_broker_daily` exists with 178 rows (31 Oct only). Angel 3 total-orders conflicts still staged (facts 413/315, 415/317, 427/373).
 
+- MOSL (2 Nov, no DB read): no MOSL run is published yet. The dry run as of 2026-10-21 (`out/live/2026-10-21/mosl/report.md`, switches m-abcdef) shows E5 pass (0 blocking, 1 warning, 5 info), 110 inputs from 110 reviewed data-book facts, and the MOSL Q2 FY27 Consolidated ADR 8.9671 (Broking 4.2480).
+
 Sources not found: `PAT_INPUTS.md` does not exist in the replica or its notes; Angel PAT notes come from `REPLICA.md` and `dashboard/js/31-brokers-pat.js`. No record of an "IR units mix-up" was found beyond the guard described in G-36.
 
 ## 2. Model / workbook mistakes
 
-Angel One (A), Groww (G, incl. its PAT sheet) and shared workbook feeds (X).
+Angel One (A), Groww (G, incl. its PAT sheet), shared workbook feeds (X) and MOSL (M; the M block follows the G rows).
 
 | ID | Where | What is wrong | Evidence | Numeric impact | Sev | Current status |
 |---|---|---|---|---|---|---|
@@ -118,7 +150,7 @@ Angel One (A), Groww (G, incl. its PAT sheet) and shared workbook feeds (X).
 | A-17 | Validation design (parity test; no pre-report estimate log) | Parity test compares the workbook with itself, so it proves reproduction, not correctness; the pre-report estimate snapshot per quarter is not stored. | Build Plan s4 E7, s5; PLAN 3.2, 5.2 | Not quantified. First out-of-sample test (Q2 FY27) was done by hand: orders +4.0% / +0.7% / +15.4% / +5.0%. | Low | open: not started (PLAN 3.2 table sb_backtest not built) |
 | X-01 | backtesting F&O!U747:U761 (BSE F&O contracts, 29 Sep-21 Oct 2026); external link [11] | BSE F&O contracts frozen at 18.96 Mn (28 Sep value) for 15 trading days; September actual average 111.11 Mn/day, Thursday expiries above 330 Mn. Shared by Angel and Groww. | Methodology s7 #1; Groww Methodology s7 #2; Data Lake Review s2; out/bridges/c.md, groww_c.md; checks switch_c.md (13/13), groww_switch_c.md (50/50) | Angel F&O Oct-26 6.7458 -> 11.6734 (+73.0%), FY27 +5.36%, Q2 FY27 +0.85%; Consolidated Oct-26 +31.6%, FY27 +2.91%. Groww Consolidated FY27 +3.31%, Oct-26 +36.36%, F&O FY27 11.955 -> 12.599. | High | fixed in live (Angel switch c and Groww g-c (switches.py MARKET_SWITCHES "c"; groww_switches.py MARKET_SWITCHES "c"). DB still holds the 15 excel_seed rows as status imputed beside the lake rows) |
 | X-02 | Angel/Groww daily sheets (Muhurat 12 Nov 2023, 1 Nov 2024, 21 Oct 2025; DR tests 2 Mar, 18 May 2024; budget days 1 Feb 2025, 1 Feb 2026; 20 Jan 2024) | Special sessions are included in the Excel averages (ExchangesDash keeps them apart); they are thin days and bias every window that touches them. | Data Lake Review s2 (conventions); LIVE_SPEC s4(d), s7 Q8-Q10; out/bridges/d.md; switch_d.md (34/34); Groww g-g | Angel Oct-25 Consolidated 16.2940 -> 16.8512 (+3.42%), Q3 FY26 +1.10% (F&O +1.45%), FY26 +0.33%; Oct-26 YoY +26.0% -> +21.8%; FY27 / Q2 / Oct-26 unchanged. Groww FY26 +0.37%. MTF keeps special days (AB, 23 Oct). | High | fixed in live (Angel switch d (SUMMARY_SWITCHES "d"); Groww g-g. Residual: see G-17) |
-| X-03 | backtesting cash!I (NSE cash ADTO) and BSE cash turnover | Read the external row two rows above the date from 9 Jun 2025: 2-row misalignment. Display only; the ADR does not read it. | Methodology s7 #11; Data Lake Review s2, s2d | None on the ADR. DB: 340 days flagged suspect for each of nse_cash/bse_cash turnover_cr. | Low | parity only (kept as is; excel_seed rows flagged suspect (verified in sb_market_daily)) |
+| X-03 | backtesting cash!I (NSE cash ADTO) and BSE cash turnover | Read the external row two rows above the date from 9 Jun 2025: 2-row misalignment. Display only for Angel One and Groww; the ADR does not read it. (MOSL uses this feed as its cash allocation key: see M-16.) | Methodology s7 #11; Data Lake Review s2, s2d | None on the Angel One / Groww ADR. DB: 340 days flagged suspect for each of nse_cash/bse_cash turnover_cr. | Low | parity only (kept as is; excel_seed rows flagged suspect (verified in sb_market_daily)) |
 | X-04 | backtesting F&O row for 1 Feb 2024 (duplicate) | Date appears twice; affects FY 2024 only, which no Summary panel shows. | Data Lake Review s2 (conventions) | None on any shown figure. | Low | parity only (not started; no effect on live (FY25 onward)) |
 | X-05 | Day bases per segment (Commodities 144 MCX days, equity 138, MTF 136 in FY27) | Segments average over different day sets and "last N" windows cover different dates (also true for Groww). | Methodology s7 #14, s9 D9; Groww Methodology s7 #16 | Not quantified. | Low | open: AB decision (D9 never decided) |
 | G-01 | backtesting F&O!AD, backtesting cash!V (Q3 FY25-Q1 FY26 numeric 0; Q2 FY25 #N/A) | FY26 F&O and Cash ADR average in 61 zero days (Apr-Jun 2025), understating FY26 by ~20-25% and overstating every FY YoY. | Groww Methodology s7 #1, s11; GROWW_LIVE_SPEC g-b; out/bridges/groww_b.md, groww_g.md; checks groww_switch_b.md (47/47) | FY26 F&O shown 8.445 vs 10.597 reported-basis; cash 2.694 vs 3.423; Consolidated FY26 13.040 shown (about 15.92 on reported figures). Live (g-b): Consolidated FY26 12.996 -> 15.907 (+22.4%). YoY shown +46.2% vs about +20%. | High | fixed in live (g-b (Q1 FY26 calibrated from total income 9,484.71 Mn; ASSUME_SWITCHES "b") and g-g (period before go-live = insufficient)) |
@@ -148,6 +180,21 @@ Angel One (A), Groww (G, incl. its PAT sheet) and shared workbook feeds (X).
 | G-25 | Groww - ADR Model vs Groww - Final (discount rates, three PAT numbers) | Discount 18% (FY27) and 18% then 10% (FY28) here vs 13.5% / 18% then 13.5% in Groww - Final; the workbook holds three FY27 PAT numbers (2,726.12 / 2,802.08 / 3,007.85). | Groww_PAT_Method.md s5 #7 | Target 205.28 vs 187.25 (-8.8%). | High | parity only (kept for parity, flagged in the tab) |
 | G-26 | Groww - ADR Model D2, E2, C21, C43 (shares, CMP, costs) | Shares 621.0962 Cr and CMP 181.52 are live Excel fields stale in the file (price series ends 2 Sep 2026); no share, cost or treasury facts in the reviewed set. | Groww_PAT_Method.md s5 #8, s2.3 | Not quantified; upside is meaningless against a stale CMP. | Med | open: needs outside owner (needs a live CMP / share count and results-filing cost facts) |
 | G-27 | Groww - ADR Model typed P/E (38/44/50), 0.75 tax, I7, M7, K6, B2 | Typed P/E with no link to history (hidden PE chart average 65.8x, stale); wrong-entity memo cells (I7, M7 from Angel); #VALUE! in B2; label noise. | Groww_PAT_Method.md s5 #9-#12 | None on the ADR; memo cells not shown on the tab. | Low | parity only (tab shows P/E as Judgement chips and omits the memo cells (REPLICA.md)) |
+| M-01 | SUMMARY - Motilal Oswal FY 2027 cash and commodities (M64, C63), Broking M7, Consolidated C7; backtesting cash!AB748:AB760; Commodities!O648:O661; every FY / quarter / month cell is IFERROR(...,0) | Q3 FY27 days are #N/A or blank for cash and commodities; AVERAGEIFS over a range with one error returns the error and IFERROR shows 0, so FY27 YTD shows cash and commodities as 0 and mixes four bases (F&O to 21 Oct, cash and commodities to 30 Sep, MTF Apr-Sep). | MOSL Methodology s4.5 #1, s7 #1; MOSL_LIVE_SPEC m-c; out/bridges/mosl_c.md, mosl_e.md; out/checks/mosl_switch_c.md (77/77) | Workbook as shown: Broking FY27 1.805 vs 4.294 and Consolidated 5.793 vs 8.281 with error days skipped; FY YoY Broking -58.3% vs -0.85%, Consolidated -24.2% vs +8.3%; cash and commodities -100%. Live (m-c, after m-a / m-b): Consolidated FY27 6.083537 -> 8.650276 (+42.19%), Broking 1.871544 -> 4.438283 (+137.15%); Q2 / Q1 FY27, Oct-26, FY26 unchanged. m-e then adds October: Consolidated FY27 +0.79%. Periods with no value at all are flagged "insufficient data" (28 after m-c, 18 after m-e; the ones listed in the bridge are FY25 / Q1-Q2 FY25 periods, where the MTF series starts 1 Oct 2024). | High | fixed in live (switch m-c: error and zero days excluded, never averaged as 0; m-e fills Q3 FY27) |
+| M-02 | SUMMARY - Brokers MOSL panel (AH63 FY27, AH67 Q1 FY27, AH145, AH149, AG68, AG69); same finding as H7 in section 6 | Panel reads gross F&O (AF) and gross cash (AA), divides cash by 10 although AA is already in Rs Cr, has commodities typed 0, and both quarter labels read Q4 FY 2026; it also inherits the silent zero of M-01. | MOSL Methodology s7 #2, s9 D14; section 6 H7 | Q1 FY27 AH67 3.808 vs SUMMARY - Motilal Oswal M12 4.521 vs reported net 274.76 Cr / 60 days = 4.579 (-16.8%); the MOSL sheet itself is -1.3% to reported. Bridge, Rs Cr/day: F&O gross 3.433 vs net 1.967 (+1.466), cash 0.375 vs 2.031 (-1.656), commodities 0 vs 0.523 (-0.523), total -0.713. FY27 AH63 3.599 vs M7 1.805. | High | open: AB decision (D14: rebuild from the corrected series, repair or retire; outside the parity target, no switch touches it) |
+| M-03 | SUMMARY - Motilal Oswal L13 (typed Q4 FY 2026), E11, O11, E39 ...; stale labels; band 3 order | The "YoY" quarter row is Q4 FY26, not Q2 FY26, so "YoY" is a two-quarter comparison; band 3 swaps Cash and Commodities. | MOSL Methodology s7 #3, s9 D4; MOSL_LIVE_SPEC m-d; out/bridges/mosl_d.md; out/checks/mosl_switch_d.md (74/74) | Q2 FY27 "YoY", workbook row vs live (vs Q2 FY26; both on the m-a..m-d basis): Consolidated +16.2% -> +20.1%, Broking -4.2% -> +9.4%, MTF +43.8% -> +31.7%, F&O -12.8% -> -2.7%, Cash +19.7% (same), Commodities -34.3% -> +17.6%. | High | fixed in live (switch m-d: YoY = same period last year, labels and panel order from the calendar, as switches g / h and g-g) |
+| M-04 | SUMMARY - Motilal Oswal Q2 FY27 (headline quarter); assumptions Q2 FY27 rows; backtesting F&O, backtesting cash, Commodities, MTF data (2) | Q2 FY27 (Jul-Sep 2026) is a pure estimate (carry-forwards of typed values) although the data book was published on 29 Oct 2026. | MOSL Methodology s0, s5, s7 #4, s9 D5; MOSL_LIVE_SPEC m-a; out/bridges/mosl_a.md; out/checks/mosl_switch_a.md (324/324) | Model vs reported net, Q2 FY27 (Rs Cr): F&O 102.81 vs 110.15 (-6.66%), cash 108.21 vs 132.03 (-18.05%), commodity 50.74 vs 34.46 (+47.25%), total broking 261.76 vs 276.64 (-5.38%); gross cash -15.83%, commodities +49.17%; MTF closing book 8,729 vs 9,600 (-9.1%). Live (m-a): Consolidated Q2 FY27 8.306287 -> 8.967060 (+7.96%), Broking 4.015205 -> 4.247980 (+5.80%); F&O +7.13%, cash +22.02%, commodities -32.09%, MTF +9.97%; FY27 Consolidated +5.01%. | High | fixed in live (switch m-a: every reported quarter Q1 FY25-Q2 FY27 calibrated from reviewed data-book facts) |
+| M-05 | assumptions typed Q1 FY27 and earlier rows; backtesting cash J52 (= J51); typed shares and take rates | Q1 FY27 reported values are not fed (cash take rate carried from Q4 FY26, reported 228 / 228.30 ignored) and typed inputs are rounded (F&O 206 vs 205.60, commodity 55 vs 54.72, Q4 FY26 F&O 203 vs 202.76, cash 189 vs 188.74; shares 0.07 / 0.068 / 0.077 vs 0.0703 / 0.0678 / 0.0772). | MOSL Methodology s7 #7; MOSL_LIVE_SPEC m-a; out/bridges/mosl_a.md; out/checks/mosl_switch_a.md (324/324) | Workbook vs data book (net), Q1 FY27: cash -1.46%, F&O +0.20%, commodity +0.51%. Live (m-a): Q1 FY27 Broking 4.521111 -> 4.544588 (+0.52%), cash +1.48%, F&O -0.20%, commodities -0.51%, Consolidated +0.29%. 37 of 110 inputs change, 73 already equal the facts. | Med | fixed in live (switch m-a, with M-04) |
+| M-06 | backtesting cash D and J (per-quarter rate), AA; assumptions D53:D54 and the estimate rules I35:I37, L35:L37, E52:E54, H53:H54, J52:J54, L62, L74, R112:R114, E15:F15 | Open-quarter estimates use different rules per segment (carry, trailing 2 / 3 / 4, share average) and the cash rate is per quarter, not per day: Q2 FY27 (65 days) earned the same total as a 60-day quarter (-7.7% on days alone); in the partial Q3 FY27, D54 = 13 gives cash 15.46 vs about 3.0 (latent x5 once the lookup is extended). Q3 FY27 cash, commodity and MTF rows are #N/A or blank. | MOSL Methodology s6, s7 #6, s9 D9; MOSL_LIVE_SPEC m-e; out/bridges/mosl_e.md; out/checks/mosl_switch_e.md (102/102) | Live (m-e): Q3 FY27 (1-21 Oct) carries Q2 FY27 net revenue per unit of key (per contract, per Rs Cr of turnover) and net/gross; MTF carries the last quarter-end share (6.352%) and yield. Oct-26 Consolidated 2.332592 -> 9.876513 (+323.41%; Broking +110.87%, mostly cash, commodity and MTF rows added where there were none), FY27 Consolidated +0.79%; Q2 / Q1 FY27 and FY26 unchanged. Rated High on the October move (Methodology graded Med). | High | fixed in live (switch m-e; residual: no pre-report estimate snapshot yet, Q3 FY27 is the next test (Methodology s5); see M-11) |
+| M-07 | backtesting F&O / cash and Commodities daily rows on 12 Nov 2023, 20 Jan 2024, 2 Mar 2024, 18 May 2024, 1 Nov 2024, 1 Feb 2025, 21 Oct 2025, 1 Feb 2026 | Special sessions are included in every F&O, cash and commodity average (as Angel One and Groww parity; X-02). | MOSL Methodology s4.5 #5, s7 #13; MOSL_LIVE_SPEC m-d; out/bridges/mosl_d.md; out/checks/mosl_switch_d.md (74/74) | Only FY26 moves among the five bridged periods (21 Oct 2025, 1 Feb 2026): Consolidated 7.642700 -> 7.662290 (+0.26%), Broking +0.45%, F&O +0.46%, cash +0.38%, commodities +0.66%; FY27, Q2, Q1, Oct-26 unchanged. MTF keeps special sessions (AB, 23 Oct). Other periods (for example Oct-25, Q3 / Q4 FY26, FY25) are not in the bridge: not quantified. | Med | fixed in live (switch m-d; residual: M-08) |
+| M-08 | m-d calibration of Q3 FY26 and Q4 FY26 (sessions 21 Oct 2025, 1 Feb 2026) | Calibration spreads each quarter's data-book net over every row, special sessions included, while the averages leave them out, so a quarter's ADR x trading days is a little below its data-book net where a special session sits (same mechanism as G-17). | out/checks/mosl_summary.md (where a switch differs from the spec, #6) | Not quantified. | Low | open: AB decision (consistent with the spec as written; follow-up to M-07) |
+| M-09 | backtesting F&O!S (= R + P: NSE index options + BSE contracts) | Revenue of all F&O (including stock options and futures) is allocated by index options + BSE only; BSE is 46-50% of the key and BSE expiry days carry 340-513 Mn contracts, so weekday, last-5 and last-20 F&O statistics follow expiry-day mix, not revenue. | MOSL Methodology s7 #8, s9 D7; out/bridges/mosl_b.md (lake key equals the workbook on all 756 common days) | Q2 FY27 daily F&O net ranges 4.7-39.9 Rs Mn (median 11.5, CV 0.57); 1 Oct 2026 is 37.8. No bridge tests an alternative key. | Med | open: AB decision (D7: live keeps the workbook key; premium turnover, all-F&O contracts and expiry weighting are untested) |
+| M-10 | MTF data (2) V:X (rows 12-506), D6:D7, F6:F14 (nine typed NII yields 11.9-15.5%), E15:F15, X12:X506 (literal 247) | The NII yields have no source and equal no data-book cell; the share is a one-day closing-book ratio applied to the whole quarter; the day basis is a literal 247; the daily series stopped 30 Sep while the industry book runs to 19 Oct; Q1 FY27 has 59 days vs 60 equity days; the Q2 FY27 data book restated the lending book by up to 16%. [SOURCE NEEDED] | MOSL Methodology s7 #9, s9 D8; MOSL_LIVE_SPEC m-f and decision 3; out/bridges/mosl_f.md; out/checks/mosl_switch_f.md (76/76) | Not quantified. m-f moves no ADR (the carried 12.94% equals the workbook's own carry). Proxy "WM net interest income x 4 / average lending book" gives 12.04% for Q2 FY27 (0.9 pp below the carry, derived), within 0.7 pp of the typed yields for Q1 FY26-Q1 FY27 and 1.3-2.6 pp above them for FY25. MTF NII is 52.6% of Consolidated in Q2 FY27 (4.719079 / 8.967060, derived). | Med | open: needs outside owner (MOSL IR: the yield source, spec decision 3 option (c); m-f keeps the typed yields as a labelled assumption row mtf_nii_yield_carry; m-e extends the MTF rows to the last data day, 19 Oct) |
+| M-11 | SUMMARY - Motilal Oswal Broking and Consolidated "last 5 / 20 / 45 days" and weekday cells; day bases per segment | Segments are added over different dates and day bases: workbook F&O to 21 Oct, others to 30 Sep (Broking last-5 4.526 is not a coherent week); after m-e the October rows end on different days: F&O and cash 13 days to 21 Oct, commodities 14 (MCX-only 20 Oct included), MTF 12 days to 19 Oct. Q2 FY27 day bases: F&O 65, commodities 66, MTF 65; Q1 FY27 MTF 59 vs 60. | MOSL Methodology s4.5 #2, #6, s7 #10, s9 D11; out/checks/mosl_summary.md (where a switch differs from the spec, #3) | Not quantified; no switch m-a to m-f changes it. | Med | open: AB decision (D11: common end date for Broking and Consolidated; same as X-05) |
+| M-12 | SUMMARY - Motilal Oswal "Avg Of Last 6 Months" and "Mo 6M" ratios | The 6M average is the mean of two quarterly ADRs (Q1, Q2 FY27), not six months and not day-weighted. | MOSL Methodology s7 #11; MOSL_LIVE_SPEC m-d (same rules as A-12) | Not quantified (workbook Broking 4.268; the month-weighted value is not stated). | Low | fixed in live (switch m-d, inferred from the spec's "same rules as Angel One and Groww" (A-12, E3); no MOSL bridge shows a 6M figure) |
+| M-13 | PAT predictor Q1FY27 N30:O30; Working Sheet - MOSL T62:T64; Motilal Oswal - Final; Motilal Oswal Charts AC; assumptions D36, O36, D15; backtesting F&O!P169 | Typed "actual" F&O / cash 124 / 118 look swapped (data book net F&O 117.80, cash 123.64; sum 275 unaffected); PAT uses annual net ratios (FY26, FY25, FY24) not the quarterly ratio; Final is a Groww / Angel hybrid with #REF!; Charts AC returns cash market share not cash revenue; D36 / O36 use a 60/65 factor (165.35 vs the daily chain's 179.13); D15 = I501; P169 typed ' '. | MOSL Methodology s7 #12, s9 D14 | None on the ADR. Other sheets not quantified. | Low | parity only (outside the parity target and the live ADR; no PAT tab for MOSL, spec decision 5) |
+| M-14 | `K144:K163` (15 typed zeros); backtesting F&O Q1-Q2 FY25 (numeric 0); F&O table Q1 / Q2 FY25 shares | Stray typed zeros and unread cells. | MOSL Methodology s7 #13; out/bridges/mosl_c.md | None shown. Q1 FY25-Q2 FY27 are calibrated by m-a and 124 earlier F&O error rows are excluded by m-c; trading-day bases are in M-11. | Low | parity only (cells kept as in the workbook; the live engine does not read them) |
+| M-15 | MOSL Broking panel (cash + F&O + commodity); data book `Consol` row 56 (net brokerage total) | The model's Broking is cash + F&O + commodity only; the data book's net brokerage total also holds currency, which is in no panel. The spec says "MOSL broking = consolidated net brokerage". | out/checks/mosl_summary.md (where a switch differs from the spec, #1); MOSL Methodology s0 (the data book has currency) | Currency net brokerage Q2 FY27 0.773 Cr (0.28% of the 277.41 Cr total; model Broking 276.64 Cr), Q1 FY27 1.095 Cr (0.40%): Broking and Consolidated ADR are low by about 0.012 Cr per day in Q2 FY27 and 0.018 in Q1 FY27. | Low | open: AB decision (options: add currency to Cash or as its own Broking line; or leave it out and label the panel "cash + F&O + commodity") |
 
 ## 3. Data source mistakes
 
@@ -165,6 +212,7 @@ Angel One (A), Groww (G, incl. its PAT sheet) and shared workbook feeds (X).
 | G-32 | Earnings-call transcripts (TR-Q2FY26 p6, TR-Q1FY27 p13); MTF yield | 14.95% MTF yield exists only as a spoken CFO statement; no MTF revenue in Rs is published; book-yield check gives 14.2-16.5%. | backsource.md s3 D7 | Not quantified (0.5 pp yield = 3.3% of MTF revenue, derived). | Low | open: AB decision (g-f keeps 14.95%; AB asked whether a filed figure exists) |
 | G-33 | Groww disclosure set (no monthly, no segment orders, no segment revenue); NSE active clients dropped in Q2 FY27; Q2 FY26 results PDF image-only | Groww files only quarterly mix/total income/ADTO share/total orders, so segment orders and monthly data cannot be sourced; Q2 FY26 PDF read visually. | disclosure_map.md s1, s4; backsource.md s5 | Structural: forces borrowed Angel orders (G-11) and visual chart reads (shares misread by 0.005 = 4.5% on the F&O take rate, per checker). | Med | parity only (IR archive (sb_broker_daily) and NSE Report 1C are partial proxies, not segment data) |
 | G-34 | Letters vs handbook (small inconsistencies) | Q4 FY26 F&O mix 54.6% in text, 55% chart, 54.8% later; Q2 FY27 other income 39.01 (results) vs 39.02 (handbook); orders restated up to 0.02% by handbook vintage; users restated incl. Fisdom. | backsource.md s4; disclosure_map.md s3 | Under 0.1% on any ADR input except the F&O mix point (0.2 pp). | Low | fixed in live (g-a/g-d use the later-vintage reviewed values) |
+| M-16 | backtesting cash K (NSE + BSE cash turnover, the daily allocation key); external-link rows (Excel 11 Jun 2025 = lake 9 Jun) | From 9 Jun 2025 the workbook reads the external row two rows above the date, so each day's cash key is the lake value two trading days earlier (all 340 days; identical before). Display only for Angel One and Groww (X-03), but MOSL allocates cash revenue by this key. | MOSL Methodology s7 #5, s9 D6; X-03; MOSL_LIVE_SPEC m-b; out/bridges/mosl_b.md; out/checks/mosl_switch_b.md (102/104; the two differences are the bridge's row count, M-17) | Five headline periods unchanged (quarters tie to the data book). Month level: Consolidated Sep-26 +0.08%, Broking Sep-26 4.290353 -> 4.297382 (+0.16%), Aug-26 +0.84%, Sep-25 +0.91% (cash +2.18%). Consolidated weekday / last-5: Tuesday 10.274615 -> 11.169574 (+8.71%, derived), Wednesday +5.05%, Monday -3.80% (derived), last 5 days +2.52% (derived). Methodology (approximate): day values move by a median 8%, 90th percentile 26%; cash 'delivery ratio' H moves up to +0.91% (Q4 FY26). Rated High under the register rule (weekday figures move over 2%; Methodology graded Med). | High | fixed in live (switch m-b: the lake's NSE + BSE turnover on its own date; the Excel series is kept for parity) |
 
 ## 4. Build / process mistakes
 
@@ -177,6 +225,8 @@ Angel One (A), Groww (G, incl. its PAT sheet) and shared workbook feeds (X).
 | G-35 | Groww Methodology v1 s0.1 #3, s1, s8b | Spec errors found while building parity: M12/M13/M18 and C65-style cells are Broking figures; zero-fill covers Q3 FY25-Q1 FY26 only (Q2 FY25 is #N/A); commodity windows count value>0 days only. | Groww Methodology s11 | No ADR effect (the code follows the sheet). | Low | fixed in live (s11 corrections added 31 Oct) |
 | G-36 | src/live/refresh_groww_ir.py; IR page units | Page chart values are 100x the displayed Rs Mn (rawCurrentValue another 100x); a silent unit change would scale MTF 100x or 0.01x. No record of an actual unit mix-up was found in the docs read. | out/checks/groww_switch_i.md s5, note 6; git 7af65c0 | Not quantified. | Low | fixed in live (run fails if page value/100 disagrees with the printed Rs Mn string) |
 | X-13 | Docs drift (LIVE_SPEC s7 Q11, GROWW_LIVE_SPEC IR archive, PLAN, Build Plan) | Stale statements: Q11 unticked though PLAN says closed; "sb_broker_daily migration not applied" though the table exists (178 rows); LIVE_SPEC Q6 vs calibrate.py (A-08); PLAN s5 says daily.yml runs Angel only vs --broker all; two Methodology copies differ by 4 bytes. | This register s verification notes | None on numbers. | Low | open: not started |
+| M-17 | out/bridges/mosl_b.md, "Daily revenue rows that changed", F&O row (bridge change test) | Row count overstated: 385 F&O rows claimed as changed, 61 are real (Q1 FY25, 2024-04-01 to 2024-06-28; ratio max printed 1.000000000, real 0.984555296). The other 324 are ulp-level float noise from an exact-inequality test. | out/checks/mosl_summary.md (Disagreements #1) | None on any ADR, parameter or other count (the 2 failing items of 104 in the m-b check). | Low | open: not started (fix the bridge's change test to use a tolerance) |
+| M-18 | out/bridges/mosl_d.md, Q2 FY27 "YoY" table | The "Workbook YoY (vs Q4 FY26)" column keeps the 1 Feb 2026 budget session in Q4 FY26 (the workbook's convention) while the Q4 FY26 column printed beside it excludes it, so the printed columns do not reproduce the workbook column. | out/checks/mosl_summary.md (where a switch differs from the spec, #2) | Consolidated 16.2% shown vs 15.9% from the printed columns; commodities -34.3% vs -35.2%. The live YoY column (vs Q2 FY26) agrees. | Low | open: not started (label the column or print both session treatments) |
 
 ### 4b. Mistakes made in this work (main session), all caught
 
@@ -187,6 +237,8 @@ Angel One (A), Groww (G, incl. its PAT sheet) and shared workbook feeds (X).
 | Told AB the Q1 FY25 commodity revenue would fall by about a fifth on the 3% mix; it rose about 2% | Wrong expectation, not a wrong number | the published run | corrected to AB the same day |
 | Told AB the ExchangesDash refresh would make NSE/BSE figures update; the run is capped by the slowest series (NSE cash trades, MCX contracts) and by `sb_calendar` | Wrong expectation | the refresh's own simulation | calendar extension built; blockers listed in the owner prompt |
 | LIVE_SPEC Q5 / Q6 ticked as done; code applies them only where the workbook has no value (A-08, A-09) | Angel MTF share Q1 FY27 about +1.5% (monthly vs daily industry average); Q3 FY25 4.85% pin kept | this register (2 Nov) | switch j (2 Nov): Consolidated FY27 −0.08%, Oct-26 +0.50%, FY26 +0.68% |
+| Pinned the Angel One / Groww "unchanged by MOSL" test to md5s computed on Python 3.9; CI runs 3.12, whose compensated `sum()` moves the last bit of 125 rows (max 2.4e-16 relative) | Parity gate failed, nothing published (run 41418564040) | the CI parity gate | summary rows hashed after rounding to 12 significant digits; same pins on 3.9 and 3.12 (b6c9c75) |
+| `refresh_market` let a failure of the optional industry-MTF view (401 with the new `NSE_LAKE_ANON_KEY`) abort the whole refresh, so the ExchangesDash rows were not upserted and MOSL stayed E5-blocked on stale zeros | MOSL not published in run 41419549046; Angel One and Groww published as of 21 Oct | the daily job's log | MTF failure is now a warning; the other rows are still written and the step exits 1 (2a2858a). The 401 itself is open (key or grant on the owner's view) |
 
 ## 5. Verification notes and what could not be verified
 
@@ -197,6 +249,7 @@ Angel One (A), Groww (G, incl. its PAT sheet) and shared workbook feeds (X).
 - X-10: equity-day flags and the 1 Feb 2025 classification were not checked against exchange circulars.
 - A-12: the "Wo 10W" label and the Cash 6M comparison value (parity side) are not in any bridge.
 - Parity-gate figures (8,774 / 8,797 exact; Groww 262 / 262) are quoted from the docs, not re-run.
+- MOSL (M-01 to M-18, 2 Nov): statuses are taken from `docs/MOSL_LIVE_SPEC.md`, `docs/MOSL_ADR_Methodology.md` s7 / s9, `out/bridges/mosl_a.md` to `mosl_f.md`, `out/checks/mosl_summary.md` and `git log` (commits 17f35db, b5dd333, 5121099, 7ca6643, cdaab95, 990eb5d). `src/engine/` and the DB were not read, so the switch keys and the run state are unverified here. Independent recompute: m-a 324/324, m-b 102/104 (the two differences are the bridge's F&O row count, M-17), m-c 77/77, m-d 74/74, m-e 102/102, m-f 76/76. Not rechecked by the checker: weekday / weekly tables, the counts of "insufficient data" periods, and the lake after 21 Oct. M-12 is inferred from the spec; no MOSL bridge shows the 6M figure.
 
 ## 6. New findings: fresh audit of the valuation and cross-broker sheets (2 Nov 2026)
 
@@ -212,7 +265,7 @@ These sheets weren't in any earlier audit. Every impact was recomputed from cach
 | H4 | High | Q2 FY27 trading days typed as 66; the quarter had 65 |
 | H5 | High | `Angel One Charts` stops at row 495 (25 Sep 2026); the data runs to 21 Oct; the valuation sheets read different rows |
 | H6 | High | `Angel One - Final` FY26 "Historical performance" PAT is 1,066, not 915; the revenue-mix block uses a fixed denominator |
-| H7 | High | `SUMMARY - Brokers` MOSL panel does not tie to `SUMMARY - Motilal Oswal` |
+| H7 | High | `SUMMARY - Brokers` MOSL panel does not tie to `SUMMARY - Motilal Oswal` (MOSL cause analysis: M-02) |
 | H8 | High | `SUMMARY - Brokers` Angel "Consolidated ADR" uses net MTF; `SUMMARY - Angel One` uses gross |
 | H9 | High | `Angel One - Final` FY28 price double-discounts at 13.5% and ignores its own 18% |
 | H10 | High | `Angel One - ADR model` and `(A+B)`: FY28 growth is applied to a different base than FY27 |
@@ -232,7 +285,7 @@ These sheets weren't in any earlier audit. Every impact was recomputed from cach
 | M14 | Med | `MTF data!D64` / `L64` typed 64 days; Q2 FY27 has 65 |
 | M15 | Med | `PAT predictor Q2FY27!I77 = F53` |
 
-Status for all of them: **open: AB decision** (workbook-only; nothing in the live engine reads these sheets). H7 (MOSL) is outside the Angel One / Groww scope.
+Status for all of them: **open: AB decision** (workbook-only; nothing in the live engine reads these sheets). H7 (MOSL panel) is the same finding as M-02 in section 2 (MOSL block), which keeps it as open: AB decision (MOSL Methodology D14); MOSL's live engine does not read `SUMMARY - Brokers`, so no published MOSL ADR is affected.
 
 
 ## 7. ExchangesDash owner's answers (2 Nov 2026) and what they change
