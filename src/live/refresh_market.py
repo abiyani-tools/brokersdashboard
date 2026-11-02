@@ -41,8 +41,11 @@ FILES = {
 }
 REQUIRED = ("nse", "bse", "mcx")
 SOURCE = "exchangesdash_json"
-START = "2023-06-01"   # A1 (AB, 2 Nov 2026): June 2023. Before it BSE F&O is zero / ramping up after its 15 May 2023
-                       # relaunch, which E5 blocks on. Was 2023-09-29.
+START = "2023-09-29"   # A1 (AB, 2 Nov 2026): to become 2023-06-01 (before it BSE F&O is zero / ramping up after its
+                       # 15 May 2023 relaunch, which E5 blocks on) ONLY after sb_calendar's MCX flags are fixed
+                       # (121 days, 29 Sep 2023 - 28 Mar 2024, marked closed although MCX traded): with the wrong
+                       # flags, earlier calendar days let 5 Commodities "Avg of last 6 months" cells per broker
+                       # average April 2024 alone.
 PK = ("trade_date", "dataset", "metric", "source")
 
 

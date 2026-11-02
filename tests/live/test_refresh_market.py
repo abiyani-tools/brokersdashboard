@@ -241,9 +241,10 @@ def test_industry_mtf_book_pages_through_the_view(monkeypatch):
     assert len(rows) == 5 and s.calls == [0, 2, 4] and 'last 2025-01-05' in msg
 
 
-def test_calendar_is_backfilled_to_start():
+def test_calendar_is_backfilled_to_start(monkeypatch):
     """A1 (2 Nov 2026): the refresh adds the days from START up to the calendar's first day, nothing before START."""
     from src.live import db, refresh_market as R
+    monkeypatch.setattr(R, 'START', '2023-06-01')
     nse = {'daily_all': [{'date': d} for d in ('2023-05-31', '2023-06-01', '2023-06-02', '2023-09-29', '2026-10-22')]}
     mcx = {'daily_all': [{'date': d} for d in ('2023-06-01', '2023-06-03', '2023-09-29', '2026-10-22')]}
     data = {'nse': nse, 'bse': {'daily_all': []}, 'mcx': mcx}
