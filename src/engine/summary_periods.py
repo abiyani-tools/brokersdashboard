@@ -163,27 +163,35 @@ def _cmp(a, b, what):
 
 # ── segments from the engine's daily output ──
 def make_segments(daily, guarded=False, calendar=None, exclude=(), mtf_split=False, exclude_segments=None,
-                  mtf_weekday_net=True):
+                  mtf_weekday_net=True, fields=None):
     """Same series and scaling as summary.build. guarded=True needs `calendar` ({iso: sb_calendar row}).
     exclude: dates left out of every statistic (switch d: special sessions) of the segments in
     exclude_segments (daily keys; None = all).
     mtf_split (switch g, decision D4): MTF is gross in every table (the workbook's weekday tables use net),
-    and a separate 'MTF (net)' panel shows net = 45% × gross. Consolidated stays on gross.
-    mtf_weekday_net=False (Groww: gross only, no net series): the weekday tables read gross, as its workbook does."""
+    and a separate 'MTF (net)' panel shows net = 45% x gross. Consolidated stays on gross.
+    mtf_weekday_net=False (Groww: gross only, no net series): the weekday tables read gross, as its workbook does.
+    fields: per-broker {segment: (daily field, divisor, last-N windows keep revenue > 0 only)} as summary.MOSL_FIELDS
+    (default: Angel One / Groww's). A daily row with `err` set (MOSL parity: #N/A / #VALUE!) is a cell holding an
+    error: the unguarded Seg gives its FY / quarter / month the workbook's IFERROR 0."""
     exclude = set(exclude)
     if exclude:
         daily = {seg: ({d: r for d, r in rows.items() if d not in exclude}
                        if exclude_segments is None or seg in exclude_segments else rows)
                  for seg, rows in daily.items()}
     seg_key = {'F&O': 'fo', 'Cash': 'cash', 'Commodities': 'comm', 'MTF': 'mtf', 'MTF (net)': 'mtf'}
-    spec = {
-        'F&O': ({d: r['rev_mn'] for d, r in daily['fo'].items()}, 10, None, False, 'is_equity_day'),
-        'Cash': ({d: r['rev_mn'] for d, r in daily['cash'].items()}, 10, None, False, 'is_equity_day'),
-        'Commodities': ({d: r['rev_mn'] for d, r in daily['comm'].items()}, 10, None, True, 'is_mcx_day'),
-        'MTF': ({d: r['gross_cr'] for d, r in daily['mtf'].items()}, 1,
-                {d: r['net_cr'] for d, r in daily['mtf'].items()} if (mtf_weekday_net and not mtf_split) else None,
-                False, 'is_equity_day'),
-    }
+    if fields is None:
+        spec = {
+            'F&O': ({d: r['rev_mn'] for d, r in daily['fo'].items()}, 10, None, False, 'is_equity_day'),
+            'Cash': ({d: r['rev_mn'] for d, r in daily['cash'].items()}, 10, None, False, 'is_equity_day'),
+            'Commodities': ({d: r['rev_mn'] for d, r in daily['comm'].items()}, 10, None, True, 'is_mcx_day'),
+            'MTF': ({d: r['gross_cr'] for d, r in daily['mtf'].items()}, 1,
+                    {d: r['net_cr'] for d, r in daily['mtf'].items()} if (mtf_weekday_net and not mtf_split) else None,
+                    False, 'is_equity_day'),
+        }
+    else:
+        flags = {'F&O': 'is_equity_day', 'Cash': 'is_equity_day', 'Commodities': 'is_mcx_day', 'MTF': 'is_equity_day'}
+        spec = {name: ({d: r[field] for d, r in daily[seg_key[name]].items()}, scale, None, pos, flags[name])
+                for name, (field, scale, pos) in fields.items()}
     if mtf_split:
         spec['MTF (net)'] = ({d: r['net_cr'] for d, r in daily['mtf'].items()}, 1, None, False, 'is_equity_day')
     out = {}
@@ -193,7 +201,8 @@ def make_segments(daily, guarded=False, calendar=None, exclude=(), mtf_split=Fal
             days = [d for d, r in calendar.items() if r[flag] and d not in drop]
             out[name] = GuardedSeg(name, s, days, scale, w, pos)
         else:
-            out[name] = Seg(s, scale, w, pos)
+            errors = [d for d, r in daily[seg_key[name]].items() if r.get('err')] if fields is not None else ()
+            out[name] = Seg(s, scale, w, pos, errors=errors)
     return out
 
 

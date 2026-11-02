@@ -162,6 +162,9 @@ def main(argv):
         if broker == 'GROWW':
             from . import groww_bridge
             return groww_bridge.main(argv)
+        if broker == 'MOSL':
+            from . import mosl_bridge
+            return mosl_bridge.main(argv)
         if broker != 'ANGELONE':
             raise SystemExit(f'--broker {broker}: unknown broker')
     letter = argv[1]
