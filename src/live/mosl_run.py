@@ -150,7 +150,7 @@ def live_run_mosl(snap, msnap, facts, lake_rows, switches=SWITCHES, as_of=None):
     note = (f"MOSL needs nothing from the Angel One calibration. As of {as_of}"
             + (f' (limited by {limiting})' if limiting else '')
             + f": {len(M.overlay)} inputs come from {len(used)} reviewed data-book facts; the rest are the workbook's. "
-              'Basis: net brokerage of retail + PWM (Consolidated net brokerage; excludes Capital Markets) plus MTF net interest '
+              'Basis: net brokerage of retail + PWM (Consolidated net brokerage; excludes Capital Markets and currency) plus MTF net interest '
               f'income. MTF yield: the workbook\'s typed values, carried at {M.assume(MS.YIELD_ASSUMPTION):.2%} '
               f'({MS.YIELD_LABEL}).')
     last = {s: M.pin(f'{s}_last_actual_quarter') for s in ('fo', 'cash', 'comm')}

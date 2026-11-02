@@ -52,6 +52,8 @@ Because revenue is disclosed every quarter, each reported quarter ties to the da
 4. **Facts.** Approve the 290 candidate facts. Nothing is staged in the DB yet. On approval they're staged with their data-book cell references, then marked reviewed, as for Groww.
 5. **Dashboard.** MOSL becomes the third option in the Brokers selector, with its own panel set (net brokerage; no MTF (net) panel). ADR only; no PAT tab for now.
 
+**AB's answers (2 Nov 2026):** "Approve all" for items 1–5: (a) for the MTF yield (12.94% carried, labelled). Later the same day, on the checker's finding that the data book's net brokerage total also holds currency (Q2 FY27 0.77 Cr, 0.28%): **leave currency out of Broking and label it** (Mistakes Register M-15). MOSL Broking = cash + F&O + commodity net brokerage of retail + PWM; excludes Capital Markets and currency.
+
 ## Dependencies
 
 - **NSE index-option contracts** become an engine input for MOSL. In the current ExchangesDash data they are zero on 12–15 Oct and end on 15 Oct. The owner's PR [sucaanalytics-max/ExchangesDash#33](https://github.com/sucaanalytics-max/ExchangesDash/pull/33) takes them from NSE directly. Until it merges, MOSL's live F&O stops at 11 Oct, and E5 will flag the zero days.
