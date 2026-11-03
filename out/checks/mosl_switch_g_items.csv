@@ -1,0 +1,631 @@
+id,kind,item,mine,bridge,rel_diff,tolerance,verdict,note
+1,databook,adto_cash Q1 FY 2024 Consol!E44 (fact 20291),16024.477948913278,16024.477948913,1.7367516098169658e-14,1e-09,agree,book cell 1602.4477948913277 x 10
+2,databook,adto_cash Q2 FY 2024 Consol!F44 (fact 20292),24088.20931887941,24088.209318879,1.706609236740424e-14,1e-09,agree,book cell 2408.820931887941 x 10
+3,databook,adto_cash Q3 FY 2024 Consol!G44 (fact 20293),27969.823907840815,27969.823907841,6.6334675460600355e-15,1e-09,agree,book cell 2796.9823907840814 x 10
+4,databook,adto_cash Q4 FY 2024 Consol!H44 (fact 20294),40597.633785463,40597.633785463,0.0,1e-09,agree,book cell 4059.7633785463 x 10
+5,databook,adto_notional_fo Q1 FY 2024 Consol!E45 (fact 20295),3965624.4562631883,3965624.456263188,1.1742445419214819e-16,1e-09,agree,book cell 396562.4456263188 x 10
+6,databook,adto_notional_fo Q2 FY 2024 Consol!F45 (fact 20296),5123913.361285891,5123913.361285891,0.0,1e-09,agree,book cell 512391.3361285891 x 10
+7,databook,adto_notional_fo Q3 FY 2024 Consol!G45 (fact 20297),5546141.049034228,5546141.049034228,0.0,1e-09,agree,book cell 554614.1049034228 x 10
+8,databook,adto_notional_fo Q4 FY 2024 Consol!H45 (fact 20298),6982181.18349299,6982181.18349299,0.0,1e-09,agree,book cell 698218.1183492991 x 10
+9,databook,adto_premium_fo Q1 FY 2024 Consol!E46 (fact 20299),36673.057784075,36673.057784075,0.0,1e-09,agree,book cell 3667.3057784075 x 10
+10,databook,adto_premium_fo Q2 FY 2024 Consol!F46 (fact 20300),44373.57683211079,44373.576832111,4.7551445223732085e-15,1e-09,agree,book cell 4437.357683211079 x 10
+11,databook,adto_premium_fo Q3 FY 2024 Consol!G46 (fact 20301),48580.034752407504,48580.034752408,1.0184536101838598e-14,1e-09,agree,book cell 4858.00347524075 x 10
+12,databook,adto_premium_fo Q4 FY 2024 Consol!H46 (fact 20302),66816.34058504786,66816.340585048,2.1778976670900236e-15,1e-09,agree,book cell 6681.6340585047865 x 10
+13,databook,adto_comm Q1 FY 2024 Consol!E47 (fact 20303),27293.758466891668,27293.758466892,1.2129369132027934e-14,1e-09,agree,book cell 2729.375846689167 x 10
+14,databook,adto_comm Q2 FY 2024 Consol!F47 (fact 20304),33671.485036101076,33671.485036101,2.1608662660356283e-15,1e-09,agree,book cell 3367.1485036101076 x 10
+15,databook,adto_comm Q3 FY 2024 Consol!G47 (fact 20305),45778.54513885458,45778.545138855,9.218413130924453e-15,1e-09,agree,book cell 4577.854513885458 x 10
+16,databook,adto_comm Q4 FY 2024 Consol!H47 (fact 20306),54683.33871453306,54683.338714533,1.1975058594995298e-15,1e-09,agree,book cell 5468.3338714533065 x 10
+17,databook,adto_currency Q1 FY 2024 Consol!E48 (fact 20307),93318.75845504664,93318.758455047,3.898443214762849e-15,1e-09,agree,book cell 9331.875845504665 x 10
+18,databook,adto_currency Q2 FY 2024 Consol!F48 (fact 20308),98954.27911807303,98954.279118073,2.9411391519518607e-16,1e-09,agree,book cell 9895.427911807303 x 10
+19,databook,adto_currency Q3 FY 2024 Consol!G48 (fact 20309),67400.79603203999,67400.79603204,2.159012368555614e-16,1e-09,agree,book cell 6740.079603203999 x 10
+20,databook,adto_currency Q4 FY 2024 Consol!H48 (fact 20310),60524.39031329508,60524.390313295,1.3223682773461445e-15,1e-09,agree,book cell 6052.439031329508 x 10
+21,databook,gross_brokerage_total Q1 FY 2024 Consol!E50 (fact 20311),4062.930910558026,4062.930910558,6.379778433635331e-15,1e-09,agree,book cell 406.2930910558026 x 10
+22,databook,gross_brokerage_total Q2 FY 2024 Consol!F50 (fact 20312),5075.835312681901,5075.835312682,1.953076023675553e-14,1e-09,agree,book cell 507.5835312681901 x 10
+23,databook,gross_brokerage_total Q3 FY 2024 Consol!G50 (fact 20313),4959.731718557101,4959.731718557,2.0354712235557132e-14,1e-09,agree,book cell 495.97317185571006 x 10
+24,databook,gross_brokerage_total Q4 FY 2024 Consol!H50 (fact 20314),6319.8769571339,6319.876957134,1.5830121040899384e-14,1e-09,agree,book cell 631.9876957133899 x 10
+25,databook,gross_brokerage_cash Q1 FY 2024 Consol!E51 (fact 20315),1509.6156330898984,1509.61563309,6.7325768689271e-14,1e-09,agree,book cell 150.96156330898984 x 10
+26,databook,gross_brokerage_cash Q2 FY 2024 Consol!F51 (fact 20316),1978.7272336452002,1978.727233645,1.011199679207132e-13,1e-09,agree,book cell 197.87272336452003 x 10
+27,databook,gross_brokerage_cash Q3 FY 2024 Consol!G51 (fact 20317),2210.6881082089008,2210.688108209,4.484346847713576e-14,1e-09,agree,book cell 221.06881082089006 x 10
+28,databook,gross_brokerage_cash Q4 FY 2024 Consol!H51 (fact 20318),3169.4786989161,3169.478698916,3.1421466841911064e-14,1e-09,agree,book cell 316.94786989160997 x 10
+29,databook,gross_brokerage_fo Q1 FY 2024 Consol!E52 (fact 20319),2065.2303508338273,2065.230350834,8.367298750334223e-14,1e-09,agree,book cell 206.52303508338272 x 10
+30,databook,gross_brokerage_fo Q2 FY 2024 Consol!F52 (fact 20320),2591.5956955974,2591.595695597,1.5441361839731012e-13,1e-09,agree,book cell 259.15956955974 x 10
+31,databook,gross_brokerage_fo Q3 FY 2024 Consol!G52 (fact 20321),2316.1909933258,2316.190993326,8.638701858637357e-14,1e-09,agree,book cell 231.61909933258 x 10
+32,databook,gross_brokerage_fo Q4 FY 2024 Consol!H52 (fact 20322),2661.0693557888003,2661.069355789,7.502024951167301e-14,1e-09,agree,book cell 266.10693557888004 x 10
+33,databook,gross_brokerage_comm Q1 FY 2024 Consol!E53 (fact 20323),226.75950264479997,226.759502645,8.821327822558358e-13,1e-09,agree,book cell 22.675950264479997 x 10
+34,databook,gross_brokerage_comm Q2 FY 2024 Consol!F53 (fact 20324),237.3046518065,237.304651807,2.1069739193579453e-12,1e-09,agree,book cell 23.73046518065 x 10
+35,databook,gross_brokerage_comm Q3 FY 2024 Consol!G53 (fact 20325),261.3039275983,261.303927598,1.1481632423396325e-12,1e-09,agree,book cell 26.130392759830002 x 10
+36,databook,gross_brokerage_comm Q4 FY 2024 Consol!H53 (fact 20326),299.8352260273,299.835226027,1.000614800076986e-12,1e-09,agree,book cell 29.983522602729998 x 10
+37,databook,gross_brokerage_currency Q1 FY 2024 Consol!E54 (fact 20327),261.32542398949994,261.325423989,1.9130854596868234e-12,1e-09,agree,book cell 26.132542398949994 x 10
+38,databook,gross_brokerage_currency Q2 FY 2024 Consol!F54 (fact 20328),268.2077316328,268.207731633,7.455979972492257e-13,1e-09,agree,book cell 26.820773163280002 x 10
+39,databook,gross_brokerage_currency Q3 FY 2024 Consol!G54 (fact 20329),171.54868942410002,171.548689424,5.83018126348571e-13,1e-09,agree,book cell 17.15486894241 x 10
+40,databook,gross_brokerage_currency Q4 FY 2024 Consol!H54 (fact 20330),189.4936764017,189.493676402,1.5832695340760098e-12,1e-09,agree,book cell 18.94936764017 x 10
+41,databook,net_brokerage_total Q1 FY 2024 Consol!E56 (fact 20331),2431.2337989943,2431.233798994,1.2326190280759686e-13,1e-09,agree,book cell 243.12337989943 x 10
+42,databook,net_brokerage_total Q2 FY 2024 Consol!F56 (fact 20332),2875.1104925339,2875.110492534,3.479672084075183e-14,1e-09,agree,book cell 287.51104925339 x 10
+43,databook,net_brokerage_total Q3 FY 2024 Consol!G56 (fact 20333),2788.7811062005,2788.7811062,1.7920636994888377e-13,1e-09,agree,book cell 278.87811062005 x 10
+44,databook,net_brokerage_total Q4 FY 2024 Consol!H56 (fact 20334),3491.2975950084,3491.297595008,1.1462147178522764e-13,1e-09,agree,book cell 349.12975950084 x 10
+45,databook,net_brokerage_cash Q1 FY 2024 Consol!E57 (fact 20335),904.1596430443998,904.159643044,4.4221903879787426e-13,1e-09,agree,book cell 90.41596430443998 x 10
+46,databook,net_brokerage_cash Q2 FY 2024 Consol!F57 (fact 20336),1018.2642646213002,1018.264264621,2.9474986210646216e-13,1e-09,agree,book cell 101.82642646213002 x 10
+47,databook,net_brokerage_cash Q3 FY 2024 Consol!G57 (fact 20337),1181.8840584599002,1181.88405846,8.445586756592767e-14,1e-09,agree,book cell 118.18840584599002 x 10
+48,databook,net_brokerage_cash Q4 FY 2024 Consol!H57 (fact 20338),1664.1245291914001,1664.124529191,2.404733911196749e-13,1e-09,agree,book cell 166.41245291914 x 10
+49,databook,net_brokerage_fo Q1 FY 2024 Consol!E58 (fact 20339),1196.6142273676,1196.614227368,3.342349488726635e-13,1e-09,agree,book cell 119.66142273676 x 10
+50,databook,net_brokerage_fo Q2 FY 2024 Consol!F58 (fact 20340),1522.8850419080002,1522.885041908,1.4930455627718225e-16,1e-09,agree,book cell 152.2885041908 x 10
+51,databook,net_brokerage_fo Q3 FY 2024 Consol!G58 (fact 20341),1339.1216293388002,1339.121629339,1.492481760699019e-13,1e-09,agree,book cell 133.91216293388 x 10
+52,databook,net_brokerage_fo Q4 FY 2024 Consol!H58 (fact 20342),1518.9817195415,1518.981719542,3.291644039339885e-13,1e-09,agree,book cell 151.89817195415 x 10
+53,databook,net_brokerage_comm Q1 FY 2024 Consol!E59 (fact 20343),140.53011078420002,140.530110784,1.4234101848703108e-12,1e-09,agree,book cell 14.05301107842 x 10
+54,databook,net_brokerage_comm Q2 FY 2024 Consol!F59 (fact 20344),147.9815433901,147.98154339,6.756759761085887e-13,1e-09,agree,book cell 14.79815433901 x 10
+55,databook,net_brokerage_comm Q3 FY 2024 Consol!G59 (fact 20345),158.5446577101,158.54465771,6.308380044471232e-13,1e-09,agree,book cell 15.85446577101 x 10
+56,databook,net_brokerage_comm Q4 FY 2024 Consol!H59 (fact 20346),184.44533174630004,184.445331746,1.62675836583104e-12,1e-09,agree,book cell 18.444533174630003 x 10
+57,databook,net_brokerage_currency Q1 FY 2024 Consol!E60 (fact 20347),189.92981779809998,189.929817798,5.264448464982498e-13,1e-09,agree,book cell 18.99298177981 x 10
+58,databook,net_brokerage_currency Q2 FY 2024 Consol!F60 (fact 20348),185.9796426145,185.979642614,2.688437859492289e-12,1e-09,agree,book cell 18.59796426145 x 10
+59,databook,net_brokerage_currency Q3 FY 2024 Consol!G60 (fact 20349),109.23076069170001,109.230760692,2.7463980030662323e-12,1e-09,agree,book cell 10.923076069170001 x 10
+60,databook,net_brokerage_currency Q4 FY 2024 Consol!H60 (fact 20350),123.74601452919998,123.746014529,1.6160128333275335e-12,1e-09,agree,book cell 12.374601452919999 x 10
+61,databook,share_overall Q1 FY 2024 Consol!E63 (fact 20351),0.06777874115542287,0.067778741,2.2930917035307974e-09,1e-08,agree,book cell 0.06777874115542287 x 1
+62,databook,share_overall Q2 FY 2024 Consol!F63 (fact 20352),0.07144076368371649,0.071440764,4.427213478128853e-09,1e-08,agree,book cell 0.07144076368371649 x 1
+63,databook,share_overall Q3 FY 2024 Consol!G63 (fact 20353),0.08019881659939261,0.080198817,4.995178351316047e-09,1e-08,agree,book cell 0.08019881659939261 x 1
+64,databook,share_overall Q4 FY 2024 Consol!H63 (fact 20354),0.08751246833427234,0.087512468,3.819711091195574e-09,1e-08,agree,book cell 0.08751246833427234 x 1
+65,databook,share_cash Q1 FY 2024 Consol!E64 (fact 20355),0.06465992652020869,0.064659927,7.420226716104219e-09,1e-08,agree,book cell 0.06465992652020869 x 1
+66,databook,share_cash Q2 FY 2024 Consol!F64 (fact 20356),0.07253940055716214,0.072539401,6.1047907412582546e-09,1e-08,agree,book cell 0.07253940055716214 x 1
+67,databook,share_cash Q3 FY 2024 Consol!G64 (fact 20357),0.07687096586875627,0.076870966,1.7073250285653592e-09,1e-08,agree,book cell 0.07687096586875627 x 1
+68,databook,share_cash Q4 FY 2024 Consol!H64 (fact 20358),0.08323861950157005,0.08323862,5.987965082686051e-09,1e-08,agree,book cell 0.08323861950157005 x 1
+69,databook,share_fo_premium Q1 FY 2024 Consol!E66 (fact 20359),0.07319089181731124,0.073190892,2.4960585671548314e-09,1e-08,agree,book cell 0.07319089181731124 x 1
+70,databook,share_fo_premium Q2 FY 2024 Consol!F66 (fact 20360),0.07625699539565857,0.076256995,5.188488915599424e-09,1e-08,agree,book cell 0.07625699539565857 x 1
+71,databook,share_fo_premium Q3 FY 2024 Consol!G66 (fact 20361),0.08310463280199396,0.083104633,2.382611353545832e-09,1e-08,agree,book cell 0.08310463280199396 x 1
+72,databook,share_fo_premium Q4 FY 2024 Consol!H66 (fact 20362),0.08771406888972641,0.087714069,1.2571939378423325e-09,1e-08,agree,book cell 0.08771406888972641 x 1
+73,databook,share_comm Q1 FY 2024 Consol!E67 (fact 20363),0.06327981419940848,0.063279814,3.1512177835160286e-09,1e-08,agree,book cell 0.06327981419940848 x 1
+74,databook,share_comm Q2 FY 2024 Consol!F67 (fact 20364),0.0652983589932904,0.065298359,1.0275304305497964e-10,1e-08,agree,book cell 0.0652983589932904 x 1
+75,databook,share_comm Q3 FY 2024 Consol!G67 (fact 20365),0.07935320623630022,0.079353206,2.9778283775962347e-09,1e-08,agree,book cell 0.07935320623630022 x 1
+76,databook,share_comm Q4 FY 2024 Consol!H67 (fact 20366),0.09071568358113824,0.090715684,4.61730261238146e-09,1e-08,agree,book cell 0.09071568358113824 x 1
+77,databook,mtf_book Q1 FY 2024 Consol!E70 (fact 20367),14670.0,14670,0.0,1e-09,agree,book cell 1467 x 10
+78,databook,mtf_book Q2 FY 2024 Consol!F70 (fact 20368),19700.0,19700,0.0,1e-09,agree,book cell 1970 x 10
+79,databook,mtf_book Q3 FY 2024 Consol!G70 (fact 20369),28270.0,28270,0.0,1e-09,agree,book cell 2827 x 10
+80,databook,mtf_book Q4 FY 2024 Consol!H70 (fact 20370),34940.0,34940,0.0,1e-09,agree,book cell 3494 x 10
+81,databook,nse_active_clients Q1 FY 2024 Consol!E69 (fact 20371),0.761297,0.761297,0.0,1e-09,agree,book cell 7.61297 x 0.1
+82,databook,nse_active_clients Q2 FY 2024 Consol!F69 (fact 20372),0.798085,0.798085,0.0,1e-09,agree,book cell 7.98085 x 0.1
+83,databook,nse_active_clients Q3 FY 2024 Consol!G69 (fact 20373),0.8223980000000002,0.822398,2.699965283537062e-16,1e-09,agree,book cell 8.223980000000001 x 0.1
+84,databook,nse_active_clients Q4 FY 2024 Consol!H69 (fact 20374),0.879629,0.879629,0.0,1e-09,agree,book cell 8.796289999999999 x 0.1
+85,databook,broking_arpu Q1 FY 2024 Consol!E72 (fact 20375),18246.15949806229,18246.159498062,1.595066099242664e-14,1e-09,agree,book cell 18246.15949806229 x 1
+86,databook,broking_arpu Q2 FY 2024 Consol!F72 (fact 20376),19322.204091763913,19322.204091764,4.51871282155731e-15,1e-09,agree,book cell 19322.204091763913 x 1
+87,databook,broking_arpu Q3 FY 2024 Consol!G72 (fact 20377),20228.81156674908,20228.811566749,3.9565119034266624e-15,1e-09,agree,book cell 20228.81156674908 x 1
+88,databook,broking_arpu Q4 FY 2024 Consol!H72 (fact 20378),23653.718035166115,23653.718035166,4.9216500194117265e-15,1e-09,agree,book cell 23653.718035166115 x 1
+89,databook,wm_nii Q1 FY 2024 WM!E8 (fact 20379),1279.303549368689,1279.303549369,2.431379074651684e-13,1e-09,agree,book cell 127.9303549368689 x 10
+90,databook,wm_nii Q2 FY 2024 WM!F8 (fact 20380),1437.9759672826801,1437.975967283,2.224757357753997e-13,1e-09,agree,book cell 143.79759672826802 x 10
+91,databook,wm_nii Q3 FY 2024 WM!G8 (fact 20381),1536.3256444835247,1536.325644484,3.0931657190163117e-13,1e-09,agree,book cell 153.63256444835247 x 10
+92,databook,wm_nii Q4 FY 2024 WM!H8 (fact 20382),1854.4284662100417,1854.42846621,2.2560458407467124e-14,1e-09,agree,book cell 185.44284662100418 x 10
+93,databook,wm_brokerage_net Q1 FY 2024 WM!E9 (fact 20383),1638.7385466938022,1638.738546694,1.2071181094426876e-13,1e-09,agree,book cell 163.87385466938022 x 10
+94,databook,wm_brokerage_net Q2 FY 2024 WM!F9 (fact 20384),2151.537666654099,2151.537666654,4.6076312783041326e-14,1e-09,agree,book cell 215.15376666540993 x 10
+95,databook,wm_brokerage_net Q3 FY 2024 WM!G9 (fact 20385),2049.949709867799,2049.949709868,9.805037075995382e-14,1e-09,agree,book cell 204.9949709867799 x 10
+96,databook,wm_brokerage_net Q4 FY 2024 WM!H9 (fact 20386),2658.202259041498,2658.202259041,1.873252298717968e-13,1e-09,agree,book cell 265.8202259041498 x 10
+97,databook,wm_distribution Q1 FY 2024 WM!E7 (fact 20387),277.23079569749996,277.230795697,1.8033273238024864e-12,1e-09,agree,book cell 27.72307956975 x 10
+98,databook,wm_distribution Q2 FY 2024 WM!F7 (fact 20388),364.99699236229594,364.996992362,8.107651426772021e-13,1e-09,agree,book cell 36.499699236229596 x 10
+99,databook,wm_distribution Q3 FY 2024 WM!G7 (fact 20389),507.5362883615199,507.536288362,9.459412591912123e-13,1e-09,agree,book cell 50.75362883615199 x 10
+100,databook,wm_distribution Q4 FY 2024 WM!H7 (fact 20390),710.34948592638,710.349485926,5.34865470016005e-13,1e-09,agree,book cell 71.034948592638 x 10
+101,databook,wm_lending_book_close Q1 FY 2024 WM!E18 (fact 20391),42324.140284594294,42324.140284594,6.876413852953631e-15,1e-09,agree,book cell 4232.41402845943 x 10
+102,databook,wm_lending_book_close Q2 FY 2024 WM!F18 (fact 20392),46079.999999999985,46080.0,3.1579677144893343e-16,1e-09,agree,book cell 4607.999999999998 x 10
+103,databook,wm_lending_book_close Q3 FY 2024 WM!G18 (fact 20393),47660.0,47660,0.0,1e-09,agree,book cell 4766 x 10
+104,databook,wm_lending_book_close Q4 FY 2024 WM!H18 (fact 20394),49880.0,49880,0.0,1e-09,agree,book cell 4988 x 10
+105,databook,wm_lending_assets_avg Q1 FY 2024 WM!E46 (fact 20395),33147.07014229715,33147.070142297,4.390106023216198e-15,1e-09,agree,book cell 3314.7070142297143 x 10
+106,databook,wm_lending_assets_avg Q2 FY 2024 WM!F46 (fact 20396),44202.07014229715,44202.070142297,3.2921343234651048e-15,1e-09,agree,book cell 4420.207014229714 x 10
+107,databook,wm_lending_assets_avg Q3 FY 2024 WM!G46 (fact 20397),46869.99999999999,46870.0,1.5523698771460264e-16,1e-09,agree,book cell 4686.999999999999 x 10
+108,databook,wm_lending_assets_avg Q4 FY 2024 WM!H46 (fact 20398),48770.0,48770,0.0,1e-09,agree,book cell 4877 x 10
+109,databook,pwm_brokerage_net Q1 FY 2024 PWM!E8 (fact 20399),501.04496240290007,501.044962403,1.9944463642152e-13,1e-09,agree,book cell 50.104496240290004 x 10
+110,databook,pwm_brokerage_net Q2 FY 2024 PWM!F8 (fact 20400),676.5482803639011,676.548280364,1.4619436881073911e-13,1e-09,agree,book cell 67.65482803639011 x 10
+111,databook,pwm_brokerage_net Q3 FY 2024 PWM!G8 (fact 20401),630.3340821886331,630.334082189,5.82020607316063e-13,1e-09,agree,book cell 63.033408218863315 x 10
+112,databook,pwm_brokerage_net Q4 FY 2024 PWM!H8 (fact 20402),734.4182489320883,734.418248932,1.2027842859044201e-13,1e-09,agree,book cell 73.44182489320883 x 10
+113,databook,capmkt_net_brokerage_allied Q1 FY 2024 Capital Market!E7 (fact 20403),730.4015000133,730.401500013,4.1075978724288157e-13,1e-09,agree,book cell 73.04015000133 x 10
+114,databook,capmkt_net_brokerage_allied Q2 FY 2024 Capital Market!F7 (fact 20404),763.521415432,763.521415432,0.0,1e-09,agree,book cell 76.3521415432 x 10
+115,databook,capmkt_net_brokerage_allied Q3 FY 2024 Capital Market!G7 (fact 20405),498.5574426655,498.557442665,1.0028828566403163e-12,1e-09,agree,book cell 49.85574426655 x 10
+116,databook,capmkt_net_brokerage_allied Q4 FY 2024 Capital Market!H7 (fact 20406),649.2436516921999,649.243651692,3.0801248041641054e-13,1e-09,agree,book cell 64.92436516922 x 10
+117,segment,F&O Q2 FY 2024 share,0.076256995,0.076257,6.55677513047459e-08,5e-07,agree,
+118,segment,F&O Q2 FY 2024 quarter key,2502.8038311,2502.8,1.5307232441622062e-06,0.005,agree,
+119,segment,F&O Q2 FY 2024 rate,1.3578779982615137,1.3579,1.620276786687708e-05,5e-05,agree,
+120,segment,F&O Q2 FY 2024 net/gross,0.5876244680045234,0.587624,7.964347110096455e-07,5e-07,agree,
+121,segment,F&O Q2 FY 2024 gross Rs Cr,259.1595695597,259.1596,1.1745773650155927e-07,5e-05,agree,
+122,segment,F&O Q2 FY 2024 net revenue (sum of daily rows),152.28850419079998,152.2885,2.751882032488126e-08,5e-05,agree,
+123,tie,F&O Q2 FY 2024 sum of daily net = net-brokerage fact / 10,152.28850419079998,152.28850419079998,0.0,1e-12,agree,
+124,tie,F&O Q2 FY 2024 sum of daily gross = gross-brokerage fact / 10,259.1595695597001,259.1595695597,4.386750522651531e-16,1e-12,agree,
+125,segment,F&O Q2 FY 2024 trading days in ADR,63,63,,,agree,
+126,segment,F&O Q2 FY 2024 ADR,2.4172778442984124,2.417278,6.441194915231673e-08,5e-07,agree,
+127,segment,F&O Q3 FY 2024 share,0.083104633,0.083105,4.4161001143266525e-06,5e-07,agree,
+128,segment,F&O Q3 FY 2024 quarter key,2959.1130044,2959.11,1.015304246759607e-06,0.005,agree,
+129,segment,F&O Q3 FY 2024 rate,0.9418626649349454,0.9419,3.96380348811387e-05,5e-05,agree,
+130,segment,F&O Q3 FY 2024 net/gross,0.5781568243714005,0.578157,3.037731957797734e-07,5e-07,agree,
+131,segment,F&O Q3 FY 2024 gross Rs Cr,231.6190993326,231.6191,2.8814549487940262e-09,5e-05,agree,
+132,segment,F&O Q3 FY 2024 net revenue (sum of daily rows),133.91216293389996,133.9122,2.7679404900250007e-07,5e-05,agree,
+133,tie,F&O Q3 FY 2024 sum of daily net = net-brokerage fact / 10,133.91216293389996,133.9121629339,2.1224143354650442e-16,1e-12,agree,
+134,tie,F&O Q3 FY 2024 sum of daily gross = gross-brokerage fact / 10,231.61909933260003,231.6190993326,1.2270883321928063e-16,1e-12,agree,
+135,segment,F&O Q3 FY 2024 trading days in ADR,60,60,,,agree,
+136,segment,F&O Q3 FY 2024 ADR,2.228443882433395,2.228444,5.275726241979313e-08,5e-07,agree,
+137,segment,F&O Q4 FY 2024 share,0.087714069,0.087714,7.866468947565846e-07,5e-07,agree,
+138,segment,F&O Q4 FY 2024 quarter key,3486.3494177,3486.35,1.6702281759800888e-07,0.005,agree,
+139,segment,F&O Q4 FY 2024 rate,0.8701938782513372,0.8702,7.034875503066524e-06,5e-05,agree,
+140,segment,F&O Q4 FY 2024 net/gross,0.5708162834003347,0.570816,4.9648256890457e-07,5e-07,agree,
+141,segment,F&O Q4 FY 2024 gross Rs Cr,266.1069355789,266.1069,1.33701513338747e-07,5e-05,agree,
+142,segment,F&O Q4 FY 2024 net revenue (sum of daily rows),151.89817195420002,151.8982,1.8463549916510914e-07,5e-05,agree,
+143,tie,F&O Q4 FY 2024 sum of daily net = net-brokerage fact / 10,151.89817195420002,151.8981719542,1.8711027963505482e-16,1e-12,agree,
+144,tie,F&O Q4 FY 2024 sum of daily gross = gross-brokerage fact / 10,266.10693557890005,266.1069355789,2.1361118881455864e-16,1e-12,agree,
+145,segment,F&O Q4 FY 2024 trading days in ADR,60,60,,,agree,
+146,segment,F&O Q4 FY 2024 ADR,2.5070059966202183,2.507006,1.3481347024184257e-09,5e-07,agree,
+147,segment,Cash Q2 FY 2024 share,0.072539401,0.072539,5.528030207984459e-06,5e-07,agree,
+148,segment,Cash Q2 FY 2024 quarter key,5254831.41,5254831.41,0.0,0.005,agree,
+149,segment,Cash Q2 FY 2024 rate (J = gross/ADTO),0.08214505310256433,0.082145,6.464487187753536e-07,5e-07,agree,
+150,segment,Cash Q2 FY 2024 net/gross,0.5146056754600088,0.514606,6.306572236126297e-07,5e-07,agree,
+151,segment,Cash Q2 FY 2024 gross Rs Cr,197.87272336450002,197.8727,1.1807842744627996e-07,5e-05,agree,
+152,segment,Cash Q2 FY 2024 net revenue (sum of daily rows),101.82642646209997,101.8264,2.598745815469702e-07,5e-05,agree,
+153,tie,Cash Q2 FY 2024 sum of daily net = net-brokerage fact / 10,101.82642646209997,101.8264264621,2.791191876008987e-16,1e-12,agree,
+154,tie,Cash Q2 FY 2024 sum of daily gross = gross-brokerage fact / 10,197.87272336449996,197.87272336450002,2.872726361384188e-16,1e-12,agree,
+155,segment,Cash Q2 FY 2024 trading days in ADR,63,63,,,agree,
+156,segment,Cash Q2 FY 2024 ADR,1.6162924835253965,1.616292,2.991571150129841e-07,5e-07,agree,
+157,segment,Cash Q3 FY 2024 share,0.076870966,0.076871,4.422994366663851e-07,5e-07,agree,
+158,segment,Cash Q3 FY 2024 quarter key,5311212.390000001,5311212.39,1.7535027903779204e-16,0.005,agree,
+159,segment,Cash Q3 FY 2024 rate (J = gross/ADTO),0.07903832771679553,0.079038,4.146302243492003e-06,5e-07,agree,
+160,segment,Cash Q3 FY 2024 net/gross,0.5346227059671069,0.534623,5.499817498188904e-07,5e-07,agree,
+161,segment,Cash Q3 FY 2024 gross Rs Cr,221.06881082089998,221.0688,4.894810775529384e-08,5e-05,agree,
+162,segment,Cash Q3 FY 2024 net revenue (sum of daily rows),118.18840584599995,118.1884,4.946339625234071e-08,5e-05,agree,
+163,tie,Cash Q3 FY 2024 sum of daily net = net-brokerage fact / 10,118.18840584599995,118.188405846,3.60716974228051e-16,1e-12,agree,
+164,tie,Cash Q3 FY 2024 sum of daily gross = gross-brokerage fact / 10,221.06881082090004,221.06881082089998,2.571299798000903e-16,1e-12,agree,
+165,segment,Cash Q3 FY 2024 trading days in ADR,60,60,,,agree,
+166,segment,Cash Q3 FY 2024 ADR,1.96396384472131,1.963964,7.906391875218347e-08,5e-07,agree,
+167,segment,Cash Q4 FY 2024 share,0.08323862,0.083239,4.565167769846753e-06,5e-07,agree,
+168,segment,Cash Q4 FY 2024 quarter key,7415163.669999998,7415163.67,2.511940709773918e-16,0.005,agree,
+169,segment,Cash Q4 FY 2024 rate (J = gross/ADTO),0.07807052784566257,0.078071,6.0477557279026e-06,5e-07,agree,
+170,segment,Cash Q4 FY 2024 net/gross,0.5250467623461709,0.525047,4.526334388569281e-07,5e-07,agree,
+171,segment,Cash Q4 FY 2024 gross Rs Cr,316.9478698916,316.9479,9.499479246577853e-08,5e-05,agree,
+172,segment,Cash Q4 FY 2024 net revenue (sum of daily rows),166.41245291910005,166.4125,2.8291684787290546e-07,5e-05,agree,
+173,tie,Cash Q4 FY 2024 sum of daily net = net-brokerage fact / 10,166.41245291910005,166.4124529191,3.41581521476893e-16,1e-12,agree,
+174,tie,Cash Q4 FY 2024 sum of daily gross = gross-brokerage fact / 10,316.9478698916,316.9478698916,0.0,1e-12,agree,
+175,segment,Cash Q4 FY 2024 trading days in ADR,60,60,,,agree,
+176,segment,Cash Q4 FY 2024 ADR,2.736415730292938,2.736416,9.85621564912764e-08,5e-07,agree,
+177,segment,Commodities Q2 FY 2024 share,0.065298359,0.065298,5.4978410714016144e-06,5e-07,agree,
+178,segment,Commodities Q2 FY 2024 quarter key,117.459861,117.46,1.183381576622844e-06,0.005,agree,
+179,segment,Commodities Q2 FY 2024 rate,30.93958626195317,30.9396,4.4402793921504613e-07,5e-05,agree,
+180,segment,Commodities Q2 FY 2024 net/gross,0.6235930996850136,0.623593,1.5985586392540123e-07,5e-07,agree,
+181,segment,Commodities Q2 FY 2024 gross Rs Cr,23.7304651807,23.7305,1.4672805039057184e-06,5e-05,agree,
+182,segment,Commodities Q2 FY 2024 net revenue (sum of daily rows),14.798154339000002,14.7982,3.0855779755592387e-06,5e-05,agree,
+183,tie,Commodities Q2 FY 2024 sum of daily net = net-brokerage fact / 10,14.798154339000002,14.798154339000002,0.0,1e-12,agree,
+184,tie,Commodities Q2 FY 2024 sum of daily gross = gross-brokerage fact / 10,23.730465180700005,23.7304651807,1.4971108453828052e-16,1e-12,agree,
+185,segment,Commodities Q2 FY 2024 trading days in ADR,62,62,,,agree,
+186,segment,Commodities Q2 FY 2024 ADR,0.2386799086935484,0.23868,3.825475598874733e-07,5e-07,agree,
+187,segment,Commodities Q3 FY 2024 share,0.079353206,0.079353,2.5959883711404834e-06,5e-07,agree,
+188,segment,Commodities Q3 FY 2024 quarter key,130.509189,130.51,6.214083212005095e-06,0.005,agree,
+189,segment,Commodities Q3 FY 2024 rate,25.23134308476405,25.2313,1.7075890055981535e-06,5e-05,agree,
+190,segment,Commodities Q3 FY 2024 net/gross,0.6067442581801189,0.606744,4.2551720180245887e-07,5e-07,agree,
+191,segment,Commodities Q3 FY 2024 gross Rs Cr,26.130392759799996,26.1304,2.7707957037602367e-07,5e-05,agree,
+192,segment,Commodities Q3 FY 2024 net revenue (sum of daily rows),15.854465770999996,15.8545,2.158945410082946e-06,5e-05,agree,
+193,tie,Commodities Q3 FY 2024 sum of daily net = net-brokerage fact / 10,15.854465770999996,15.854465771,2.2408283761278814e-16,1e-12,agree,
+194,tie,Commodities Q3 FY 2024 sum of daily gross = gross-brokerage fact / 10,26.130392759800003,26.130392759799996,2.7192195015653434e-16,1e-12,agree,
+195,segment,Commodities Q3 FY 2024 trading days in ADR,60,60,,,agree,
+196,segment,Commodities Q3 FY 2024 ADR,0.26424109618333325,0.264241,3.6399838871289e-07,5e-07,agree,
+197,segment,Commodities Q4 FY 2024 share,0.090715684,0.090716,3.483398738923729e-06,5e-07,agree,
+198,segment,Commodities Q4 FY 2024 quarter key,150.58818,150.59,1.2085795869641136e-05,0.005,agree,
+199,segment,Commodities Q4 FY 2024 rate,21.94872971404135,21.9487,1.3537932143332624e-06,5e-05,agree,
+200,segment,Commodities Q4 FY 2024 net/gross,0.6151556446185906,0.615156,5.777094093392451e-07,5e-07,agree,
+201,segment,Commodities Q4 FY 2024 gross Rs Cr,29.9835226027,29.9835,7.538373759198218e-07,5e-05,agree,
+202,segment,Commodities Q4 FY 2024 net revenue (sum of daily rows),18.4445331746,18.4445,1.798614238950533e-06,5e-05,agree,
+203,tie,Commodities Q4 FY 2024 sum of daily net = net-brokerage fact / 10,18.4445331746,18.4445331746,0.0,1e-12,agree,
+204,tie,Commodities Q4 FY 2024 sum of daily gross = gross-brokerage fact / 10,29.98352260269999,29.9835226027,3.554666066968977e-16,1e-12,agree,
+205,segment,Commodities Q4 FY 2024 trading days in ADR,61,61,,,agree,
+206,segment,Commodities Q4 FY 2024 ADR,0.30236939630491805,0.302369,1.3106647792133956e-06,5e-07,agree,
+207,arith,F&O Q2 FY 2024 K = share x key,190.85629923417352,190.8563,4.012581638092142e-09,5e-05,agree,
+208,arith,"F&O Q2 FY 2024 ADR numerator (net, special sessions out)",152.28850419079998,152.2885,2.751882032488126e-08,5e-05,agree,
+209,arith,F&O Q3 FY 2024 K = share x key,245.91600023618938,245.916,9.604473842245326e-10,5e-05,agree,
+210,arith,"F&O Q3 FY 2024 ADR numerator (net, special sessions out)",133.7066329460037,133.7066,2.464051556268923e-07,5e-05,agree,
+211,arith,F&O Q4 FY 2024 K = share x key,305.8018933822476,305.8019,2.1640651599334265e-08,5e-05,agree,
+212,arith,"F&O Q4 FY 2024 ADR numerator (net, special sessions out)",150.4203597972131,150.4204,2.672695119248527e-07,5e-05,agree,
+213,arith,Cash Q2 FY 2024 H,2.5118152125026683,2.5118,6.056378109546498e-06,5e-05,agree,
+214,arith,"Cash Q2 FY 2024 days printed after ""over"" = days minus special sessions (the key total itself includes them)",63,63,,,agree,"bridge wording: ""quarter key = X Rs Cr over N days""; X includes the 0 special day(s), N does not"
+215,arith,Cash Q2 FY 2024 ADR numerator,101.82642646209997,101.8264,2.598745815469702e-07,5e-05,agree,
+216,arith,Cash Q2 FY 2024 ADTO Rs Cr/day,2408.8209318879,2408.8209,1.3237970192330333e-08,5e-05,agree,
+217,arith,Cash Q3 FY 2024 H,2.3929655162351944,2.393,1.4410265275977963e-05,5e-05,agree,
+218,arith,"Cash Q3 FY 2024 days printed after ""over"" = days minus special sessions (the key total itself includes them)",60,60,,,agree,"bridge wording: ""quarter key = X Rs Cr over N days""; X includes the 1 special day(s), N does not"
+219,arith,Cash Q3 FY 2024 ADR numerator,117.8378306832786,117.8378,2.603856369157329e-07,5e-05,agree,
+220,arith,Cash Q3 FY 2024 ADTO Rs Cr/day,2796.9823907841,2796.9824,3.294943796794489e-09,5e-05,agree,
+221,arith,Cash Q4 FY 2024 H,2.452184831623989,2.4522,6.185619448164061e-06,5e-05,agree,
+222,arith,"Cash Q4 FY 2024 days printed after ""over"" = days minus special sessions (the key total itself includes them)",60,60,,,agree,"bridge wording: ""quarter key = X Rs Cr over N days""; X includes the 2 special day(s), N does not"
+223,arith,Cash Q4 FY 2024 ADR numerator,164.18494381757628,164.1849,2.668793816592899e-07,5e-05,agree,
+224,arith,Cash Q4 FY 2024 ADTO Rs Cr/day,4059.7633785462995,4059.7634,5.284470606286559e-09,5e-05,agree,
+225,arith,Commodities Q2 FY 2024 Mn contracts,117.459861,117.4599,3.320282070818249e-07,5e-05,agree,
+226,arith,Commodities Q2 FY 2024 take Rs/contract,30.93958626195317,30.9396,4.4402793921504613e-07,5e-05,agree,
+227,arith,Commodities Q3 FY 2024 Mn contracts,130.509189,130.5092,8.428524579607705e-08,5e-05,agree,
+228,arith,Commodities Q3 FY 2024 take Rs/contract,25.23134308476405,25.2313,1.7075890055981535e-06,5e-05,agree,
+229,arith,Commodities Q4 FY 2024 Mn contracts,150.58818,150.5882,1.3281253117009349e-07,5e-05,agree,
+230,arith,Commodities Q4 FY 2024 take Rs/contract,21.94872971404135,21.9487,1.3537932143332624e-06,5e-05,agree,
+231,broking,F&O Q2 FY 2024 ADR,2.4172778442984124,2.417278,6.441194915231673e-08,5e-07,agree,
+232,broking,Cash Q2 FY 2024 ADR,1.6162924835253965,1.616292,2.991571150129841e-07,5e-07,agree,
+233,broking,Commodities Q2 FY 2024 ADR,0.2386799086935484,0.23868,3.825475598874733e-07,5e-07,agree,
+234,broking,Broking Q2 FY 2024 ADR (sum of segment ADRs),4.272250236517357,4.27225,5.536130718125546e-08,5e-07,agree,
+235,broking,F&O Q3 FY 2024 ADR,2.228443882433395,2.228444,5.275726241979313e-08,5e-07,agree,
+236,broking,Cash Q3 FY 2024 ADR,1.96396384472131,1.963964,7.906391875218347e-08,5e-07,agree,
+237,broking,Commodities Q3 FY 2024 ADR,0.26424109618333325,0.264241,3.6399838871289e-07,5e-07,agree,
+238,broking,Broking Q3 FY 2024 ADR (sum of segment ADRs),4.456648823338039,4.456649,3.964008846463599e-08,5e-07,agree,
+239,broking,F&O Q4 FY 2024 ADR,2.5070059966202183,2.507006,1.3481347024184257e-09,5e-07,agree,
+240,broking,Cash Q4 FY 2024 ADR,2.736415730292938,2.736416,9.85621564912764e-08,5e-07,agree,
+241,broking,Commodities Q4 FY 2024 ADR,0.30236939630491805,0.302369,1.3106647792133956e-06,5e-07,agree,
+242,broking,Broking Q4 FY 2024 ADR (sum of segment ADRs),5.545791123218075,5.545791,2.2218304317056898e-08,5e-07,agree,
+243,tie,Broking Q2 FY 2024: sum of daily net revenue = cash+F&O+comm net brokerage facts,268.91308499189995,268.9130849919,2.1138212319612565e-16,1e-12,agree,
+244,tie,Broking Q3 FY 2024: sum of daily net revenue = cash+F&O+comm net brokerage facts,267.9550345508999,267.9550345509,4.2427580400628896e-16,1e-12,agree,
+245,tie,Broking Q4 FY 2024: sum of daily net revenue = cash+F&O+comm net brokerage facts,336.75515804790007,336.75515804789995,3.3759494102669456e-16,1e-12,agree,
+246,absent,June 2023 revenue rows (all three segments),0,0,,,agree,
+247,absent,calendar days 2023-06-01..2023-06-30 (the 21 days that get no row),21,21,,,agree,
+248,first-day,first revenue day F&O,2023-07-03,2023-07-03,,,agree,
+249,first-day,first revenue day Cash,2023-07-03,2023-07-03,,,agree,
+250,first-day,first revenue day Commodities,2023-07-03,2023-07-03,,,agree,
+251,absent,calendar starts after Q1 FY24 began (so Q1 FY24 / FY 2024 / FY 2024 months before Jul incomplete),2023-06-01,2023-06-01,,,agree,
+252,absent,Q1 FY24 not computed: no facts-based quarter in my model,False,False,,,agree,
+253,absent,FY 2024 not computed: needs Q1 FY24 days (my model has no Q1 FY24 days),False,False,,,agree,
+254,absent,"industry MTF book starts after Q4 FY24 (no MTF base, so Consolidated FY24 insufficient)",True,True,,,agree,first MTF industry row 2024-10-01
+255,daily,F&O daily rows added (Q2-Q4 FY24),186,186,,,agree,
+256,daily,F&O days after = days before + added (bridge before 634),820,820,,,agree,
+257,daily,F&O first day,2023-07-03,2023-07-03,,,agree,
+258,daily,F&O no day before 2023-07-03 (June rows),0,0,,,agree,
+259,daily,Cash daily rows added (Q2-Q4 FY24),186,186,,,agree,
+260,daily,Cash days after = days before + added (bridge before 634),820,820,,,agree,
+261,daily,Cash first day,2023-07-03,2023-07-03,,,agree,
+262,daily,Cash no day before 2023-07-03 (June rows),0,0,,,agree,
+263,daily,Commodities daily rows added (Q2-Q4 FY24),183,183,,,agree,
+264,daily,Commodities days after = days before + added (bridge before 660),843,843,,,agree,
+265,daily,Commodities first day,2023-07-03,2023-07-03,,,agree,
+266,daily,Commodities no day before 2023-07-03 (June rows),0,0,,,agree,
+267,param,Cash 'delivery ratio' H Q2 FY 2024,2.5118152125026683,2.5118,6.056378109546498e-06,5e-05,agree,
+268,param,Cash 'delivery ratio' H Q3 FY 2024,2.3929655162351944,2.393,1.4410265275977963e-05,5e-05,agree,
+269,param,Cash 'delivery ratio' H Q4 FY 2024,2.452184831623989,2.4522,6.185619448164061e-06,5e-05,agree,
+270,param,Cash gross per Rs of reported ADTO J Q2 FY 2024,0.08214505310256433,0.0821,0.0005484578908004255,5e-05,agree,
+271,param,Cash gross per Rs of reported ADTO J Q3 FY 2024,0.07903832771679553,0.079,0.000484925705068856,5e-05,agree,
+272,param,Cash gross per Rs of reported ADTO J Q4 FY 2024,0.07807052784566257,0.0781,0.00037736433210543315,5e-05,agree,
+273,param,Cash model gross brokerage Rs Cr Q2 FY 2024,197.87272336449996,197.87,1.3763213310306667e-05,0.005,agree,
+274,param,Cash model gross brokerage Rs Cr Q3 FY 2024,221.06881082090004,221.07,5.3791970866818335e-06,0.005,agree,
+275,param,Cash model gross brokerage Rs Cr Q4 FY 2024,316.9478698916,316.95,6.720644896568582e-06,0.005,agree,
+276,param,Cash model net brokerage Rs Cr Q2 FY 2024,101.82642646209997,101.83,3.509317391755228e-05,0.005,agree,
+277,param,Cash model net brokerage Rs Cr Q3 FY 2024,118.18840584599995,118.19,1.3488061596120467e-05,0.005,agree,
+278,param,Cash model net brokerage Rs Cr Q4 FY 2024,166.41245291910005,166.41,1.4739997259961918e-05,0.005,agree,
+279,param,Cash net / gross Q2 FY 2024,0.5146056754600088,0.5146,1.1028755179922543e-05,5e-05,agree,
+280,param,Cash net / gross Q3 FY 2024,0.5346227059671069,0.5346,4.2471011525572625e-05,5e-05,agree,
+281,param,Cash net / gross Q4 FY 2024,0.5250467623461709,0.525,8.906320260292673e-05,5e-05,agree,
+282,param,Cash share (cancels) Q2 FY 2024,0.072539401,0.0725,0.0005431668783701198,5e-05,agree,
+283,param,Cash share (cancels) Q3 FY 2024,0.076870966,0.0769,0.000377555266579938,5e-05,agree,
+284,param,Cash share (cancels) Q4 FY 2024,0.08323862,0.0832,0.0004639673267048769,5e-05,agree,
+285,param,Commodities gross Rs per MOSL contract Q2 FY 2024,30.93958626195317,30.9396,4.4402793921504613e-07,5e-05,agree,
+286,param,Commodities gross Rs per MOSL contract Q3 FY 2024,25.23134308476405,25.2313,1.7075890055981535e-06,5e-05,agree,
+287,param,Commodities gross Rs per MOSL contract Q4 FY 2024,21.94872971404135,21.9487,1.3537932143332624e-06,5e-05,agree,
+288,param,Commodities model gross brokerage Rs Cr Q2 FY 2024,23.730465180700005,23.7305,1.4672805037560076e-06,5e-05,agree,
+289,param,Commodities model gross brokerage Rs Cr Q3 FY 2024,26.130392759800003,26.1304,2.770795701041018e-07,5e-05,agree,
+290,param,Commodities model gross brokerage Rs Cr Q4 FY 2024,29.98352260269999,29.9835,7.538373755643554e-07,5e-05,agree,
+291,param,Commodities model net brokerage Rs Cr Q2 FY 2024,14.798154339000002,14.7982,3.0855779755592387e-06,5e-05,agree,
+292,param,Commodities model net brokerage Rs Cr Q3 FY 2024,15.854465770999996,15.8545,2.158945410082946e-06,5e-05,agree,
+293,param,Commodities model net brokerage Rs Cr Q4 FY 2024,18.4445331746,18.4445,1.798614238950533e-06,5e-05,agree,
+294,param,Commodities net / gross Q2 FY 2024,0.6235930996850136,0.6236,1.1065290228355036e-05,5e-05,agree,
+295,param,Commodities net / gross Q3 FY 2024,0.6067442581801189,0.6067,7.29437147895431e-05,5e-05,agree,
+296,param,Commodities net / gross Q4 FY 2024,0.6151556446185906,0.6152,7.209912452754304e-05,5e-05,agree,
+297,param,Commodities share Q2 FY 2024,0.065298359,0.0653,2.5130168453241548e-05,5e-05,agree,
+298,param,Commodities share Q3 FY 2024,0.079353206,0.0794,0.0005893450881612441,5e-05,agree,
+299,param,Commodities share Q4 FY 2024,0.090715684,0.0907,0.00017289182320448488,5e-05,agree,
+300,param,F&O gross Rs per contract Q2 FY 2024,1.3578779982615137,1.3579,1.620276786687708e-05,5e-05,agree,
+301,param,F&O gross Rs per contract Q3 FY 2024,0.9418626649349454,0.9419,3.96380348811387e-05,5e-05,agree,
+302,param,F&O gross Rs per contract Q4 FY 2024,0.8701938782513372,0.8702,7.034875503066524e-06,5e-05,agree,
+303,param,F&O model gross brokerage Rs Cr Q2 FY 2024,259.1595695597001,259.16,1.6609056177968871e-06,0.005,agree,
+304,param,F&O model gross brokerage Rs Cr Q3 FY 2024,231.61909933260003,231.62,3.888556255828356e-06,0.005,agree,
+305,param,F&O model gross brokerage Rs Cr Q4 FY 2024,266.10693557890005,266.11,1.1515617977392677e-05,0.005,agree,
+306,param,F&O model net brokerage Rs Cr Q2 FY 2024,152.28850419079998,152.29,9.822110447229496e-06,0.005,agree,
+307,param,F&O model net brokerage Rs Cr Q3 FY 2024,133.91216293389996,133.91,1.615188532975154e-05,0.005,agree,
+308,param,F&O model net brokerage Rs Cr Q4 FY 2024,151.89817195420002,151.9,1.2034534562094746e-05,0.005,agree,
+309,param,F&O net / gross Q2 FY 2024,0.5876244680045234,0.5876,4.1638845649962e-05,5e-05,agree,
+310,param,F&O net / gross Q3 FY 2024,0.5781568243714005,0.5782,7.467248114764388e-05,5e-05,agree,
+311,param,F&O net / gross Q4 FY 2024,0.5708162834003347,0.5708,2.8526516864185184e-05,5e-05,agree,
+312,param,F&O premium share (cancels) Q2 FY 2024,0.076256995,0.0763,0.000563630406291122,5e-05,agree,
+313,param,F&O premium share (cancels) Q3 FY 2024,0.083104633,0.0831,5.574899777252953e-05,5e-05,agree,
+314,param,F&O premium share (cancels) Q4 FY 2024,0.087714069,0.0877,0.00016039616176061148,5e-05,agree,
+315,input,adto_cash_mosl Q2 FY 2024 live,2408.8209318879,2408.82,3.8686474671493606e-07,0.005,agree,
+316,input,adto_cash_mosl Q2 FY 2024 fact ids,20292,20292,,,agree,
+317,input,adto_cash_mosl Q2 FY 2024 workbook has no value (dash),—,—,,,agree,
+318,input,adto_cash_mosl Q3 FY 2024 live,2796.9823907841,2796.98,8.547726678298634e-07,0.005,agree,
+319,input,adto_cash_mosl Q3 FY 2024 fact ids,20293,20293,,,agree,
+320,input,adto_cash_mosl Q3 FY 2024 workbook has no value (dash),—,—,,,agree,
+321,input,adto_cash_mosl Q4 FY 2024 live,4059.7633785462995,4059.76,8.322027626288094e-07,0.005,agree,
+322,input,adto_cash_mosl Q4 FY 2024 fact ids,20294,20294,,,agree,
+323,input,adto_cash_mosl Q4 FY 2024 workbook has no value (dash),—,—,,,agree,
+324,input,gross_cash_cr Q2 FY 2024 live,197.87272336450002,197.87,1.3763213310593937e-05,0.005,agree,
+325,input,gross_cash_cr Q2 FY 2024 fact ids,20316,20316,,,agree,
+326,input,gross_cash_cr Q2 FY 2024 workbook has no value (dash),—,—,,,agree,
+327,input,gross_cash_cr Q3 FY 2024 live,221.06881082089998,221.07,5.379197086938962e-06,0.005,agree,
+328,input,gross_cash_cr Q3 FY 2024 fact ids,20317,20317,,,agree,
+329,input,gross_cash_cr Q3 FY 2024 workbook has no value (dash),—,—,,,agree,
+330,input,gross_cash_cr Q4 FY 2024 live,316.9478698916,316.95,6.720644896568582e-06,0.005,agree,
+331,input,gross_cash_cr Q4 FY 2024 fact ids,20318,20318,,,agree,
+332,input,gross_cash_cr Q4 FY 2024 workbook has no value (dash),—,—,,,agree,
+333,input,gross_comm_cr Q2 FY 2024 live,23.7304651807,23.7305,1.4672805039057184e-06,5e-05,agree,
+334,input,gross_comm_cr Q2 FY 2024 fact ids,20324,20324,,,agree,
+335,input,gross_comm_cr Q2 FY 2024 workbook has no value (dash),—,—,,,agree,
+336,input,gross_comm_cr Q3 FY 2024 live,26.130392759799996,26.1304,2.7707957037602367e-07,5e-05,agree,
+337,input,gross_comm_cr Q3 FY 2024 fact ids,20325,20325,,,agree,
+338,input,gross_comm_cr Q3 FY 2024 workbook has no value (dash),—,—,,,agree,
+339,input,gross_comm_cr Q4 FY 2024 live,29.9835226027,29.9835,7.538373759198218e-07,5e-05,agree,
+340,input,gross_comm_cr Q4 FY 2024 fact ids,20326,20326,,,agree,
+341,input,gross_comm_cr Q4 FY 2024 workbook has no value (dash),—,—,,,agree,
+342,input,gross_fo_cr Q2 FY 2024 live,259.1595695597,259.16,1.6609056182355615e-06,0.005,agree,
+343,input,gross_fo_cr Q2 FY 2024 fact ids,20320,20320,,,agree,
+344,input,gross_fo_cr Q2 FY 2024 workbook has no value (dash),—,—,,,agree,
+345,input,gross_fo_cr Q3 FY 2024 live,231.6190993326,231.62,3.8885562559510636e-06,0.005,agree,
+346,input,gross_fo_cr Q3 FY 2024 fact ids,20321,20321,,,agree,
+347,input,gross_fo_cr Q3 FY 2024 workbook has no value (dash),—,—,,,agree,
+348,input,gross_fo_cr Q4 FY 2024 live,266.1069355789,266.11,1.1515617977606285e-05,0.005,agree,
+349,input,gross_fo_cr Q4 FY 2024 fact ids,20322,20322,,,agree,
+350,input,gross_fo_cr Q4 FY 2024 workbook has no value (dash),—,—,,,agree,
+351,input,net_gross_cash Q2 FY 2024 live,0.5146056754600089,0.5146,1.1028755180138282e-05,5e-05,agree,
+352,input,net_gross_cash Q2 FY 2024 fact ids,"20336, 20316","20336, 20316",,,agree,
+353,input,net_gross_cash Q2 FY 2024 workbook has no value (dash),—,—,,,agree,
+354,input,net_gross_cash Q3 FY 2024 live,0.5346227059671069,0.5346,4.2471011525572625e-05,5e-05,agree,
+355,input,net_gross_cash Q3 FY 2024 fact ids,"20337, 20317","20337, 20317",,,agree,
+356,input,net_gross_cash Q3 FY 2024 workbook has no value (dash),—,—,,,agree,
+357,input,net_gross_cash Q4 FY 2024 live,0.5250467623461709,0.525,8.906320260292673e-05,5e-05,agree,
+358,input,net_gross_cash Q4 FY 2024 fact ids,"20338, 20318","20338, 20318",,,agree,
+359,input,net_gross_cash Q4 FY 2024 workbook has no value (dash),—,—,,,agree,
+360,input,net_gross_comm Q2 FY 2024 live,0.6235930996850136,0.6236,1.1065290228355036e-05,5e-05,agree,
+361,input,net_gross_comm Q2 FY 2024 fact ids,"20344, 20324","20344, 20324",,,agree,
+362,input,net_gross_comm Q2 FY 2024 workbook has no value (dash),—,—,,,agree,
+363,input,net_gross_comm Q3 FY 2024 live,0.6067442581801189,0.6067,7.29437147895431e-05,5e-05,agree,
+364,input,net_gross_comm Q3 FY 2024 fact ids,"20345, 20325","20345, 20325",,,agree,
+365,input,net_gross_comm Q3 FY 2024 workbook has no value (dash),—,—,,,agree,
+366,input,net_gross_comm Q4 FY 2024 live,0.6151556446185906,0.6152,7.209912452754304e-05,5e-05,agree,
+367,input,net_gross_comm Q4 FY 2024 fact ids,"20346, 20326","20346, 20326",,,agree,
+368,input,net_gross_comm Q4 FY 2024 workbook has no value (dash),—,—,,,agree,
+369,input,net_gross_fo Q2 FY 2024 live,0.5876244680045234,0.5876,4.1638845649962e-05,5e-05,agree,
+370,input,net_gross_fo Q2 FY 2024 fact ids,"20340, 20320","20340, 20320",,,agree,
+371,input,net_gross_fo Q2 FY 2024 workbook has no value (dash),—,—,,,agree,
+372,input,net_gross_fo Q3 FY 2024 live,0.5781568243714006,0.5782,7.467248114745187e-05,5e-05,agree,
+373,input,net_gross_fo Q3 FY 2024 fact ids,"20341, 20321","20341, 20321",,,agree,
+374,input,net_gross_fo Q3 FY 2024 workbook has no value (dash),—,—,,,agree,
+375,input,net_gross_fo Q4 FY 2024 live,0.5708162834003347,0.5708,2.8526516864185184e-05,5e-05,agree,
+376,input,net_gross_fo Q4 FY 2024 fact ids,"20342, 20322","20342, 20322",,,agree,
+377,input,net_gross_fo Q4 FY 2024 workbook has no value (dash),—,—,,,agree,
+378,input,share_cash Q2 FY 2024 live,0.072539401,0.0725,0.0005431668783701198,5e-05,agree,
+379,input,share_cash Q2 FY 2024 fact ids,20356,20356,,,agree,
+380,input,share_cash Q2 FY 2024 workbook has no value (dash),—,—,,,agree,
+381,input,share_cash Q3 FY 2024 live,0.076870966,0.0769,0.000377555266579938,5e-05,agree,
+382,input,share_cash Q3 FY 2024 fact ids,20357,20357,,,agree,
+383,input,share_cash Q3 FY 2024 workbook has no value (dash),—,—,,,agree,
+384,input,share_cash Q4 FY 2024 live,0.08323862,0.0832,0.0004639673267048769,5e-05,agree,
+385,input,share_cash Q4 FY 2024 fact ids,20358,20358,,,agree,
+386,input,share_cash Q4 FY 2024 workbook has no value (dash),—,—,,,agree,
+387,input,share_comm Q2 FY 2024 live,0.065298359,0.0653,2.5130168453241548e-05,5e-05,agree,
+388,input,share_comm Q2 FY 2024 fact ids,20364,20364,,,agree,
+389,input,share_comm Q2 FY 2024 workbook has no value (dash),—,—,,,agree,
+390,input,share_comm Q3 FY 2024 live,0.079353206,0.0794,0.0005893450881612441,5e-05,agree,
+391,input,share_comm Q3 FY 2024 fact ids,20365,20365,,,agree,
+392,input,share_comm Q3 FY 2024 workbook has no value (dash),—,—,,,agree,
+393,input,share_comm Q4 FY 2024 live,0.090715684,0.0907,0.00017289182320448488,5e-05,agree,
+394,input,share_comm Q4 FY 2024 fact ids,20366,20366,,,agree,
+395,input,share_comm Q4 FY 2024 workbook has no value (dash),—,—,,,agree,
+396,input,share_fo Q2 FY 2024 live,0.076256995,0.0763,0.000563630406291122,5e-05,agree,
+397,input,share_fo Q2 FY 2024 fact ids,20360,20360,,,agree,
+398,input,share_fo Q2 FY 2024 workbook has no value (dash),—,—,,,agree,
+399,input,share_fo Q3 FY 2024 live,0.083104633,0.0831,5.574899777252953e-05,5e-05,agree,
+400,input,share_fo Q3 FY 2024 fact ids,20361,20361,,,agree,
+401,input,share_fo Q3 FY 2024 workbook has no value (dash),—,—,,,agree,
+402,input,share_fo Q4 FY 2024 live,0.087714069,0.0877,0.00016039616176061148,5e-05,agree,
+403,input,share_fo Q4 FY 2024 fact ids,20362,20362,,,agree,
+404,input,share_fo Q4 FY 2024 workbook has no value (dash),—,—,,,agree,
+405,fy25+,FY 2027 Consolidated ADR after (FY25+ facts only; MTF taken from the bridge for Consolidated),8.71829441324692,8.718295,6.730135650386448e-08,1e-06,agree,
+406,fy25+,FY 2027 Consolidated: bridge before = after (0 change),True,True,,,agree,
+407,fy25+,FY 2027 Broking ADR after (FY25+ facts only; MTF taken from the bridge for Consolidated),4.440500413246919,4.4405,9.306314153912972e-08,5e-07,agree,
+408,fy25+,FY 2027 Broking: bridge before = after (0 change),True,True,,,agree,
+409,fy25+,FY 2027 F&O ADR after (FY25+ facts only; MTF taken from the bridge for Consolidated),1.8715441957292387,1.871544,1.0458168128821631e-07,5e-07,agree,
+410,fy25+,FY 2027 F&O: bridge before = after (0 change),True,True,,,agree,
+411,fy25+,FY 2027 Cash ADR after (FY25+ facts only; MTF taken from the bridge for Consolidated),2.0351854374951257,2.035185,2.149657313011148e-07,5e-07,agree,
+412,fy25+,FY 2027 Cash: bridge before = after (0 change),True,True,,,agree,
+413,fy25+,FY 2027 Commodities ADR after (FY25+ facts only; MTF taken from the bridge for Consolidated),0.5337707800225541,0.533771,4.1211951553288034e-07,5e-07,agree,
+414,fy25+,FY 2027 Commodities: bridge before = after (0 change),True,True,,,agree,
+415,fy25+,Q2 FY 2027 Consolidated ADR after (FY25+ facts only; MTF taken from the bridge for Consolidated),8.967059386748367,8.96706,6.838937540133533e-08,1e-06,agree,
+416,fy25+,Q2 FY 2027 Consolidated: bridge before = after (0 change),True,True,,,agree,
+417,fy25+,Q2 FY 2027 Broking ADR after (FY25+ facts only; MTF taken from the bridge for Consolidated),4.247980386748368,4.24798,9.10428797552707e-08,5e-07,agree,
+418,fy25+,Q2 FY 2027 Broking: bridge before = after (0 change),True,True,,,agree,
+419,fy25+,Q2 FY 2027 F&O ADR after (FY25+ facts only; MTF taken from the bridge for Consolidated),1.6946176419076928,1.694618,2.1131152102716492e-07,5e-07,agree,
+420,fy25+,Q2 FY 2027 F&O: bridge before = after (0 change),True,True,,,agree,
+421,fy25+,Q2 FY 2027 Cash ADR after (FY25+ facts only; MTF taken from the bridge for Consolidated),2.0313029103846145,2.031303,4.411719243002936e-08,5e-07,agree,
+422,fy25+,Q2 FY 2027 Cash: bridge before = after (0 change),True,True,,,agree,
+423,fy25+,Q2 FY 2027 Commodities ADR after (FY25+ facts only; MTF taken from the bridge for Consolidated),0.5220598344560606,0.52206,3.17097535406723e-07,5e-07,agree,
+424,fy25+,Q2 FY 2027 Commodities: bridge before = after (0 change),True,True,,,agree,
+425,fy25+,Q1 FY 2027 Consolidated ADR after (FY25+ facts only; MTF taken from the bridge for Consolidated),8.197926834941876,8.197926,1.0184792965941014e-07,1e-06,agree,
+426,fy25+,Q1 FY 2027 Consolidated: bridge before = after (0 change),True,True,,,agree,
+427,fy25+,Q1 FY 2027 Broking ADR after (FY25+ facts only; MTF taken from the bridge for Consolidated),4.5445878349418765,4.544588,3.631971118469892e-08,5e-07,agree,
+428,fy25+,Q1 FY 2027 Broking: bridge before = after (0 change),True,True,,,agree,
+429,fy25+,Q1 FY 2027 F&O ADR after (FY25+ facts only; MTF taken from the bridge for Consolidated),1.9633209135850014,1.963321,4.401470707658817e-08,5e-07,agree,
+430,fy25+,Q1 FY 2027 F&O: bridge before = after (0 change),True,True,,,agree,
+431,fy25+,Q1 FY 2027 Cash ADR after (FY25+ facts only; MTF taken from the bridge for Consolidated),2.06067515361,2.060675,7.454353006884582e-08,5e-07,agree,
+432,fy25+,Q1 FY 2027 Cash: bridge before = after (0 change),True,True,,,agree,
+433,fy25+,Q1 FY 2027 Commodities ADR after (FY25+ facts only; MTF taken from the bridge for Consolidated),0.5205917677468749,0.520592,4.4613272039598156e-07,5e-07,agree,
+434,fy25+,Q1 FY 2027 Commodities: bridge before = after (0 change),True,True,,,agree,
+435,fy25+,FY 2027 October Consolidated ADR after (FY25+ facts only; MTF taken from the bridge for Consolidated),9.876512779303265,9.876513,2.2345612644564315e-08,5e-07,agree,
+436,fy25+,FY 2027 October Consolidated: bridge before = after (0 change),True,True,,,agree,
+437,fy25+,FY 2027 October Broking ADR after (FY25+ facts only; MTF taken from the bridge for Consolidated),4.918771779303266,4.918772,4.486825853627772e-08,5e-07,agree,
+438,fy25+,FY 2027 October Broking: bridge before = after (0 change),True,True,,,agree,
+439,fy25+,FY 2027 October F&O ADR after (FY25+ facts only; MTF taken from the bridge for Consolidated),2.332592113194987,2.332592,4.852755289748918e-08,5e-07,agree,
+440,fy25+,FY 2027 October F&O: bridge before = after (0 change),True,True,,,agree,
+441,fy25+,FY 2027 October Cash ADR after (FY25+ facts only; MTF taken from the bridge for Consolidated),1.9369532294405798,1.936953,1.1845437276505046e-07,5e-07,agree,
+442,fy25+,FY 2027 October Cash: bridge before = after (0 change),True,True,,,agree,
+443,fy25+,FY 2027 October Commodities ADR after (FY25+ facts only; MTF taken from the bridge for Consolidated),0.6492264366676987,0.649226,6.725969155214929e-07,5e-07,agree,
+444,fy25+,FY 2027 October Commodities: bridge before = after (0 change),True,True,,,agree,
+445,fy25+,FY 2026 Consolidated ADR after (FY25+ facts only; MTF taken from the bridge for Consolidated),7.662289832953528,7.66229,2.1801115823890927e-08,5e-07,agree,
+446,fy25+,FY 2026 Consolidated: bridge before = after (0 change),True,True,,,agree,
+447,fy25+,FY 2026 Broking ADR after (FY25+ facts only; MTF taken from the bridge for Consolidated),4.348882832953527,4.348883,3.841135129513018e-08,5e-07,agree,
+448,fy25+,FY 2026 Broking: bridge before = after (0 change),True,True,,,agree,
+449,fy25+,FY 2026 F&O ADR after (FY25+ facts only; MTF taken from the bridge for Consolidated),1.8578279980335404,1.857828,1.0584723999062353e-09,5e-07,agree,
+450,fy25+,FY 2026 F&O: bridge before = after (0 change),True,True,,,agree,
+451,fy25+,FY 2026 Cash ADR after (FY25+ facts only; MTF taken from the bridge for Consolidated),1.8880622201339226,1.888062,1.1659251495978586e-07,5e-07,agree,
+452,fy25+,FY 2026 Cash: bridge before = after (0 change),True,True,,,agree,
+453,fy25+,FY 2026 Commodities ADR after (FY25+ facts only; MTF taken from the bridge for Consolidated),0.6029926147860643,0.602993,6.388364968575751e-07,5e-07,agree,
+454,fy25+,FY 2026 Commodities: bridge before = after (0 change),True,True,,,agree,
+455,cells,new-cell rows derived from the rules vs the bridge table (count),38,38,,,agree,
+456,cells,"new-cell rows: sets equal (my-only 0, bridge-only 0)",True,True,,,agree,my-only []; bridge-only []
+457,cells,"cells = rows x 4 panels (Broking, Cash, Commodities, F&O)",152,152,,,agree,
+458,cells,every bridge row lists the four panels,True,True,,,agree,
+459,newcell,FY 2025 April | Avg of last 6 months | value | Broking,5.133430117423721,,,,recomputed,Rs Cr/day
+460,newcell,FY 2025 April | Avg of last 6 months | value | F&O,2.379314195017559,,,,recomputed,Rs Cr/day
+461,newcell,FY 2025 April | Avg of last 6 months | value | Cash,2.4688437257601277,,,,recomputed,Rs Cr/day
+462,newcell,FY 2025 April | Avg of last 6 months | value | Commodities,0.2852721966460348,,,,recomputed,Rs Cr/day
+463,newcell,FY 2025 April | FY 2024 March | value | Broking,5.322453349593654,,,,recomputed,Rs Cr/day
+464,newcell,FY 2025 April | FY 2024 March | value | F&O,2.5098661860636877,,,,recomputed,Rs Cr/day
+465,newcell,FY 2025 April | FY 2024 March | value | Cash,2.515883410619196,,,,recomputed,Rs Cr/day
+466,newcell,FY 2025 April | FY 2024 March | value | Commodities,0.2967037529107699,,,,recomputed,Rs Cr/day
+467,newcell,FY 2025 April | FY 2025 April | comparison | Broking,-0.11050931300924116,,,,recomputed,ratio
+468,newcell,FY 2025 April | FY 2025 April | comparison | F&O,-0.14535528596477243,,,,recomputed,ratio
+469,newcell,FY 2025 April | FY 2025 April | comparison | Cash,-0.07862736519221725,,,,recomputed,ratio
+470,newcell,FY 2025 April | FY 2025 April | comparison | Commodities,-0.0860827071459852,,,,recomputed,ratio
+471,newcell,FY 2025 April | FY 2025 April / vs 6M | comparison | Broking,-0.07775647508331507,,,,recomputed,ratio
+472,newcell,FY 2025 April | FY 2025 April / vs 6M | comparison | F&O,-0.09846128210097216,,,,recomputed,ratio
+473,newcell,FY 2025 April | FY 2025 April / vs 6M | comparison | Cash,-0.061072151823747145,,,,recomputed,ratio
+474,newcell,FY 2025 April | FY 2025 April / vs 6M | comparison | Commodities,-0.049459800751997296,,,,recomputed,ratio
+475,newcell,FY 2025 August | Avg of last 6 months | value | Broking,5.590146424259507,,,,recomputed,Rs Cr/day
+476,newcell,FY 2025 August | Avg of last 6 months | value | F&O,2.446819096156675,,,,recomputed,Rs Cr/day
+477,newcell,FY 2025 August | Avg of last 6 months | value | Cash,2.831871429327349,,,,recomputed,Rs Cr/day
+478,newcell,FY 2025 August | Avg of last 6 months | value | Commodities,0.31145589877548346,,,,recomputed,Rs Cr/day
+479,newcell,FY 2025 August | FY 2024 August | value | Broking,4.343367908673131,,,,recomputed,Rs Cr/day
+480,newcell,FY 2025 August | FY 2024 August | value | F&O,2.4769731134183774,,,,recomputed,Rs Cr/day
+481,newcell,FY 2025 August | FY 2024 August | value | Cash,1.6169885628230771,,,,recomputed,Rs Cr/day
+482,newcell,FY 2025 August | FY 2024 August | value | Commodities,0.24940623243167667,,,,recomputed,Rs Cr/day
+483,newcell,FY 2025 August | FY 2025 August / YoY | comparison | Broking,0.33001037698563085,,,,recomputed,ratio
+484,newcell,FY 2025 August | FY 2025 August / YoY | comparison | F&O,-0.0028556238492795094,,,,recomputed,ratio
+485,newcell,FY 2025 August | FY 2025 August / YoY | comparison | Cash,0.8243434832992933,,,,recomputed,ratio
+486,newcell,FY 2025 August | FY 2025 August / YoY | comparison | Commodities,0.4309266815213302,,,,recomputed,ratio
+487,newcell,FY 2025 August | FY 2025 August / vs 6M | comparison | Broking,0.033376221512274595,,,,recomputed,ratio
+488,newcell,FY 2025 August | FY 2025 August / vs 6M | comparison | F&O,0.009432946555490984,,,,recomputed,ratio
+489,newcell,FY 2025 August | FY 2025 August / vs 6M | comparison | Cash,0.04169367175559491,,,,recomputed,ratio
+490,newcell,FY 2025 August | FY 2025 August / vs 6M | comparison | Commodities,0.14585093404013239,,,,recomputed,ratio
+491,newcell,FY 2025 December | FY 2024 December | value | Broking,5.297886893292787,,,,recomputed,Rs Cr/day
+492,newcell,FY 2025 December | FY 2024 December | value | F&O,2.4739067777477715,,,,recomputed,Rs Cr/day
+493,newcell,FY 2025 December | FY 2024 December | value | Cash,2.52954415291106,,,,recomputed,Rs Cr/day
+494,newcell,FY 2025 December | FY 2024 December | value | Commodities,0.2944359626339569,,,,recomputed,Rs Cr/day
+495,newcell,FY 2025 December | FY 2025 December / YoY | comparison | Broking,-0.2492320998563573,,,,recomputed,ratio
+496,newcell,FY 2025 December | FY 2025 December / YoY | comparison | F&O,-0.3852533844259224,,,,recomputed,ratio
+497,newcell,FY 2025 December | FY 2025 December / YoY | comparison | Cash,-0.1853766997856383,,,,recomputed,ratio
+498,newcell,FY 2025 December | FY 2025 December / YoY | comparison | Commodities,0.34505306275964753,,,,recomputed,ratio
+499,newcell,FY 2025 February | FY 2024 February | value | Broking,5.676691193112216,,,,recomputed,Rs Cr/day
+500,newcell,FY 2025 February | FY 2024 February | value | F&O,2.5249862780455383,,,,recomputed,Rs Cr/day
+501,newcell,FY 2025 February | FY 2024 February | value | Cash,2.8626982482265197,,,,recomputed,Rs Cr/day
+502,newcell,FY 2025 February | FY 2024 February | value | Commodities,0.2890066668401583,,,,recomputed,Rs Cr/day
+503,newcell,FY 2025 February | FY 2025 February / YoY | comparison | Broking,-0.43438159286706834,,,,recomputed,ratio
+504,newcell,FY 2025 February | FY 2025 February / YoY | comparison | F&O,-0.44093589943885336,,,,recomputed,ratio
+505,newcell,FY 2025 February | FY 2025 February / YoY | comparison | Cash,-0.5107108726058303,,,,recomputed,ratio
+506,newcell,FY 2025 February | FY 2025 February / YoY | comparison | Commodities,0.3789464598121113,,,,recomputed,ratio
+507,newcell,FY 2025 January | FY 2024 January | value | Broking,5.605495294569418,,,,recomputed,Rs Cr/day
+508,newcell,FY 2025 January | FY 2024 January | value | F&O,2.486574124243353,,,,recomputed,Rs Cr/day
+509,newcell,FY 2025 January | FY 2024 January | value | Cash,2.7991609149368464,,,,recomputed,Rs Cr/day
+510,newcell,FY 2025 January | FY 2024 January | value | Commodities,0.31976025538921893,,,,recomputed,Rs Cr/day
+511,newcell,FY 2025 January | FY 2025 January / YoY | comparison | Broking,-0.300252500551506,,,,recomputed,ratio
+512,newcell,FY 2025 January | FY 2025 January / YoY | comparison | F&O,-0.18517488785672975,,,,recomputed,ratio
+513,newcell,FY 2025 January | FY 2025 January / YoY | comparison | Cash,-0.46891431380622706,,,,recomputed,ratio
+514,newcell,FY 2025 January | FY 2025 January / YoY | comparison | Commodities,0.28131615397719933,,,,recomputed,ratio
+515,newcell,FY 2025 July | Avg of last 6 months | value | Broking,5.573341827463705,,,,recomputed,Rs Cr/day
+516,newcell,FY 2025 July | Avg of last 6 months | value | F&O,2.4563795575666014,,,,recomputed,Rs Cr/day
+517,newcell,FY 2025 July | Avg of last 6 months | value | Cash,2.8167298567859094,,,,recomputed,Rs Cr/day
+518,newcell,FY 2025 July | Avg of last 6 months | value | Commodities,0.30023241311119353,,,,recomputed,Rs Cr/day
+519,newcell,FY 2025 July | FY 2024 July | value | Broking,3.7118384930967765,,,,recomputed,Rs Cr/day
+520,newcell,FY 2025 July | FY 2024 July | value | F&O,2.0031938684097534,,,,recomputed,Rs Cr/day
+521,newcell,FY 2025 July | FY 2024 July | value | Cash,1.4986097464221482,,,,recomputed,Rs Cr/day
+522,newcell,FY 2025 July | FY 2024 July | value | Commodities,0.21003487826487485,,,,recomputed,Rs Cr/day
+523,newcell,FY 2025 July | FY 2025 July / YoY | comparison | Broking,0.5631150312263113,,,,recomputed,ratio
+524,newcell,FY 2025 July | FY 2025 July / YoY | comparison | F&O,0.12460776514976657,,,,recomputed,ratio
+525,newcell,FY 2025 July | FY 2025 July / YoY | comparison | Cash,1.1754034997790876,,,,recomputed,ratio
+526,newcell,FY 2025 July | FY 2025 July / YoY | comparison | Commodities,0.3766393360418667,,,,recomputed,ratio
+527,newcell,FY 2025 July | FY 2025 July / vs 6M | comparison | Broking,0.04103260156292232,,,,recomputed,ratio
+528,newcell,FY 2025 July | FY 2025 July / vs 6M | comparison | F&O,-0.08287488691456979,,,,recomputed,ratio
+529,newcell,FY 2025 July | FY 2025 July / vs 6M | comparison | Cash,0.15739920153002473,,,,recomputed,ratio
+530,newcell,FY 2025 July | FY 2025 July / vs 6M | comparison | Commodities,-0.03693850919052699,,,,recomputed,ratio
+531,newcell,FY 2025 June | Avg of last 6 months | value | Broking,5.537025869027096,,,,recomputed,Rs Cr/day
+532,newcell,FY 2025 June | Avg of last 6 months | value | F&O,2.498985172711341,,,,recomputed,Rs Cr/day
+533,newcell,FY 2025 June | Avg of last 6 months | value | Cash,2.7323742697252795,,,,recomputed,Rs Cr/day
+534,newcell,FY 2025 June | Avg of last 6 months | value | Commodities,0.30566642659047616,,,,recomputed,Rs Cr/day
+535,newcell,FY 2025 June | FY 2025 June / vs 6M | comparison | Broking,0.15889439433939545,,,,recomputed,ratio
+536,newcell,FY 2025 June | FY 2025 June / vs 6M | comparison | F&O,0.08836818266178192,,,,recomputed,ratio
+537,newcell,FY 2025 June | FY 2025 June / vs 6M | comparison | Cash,0.23061738474714621,,,,recomputed,ratio
+538,newcell,FY 2025 June | FY 2025 June / vs 6M | comparison | Commodities,0.09434659140234491,,,,recomputed,ratio
+539,newcell,FY 2025 March | FY 2024 March | value | Broking,5.322453349593654,,,,recomputed,Rs Cr/day
+540,newcell,FY 2025 March | FY 2024 March | value | F&O,2.5098661860636877,,,,recomputed,Rs Cr/day
+541,newcell,FY 2025 March | FY 2024 March | value | Cash,2.515883410619196,,,,recomputed,Rs Cr/day
+542,newcell,FY 2025 March | FY 2024 March | value | Commodities,0.2967037529107699,,,,recomputed,Rs Cr/day
+543,newcell,FY 2025 March | FY 2025 March / YoY | comparison | Broking,-0.31931647715269174,,,,recomputed,ratio
+544,newcell,FY 2025 March | FY 2025 March / YoY | comparison | F&O,-0.31216714482991115,,,,recomputed,ratio
+545,newcell,FY 2025 March | FY 2025 March / YoY | comparison | Cash,-0.39488996196741855,,,,recomputed,ratio
+546,newcell,FY 2025 March | FY 2025 March / YoY | comparison | Commodities,0.2610274099364549,,,,recomputed,ratio
+547,newcell,FY 2025 May | Avg of last 6 months | value | Broking,5.359372461313158,,,,recomputed,Rs Cr/day
+548,newcell,FY 2025 May | Avg of last 6 months | value | F&O,2.4601640761387396,,,,recomputed,Rs Cr/day
+549,newcell,FY 2025 May | Avg of last 6 months | value | Cash,2.59990212515719,,,,recomputed,Rs Cr/day
+550,newcell,FY 2025 May | Avg of last 6 months | value | Commodities,0.2993062600172278,,,,recomputed,Rs Cr/day
+551,newcell,FY 2025 May | FY 2025 May / vs 6M | comparison | Broking,0.02269054864877118,,,,recomputed,ratio
+552,newcell,FY 2025 May | FY 2025 May / vs 6M | comparison | F&O,0.06226907337111909,,,,recomputed,ratio
+553,newcell,FY 2025 May | FY 2025 May / vs 6M | comparison | Cash,-0.021006961088273712,,,,recomputed,ratio
+554,newcell,FY 2025 May | FY 2025 May / vs 6M | comparison | Commodities,0.07694796284383987,,,,recomputed,ratio
+555,newcell,FY 2025 November | FY 2024 November | value | Broking,4.131603845806667,,,,recomputed,Rs Cr/day
+556,newcell,FY 2025 November | FY 2024 November | value | F&O,2.135916533641839,,,,recomputed,Rs Cr/day
+557,newcell,FY 2025 November | FY 2024 November | value | Cash,1.7562048838594921,,,,recomputed,Rs Cr/day
+558,newcell,FY 2025 November | FY 2024 November | value | Commodities,0.23948242830533553,,,,recomputed,Rs Cr/day
+559,newcell,FY 2025 November | FY 2025 November / YoY | comparison | Broking,0.20048639329238416,,,,recomputed,ratio
+560,newcell,FY 2025 November | FY 2025 November / YoY | comparison | F&O,0.1528953398323578,,,,recomputed,ratio
+561,newcell,FY 2025 November | FY 2025 November / YoY | comparison | Cash,0.18670890519442174,,,,recomputed,ratio
+562,newcell,FY 2025 November | FY 2025 November / YoY | comparison | Commodities,0.7259805212507309,,,,recomputed,ratio
+563,newcell,FY 2025 October | FY 2024 October | value | Broking,3.940455730914664,,,,recomputed,Rs Cr/day
+564,newcell,FY 2025 October | FY 2024 October | value | F&O,2.075508335910576,,,,recomputed,Rs Cr/day
+565,newcell,FY 2025 October | FY 2024 October | value | Cash,1.6061424973933804,,,,recomputed,Rs Cr/day
+566,newcell,FY 2025 October | FY 2024 October | value | Commodities,0.2588048976107076,,,,recomputed,Rs Cr/day
+567,newcell,FY 2025 October | FY 2025 October / YoY | comparison | Broking,0.3126955043588062,,,,recomputed,ratio
+568,newcell,FY 2025 October | FY 2025 October / YoY | comparison | F&O,0.28329178004211,,,,recomputed,ratio
+569,newcell,FY 2025 October | FY 2025 October / YoY | comparison | Cash,0.3240938638320736,,,,recomputed,ratio
+570,newcell,FY 2025 October | FY 2025 October / YoY | comparison | Commodities,0.47776303503512807,,,,recomputed,ratio
+571,newcell,FY 2025 September | FY 2024 September | value | Broking,4.783415144886994,,,,recomputed,Rs Cr/day
+572,newcell,FY 2025 September | FY 2024 September | value | F&O,2.7864012229495434,,,,recomputed,Rs Cr/day
+573,newcell,FY 2025 September | FY 2024 September | value | Cash,1.7390936702563586,,,,recomputed,Rs Cr/day
+574,newcell,FY 2025 September | FY 2024 September | value | Commodities,0.2579202516810916,,,,recomputed,Rs Cr/day
+575,newcell,FY 2025 September | FY 2025 September / YoY | comparison | Broking,0.21643111745570032,,,,recomputed,ratio
+576,newcell,FY 2025 September | FY 2025 September / YoY | comparison | F&O,-0.08853489515838608,,,,recomputed,ratio
+577,newcell,FY 2025 September | FY 2025 September / YoY | comparison | Cash,0.6322467423507403,,,,recomputed,ratio
+578,newcell,FY 2025 September | FY 2025 September / YoY | comparison | Commodities,0.7073400260505722,,,,recomputed,ratio
+579,newcell,Q1 FY 2025 | Q1 FY 2025 | comparison | Broking,-0.0031976326117177933,,,,recomputed,ratio
+580,newcell,Q1 FY 2025 | Q1 FY 2025 | comparison | F&O,-0.006398727342248556,,,,recomputed,ratio
+581,newcell,Q1 FY 2025 | Q1 FY 2025 | comparison | Cash,-0.0029538352107242316,,,,recomputed,ratio
+582,newcell,Q1 FY 2025 | Q1 FY 2025 | comparison | Commodities,0.02113694863898319,,,,recomputed,ratio
+583,newcell,Q1 FY 2025 | Q4 FY 2024 | value | Broking,5.545791123218075,,,,recomputed,Rs Cr/day
+584,newcell,Q1 FY 2025 | Q4 FY 2024 | value | F&O,2.5070059966202183,,,,recomputed,Rs Cr/day
+585,newcell,Q1 FY 2025 | Q4 FY 2024 | value | Cash,2.736415730292938,,,,recomputed,Rs Cr/day
+586,newcell,Q1 FY 2025 | Q4 FY 2024 | value | Commodities,0.30236939630491805,,,,recomputed,Rs Cr/day
+587,newcell,Q2 FY 2025 | Q2 FY 2024 | value | Broking,4.272250236517357,,,,recomputed,Rs Cr/day
+588,newcell,Q2 FY 2025 | Q2 FY 2024 | value | F&O,2.4172778442984124,,,,recomputed,Rs Cr/day
+589,newcell,Q2 FY 2025 | Q2 FY 2024 | value | Cash,1.6162924835253965,,,,recomputed,Rs Cr/day
+590,newcell,Q2 FY 2025 | Q2 FY 2024 | value | Commodities,0.2386799086935484,,,,recomputed,Rs Cr/day
+591,newcell,Q2 FY 2025 | Q2 FY 2025 / YoY | comparison | Broking,0.35715123715552743,,,,recomputed,ratio
+592,newcell,Q2 FY 2025 | Q2 FY 2025 / YoY | comparison | F&O,0.0003731823125305844,,,,recomputed,ratio
+593,newcell,Q2 FY 2025 | Q2 FY 2025 / YoY | comparison | Cash,0.8684911274025822,,,,recomputed,ratio
+594,newcell,Q2 FY 2025 | Q2 FY 2025 / YoY | comparison | Commodities,0.5078001391417037,,,,recomputed,ratio
+595,newcell,Q3 FY 2025 | Q3 FY 2024 | value | Broking,4.456648823338039,,,,recomputed,Rs Cr/day
+596,newcell,Q3 FY 2025 | Q3 FY 2024 | value | F&O,2.228443882433395,,,,recomputed,Rs Cr/day
+597,newcell,Q3 FY 2025 | Q3 FY 2024 | value | Cash,1.96396384472131,,,,recomputed,Rs Cr/day
+598,newcell,Q3 FY 2025 | Q3 FY 2024 | value | Commodities,0.26424109618333325,,,,recomputed,Rs Cr/day
+599,newcell,Q3 FY 2025 | Q3 FY 2025 / YoY | comparison | Broking,0.05437118676600372,,,,recomputed,ratio
+600,newcell,Q3 FY 2025 | Q3 FY 2025 / YoY | comparison | F&O,-0.007917937177191137,,,,recomputed,ratio
+601,newcell,Q3 FY 2025 | Q3 FY 2025 / YoY | comparison | Cash,0.06487590717479397,,,,recomputed,ratio
+602,newcell,Q3 FY 2025 | Q3 FY 2025 / YoY | comparison | Commodities,0.5016026273651857,,,,recomputed,ratio
+603,newcell,Q4 FY 2025 | Q4 FY 2024 | value | Broking,5.545791123218075,,,,recomputed,Rs Cr/day
+604,newcell,Q4 FY 2025 | Q4 FY 2024 | value | F&O,2.5070059966202183,,,,recomputed,Rs Cr/day
+605,newcell,Q4 FY 2025 | Q4 FY 2024 | value | Cash,2.736415730292938,,,,recomputed,Rs Cr/day
+606,newcell,Q4 FY 2025 | Q4 FY 2024 | value | Commodities,0.30236939630491805,,,,recomputed,Rs Cr/day
+607,newcell,Q4 FY 2025 | Q4 FY 2025 / YoY | comparison | Broking,-0.34961665206899784,,,,recomputed,ratio
+608,newcell,Q4 FY 2025 | Q4 FY 2025 / YoY | comparison | F&O,-0.3054036869112141,,,,recomputed,ratio
+609,newcell,Q4 FY 2025 | Q4 FY 2025 / YoY | comparison | Cash,-0.46244109032360803,,,,recomputed,ratio
+610,newcell,Q4 FY 2025 | Q4 FY 2025 / YoY | comparison | Commodities,0.30485566305542977,,,,recomputed,ratio
+611,newcell-tie,FY 2025 April | Avg of last 6 months | Broking value = F&O + Cash + Commodities,5.133430117423721,5.133430117423721,0.0,1e-12,agree,
+612,newcell-tie,FY 2025 April | FY 2024 March | Broking value = F&O + Cash + Commodities,5.322453349593654,5.322453349593654,0.0,1e-12,agree,
+613,newcell-tie,FY 2025 August | Avg of last 6 months | Broking value = F&O + Cash + Commodities,5.590146424259507,5.590146424259507,0.0,1e-12,agree,
+614,newcell-tie,FY 2025 August | FY 2024 August | Broking value = F&O + Cash + Commodities,4.343367908673131,4.343367908673131,0.0,1e-12,agree,
+615,newcell-tie,FY 2025 December | FY 2024 December | Broking value = F&O + Cash + Commodities,5.297886893292787,5.297886893292787,0.0,1e-12,agree,
+616,newcell-tie,FY 2025 February | FY 2024 February | Broking value = F&O + Cash + Commodities,5.676691193112216,5.676691193112216,0.0,1e-12,agree,
+617,newcell-tie,FY 2025 January | FY 2024 January | Broking value = F&O + Cash + Commodities,5.605495294569418,5.605495294569418,0.0,1e-12,agree,
+618,newcell-tie,FY 2025 July | Avg of last 6 months | Broking value = F&O + Cash + Commodities,5.573341827463705,5.573341827463705,0.0,1e-12,agree,
+619,newcell-tie,FY 2025 July | FY 2024 July | Broking value = F&O + Cash + Commodities,3.7118384930967765,3.7118384930967765,0.0,1e-12,agree,
+620,newcell-tie,FY 2025 June | Avg of last 6 months | Broking value = F&O + Cash + Commodities,5.537025869027096,5.537025869027096,0.0,1e-12,agree,
+621,newcell-tie,FY 2025 March | FY 2024 March | Broking value = F&O + Cash + Commodities,5.322453349593654,5.322453349593654,0.0,1e-12,agree,
+622,newcell-tie,FY 2025 May | Avg of last 6 months | Broking value = F&O + Cash + Commodities,5.359372461313158,5.359372461313158,0.0,1e-12,agree,
+623,newcell-tie,FY 2025 November | FY 2024 November | Broking value = F&O + Cash + Commodities,4.131603845806667,4.131603845806667,0.0,1e-12,agree,
+624,newcell-tie,FY 2025 October | FY 2024 October | Broking value = F&O + Cash + Commodities,3.940455730914664,3.940455730914664,0.0,1e-12,agree,
+625,newcell-tie,FY 2025 September | FY 2024 September | Broking value = F&O + Cash + Commodities,4.783415144886994,4.783415144886994,0.0,1e-12,agree,
+626,newcell-tie,Q1 FY 2025 | Q4 FY 2024 | Broking value = F&O + Cash + Commodities,5.545791123218075,5.545791123218075,0.0,1e-12,agree,
+627,newcell-tie,Q2 FY 2025 | Q2 FY 2024 | Broking value = F&O + Cash + Commodities,4.272250236517357,4.272250236517357,0.0,1e-12,agree,
+628,newcell-tie,Q3 FY 2025 | Q3 FY 2024 | Broking value = F&O + Cash + Commodities,4.456648823338039,4.456648823338039,0.0,1e-12,agree,
+629,newcell-tie,Q4 FY 2025 | Q4 FY 2024 | Broking value = F&O + Cash + Commodities,5.545791123218075,5.545791123218075,0.0,1e-12,agree,
+630,newcell,all 152 recomputed cells are numbers (no insufficient data left),True,True,,,agree,
