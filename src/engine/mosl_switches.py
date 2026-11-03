@@ -1,4 +1,5 @@
-"""MOSL parity -> live switches m-a ... m-f (docs/MOSL_LIVE_SPEC.md, approved by AB on 2 Nov 2026), applied in order a -> f.
+"""MOSL parity -> live switches m-a ... m-f (docs/MOSL_LIVE_SPEC.md, approved by AB on 2 Nov 2026), applied in order a -> f,
+and the optional m-g (FY24 quarters; EXTRA, off in the published chain until AB approves it).
 
 Same discipline as Angel's and Groww's switches (src/engine/switches.py, groww_switches.py):
 - a switch is a named, independent addition; with none on, MOSL is the workbook (264 / 264 cells);
@@ -22,6 +23,11 @@ What each switch does (the engine reads them through MoslInputs.on(letter), src/
   f  MTF yield: the workbook's typed NII yields kept, the last (12.94%) carried for later quarters from the labelled
      assumption `mtf_nii_yield_carry` ([SOURCE NEEDED: MOSL does not publish an MTF yield])
 
+  g  (not approved) MOSL's quarters start at Q2 FY24: F&O, cash and commodities calibrate Q2 - Q4 FY24 as m-a does for
+     FY25+, from the 116 FY24 candidate facts (out/mosl/facts_candidates_fy24.json; the fixture
+     snapshot/mosl_facts_fy24_candidates_*.json loads them as if reviewed, for the m-g bridge only). Q1 FY24 is not
+     calibrated: no revenue row before Q2 FY24, and MTF still starts Q3 FY25 (so Consolidated FY24 stays insufficient)
+
 Units. The candidates are in the data book's Rs Mn (x10 of its Rs Cr) and Rs Mn per day; the engine reads Rs Cr and
 Rs Cr per day, so each fact is declared with its source unit and divided by 10. Net / gross = net brokerage / gross
 brokerage of the same segment and quarter (two facts).
@@ -32,8 +38,10 @@ from collections import namedtuple
 
 from .inputs import quarter_seq
 
-ORDER = 'abcdef'
-ALL = ORDER
+ORDER = 'abcdef'                      # the published chain
+EXTRA = 'g'                           # m-g: FY24 quarters; off until AB approves it
+ALL = ORDER + EXTRA
+REQUIRES = {'g': 'a'}                 # g adds FY24 quarters to the calibration a builds
 
 DESCRIPTIONS = {
     'a': 'Reported quarters from the data book: Q1 FY25 - Q2 FY27 calibrated from facts; Q2 FY27 actual; Q1 FY27 cash gross fed',
@@ -42,12 +50,17 @@ DESCRIPTIONS = {
     'd': 'Periods and comparisons from the calendar; special sessions out of the F&O, cash and commodity averages',
     'e': "One estimate rule: the open quarter carries the last reported quarter's net revenue per unit of key and its net / gross",
     'f': 'MTF yield: typed NII yields kept, the last carried as a labelled assumption (MOSL publishes no MTF yield)',
+    'g': 'FY24 quarters: F&O, cash and commodities calibrate Q2 - Q4 FY24 from reviewed data-book facts; MTF still starts Q3 FY25',
 }
 
 HERE = os.path.dirname(__file__)
 CANDIDATES = os.path.join(HERE, '..', '..', 'out', 'mosl', 'facts_candidates.json')
 REVIEWED = os.path.join(HERE, '..', '..', 'snapshot', 'mosl_facts_reviewed_2026-11-02.json')
 LAKE_FIXTURE = os.path.join(HERE, '..', '..', 'snapshot', 'mosl_lake_2026-11-02.json')
+FY24_CANDIDATES = os.path.join(HERE, '..', '..', 'out', 'mosl', 'facts_candidates_fy24.json')
+FY24_REVIEWED = os.path.join(HERE, '..', '..', 'snapshot', 'mosl_facts_fy24_candidates_2026-11-03.json')
+LAKE_FIXTURE_G = os.path.join(HERE, '..', '..', 'snapshot', 'mosl_lake_2026-11-03.json')
+SHARED_FIXTURE_G = os.path.join(HERE, '..', '..', 'snapshot', 'db_snapshot_2026-11-03.json')
 LAKE_DB_FIXTURE = os.path.join(HERE, '..', '..', 'snapshot', 'mosl_lake_db_2026-11-02.json')
 
 Q = quarter_seq
@@ -67,14 +80,21 @@ FACT_INPUTS = {
 # net / gross = net_brokerage_<seg> / gross_brokerage_<seg>, both Rs Mn
 RATIO_INPUTS = {'net_gross_fo': 'fo', 'net_gross_cash': 'cash', 'net_gross_comm': 'comm'}
 
-# a: all of them, every reported quarter
-FACT_SWITCHES = {'a': [('fact', m, REPORTED) for m in FACT_INPUTS] + [('ratio', m, REPORTED) for m in RATIO_INPUTS]}
+FY24_QUARTERS = Q('Q2 FY 2024', 'Q4 FY 2024')     # g: the FY24 quarters that are calibrated (Q1 FY24 is not)
+FY24_FIRST = FY24_QUARTERS[0]
+FY24_FACT_INPUTS = tuple(m for m in FACT_INPUTS if m != 'mtf_book_closing')   # MTF NII still starts Q3 FY25
+
+# a: all of them, every reported quarter; g: the FY24 quarters, without the MTF book
+FACT_SWITCHES = {'a': [('fact', m, REPORTED) for m in FACT_INPUTS] + [('ratio', m, REPORTED) for m in RATIO_INPUTS],
+                 'g': [('fact', m, FY24_QUARTERS) for m in FY24_FACT_INPUTS]
+                 + [('ratio', m, FY24_QUARTERS) for m in RATIO_INPUTS]}
 
 # switch -> pin values it sets (the workbook's table ends and "last actual" markers)
 PIN_SWITCHES = {
     'a': {('fo_last_actual_quarter', ''): 'Q2 FY 2027', ('cash_last_actual_quarter', ''): 'Q2 FY 2027',
           ('comm_last_actual_quarter', ''): 'Q2 FY 2027', ('mtf_last_actual_quarter', ''): 'Q2 FY 2027',
           ('fo_zero_quarters', ''): '', ('cash_table_first_quarter', ''): 'Q1 FY 2025'},
+    'g': {('fo_table_first_quarter', ''): FY24_FIRST, ('cash_table_first_quarter', ''): FY24_FIRST},
 }
 
 YIELD_ASSUMPTION = 'mtf_nii_yield_carry'
@@ -96,6 +116,9 @@ def check(switches):
     missing = switches - IMPLEMENTED
     if missing:
         raise SwitchError(f'MOSL switch(es) {sorted(missing)} not implemented yet')
+    for sw in sorted(switches & set(REQUIRES)):
+        if not set(REQUIRES[sw]) <= switches:
+            raise SwitchError(f'MOSL switch m-{sw} needs m-{REQUIRES[sw]}')
     return switches
 
 
@@ -208,9 +231,51 @@ def load_reviewed(path=REVIEWED):
     return json.load(open(path))['facts']
 
 
+# ── the FY24 candidate fixture (m-g bridge only; not approved) ──
+FY24_FIRST_FACT_ID = 20291                  # after the 290 reviewed fixture facts (20001 - 20290)
+FY24_META = ('candidates treated as reviewed for the m-g bridge only; not approved. AB has not reviewed the 116 FY24 '
+             'facts and the database holds none of them. Nothing here is written anywhere.')
+
+
+def build_fy24_fixture(candidates_path=FY24_CANDIDATES):
+    """snapshot/mosl_facts_fy24_candidates_*.json: the 116 FY24 candidates with status 'reviewed' so the m-g engine and
+    tests can read them (same shape as the reviewed fixture). fact_id = 20291 + position; reviewed_at stays null."""
+    cand = json.load(open(candidates_path))
+    docs = cand['documents']
+    rows = []
+    for i, c in enumerate(cand['sb_disclosure_facts']):
+        r = dict(c)
+        r['fact_id'] = FY24_FIRST_FACT_ID + i
+        fname = c['source_ref'].split(':', 1)[1].split('#')[0] if ':' in c['source_ref'] else ''
+        r['doc_id'] = docs.get(fname, {}).get('sha256')
+        r['status'] = 'reviewed'
+        rows.append(r)
+    return {'_meta': FY24_META + f' Built by src.engine.mosl_switches.build_fy24_fixture() from out/mosl/'
+                     f'facts_candidates_fy24.json ({len(rows)} facts); fact_id = {FY24_FIRST_FACT_ID} + position; '
+                     'doc_id = sha256 of the data book named in source_ref.',
+            'facts': rows}
+
+
+def fy24_inputs():
+    """[(candidate metric, period)] the m-g switch reads: every one must be 'reviewed' before it may go live."""
+    out = set()
+    for kind, metric, quarters in FACT_SWITCHES['g']:
+        for q in quarters:
+            if kind == 'fact':
+                out.add((FACT_INPUTS[metric][0], q))
+            else:
+                out |= {(f'net_brokerage_{RATIO_INPUTS[metric]}', q), (f'gross_brokerage_{RATIO_INPUTS[metric]}', q)}
+    return sorted(out, key=lambda x: (x[0], int(x[1][-4:]), int(x[1][1])))
+
+
 if __name__ == '__main__':
     fx = build_reviewed_fixture()
     with open(REVIEWED, 'w') as fh:
         json.dump(fx, fh, indent=1)
         fh.write('\n')
     print(f'written {os.path.relpath(REVIEWED)} ({len(fx["facts"])} facts)')
+    fx = build_fy24_fixture()
+    with open(FY24_REVIEWED, 'w') as fh:
+        json.dump(fx, fh, indent=1)
+        fh.write('\n')
+    print(f'written {os.path.relpath(FY24_REVIEWED)} ({len(fx["facts"])} facts)')

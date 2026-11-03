@@ -21,6 +21,9 @@ Workbook quirks kept in parity mode (section 8c):
     before `comm_o_blank_from_date` and blank from it; MTF has no row after the last formula date;
   - F&O Q3/Q4 FY24 are #N/A (no table row), Q1/Q2 FY25 numeric 0 (blank rate), 31 May 2024 is #VALUE! (text key).
 
+Switch m-g (not approved): the quarters start at Q2 FY24 (M.qs, the first-quarter pins) and the same tables calibrate Q2 - Q4 FY24 from
+FY24 facts; no row exists before Q2 FY24 (Q1 FY24 is not calibrated), and MTF still starts Q3 FY25.
+
 Daily rows: {date: {'rev_<unit>': net or None, 'gross_<unit>': gross or None, 'err': '#N/A' | '#VALUE!' | None}}.
 A date with no row is a blank cell. summary.build(daily, 'MOSL') turns an 'err' row into the workbook's IFERROR 0.
 """
@@ -103,7 +106,7 @@ class MoslInputs:
             return Q_ALL
         last = max([q_of(d) for s in self._mkt.values() for d in s] + [q_of(d) for s in self._lake.values() for d in s]
                    + [Q_ALL[-1]], key=_qkey)
-        return quarter_seq(Q_ALL[0], last)
+        return quarter_seq(MS.FY24_FIRST if 'g' in self.switches else Q_ALL[0], last)     # m-g: from Q2 FY24
 
     def fact(self, metric, period):
         o = self.overlay.get((metric, period))
@@ -147,11 +150,14 @@ def load_lake(path=None):
     return {k: {d: (v, st) for d, v, st in rows} for k, rows in fx['series'].items()}
 
 
-def load(shared_snapshot, mosl_snapshot, switches=(), reviewed_path=None, lake_path=None, as_of=None):
+def load(shared_snapshot, mosl_snapshot, switches=(), reviewed_path=None, lake_path=None, as_of=None, fy24_path=None):
     """MoslInputs from the shared (Angel) snapshot path and the MOSL snapshot path.
-    switches: MOSL live switches; the reviewed facts (and, for m-b, the lake fixture) are read from their default fixtures."""
+    switches: MOSL live switches; the reviewed facts (and, for m-b, the lake fixture) are read from their default fixtures.
+    Switch m-g also reads the FY24 facts (fy24_path; default: the candidate fixture, treated as reviewed, not approved)."""
     switches = MS.check(switches)
     reviewed = MS.load_reviewed(reviewed_path or MS.REVIEWED) if switches else None
+    if 'g' in switches:
+        reviewed = reviewed + MS.load_reviewed(fy24_path or MS.FY24_REVIEWED)
     lake = load_lake(lake_path) if 'b' in switches else None
     return MoslInputs(json.load(open(mosl_snapshot)), json.load(open(shared_snapshot)), switches, reviewed, lake, as_of)
 
@@ -308,7 +314,7 @@ def cash_daily(M):
         E = M.fact('share_cash', q)
         G = M.fact('adto_cash_mosl', q)
         H = (E * C) / G                                                      # 'delivery ratio' F / G
-        T[q] = dict(days=D, share=E, H=H, G=G,
+        T[q] = dict(days=D, share=E, H=H, G=G, key=tot[q],                   # key: the quarter's NSE + BSE turnover, Rs Cr
                     J=M.fact('gross_cash_cr', q) / G if (q != last or M.on('a')) else None)
     if not M.on('a'):
         T[last]['J'] = T[qs[qs.index(last) - 1]]['J']                        # J52 = J51: typed I52 = 228 not used

@@ -8,6 +8,7 @@ F&O + Cash + Commodities, Consolidated = Broking + MTF. "Before" = the switches 
 adds this one. Every run reads the series up to BRIDGE_AS_OF (the workbook snapshot's last day, 21 Oct 2026), so
 the bridges compare like with like whatever the lake holds after it.
 """
+import os
 import sys
 from collections import defaultdict
 
@@ -141,11 +142,111 @@ def daily_changes(res_a, res_b):
     return out
 
 
+# ── m-g: FY24 quarters ──
+FY24_PANEL_SEGS = (('F&O', 'fo'), ('Cash', 'cash'), ('Commodities', 'comm'))
+
+
+def _row_key(r):
+    return (r['panel'], r['period_type'], r['period_key'], r['table_name'], r['row_label'])
+
+
+def _is_fy24(period_type, key):
+    """Period keys that belong to FY24 (or earlier): FY 2024, Q1-Q4 FY 2024, 'FY 2024 <month>'. The as-of tables are keyed
+    by a date and never FY24."""
+    if period_type == 'asof':
+        return False
+    return (key[:7] == 'FY 2024') if period_type in ('FY', 'M') else (key[-7:] == 'FY 2024')
+
+
+def fy24_effect(M_a, r_a, M_b, r_b):
+    """What m-g changes in the live (guarded) summary rows, a-f -> a-g.
+    Returns dict(fy25_changed=[(key, field, before, after)], fy25_unchanged=n, fy24_new=[rows only a-g has],
+    violations=[...]). A violation is an FY25+ value that changed, or a comparison that changed from a value."""
+    ra, rb = ({_row_key(r): r for r in live_period_rows(M, res)} for M, res in ((M_a, r_a), (M_b, r_b)))
+    changed, same, violations = [], 0, []
+    for k, y in rb.items():
+        if _is_fy24(k[1], k[2]):
+            continue
+        x = ra.get(k)
+        if x is None:
+            violations.append((k, 'row', None, 'new row'))
+            continue
+        moved_ = False
+        for f in ('value', 'comp_value'):
+            if x[f] == y[f]:
+                continue
+            moved_ = True
+            if x[f] is None:
+                changed.append((k, f, None, y[f]))
+            else:
+                violations.append((k, f, x[f], y[f]))
+        same += not moved_
+    for k in ra:
+        if k not in rb:
+            violations.append((k, 'row', 'dropped', None))
+    return dict(fy25_changed=changed, fy25_unchanged=same, violations=violations,
+                fy24_rows=[r for k, r in rb.items() if _is_fy24(k[1], k[2])],
+                fy24_only_after=[k for k in rb if _is_fy24(k[1], k[2]) and k not in ra])
+
+
+def g_detail(M, res, quarters=MS.FY24_QUARTERS):
+    """Per FY24 quarter and segment: the calibration quantities and the quarter's revenue, ADR and its arithmetic.
+    Returns {(segment, quarter): dict}; revenue in Rs Cr (net = net / gross x gross), days = rows the quarter has."""
+    c, d = res['calib'], res['daily']
+    adr_q = adr(M, res, tuple(('Q', q) for q in quarters))
+    out = {}
+    for q in quarters:
+        r = c['ratio'][q]
+        fo, cash = c['fo']['table'][q], c['cash']['table'][q]
+        gross_fact = {s: M.fact(f'gross_{s}_cr', q) for s in ('fo', 'cash', 'comm')}
+        keys = {'fo': (fo['F'], 'Cr contracts (NSE index options + BSE)'),
+                'cash': (cash['key'], 'Rs Cr turnover (NSE + BSE)'),
+                'comm': (c['comm']['contracts_mn'][q], 'Mn contracts (MCX)')}
+        share = {'fo': c['fo']['share'][q], 'cash': cash['share'], 'comm': c['comm']['share'][q]}
+        rate = {'fo': c['fo']['rate'][q] / 10, 'cash': cash['J'], 'comm': c['comm']['take'][q]}      # Rs per contract; cash: gross per Rs of ADTO
+        for name, seg in FY24_PANEL_SEGS:
+            rows = {dd: x for dd, x in d[seg].items() if q_of(dd) == q}
+            field, scale = ('rev_cr', 1.0) if seg == 'cash' else ('rev_mn', 10.0)
+            rev = sum(x[field] for x in rows.values()) / scale                       # the quarter's net revenue, every day
+            sp = special_dates(M)                                                    # m-d: special sessions out of the ADR
+            adr_rev = sum(x[field] for dd, x in rows.items() if dd not in sp) / scale
+            n = sum(1 for dd in rows if dd not in sp)
+            n_special = len(rows) - n
+            out[(name, q)] = dict(share=share[seg], key=keys[seg][0], key_unit=keys[seg][1], rate=rate[seg], ng=r[seg],
+                                  gross=gross_fact[seg], revenue=rev, days=n, n_special=n_special, adr_revenue=adr_rev, adr=adr_rev / n, adr_engine=adr_q[('Q', q, name)],
+                                  seg=seg, G=cash['G'] if seg == 'cash' else None, H=cash['H'] if seg == 'cash' else None)
+        out[('Broking', q)] = dict(adr=sum(out[(n_, q)]['adr'] for n_, _ in FY24_PANEL_SEGS),
+                                   adr_engine=adr_q[('Q', q, 'Broking')])
+    return out
+
+
+def g_arith(name, q, x):
+    """One line of arithmetic for a segment-quarter (Rs Cr)."""
+    if x['seg'] == 'fo':
+        K = x['share'] * x['key']
+        return (f"{name} {q}: K = share x key = {x['share']:.6f} x {x['key']:,.4f} = {K:,.4f} Cr contracts; "
+                f"rate = gross / K = {x['gross']:,.4f} / {K:,.4f} = {x['rate']:.4f} Rs per contract; net = {x['ng']:.6f} x "
+                f"{x['gross']:,.4f} = {x['ng'] * x['gross']:,.4f} Rs Cr; ADR = {x['adr_revenue']:,.4f} / {x['days']} days = {x['adr']:.6f}")
+    if x['seg'] == 'cash':
+        return (f"{name} {q}: gross per Rs of reported ADTO J = gross / ADTO = {x['gross']:,.4f} / {x['G']:,.4f} = {x['rate']:.6f}; "
+                f"day gross = share x (key_d / H) x (J x ADTO / days) with H = share x avg key / ADTO = {x['H']:.4f}; "
+                f"quarter key = {x['key']:,.2f} Rs Cr over {x['days']} days; net = {x['ng']:.6f} x {x['gross']:,.4f} = "
+                f"{x['ng'] * x['gross']:,.4f}; ADR = {x['adr_revenue']:,.4f} / {x['days']} days = {x['adr']:.6f}")
+    return (f"{name} {q}: take = gross x 10 / (share x contracts) = {x['gross']:,.4f} x 10 / ({x['share']:.6f} x {x['key']:,.4f}) "
+            f"= {x['rate']:.4f} Rs per contract; net = {x['ng']:.6f} x {x['gross']:,.4f} = {x['ng'] * x['gross']:,.4f}; "
+            f"ADR = {x['adr_revenue']:,.4f} / {x['days']} days = {x['adr']:.6f}")
+
+
 # ── the bridge ──
-def bridge(letter, shared_snapshot=SHARED_SNAPSHOT, mosl_snapshot=MOSL_SNAPSHOT):
+def bridge(letter, shared_snapshot=None, mosl_snapshot=MOSL_SNAPSHOT, lake_path=None):
+    """shared_snapshot / lake_path default to the parity fixtures; m-g (market data from 1 June 2023) defaults to
+    snapshot/db_snapshot_2026-11-03.json and snapshot/mosl_lake_2026-11-03.json."""
+    if letter == 'g':
+        shared_snapshot, lake_path = shared_snapshot or MS.SHARED_FIXTURE_G, lake_path or MS.LAKE_FIXTURE_G
+    shared_snapshot = shared_snapshot or SHARED_SNAPSHOT
     before, after = MS.cumulative(letter)
-    M_a, r_a = run_switches(before, shared_snapshot, mosl_snapshot)
-    M_b, r_b = run_switches(after, shared_snapshot, mosl_snapshot)
+    M_a, r_a = run_switches(before, shared_snapshot, mosl_snapshot, lake_path=lake_path)
+    M_b, r_b = run_switches(after, shared_snapshot, mosl_snapshot, lake_path=lake_path)
     periods = PERIODS + EXTRA_PERIODS.get(letter, ())
     t_a, t_b = adr(M_a, r_a, periods), adr(M_b, r_b, periods)
     rows = []
@@ -164,7 +265,21 @@ def bridge(letter, shared_snapshot=SHARED_SNAPSHOT, mosl_snapshot=MOSL_SNAPSHOT)
             wb0 = SP._combine(sa, panel, lambda s: s.q('Q4 FY 2026'))
             yoy.append(dict(panel=panel, workbook=(q0 / wb0 - 1) if wb0 else None, live=(q / ly - 1) if ly else None,
                             q_after=q, q4_after=wb, q2ly_after=ly))
-    return dict(letter=letter, before=sorted(before), after=sorted(after), rows=rows, yoy=yoy,
+    g = None
+    if letter == 'g':
+        eff = fy24_effect(M_a, r_a, M_b, r_b)
+        assert not eff['violations'], eff['violations'][:5]                          # no FY25+ value may change
+        assert all(r['value'] is None for r in eff['fy24_rows'] if r['period_key'] == 'FY 2024' or r['row_label'] == 'Q1 FY 2024'
+                   or (r['panel'] == 'Consolidated' and r['row_label'] == r['period_key'])), 'FY 2024 / Q1 FY24 / Consolidated FY24'
+        M_o, r_o = run_switches(before, SHARED_SNAPSHOT, mosl_snapshot)              # a-f on the 23 Oct / 2 Nov fixtures
+        t_o, t_n = adr(M_o, r_o), t_a
+        g = dict(effect=eff, detail=g_detail(M_b, r_b), shared=shared_snapshot, lake=lake_path,
+                 fixture_effect=[(k, panel, t_o[(p, k, panel)], t_n[(p, k, panel)]) for p, k in PERIODS for panel in SP.PANELS
+                                 if abs(t_o[(p, k, panel)] - t_n[(p, k, panel)]) > 1e-9 * max(1.0, abs(t_o[(p, k, panel)]))],
+                 quarters=M_b.qs[:3], first_rows={q: {s: min(d for d in r_b['daily'][s] if q_of(d) == q) for s in ('fo', 'cash', 'comm')}
+                                                  for q in M_b.qs[:3]},
+                 no_row_dates=sorted(d for d in M_b.cal if d < '2023-07-01'))
+    return dict(letter=letter, g=g, before=sorted(before), after=sorted(after), rows=rows, yoy=yoy,
                 facts={k: o for k, o in M_b.overlay.items() if o.switch == letter and o.changed},
                 same={k: o for k, o in M_b.overlay.items() if o.switch == letter and not o.changed},
                 asof=_asof_diff(asof_table(M_a, r_a), asof_table(M_b, r_b)),
@@ -260,6 +375,8 @@ def markdown(b):
               'F14). The numbers do not move because the carried value equals the workbook\'s own carry; what changes is that '
               'the yield is now a labelled assumption row in sb_assumptions, which the run refuses without. The day basis '
               '(247) is unchanged.', '']
+    if b['letter'] == 'g':
+        L += _g_markdown(b)
     if b['insufficient_after'] is not None:
         L += [f"Periods flagged insufficient in the live rows after this switch: {len(b['insufficient_after'])}"
               + (f" (before: {len(b['insufficient_before'])})" if b['insufficient_before'] is not None else '') + '.', '']
@@ -292,6 +409,71 @@ def markdown(b):
         L.append(f"| {name} | {d['days_before']} | {d['days_after']} | {d['changed']} | {d['first'] or ''} | "
                  f"{d['last'] or ''} | {f(d['rmin'])} | {f(d['rmax'])} | {len(d['added'])} | {len(d['dropped'])} |")
     return '\n'.join(L) + '\n'
+
+
+def _g_markdown(b):
+    g = b['g']
+    eff, det = g['effect'], g['detail']
+    qs = MS.FY24_QUARTERS
+    L = ['## m-g: FY24 quarters', '',
+         "MOSL's quarters now start at Q2 FY24 (Jul 2023). F&O, cash and commodities calibrate Q2 - Q4 FY24 exactly as m-a does "
+         "for FY25+: rate = reported gross brokerage / (share x the quarter's key), revenue = rate x share x the day's key x "
+         "net / gross. The facts are the 116 FY24 candidates, loaded as if reviewed (not approved); the FY24 gross and net "
+         "brokerage Rs Mn are divided by 10 to Rs Cr. Market data from 1 June 2023 "
+         f"({os.path.basename(g['shared'])}, {os.path.basename(g['lake'])}; read only from ExchangesDash's public JSON). "
+         f"No revenue row exists before Q2 FY24 (the {len(g['no_row_dates'])} calendar days from {g['no_row_dates'][0]} to "
+         f"{g['no_row_dates'][-1]} have none). First revenue day per segment: "
+         + '; '.join(f"{n} {g['first_rows'][qs[0]][sg]}" for n, sg in FY24_PANEL_SEGS) + '. MTF is unchanged: NII still starts '
+         'Q3 FY25 (no industry book before Oct 2024), so Consolidated FY24 stays insufficient.', '',
+         'Per segment and quarter (Rs crore; ADR = net revenue / trading days with a row, special sessions left out by m-d: net revenue below counts every day, ADR does not):', '',
+         '| Segment | Quarter | Share | Quarter key | Rate | Net / gross | Gross Rs Cr | Net revenue Rs Cr | Days | ADR |',
+         '|---|---|---:|---:|---:|---:|---:|---:|---:|---:|']
+    for name, _ in FY24_PANEL_SEGS:
+        for q in qs:
+            x = det[(name, q)]
+            rate = f"{x['rate']:.4f}" if x['seg'] != 'cash' else f"{x['rate']:.6f}"
+            L.append(f"| {name} | {q} | {x['share']:.6f} | {x['key']:,.2f} ({x['key_unit']}) | {rate} | {x['ng']:.6f} | "
+                     f"{x['gross']:,.4f} | {x['revenue']:,.4f} | {x['days']} | {_f6(x['adr'])} |")
+    L += ['', "Rate: F&O and commodities in Rs per contract (gross / (share x key)); cash is gross per Rs of the data book's "
+          'ADTO (J). Arithmetic:', '']
+    for name, _ in FY24_PANEL_SEGS:
+        for q in qs:
+            L.append('- ' + g_arith(name, q, det[(name, q)]))
+    L += ['', 'Broking ADR (F&O + Cash + Commodities, Rs crore per trading day):', '',
+          '| Quarter | F&O | Cash | Commodities | Broking |', '|---|---:|---:|---:|---:|']
+    for q in qs:
+        assert abs(det[('Broking', q)]['adr'] - det[('Broking', q)]['adr_engine']) < 1e-12, q
+        L.append(f"| {q} | " + ' | '.join(_f6(det[(n, q)]['adr']) for n, _ in FY24_PANEL_SEGS)
+                 + f" | {_f6(det[('Broking', q)]['adr'])} |")
+    L += ['']
+    insuff = [r for r in eff['fy24_rows'] if r['value'] is None and r['row_label'] == r['period_key']
+              and r['period_type'] in ('FY', 'Q')]
+    q1 = [r for r in eff['fy24_rows'] if r['row_label'] == 'Q1 FY 2024' and r['value'] is None]
+    L += ['Still "insufficient data" after m-g (live rows):', '']
+    for r in sorted(insuff, key=lambda r: (r['period_key'], r['panel'])):
+        L.append(f"- {r['panel']} {r['period_key']}: {r['note']}")
+    L.append(f"- Q1 FY 2024 (the base of Q2 FY24's QoQ): {len(q1)} panels, e.g. {q1[0]['note'] if q1 else '-'}")
+    L += ['', "FY25+ cells (every FY / quarter / month / week row of FY 2025 onward, all panels): "
+          f"{len(eff['fy25_changed'])} change from \"insufficient data\" to a value, {eff['fy25_unchanged']} are unchanged, "
+          f"{len(eff['violations'])} change a value that was already there (asserted 0).", '']
+    grouped = {}
+    for k, f, _, y in eff['fy25_changed']:
+        grouped.setdefault((k[1], k[2], k[4], f), []).append(k[0])
+    L += ['| Period | Row | Field | Panels (insufficient data -> value) |', '|---|---|---|---|']
+    for (pt, pk, rl, f), panels in sorted(grouped.items(), key=lambda kv: (kv[0][0], kv[0][1], kv[0][2])):
+        L.append(f"| {pk} | {rl.replace(' | ', ' / ')} | {'value' if f == 'value' else 'comparison'} | {', '.join(sorted(panels))} |")
+    L += ['', 'A "value" row is the FY24 base of a FY25 comparison (e.g. the "Q2 FY 2024" row inside Q2 FY25); a "comparison" '
+          'row is the YoY, QoQ, MoM or vs-6M figure itself.', '']
+    if g['fixture_effect']:
+        L += ['Data effect, not the switch: a-f on these fixtures (market data from 1 Jun 2023, MCX days flagged, owner '
+              'corrections to two 2025 NSE cash turnover days) against a-f on the 23 Oct / 2 Nov fixtures:', '',
+              '| Period | Panel | a-f, old fixtures | a-f, new fixtures |', '|---|---|---:|---:|']
+        for k, panel, x, y in g['fixture_effect']:
+            L.append(f'| {k} | {panel} | {_f6(x)} | {_f6(y)} |')
+        L.append('')
+    else:
+        L += ['a-f on these fixtures equals a-f on the 23 Oct / 2 Nov fixtures (to 1e-9) in every bridge period and panel: the data effect is nil at the period level.', '']
+    return L
 
 
 def _span(ds):

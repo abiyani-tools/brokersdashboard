@@ -76,13 +76,29 @@ def refusal_reasons(switches, msnap, facts):
     lenient = [dict(f, status='reviewed') for f in rows]
     by_id = {f['fact_id']: f for f in rows}
     seed_facts = {(f['metric'], f['period_key']): f for f in msnap['facts']}
+    fy24_bad = False
+    if 'g' in switches:                                  # m-g: every FY24 fact it reads must be reviewed (AB has not approved it)
+        have = {(f['metric'], f['period_key']): f for f in rows if not f.get('segment')}
+        wanted = MS.fy24_inputs()
+        absent = [k for k in wanted if k not in have]
+        unrev = [have[k] for k in wanted if k in have and have[k]['status'] != 'reviewed']
+        if absent or unrev:
+            fy24_bad = True
+            what = ', '.join([f'{m} {p} (absent)' for m, p in absent[:6]]
+                             + [f"{f['metric']} {f['period_key']} (fact {f['fact_id']}, {f['status']})" for f in unrev[:6]])
+            reasons.append(f'switch m-g: {len(absent) + len(unrev)} of the {len(wanted)} FY24 facts it reads are not '
+                           f'reviewed ({len(absent)} absent, {len(unrev)} not reviewed): {what}'
+                           + (' ...' if len(absent) + len(unrev) > 12 else ''))
     try:
         overlay = MS.build_overlay(switches, lenient, seed_facts)
     except MS.SwitchError as e:
-        reasons.append(f'MOSL filing facts incomplete or inconsistent: {e}')
+        if not fy24_bad:
+            reasons.append(f'MOSL filing facts incomplete or inconsistent: {e}')
         return reasons
     need = {i for o in overlay.values() for i in o.fact_ids if isinstance(i, int)}
-    bad = [by_id[i] for i in sorted(need) if by_id[i]['status'] != 'reviewed']
+    fy24 = {q for q in MS.FY24_QUARTERS}
+    bad = [by_id[i] for i in sorted(need) if by_id[i]['status'] != 'reviewed'
+           and not ('g' in switches and by_id[i]['period_key'] in fy24)]       # FY24 facts are reported above
     if bad:
         what = ', '.join(f"{f['metric']} {f['period_key']} (fact {f['fact_id']}, {f['status']})" for f in bad[:12])
         reasons.append(f'{len(bad)} of the {len(need)} MOSL facts the switches read are not reviewed: {what}'
@@ -153,6 +169,9 @@ def live_run_mosl(snap, msnap, facts, lake_rows, switches=SWITCHES, as_of=None):
               'Basis: net brokerage of retail + PWM (Consolidated net brokerage; excludes Capital Markets and currency) plus MTF net interest '
               f'income. MTF yield: the workbook\'s typed values, carried at {M.assume(MS.YIELD_ASSUMPTION):.2%} '
               f'({MS.YIELD_LABEL}).')
+    if 'g' in M.switches:
+        note += (' m-g: F&O, cash and commodities start at Q2 FY24 (reviewed FY24 data-book facts); Q1 FY24 is not calibrated '
+                 'and MTF starts Q3 FY25, so FY 2024, Q1 FY24 and Consolidated FY24 stay insufficient.')
     last = {s: M.pin(f'{s}_last_actual_quarter') for s in ('fo', 'cash', 'comm')}
     last['mtf'] = M.pin('mtf_last_actual_quarter')
     return dict(as_of=as_of, switches=''.join(sorted(M.switches)), report=report, daily=res['daily'],
