@@ -59,3 +59,20 @@ Because revenue is disclosed every quarter, each reported quarter ties to the da
 - **NSE index-option contracts** become an engine input for MOSL. In the current ExchangesDash data they are zero on 12–15 Oct and end on 15 Oct. The owner's PR [sucaanalytics-max/ExchangesDash#33](https://github.com/sucaanalytics-max/ExchangesDash/pull/33) takes them from NSE directly. Until it merges, MOSL's live F&O stops at 11 Oct, and E5 will flag the zero days.
 - **MCX contracts and NSE cash turnover:** the same limits as the other brokers (as of 21 Oct until PR #33).
 - **Each quarter's update:** the data book is published on results day, and the filing watcher (PLAN 4.2) can be extended to fetch it from MOSL's IR JSON (`motilaloswal.com/spreadsheets/investor-relations.json`, column "Data Book"; URL pattern `q{n}fy{yy}-data-book.xlsx`, folder changes, so read the JSON). It stages the facts for AB's review, which keeps the base assumptions current with each quarterly presentation.
+
+## Proposed switch m-g: FY24 quarters (step A2 of `docs/ADR_Backfill_Scope.md`, 3 Nov 2026; not approved)
+
+**Inputs.** 116 candidate facts: 29 metrics × Q1–Q4 FY24, the same metrics and conventions as the 290 reviewed facts. All come from the latest data book that still carries FY24 (the Q4 FY26 book). Each one was re-read from its cell (116 of 116 match), and cross-checked against the other 7 vintages: `out/mosl/facts_candidates_fy24.json`, `out/mosl/facts_candidates_fy24_check.md`. The gross and net identities hold (cash + F&O + commodity + currency = total, to rounding). 44 values were restated between vintages by more than 0.5% (e.g. cash ADTO, and net total brokerage, which first left out commodity and currency). Using the latest vintage keeps FY24 on the same basis as the FY25+ facts. Commodity share, overall share and the MTF book exist for FY24 only in the Q4 FY26 book, so they have no cross-check.
+
+**Rule.** With m-g on, MOSL's quarters start at **Q2 FY24** instead of Q1 FY25:
+- The F&O, cash and commodity tables calibrate Q2–Q4 FY24 exactly as m-a does for FY25+: reported gross brokerage ÷ (share × the quarter's exchange key), then × the quarter's net/gross ratio.
+- The first-quarter pins move to Q2 FY24.
+- The quarters' regime is 'actual'.
+
+**Not covered:**
+- **Q1 FY24 (Apr–Jun 2023):** market data starts 1 June 2023, after BSE's F&O relaunch (step A1), so the quarter's key total is incomplete. Q1 FY24 and FY 2024 as a whole stay "insufficient data". The June 2023 days get no revenue row.
+- **MTF:** no industry MTF book before Oct 2024, so MTF NII still starts Q3 FY25. FY24 has no MTF, and **Consolidated** FY24 stays "insufficient data". **Broking** and the three segment panels show Q2–Q4 FY24.
+
+**Currency (revisits M-15).** Currency is in no MOSL panel (AB, 2 Nov). In FY25+ it's about 0.3% of net brokerage, but in FY24 it was much larger: 7.8% / 6.5% / 3.9% / 3.5% of net brokerage in Q1–Q4 FY24 (Rs Mn 189.9 / 186.0 / 109.2 / 123.7 of 2,431 / 2,875 / 2,789 / 3,491). The step down after FY24 is in every vintage, and no book explains it. So for FY24, "Broking excludes currency" leaves out about 4–8%, and the dashboard label "about 0.3%" would be wrong for those quarters. Options: keep it out and make the label period-specific, or add currency as its own Broking line for all quarters.
+
+**Expected effect.** No change to any FY25+ figure. FY 2025's YoY and Q1–Q4 FY25's YoY comparisons get a base where today they show "insufficient data". Q3 and Q4 FY24 get a value, and Q2 FY24 is the first QoQ base. A bridge (`out/bridges/mosl_g.md`) and an independent recompute check (`out/checks/mosl_switch_g.md`) come before AB's approval, as for m-a … m-f.
