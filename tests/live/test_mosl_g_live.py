@@ -30,8 +30,17 @@ def facts24():
     return MS.load_reviewed(MS.FY24_REVIEWED)
 
 
-def test_default_switches_stay_abcdef():
-    assert mosl_run.SWITCHES == 'abcdef'
+def test_default_switches_are_abcdefg_since_abs_approval_of_3_nov_2026():
+    assert mosl_run.SWITCHES == 'abcdefg'
+
+
+def test_with_the_fy24_facts_in_the_db_but_g_off_the_run_is_unchanged(shared, msnap, facts290, facts24):
+    """The facts reach the database before the code flips: m-abcdef must not move."""
+    lr = lake_rows(MS.LAKE_FIXTURE_G)
+    a = live_run_mosl(shared, msnap, facts290, lr, 'abcdef', as_of='2026-10-21')
+    b = live_run_mosl(shared, msnap, facts290 + facts24, lr, 'abcdef', as_of='2026-10-21')
+    assert b['rows'] == a['rows'] and b['daily'] == a['daily'] and b['calib'] == a['calib']
+    assert b['fact_ids'] == a['fact_ids'] and b['note'] == a['note'] and b['switches'] == 'abcdef'
 
 
 def test_refused_unless_every_fy24_fact_is_reviewed(msnap, facts290, facts24):

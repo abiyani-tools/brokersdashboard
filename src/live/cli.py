@@ -30,8 +30,12 @@ DEFAULT_GROWW_FACTS = 'snapshot/groww_facts_reviewed_2026-10-31.json'
 DEFAULT_GROWW_IR = 'snapshot/groww_ir_2026-10-31.json'
 DEFAULT_GROWW_EXCHANGE = 'snapshot/groww_exchange_2026-10-31.json'
 DEFAULT_MOSL_SNAPSHOT = 'snapshot/mosl_snapshot_2026-10-23.json'
-DEFAULT_MOSL_FACTS = 'snapshot/mosl_facts_reviewed_2026-11-02.json'
-DEFAULT_MOSL_LAKE = 'snapshot/mosl_lake_2026-11-02.json'
+# MOSL switch m-g (FY24 quarters, on by default since AB's approval of 3 Nov 2026) needs the 116 FY24 facts as reviewed and market
+# data from 1 Jun 2023: in file mode MOSL reads its own shared snapshot (calendar and MCX contracts from Jun 2023) while Angel One
+# and Groww keep DEFAULT_SNAPSHOT (their dry-run output is pinned). With --db all three read the database.
+DEFAULT_MOSL_SHARED = 'snapshot/db_snapshot_2026-11-03.json'
+DEFAULT_MOSL_FACTS = 'snapshot/mosl_facts_reviewed_2026-11-03.json'
+DEFAULT_MOSL_LAKE = 'snapshot/mosl_lake_2026-11-03.json'
 EXTRA_ENV = 'GROWW_EXTRA'          # same as --groww-extra; the flag wins
 SIGNED_OFF_EXTRA = 'i'             # optional Groww IR switches AB signed off (31 Oct 2026: g-i on, g-h off); published
 REFUSED_EXIT = 2
@@ -39,14 +43,14 @@ REFUSED_EXIT = 2
 
 def parse(argv):
     """-> dict(db, publish, broker, snapshot, reviewed, groww_snapshot, groww_facts, groww_extra, groww_ir,
-    groww_exchange, mosl_snapshot, mosl_facts, mosl_lake). Positional: snapshot, facts.
+    groww_exchange, mosl_snapshot, mosl_facts, mosl_lake, mosl_shared). Positional: snapshot, facts.
 
     groww_extra: the optional Groww IR switches ('h', 'i', 'hi'); default SIGNED_OFF_EXTRA (env GROWW_EXTRA overrides,
     'none' turns them all off)."""
     opts = dict(db=False, publish=False, broker=ANGEL, groww_snapshot=DEFAULT_GROWW_SNAPSHOT,
                 groww_facts=DEFAULT_GROWW_FACTS, groww_extra=os.environ.get(EXTRA_ENV, SIGNED_OFF_EXTRA),
                 groww_ir=DEFAULT_GROWW_IR, groww_exchange=DEFAULT_GROWW_EXCHANGE, mosl_snapshot=DEFAULT_MOSL_SNAPSHOT,
-                mosl_facts=DEFAULT_MOSL_FACTS, mosl_lake=DEFAULT_MOSL_LAKE)
+                mosl_facts=DEFAULT_MOSL_FACTS, mosl_lake=DEFAULT_MOSL_LAKE, mosl_shared=DEFAULT_MOSL_SHARED)
     args, i = [], 0
     while i < len(argv):
         a = argv[i]
@@ -54,7 +58,7 @@ def parse(argv):
             opts[a[2:]] = True
         elif a.startswith('--broker') or a.split('=')[0] in ('--groww-snapshot', '--groww-facts', '--groww-extra',
                                                               '--groww-ir', '--groww-exchange', '--mosl-snapshot',
-                                                              '--mosl-facts', '--mosl-lake'):
+                                                              '--mosl-facts', '--mosl-lake', '--mosl-shared'):
             key, eq, val = a.partition('=')
             if not eq:
                 i += 1
@@ -215,6 +219,7 @@ def main(argv=None, reader_factory=None, writer_factory=None):
                 lake_rows = mosl_lake_rows(reader.table('sb_market_daily'))
             else:
                 from ..engine import mosl_switches as MS
+                snap_full = json.load(open(o['mosl_shared']))      # MOSL's own calendar / MCX from Jun 2023 (Angel One / Groww are unchanged)
                 msnap = json.load(open(o['mosl_snapshot']))
                 mfacts = MS.load_reviewed(o['mosl_facts'])
                 lake_rows = [dict(trade_date=d, dataset=k.split('/')[0], metric=k.split('/')[1], value=v, status=st,

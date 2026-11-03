@@ -1,5 +1,5 @@
 {
- "_meta": "candidates treated as reviewed for the m-g bridge only; not approved. AB has not reviewed the 116 FY24 facts and the database holds none of them. Nothing here is written anywhere. Built by src.engine.mosl_switches.build_fy24_fixture() from out/mosl/facts_candidates_fy24.json (116 facts); fact_id = 20291 + position; doc_id = sha256 of the data book named in source_ref.",
+ "_meta": "the 116 FY24 candidates marked reviewed per AB's approval of 3 Nov 2026 (\"Approve, go live\": switch m-g and the 116 facts). Local fixture, not the database: the rows reach the database only when out/mosl/fy24_facts.sql is applied. Built by src.engine.mosl_switches.build_fy24_fixture() from out/mosl/facts_candidates_fy24.json (116 facts); fact_id = 20291 + position; doc_id = sha256 of the data book named in source_ref.",
  "facts": [
   {
    "fact_id": 20291,
@@ -16,7 +16,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=Consol!E44",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints Rs Cr; x10 = Rs Mn. Printed value in book unit: 1602.45. Vintages: 2355.64 in Q1FY25 book; 1527.91 in Q2FY25 book; 1602.45 in Q2FY26 book. Latest value used.",
    "created_at": null
@@ -36,7 +36,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=Consol!F44",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints Rs Cr; x10 = Rs Mn. Printed value in book unit: 2408.82. Vintages: 3353.94 in Q1FY25 book; 2343.08 in Q2FY25 book; 2408.82 in Q2FY26 book. Latest value used.",
    "created_at": null
@@ -56,7 +56,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=Consol!G44",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints Rs Cr; x10 = Rs Mn. Printed value in book unit: 2796.98. Vintages: 3274.63 in Q1FY25 book; 2720.37 in Q2FY25 book; 2796.98 in Q2FY26 book. Latest value used.",
    "created_at": null
@@ -76,7 +76,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=Consol!H44",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints Rs Cr; x10 = Rs Mn. Printed value in book unit: 4059.76. Vintages: 5166.69 in Q1FY25 book; 3977.71 in Q2FY25 book; 4059.76 in Q2FY26 book. Latest value used.",
    "created_at": null
@@ -96,7 +96,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=Consol!E45",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints Rs Cr; x10 = Rs Mn. Printed value in book unit: 396562. Vintages: 410049 in Q1FY25 book; 396562 in Q2FY25 book. Latest value used.",
    "created_at": null
@@ -116,7 +116,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=Consol!F45",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints Rs Cr; x10 = Rs Mn. Printed value in book unit: 512391. Vintages: 521882 in Q1FY25 book; 512391 in Q2FY25 book. Latest value used.",
    "created_at": null
@@ -136,7 +136,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=Consol!G45",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints Rs Cr; x10 = Rs Mn. Printed value in book unit: 554614. Vintages: 561013 in Q1FY25 book; 554614 in Q2FY25 book. Latest value used.",
    "created_at": null
@@ -156,7 +156,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=Consol!H45",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints Rs Cr; x10 = Rs Mn. Printed value in book unit: 698218. Vintages: 710425 in Q1FY25 book; 698218 in Q2FY25 book. Latest value used.",
    "created_at": null
@@ -176,7 +176,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=Consol!E46",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints Rs Cr; x10 = Rs Mn. Printed value in book unit: 3667.31. Vintages: 3514.54 in Q1FY25 book; 3632 in Q1FY26 book; 3667.31 in Q2FY26 book. Latest value used.",
    "created_at": null
@@ -196,7 +196,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=Consol!F46",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints Rs Cr; x10 = Rs Mn. Printed value in book unit: 4437.36. Vintages: 4375.89 in Q1FY25 book; 4437.36 in Q2FY26 book. Latest value used.",
    "created_at": null
@@ -216,7 +216,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=Consol!G46",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints Rs Cr; x10 = Rs Mn. Printed value in book unit: 4858. Vintages: 4744.36 in Q1FY25 book; 4858 in Q2FY26 book. Latest value used.",
    "created_at": null
@@ -236,7 +236,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=Consol!H46",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints Rs Cr; x10 = Rs Mn. Printed value in book unit: 6681.63. Vintages: 6604.85 in Q1FY25 book; 6681.63 in Q2FY26 book. Latest value used.",
    "created_at": null
@@ -256,7 +256,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=Consol!E47",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints Rs Cr; x10 = Rs Mn. Printed value in book unit: 2729.38.",
    "created_at": null
@@ -276,7 +276,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=Consol!F47",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints Rs Cr; x10 = Rs Mn. Printed value in book unit: 3367.15.",
    "created_at": null
@@ -296,7 +296,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=Consol!G47",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints Rs Cr; x10 = Rs Mn. Printed value in book unit: 4577.85.",
    "created_at": null
@@ -316,7 +316,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=Consol!H47",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints Rs Cr; x10 = Rs Mn. Printed value in book unit: 5468.33.",
    "created_at": null
@@ -336,7 +336,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=Consol!E48",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints Rs Cr; x10 = Rs Mn. Printed value in book unit: 9331.88.",
    "created_at": null
@@ -356,7 +356,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=Consol!F48",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints Rs Cr; x10 = Rs Mn. Printed value in book unit: 9895.43.",
    "created_at": null
@@ -376,7 +376,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=Consol!G48",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints Rs Cr; x10 = Rs Mn. Printed value in book unit: 6740.08.",
    "created_at": null
@@ -396,7 +396,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=Consol!H48",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints Rs Cr; x10 = Rs Mn. Printed value in book unit: 6052.44.",
    "created_at": null
@@ -416,7 +416,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=Consol!E50",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints Rs Cr; x10 = Rs Mn. Printed value in book unit: 406.293. Vintages: 378.83 in Q2FY25 book; 406.293 in Q2FY26 book. Latest value used.",
    "created_at": null
@@ -436,7 +436,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=Consol!F50",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints Rs Cr; x10 = Rs Mn. Printed value in book unit: 507.584. Vintages: 504.457 in Q2FY25 book; 507.584 in Q2FY26 book. Latest value used.",
    "created_at": null
@@ -456,7 +456,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=Consol!G50",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints Rs Cr; x10 = Rs Mn. Printed value in book unit: 495.973. Vintages: 486.472 in Q2FY25 book; 495.973 in Q2FY26 book. Latest value used.",
    "created_at": null
@@ -476,7 +476,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=Consol!H50",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints Rs Cr; x10 = Rs Mn. Printed value in book unit: 631.988. Vintages: 622.776 in Q2FY25 book; 631.988 in Q2FY26 book. Latest value used.",
    "created_at": null
@@ -496,7 +496,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=Consol!E51",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints Rs Cr; x10 = Rs Mn. Printed value in book unit: 150.962. Vintages: 123.841 in Q2FY25 book; 150.962 in Q2FY26 book. Latest value used.",
    "created_at": null
@@ -516,7 +516,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=Consol!F51",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints Rs Cr; x10 = Rs Mn. Printed value in book unit: 197.873. Vintages: 195.274 in Q2FY25 book; 197.873 in Q2FY26 book. Latest value used.",
    "created_at": null
@@ -536,7 +536,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=Consol!G51",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints Rs Cr; x10 = Rs Mn. Printed value in book unit: 221.069. Vintages: 212.426 in Q2FY25 book; 221.069 in Q2FY26 book. Latest value used.",
    "created_at": null
@@ -556,7 +556,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=Consol!H51",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints Rs Cr; x10 = Rs Mn. Printed value in book unit: 316.948. Vintages: 308.444 in Q2FY25 book; 316.948 in Q2FY26 book. Latest value used.",
    "created_at": null
@@ -576,7 +576,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=Consol!E52",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints Rs Cr; x10 = Rs Mn. Printed value in book unit: 206.523. Vintages: 206.18 in Q2FY25 book; 206.523 in Q2FY26 book. Latest value used.",
    "created_at": null
@@ -596,7 +596,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=Consol!F52",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints Rs Cr; x10 = Rs Mn. Printed value in book unit: 259.16. Vintages: 258.632 in Q2FY25 book; 259.16 in Q2FY26 book. Latest value used.",
    "created_at": null
@@ -616,7 +616,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=Consol!G52",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints Rs Cr; x10 = Rs Mn. Printed value in book unit: 231.619. Vintages: 230.761 in Q2FY25 book; 231.619 in Q2FY26 book. Latest value used.",
    "created_at": null
@@ -636,7 +636,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=Consol!H52",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints Rs Cr; x10 = Rs Mn. Printed value in book unit: 266.107. Vintages: 265.399 in Q2FY25 book; 266.107 in Q2FY26 book. Latest value used.",
    "created_at": null
@@ -656,7 +656,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=Consol!E53",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints Rs Cr; x10 = Rs Mn. Printed value in book unit: 22.676.",
    "created_at": null
@@ -676,7 +676,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=Consol!F53",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints Rs Cr; x10 = Rs Mn. Printed value in book unit: 23.7305.",
    "created_at": null
@@ -696,7 +696,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=Consol!G53",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints Rs Cr; x10 = Rs Mn. Printed value in book unit: 26.1304.",
    "created_at": null
@@ -716,7 +716,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=Consol!H53",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints Rs Cr; x10 = Rs Mn. Printed value in book unit: 29.9835.",
    "created_at": null
@@ -736,7 +736,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=Consol!E54",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints Rs Cr; x10 = Rs Mn. Printed value in book unit: 26.1325.",
    "created_at": null
@@ -756,7 +756,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=Consol!F54",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints Rs Cr; x10 = Rs Mn. Printed value in book unit: 26.8208.",
    "created_at": null
@@ -776,7 +776,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=Consol!G54",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints Rs Cr; x10 = Rs Mn. Printed value in book unit: 17.1549.",
    "created_at": null
@@ -796,7 +796,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=Consol!H54",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints Rs Cr; x10 = Rs Mn. Printed value in book unit: 18.9494.",
    "created_at": null
@@ -816,7 +816,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=Consol!E56",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints Rs Cr; x10 = Rs Mn. Printed value in book unit: 243.123. Vintages: 182.976 in Q1FY25 book; 216.022 in Q2FY25 book; 243.123 in Q2FY26 book. Latest value used.",
    "created_at": null
@@ -836,7 +836,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=Consol!F56",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints Rs Cr; x10 = Rs Mn. Printed value in book unit: 287.511. Vintages: 251.54 in Q1FY25 book; 284.936 in Q2FY25 book; 287.511 in Q2FY26 book. Latest value used.",
    "created_at": null
@@ -856,7 +856,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=Consol!G56",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints Rs Cr; x10 = Rs Mn. Printed value in book unit: 278.878. Vintages: 243.023 in Q1FY25 book; 269.801 in Q2FY25 book; 278.878 in Q2FY26 book. Latest value used.",
    "created_at": null
@@ -876,7 +876,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=Consol!H56",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints Rs Cr; x10 = Rs Mn. Printed value in book unit: 349.13. Vintages: 310.344 in Q1FY25 book; 341.163 in Q2FY25 book; 349.13 in Q2FY26 book. Latest value used.",
    "created_at": null
@@ -896,7 +896,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=Consol!E57",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints Rs Cr; x10 = Rs Mn. Printed value in book unit: 90.416. Vintages: 63.6418 in Q1FY25 book; 90.416 in Q2FY26 book. Latest value used.",
    "created_at": null
@@ -916,7 +916,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=Consol!F57",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints Rs Cr; x10 = Rs Mn. Printed value in book unit: 101.826. Vintages: 99.7647 in Q1FY25 book; 101.826 in Q2FY26 book. Latest value used.",
    "created_at": null
@@ -936,7 +936,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=Consol!G57",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints Rs Cr; x10 = Rs Mn. Printed value in book unit: 118.188. Vintages: 109.954 in Q1FY25 book; 118.188 in Q2FY26 book. Latest value used.",
    "created_at": null
@@ -956,7 +956,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=Consol!H57",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints Rs Cr; x10 = Rs Mn. Printed value in book unit: 166.412. Vintages: 159.137 in Q1FY25 book; 166.412 in Q2FY26 book. Latest value used.",
    "created_at": null
@@ -976,7 +976,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=Consol!E58",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints Rs Cr; x10 = Rs Mn. Printed value in book unit: 119.661. Vintages: 119.334 in Q1FY25 book; 119.661 in Q2FY26 book. Latest value used.",
    "created_at": null
@@ -996,7 +996,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=Consol!F58",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints Rs Cr; x10 = Rs Mn. Printed value in book unit: 152.289. Vintages: 151.776 in Q1FY25 book; 152.289 in Q2FY26 book. Latest value used.",
    "created_at": null
@@ -1016,7 +1016,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=Consol!G58",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints Rs Cr; x10 = Rs Mn. Printed value in book unit: 133.912. Vintages: 133.069 in Q1FY25 book; 133.912 in Q2FY26 book. Latest value used.",
    "created_at": null
@@ -1036,7 +1036,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=Consol!H58",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints Rs Cr; x10 = Rs Mn. Printed value in book unit: 151.898. Vintages: 151.206 in Q1FY25 book; 151.898 in Q2FY26 book. Latest value used.",
    "created_at": null
@@ -1056,7 +1056,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=Consol!E59",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints Rs Cr; x10 = Rs Mn. Printed value in book unit: 14.053.",
    "created_at": null
@@ -1076,7 +1076,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=Consol!F59",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints Rs Cr; x10 = Rs Mn. Printed value in book unit: 14.7982.",
    "created_at": null
@@ -1096,7 +1096,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=Consol!G59",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints Rs Cr; x10 = Rs Mn. Printed value in book unit: 15.8545.",
    "created_at": null
@@ -1116,7 +1116,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=Consol!H59",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints Rs Cr; x10 = Rs Mn. Printed value in book unit: 18.4445.",
    "created_at": null
@@ -1136,7 +1136,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=Consol!E60",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints Rs Cr; x10 = Rs Mn. Printed value in book unit: 18.993.",
    "created_at": null
@@ -1156,7 +1156,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=Consol!F60",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints Rs Cr; x10 = Rs Mn. Printed value in book unit: 18.598.",
    "created_at": null
@@ -1176,7 +1176,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=Consol!G60",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints Rs Cr; x10 = Rs Mn. Printed value in book unit: 10.9231.",
    "created_at": null
@@ -1196,7 +1196,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=Consol!H60",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints Rs Cr; x10 = Rs Mn. Printed value in book unit: 12.3746.",
    "created_at": null
@@ -1216,7 +1216,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=Consol!E63",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Printed as fraction (data book cell is a ratio). Printed value in book unit: 0.0677787.",
    "created_at": null
@@ -1236,7 +1236,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=Consol!F63",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Printed as fraction (data book cell is a ratio). Printed value in book unit: 0.0714408.",
    "created_at": null
@@ -1256,7 +1256,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=Consol!G63",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Printed as fraction (data book cell is a ratio). Printed value in book unit: 0.0801988.",
    "created_at": null
@@ -1276,7 +1276,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=Consol!H63",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Printed as fraction (data book cell is a ratio). Printed value in book unit: 0.0875125.",
    "created_at": null
@@ -1296,7 +1296,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=Consol!E64",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Printed as fraction (data book cell is a ratio). Printed value in book unit: 0.0646599. Vintages: 0.0577405 in Q1FY25 book; 0.061797 in Q2FY25 book; 0.061797 in Q1FY26 book; 0.0646599 in Q2FY26 book. Latest value used.",
    "created_at": null
@@ -1316,7 +1316,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=Consol!F64",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Printed as fraction (data book cell is a ratio). Printed value in book unit: 0.0725394. Vintages: 0.0632113 in Q1FY25 book; 0.0705598 in Q2FY25 book; 0.0725394 in Q2FY26 book. Latest value used.",
    "created_at": null
@@ -1336,7 +1336,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=Consol!G64",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Printed as fraction (data book cell is a ratio). Printed value in book unit: 0.076871. Vintages: 0.0632113 in Q1FY25 book; 0.0747653 in Q2FY25 book; 0.076871 in Q2FY26 book. Latest value used.",
    "created_at": null
@@ -1356,7 +1356,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=Consol!H64",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Printed as fraction (data book cell is a ratio). Printed value in book unit: 0.0832386. Vintages: 0.0815563 in Q1FY25 book; 0.0815563 in Q2FY25 book; 0.0832386 in Q2FY26 book. Latest value used.",
    "created_at": null
@@ -1376,7 +1376,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=Consol!E66",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Printed as fraction (data book cell is a ratio). Printed value in book unit: 0.0731909. Vintages: 0.0701479 in Q1FY25 book; 0.0724862 in Q2FY25 book; 0.0731909 in Q2FY26 book. Latest value used.",
    "created_at": null
@@ -1396,7 +1396,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=Consol!F66",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Printed as fraction (data book cell is a ratio). Printed value in book unit: 0.076257. Vintages: 0.0752006 in Q1FY25 book; 0.076257 in Q2FY26 book. Latest value used.",
    "created_at": null
@@ -1416,7 +1416,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=Consol!G66",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Printed as fraction (data book cell is a ratio). Printed value in book unit: 0.0831046. Vintages: 0.0811583 in Q1FY25 book; 0.0831046 in Q2FY26 book. Latest value used.",
    "created_at": null
@@ -1436,7 +1436,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=Consol!H66",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Printed as fraction (data book cell is a ratio). Printed value in book unit: 0.0877141. Vintages: 0.0867051 in Q1FY25 book; 0.0877141 in Q2FY26 book. Latest value used.",
    "created_at": null
@@ -1456,7 +1456,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=Consol!E67",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Printed as fraction (data book cell is a ratio). Printed value in book unit: 0.0632798.",
    "created_at": null
@@ -1476,7 +1476,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=Consol!F67",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Printed as fraction (data book cell is a ratio). Printed value in book unit: 0.0652984.",
    "created_at": null
@@ -1496,7 +1496,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=Consol!G67",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Printed as fraction (data book cell is a ratio). Printed value in book unit: 0.0793532.",
    "created_at": null
@@ -1516,7 +1516,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=Consol!H67",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Printed as fraction (data book cell is a ratio). Printed value in book unit: 0.0907157.",
    "created_at": null
@@ -1536,7 +1536,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=Consol!E70",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints Rs Cr; x10 = Rs Mn. Printed value in book unit: 1467.",
    "created_at": null
@@ -1556,7 +1556,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=Consol!F70",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints Rs Cr; x10 = Rs Mn. Printed value in book unit: 1970.",
    "created_at": null
@@ -1576,7 +1576,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=Consol!G70",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints Rs Cr; x10 = Rs Mn. Printed value in book unit: 2827.",
    "created_at": null
@@ -1596,7 +1596,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=Consol!H70",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints Rs Cr; x10 = Rs Mn. Printed value in book unit: 3494.",
    "created_at": null
@@ -1616,7 +1616,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=Consol!E69",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints lakh; /10 = Mn. Printed value in book unit: 7.61297.",
    "created_at": null
@@ -1636,7 +1636,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=Consol!F69",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints lakh; /10 = Mn. Printed value in book unit: 7.98085.",
    "created_at": null
@@ -1656,7 +1656,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=Consol!G69",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints lakh; /10 = Mn. Printed value in book unit: 8.22398.",
    "created_at": null
@@ -1676,7 +1676,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=Consol!H69",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints lakh; /10 = Mn. Printed value in book unit: 8.79629.",
    "created_at": null
@@ -1696,7 +1696,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=Consol!E72",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Printed in Rs. Printed value in book unit: 18246.2.",
    "created_at": null
@@ -1716,7 +1716,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=Consol!F72",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Printed in Rs. Printed value in book unit: 19322.2.",
    "created_at": null
@@ -1736,7 +1736,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=Consol!G72",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Printed in Rs. Printed value in book unit: 20228.8.",
    "created_at": null
@@ -1756,7 +1756,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=Consol!H72",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Printed in Rs. Printed value in book unit: 23653.7.",
    "created_at": null
@@ -1776,7 +1776,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=WM!E8",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints Rs Cr; x10 = Rs Mn. Printed value in book unit: 127.93. Vintages: 126.93 in Q1FY25 book; 127.93 in Q4FY25 book. Latest value used.",
    "created_at": null
@@ -1796,7 +1796,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=WM!F8",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints Rs Cr; x10 = Rs Mn. Printed value in book unit: 143.798.",
    "created_at": null
@@ -1816,7 +1816,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=WM!G8",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints Rs Cr; x10 = Rs Mn. Printed value in book unit: 153.633.",
    "created_at": null
@@ -1836,7 +1836,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=WM!H8",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints Rs Cr; x10 = Rs Mn. Printed value in book unit: 185.443. Vintages: 183.443 in Q1FY25 book; 185.443 in Q4FY25 book. Latest value used.",
    "created_at": null
@@ -1856,7 +1856,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=WM!E9",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints Rs Cr; x10 = Rs Mn. Printed value in book unit: 163.874.",
    "created_at": null
@@ -1876,7 +1876,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=WM!F9",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints Rs Cr; x10 = Rs Mn. Printed value in book unit: 215.154.",
    "created_at": null
@@ -1896,7 +1896,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=WM!G9",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints Rs Cr; x10 = Rs Mn. Printed value in book unit: 204.995.",
    "created_at": null
@@ -1916,7 +1916,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=WM!H9",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints Rs Cr; x10 = Rs Mn. Printed value in book unit: 265.82.",
    "created_at": null
@@ -1936,7 +1936,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=WM!E7",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints Rs Cr; x10 = Rs Mn. Printed value in book unit: 27.7231. Vintages: 31.5191 in Q1FY25 book; 27.7231 in Q4FY26 book. Latest value used.",
    "created_at": null
@@ -1956,7 +1956,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=WM!F7",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints Rs Cr; x10 = Rs Mn. Printed value in book unit: 36.4997. Vintages: 41.3371 in Q1FY25 book; 36.4997 in Q4FY26 book. Latest value used.",
    "created_at": null
@@ -1976,7 +1976,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=WM!G7",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints Rs Cr; x10 = Rs Mn. Printed value in book unit: 50.7536. Vintages: 55.1615 in Q1FY25 book; 50.7536 in Q4FY26 book. Latest value used.",
    "created_at": null
@@ -1996,7 +1996,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=WM!H7",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints Rs Cr; x10 = Rs Mn. Printed value in book unit: 71.0349. Vintages: 77.7525 in Q1FY25 book; 71.0349 in Q4FY26 book. Latest value used.",
    "created_at": null
@@ -2016,7 +2016,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=WM!E18",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints Rs Cr; x10 = Rs Mn. Printed value in book unit: 4232.41.",
    "created_at": null
@@ -2036,7 +2036,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=WM!F18",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints Rs Cr; x10 = Rs Mn. Printed value in book unit: 4608.",
    "created_at": null
@@ -2056,7 +2056,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=WM!G18",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints Rs Cr; x10 = Rs Mn. Printed value in book unit: 4766.",
    "created_at": null
@@ -2076,7 +2076,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=WM!H18",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints Rs Cr; x10 = Rs Mn. Printed value in book unit: 4988.",
    "created_at": null
@@ -2096,7 +2096,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=WM!E46",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints Rs Cr; x10 = Rs Mn. Printed value in book unit: 3314.71.",
    "created_at": null
@@ -2116,7 +2116,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=WM!F46",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints Rs Cr; x10 = Rs Mn. Printed value in book unit: 4420.21.",
    "created_at": null
@@ -2136,7 +2136,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=WM!G46",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints Rs Cr; x10 = Rs Mn. Printed value in book unit: 4687.",
    "created_at": null
@@ -2156,7 +2156,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=WM!H46",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints Rs Cr; x10 = Rs Mn. Printed value in book unit: 4877.",
    "created_at": null
@@ -2176,7 +2176,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=PWM!E8",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints Rs Cr; x10 = Rs Mn. Printed value in book unit: 50.1045. Vintages: 51.1045 in Q1FY25 book; 50.1045 in Q4FY25 book. Latest value used. Not additive to Consol net brokerage (see backsource.md answer b).",
    "created_at": null
@@ -2196,7 +2196,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=PWM!F8",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints Rs Cr; x10 = Rs Mn. Printed value in book unit: 67.6548. Not additive to Consol net brokerage (see backsource.md answer b).",
    "created_at": null
@@ -2216,7 +2216,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=PWM!G8",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints Rs Cr; x10 = Rs Mn. Printed value in book unit: 63.0334. Not additive to Consol net brokerage (see backsource.md answer b).",
    "created_at": null
@@ -2236,7 +2236,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=PWM!H8",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints Rs Cr; x10 = Rs Mn. Printed value in book unit: 73.4418. Not additive to Consol net brokerage (see backsource.md answer b).",
    "created_at": null
@@ -2256,7 +2256,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=Capital Market!E7",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints Rs Cr; x10 = Rs Mn. Printed value in book unit: 73.0402. Not additive to Consol net brokerage (see backsource.md answer b). Row label is \"Net Brokerage\" in the Q1FY25-Q3FY26 books and \"Net Brokerage & other allied income\" from the Q4FY26 book; FY24 values are identical across all vintages, so treated as the same series.",
    "created_at": null
@@ -2276,7 +2276,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=Capital Market!F7",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints Rs Cr; x10 = Rs Mn. Printed value in book unit: 76.3521. Not additive to Consol net brokerage (see backsource.md answer b). Row label is \"Net Brokerage\" in the Q1FY25-Q3FY26 books and \"Net Brokerage & other allied income\" from the Q4FY26 book; FY24 values are identical across all vintages, so treated as the same series.",
    "created_at": null
@@ -2296,7 +2296,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=Capital Market!G7",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints Rs Cr; x10 = Rs Mn. Printed value in book unit: 49.8557. Not additive to Consol net brokerage (see backsource.md answer b). Row label is \"Net Brokerage\" in the Q1FY25-Q3FY26 books and \"Net Brokerage & other allied income\" from the Q4FY26 book; FY24 values are identical across all vintages, so treated as the same series.",
    "created_at": null
@@ -2316,7 +2316,7 @@
    "source_ref": "data_book:MOSL_DataBook_q4fy26-data-book.xlsx#sheet=Capital Market!H7",
    "extracted_by": "claude",
    "status": "reviewed",
-   "reviewed_at": null,
+   "reviewed_at": "2026-11-03T00:00:00+00:00",
    "supersedes": null,
    "note": "Data book prints Rs Cr; x10 = Rs Mn. Printed value in book unit: 64.9244. Not additive to Consol net brokerage (see backsource.md answer b). Row label is \"Net Brokerage\" in the Q1FY25-Q3FY26 books and \"Net Brokerage & other allied income\" from the Q4FY26 book; FY24 values are identical across all vintages, so treated as the same series.",
    "created_at": null

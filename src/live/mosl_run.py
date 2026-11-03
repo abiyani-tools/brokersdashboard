@@ -1,4 +1,4 @@
-"""MOSL live run: switches m-a ... m-f on the shared snapshot, with MOSL's own facts and its four lake series.
+"""MOSL live run: switches m-a ... m-g on the shared snapshot, with MOSL's own facts and its four lake series.
 
 MOSL publishes no orders, so nothing is borrowed from the Angel One calibration (unlike Groww): a MOSL run needs the shared
 snapshot (calendar, MCX contracts, industry MTF book) and MOSL's inputs only. It still reads the same snapshot as the other
@@ -23,7 +23,7 @@ from .run import EngineSnapshotReader, coverage
 from .snapshot import complete_through_mosl, mosl_lake_series
 
 BROKER = 'MOSL'
-SWITCHES = 'abcdef'
+SWITCHES = 'abcdefg'               # m-g (FY24 quarters) approved by AB on 3 Nov 2026, with its 116 FY24 facts
 
 
 class MoslRefused(RuntimeError):
@@ -77,7 +77,7 @@ def refusal_reasons(switches, msnap, facts):
     by_id = {f['fact_id']: f for f in rows}
     seed_facts = {(f['metric'], f['period_key']): f for f in msnap['facts']}
     fy24_bad = False
-    if 'g' in switches:                                  # m-g: every FY24 fact it reads must be reviewed (AB has not approved it)
+    if 'g' in switches:                                  # m-g: every FY24 fact it reads must be reviewed (AB approved it on 3 Nov 2026)
         have = {(f['metric'], f['period_key']): f for f in rows if not f.get('segment')}
         wanted = MS.fy24_inputs()
         absent = [k for k in wanted if k not in have]

@@ -1,6 +1,6 @@
 # Live run (dry run) · MOSL — as of 2026-10-21
 
-Switches: m-abcdef · E5: pass (0 blocking, 1 warnings, 5 info) · E1 coverage: pass · Summary rows: 1566
+Switches: m-abcdefg · E5: pass (0 blocking, 1 warnings, 7 info) · E1 coverage: pass · Summary rows: 1974
 
 Nothing was written to the database.
 
@@ -27,16 +27,18 @@ Nothing was written to the database.
 | Q2 FY 2027 | F&O | 1.6946 | -13.7% | -2.7% |
 | Q2 FY 2027 | MTF | 4.7191 | +29.2% | +31.7% |
 
-MOSL needs nothing from the Angel One calibration. As of 2026-10-21 (limited by mcx:contracts): 110 inputs come from 110 reviewed data-book facts; the rest are the workbook's. Basis: net brokerage of retail + PWM (Consolidated net brokerage; excludes Capital Markets) plus MTF net interest income. MTF yield: the workbook's typed values, carried at 12.94% ([SOURCE NEEDED: MOSL does not publish an MTF yield]).
+MOSL needs nothing from the Angel One calibration. As of 2026-10-21 (limited by mcx:contracts): 140 inputs come from 140 reviewed data-book facts; the rest are the workbook's. Basis: net brokerage of retail + PWM (Consolidated net brokerage; excludes Capital Markets and currency) plus MTF net interest income. MTF yield: the workbook's typed values, carried at 12.94% ([SOURCE NEEDED: MOSL does not publish an MTF yield]). m-g: F&O, cash and commodities start at Q2 FY24 (reviewed FY24 data-book facts); Q1 FY24 is not calibrated and MTF starts Q3 FY25, so FY 2024, Q1 FY24 and Consolidated FY24 stay insufficient.
 
 ## E5 integrity report
 
 ```
-E5: 0 blocking, 1 warning, 5 info
+E5: 0 blocking, 1 warning, 7 info
+INFO    jump     mcx:contracts 2024-01-01: 206,227 outside 0.2×1,530,602 .. 5.0×4,079,515 — known: 206,227 contracts against a trailing 20-day minimum of 1,530,602: New Year's Day, MCX traded the morning session only (evening session from 5 pm closed; Zerodha bulletin 367799, 1 Jan 2024). Genuine thin day, not a data error; checked once sb_calendar marked the day open (it said MCX closed, 29 Sep 2023 - 28 Mar 2024, until 2 Nov 2026)
 INFO    jump     mcx:contracts 2025-01-01: 406,749 outside 0.2×2,205,346 .. 5.0×7,748,851 — known: 406,749 contracts against a trailing 20-day minimum of 2,205,346: New Year's Day, MCX traded the morning session only (evening session from 5 pm closed; Zerodha bulletin 31 Dec 2024). Genuine thin day, not a data error; not marked special in sb_calendar, so it stays in the commodity averages
 WARNING missing  mtf_industry:book_cr 2026-04-08: no value on a trading day
 INFO    status   bse_fo:contracts [excel_seed] 2026-09-29..2026-10-21 (15 days): status imputed
 INFO    frozen   bse_fo:contracts [excel_seed] 2026-09-28..2026-10-21 (16 days): 18,962,859 repeated 16 days
+INFO    jump     mcx:contracts [excel_seed] 2024-01-01: 206,227 outside 0.2×1,530,602 .. 5.0×4,079,515
 INFO    jump     mcx:contracts [excel_seed] 2025-01-01: 406,749 outside 0.2×2,205,346 .. 5.0×7,748,851
 INFO    missing  mtf_industry:book_cr [excel_seed] 2026-04-08: no value on a trading day
 ```

@@ -1,7 +1,7 @@
-"""MOSL switch m-g: FY24 quarters (docs/MOSL_LIVE_SPEC.md, "Proposed switch m-g"; NOT approved by AB).
+"""MOSL switch m-g: FY24 quarters (docs/MOSL_LIVE_SPEC.md, "Proposed switch m-g"; approved by AB on 3 Nov 2026, live default).
 
-The 116 FY24 candidate facts are read as if reviewed (snapshot/mosl_facts_fy24_candidates_2026-11-03.json, for the bridge
-only). Market data from 1 Jun 2023 comes from the m-g fixtures (snapshot/db_snapshot_2026-11-03.json,
+The 116 FY24 facts are read as reviewed (snapshot/mosl_facts_fy24_candidates_2026-11-03.json: AB's approval of 3 Nov 2026; the
+database gets them from out/mosl/fy24_facts.sql). Market data from 1 Jun 2023 comes from the m-g fixtures (snapshot/db_snapshot_2026-11-03.json,
 snapshot/mosl_lake_2026-11-03.json, built by seed/build_mosl_g_fixtures.py from ExchangesDash's public JSON).
 Run: python -m pytest tests/test_mosl_g.py -q"""
 import copy
@@ -37,29 +37,33 @@ def fy24_facts():
 
 
 # ── fixtures and the switch itself ──
-def test_fixture_is_the_116_fy24_candidates_marked_as_not_approved():
+def test_fixture_is_the_116_fy24_facts_marked_reviewed_per_abs_approval():
     rows = fy24_rows()
     fx = json.load(open(MS.FY24_REVIEWED))
     cand = json.load(open(MS.FY24_CANDIDATES))['sb_disclosure_facts']
     assert len(rows) == len(cand) == 116 and {r['status'] for r in rows} == {'reviewed'}
     assert sorted(r['fact_id'] for r in rows) == list(range(20291, 20407))
-    assert 'not approved' in fx['_meta'] and 'm-g bridge only' in fx['_meta']
+    assert "AB's approval of 3 Nov 2026" in fx['_meta'] and 'not the database' in fx['_meta']
     assert {r['period_key'] for r in rows} == set(quarter_seq('Q1 FY 2024', 'Q4 FY 2024'))
-    assert all(r['broker_id'] == 'MOSL' and r['doc_id'] and r['reviewed_at'] is None for r in rows)
+    assert all(r['broker_id'] == 'MOSL' and r['doc_id'] and r['reviewed_at'].startswith('2026-11-03') for r in rows)
     assert fx == MS.build_fy24_fixture()                                        # reproducible from the candidates
     assert not {(r['metric'], r['period_key']) for r in rows} & {(r['metric'], r['period_key']) for r in MS.load_reviewed()}
+    # the combined file the live run reads in file mode: 290 + 116, all reviewed
+    allf = json.load(open(MS.REVIEWED_ALL))
+    assert allf == MS.build_reviewed_all_fixture() and "AB's approval of 3 Nov 2026" in allf['_about']
+    assert [r['fact_id'] for r in allf['facts']] == list(range(20001, 20407)) and {r['status'] for r in allf['facts']} == {'reviewed'}
 
 
-def test_g_is_an_extra_switch_that_needs_a_and_is_not_on_by_default():
+def test_g_is_an_extra_switch_that_needs_a_and_b_and_is_on_by_default_since_abs_approval():
     assert MS.ORDER == 'abcdef' and MS.EXTRA == 'g' and MS.ALL == 'abcdefg'
     assert MS.cumulative('g') == (frozenset('abcdef'), frozenset('abcdefg'))
     from src.live import mosl_run
-    assert mosl_run.SWITCHES == 'abcdef'                                         # AB has not approved m-g
-    with pytest.raises(MS.SwitchError, match='needs m-a'):
+    assert mosl_run.SWITCHES == 'abcdefg'                                        # AB approved m-g on 3 Nov 2026
+    with pytest.raises(MS.SwitchError, match='needs m-ab'):
         MS.check('g')
-    with pytest.raises(MS.SwitchError, match='needs m-a'):
-        MS.check('bcdefg')
-    assert MS.check('ag') == frozenset('ag')
+    with pytest.raises(MS.SwitchError, match='needs m-ab'):
+        MS.check('acdefg')
+    assert MS.check('abg') == frozenset('abg')
     assert len(MS.fy24_inputs()) == 30 and MS.FY24_QUARTERS == ['Q2 FY 2024', 'Q3 FY 2024', 'Q4 FY 2024']
 
 
@@ -70,6 +74,20 @@ def test_g_off_the_data_extension_changes_no_a_f_row():
     new = run_g('abcdef', SH_G, MS.LAKE_FIXTURE)[1]['daily']
     for seg in old:
         assert new[seg] == old[seg], seg
+
+
+def test_g_off_the_fy24_facts_being_present_changes_nothing():
+    """The database holds the 116 FY24 facts before the code reads them: m-abcdef with them present as reviewed gives the
+    same daily rows, calibration and summary rows as without them."""
+    def go(extra):
+        M = mosl.MoslInputs(json.load(open(PM.MOSL_SNAPSHOT)), json.load(open(SH_G)), tuple('abcdef'),
+                            MS.load_reviewed() + extra, mosl.load_lake(LK_G), '2026-10-21')
+        res = mosl.run(M)
+        return res, B.live_period_rows(M, res), B.adr(M, res)
+    without, with_ = go([]), go(fy24_rows())
+    assert with_[0] == without[0]                                                # daily rows and calibration
+    assert with_[1] == without[1] and with_[2] == without[2]                     # summary rows and the ADR table
+    assert min(with_[0]['daily']['fo']) == '2024-04-01'
 
 
 def test_g_quarters_start_at_q2_fy24_with_actual_regime():
@@ -135,6 +153,14 @@ def test_g_quarter_adr_and_arithmetic():
             assert x['gross'] == pytest.approx(F[(f'gross_brokerage_{s}', q)]['value'] / 10)
         assert det[('Broking', q)]['adr'] == pytest.approx(sum(det[(n, q)]['adr'] for n in ('F&O', 'Cash', 'Commodities')))
     assert [round(det[('Broking', q)]['adr'], 4) for q in MS.FY24_QUARTERS] == [4.2723, 4.4566, 5.5458]
+
+
+def test_g_is_refused_when_the_key_series_start_after_the_first_day_of_q2_fy24():
+    """The old fixtures start on 2023-09-29: Q2 FY24 would be calibrated on part of its key, so the engine raises."""
+    with pytest.raises(MS.SwitchError, match='key series must start by 2023-07-03'):
+        B.run_switches(tuple('abcdefg'))                                         # 23 Oct snapshot, 2 Nov lake
+    with pytest.raises(MS.SwitchError, match='key series must start by 2023-07-03'):
+        B.run_switches(tuple('abcdefg'), SH_G, PM.MOSL_SNAPSHOT, lake_path=MS.LAKE_FIXTURE)
 
 
 def test_g_changes_no_fy25_plus_value_and_keeps_fy24_periods_insufficient():

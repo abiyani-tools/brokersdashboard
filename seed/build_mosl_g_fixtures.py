@@ -1,6 +1,7 @@
 """Fixtures for MOSL switch m-g (FY24 quarters): market data from 1 June 2023, read only from ExchangesDash's public JSON.
 
     python3 seed/build_mosl_g_fixtures.py [SHARED_IN [LAKE_OUT [SHARED_OUT]]]
+    python3 seed/build_mosl_g_fixtures.py --db-variant   # only snapshot/mosl_lake_db_2026-11-03.json, from the committed lake file
 
 Reads nothing but the owner's public files (src.live.refresh_market.fetch(): nse / bse / mcx dashboard JSON on
 raw.githubusercontent.com, each at the latest commit that changed it) and the committed shared snapshot. No database is
@@ -17,6 +18,11 @@ refresh now does after step A1, and writes:
                                            - is_mcx_day set true on 2023-09-29 .. 2024-03-28 where MCX traded (the database
                                              has these flags since 2 Nov 2026; the snapshot had them false).
                                          Every other row is unchanged.
+  snapshot/mosl_lake_db_2026-11-03.json  the lake fixture with the three differences the database showed on 2 Nov 2026 (io_contracts
+                                         zero on 12-15 Oct and nothing after, BSE cash turnover 0.0 on 2026-06-15), as
+                                         build_mosl_lake.as_read_in_db() makes them: for the E5 tests of the live run (m-g needs
+                                         the series from June 2023, which mosl_lake_db_2026-11-02.json lacks). Built from the
+                                         committed lake file; nothing is fetched.
 """
 import datetime as dt
 import json
@@ -35,6 +41,7 @@ START = '2023-06-01'
 SHARED_IN = os.path.join(ROOT, 'snapshot', 'db_snapshot_2026-10-23.json')
 LAKE_OUT = os.path.join(ROOT, 'snapshot', 'mosl_lake_2026-11-03.json')
 SHARED_OUT = os.path.join(ROOT, 'snapshot', 'db_snapshot_2026-11-03.json')
+DB_OUT = os.path.join(ROOT, 'snapshot', 'mosl_lake_db_2026-11-03.json')
 MCX_END = '2024-03-28'            # the snapshot's own MCX series starts 2024-04-01
 
 
@@ -88,6 +95,17 @@ def _day_before(day):
     return (dt.date.fromisoformat(day) - dt.timedelta(days=1)).isoformat()
 
 
+def db_variant(lake_path=LAKE_OUT, out=DB_OUT):
+    lake = json.load(open(lake_path))
+    db = L.fixture(L.as_read_in_db(lake['series']),
+                   'Same series as the database held them on 2 Nov 2026 before that day\'s refresh, from 2023-06-01: io_contracts zero '
+                   '(suspect) on 12-15 Oct and no row after, bse_cash turnover 0.0 on 2026-06-15. For the E5 tests. Read only.')
+    with open(out, 'w') as fh:
+        json.dump(db, fh, indent=0)
+        fh.write('\n')
+    print(out, {k: (len(v), v[0][0], v[-1][0]) for k, v in db['series'].items()})
+
+
 def main(shared_in=SHARED_IN, lake_out=LAKE_OUT, shared_out=SHARED_OUT):
     data, shas = R.fetch()
     lake, snap = build(data, shas, json.load(open(shared_in)))
@@ -103,4 +121,7 @@ def main(shared_in=SHARED_IN, lake_out=LAKE_OUT, shared_out=SHARED_OUT):
 
 
 if __name__ == '__main__':
-    main(*sys.argv[1:])
+    if sys.argv[1:] == ['--db-variant']:
+        db_variant()
+    else:
+        main(*sys.argv[1:])

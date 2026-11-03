@@ -418,7 +418,7 @@ def _g_markdown(b):
     L = ['## m-g: FY24 quarters', '',
          "MOSL's quarters now start at Q2 FY24 (Jul 2023). F&O, cash and commodities calibrate Q2 - Q4 FY24 exactly as m-a does "
          "for FY25+: rate = reported gross brokerage / (share x the quarter's key), revenue = rate x share x the day's key x "
-         "net / gross. The facts are the 116 FY24 candidates, loaded as if reviewed (not approved); the FY24 gross and net "
+         "net / gross. The facts are the 116 FY24 facts (AB approved them with the switch on 3 Nov 2026); the FY24 gross and net "
          "brokerage Rs Mn are divided by 10 to Rs Cr. Market data from 1 June 2023 "
          f"({os.path.basename(g['shared'])}, {os.path.basename(g['lake'])}; read only from ExchangesDash's public JSON). "
          f"No revenue row exists before Q2 FY24 (the {len(g['no_row_dates'])} calendar days from {g['no_row_dates'][0]} to "

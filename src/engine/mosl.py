@@ -21,7 +21,7 @@ Workbook quirks kept in parity mode (section 8c):
     before `comm_o_blank_from_date` and blank from it; MTF has no row after the last formula date;
   - F&O Q3/Q4 FY24 are #N/A (no table row), Q1/Q2 FY25 numeric 0 (blank rate), 31 May 2024 is #VALUE! (text key).
 
-Switch m-g (not approved): the quarters start at Q2 FY24 (M.qs, the first-quarter pins) and the same tables calibrate Q2 - Q4 FY24 from
+Switch m-g (approved by AB on 3 Nov 2026): the quarters start at Q2 FY24 (M.qs, the first-quarter pins) and the same tables calibrate Q2 - Q4 FY24 from
 FY24 facts; no row exists before Q2 FY24 (Q1 FY24 is not calibrated), and MTF still starts Q3 FY25.
 
 Daily rows: {date: {'rev_<unit>': net or None, 'gross_<unit>': gross or None, 'err': '#N/A' | '#VALUE!' | None}}.
@@ -96,6 +96,14 @@ class MoslInputs:
                     raise MS.SwitchError(f'switch m-b: the lake series {key} is missing')
                 self._lake[key] = {d: v for d, v in lake[key].items() if as_of is None or d <= as_of}
 
+        if 'g' in self.switches:                          # Q2 FY24 is calibrated on its whole key: the series must reach back to it
+            starts = {f'lake {k}': min(v) for k, v in self._lake.items() if v}
+            starts.update({f'{ds}:{m}': min(v) for (ds, m), v in self._mkt.items() if (ds, m) == SHARED['mcx'] and v})
+            late = {k: d for k, d in starts.items() if d > MS.FY24_FIRST_DAY}
+            if late or len(starts) < len(LAKE_KEYS) + 1:
+                raise MS.SwitchError(f'switch m-g: the key series must start by {MS.FY24_FIRST_DAY} (Q2 FY24 is calibrated on its '
+                                     f'whole quarter); they start {late or sorted(starts)}')
+
     def on(self, letter):
         return letter in self.switches
 
@@ -153,7 +161,7 @@ def load_lake(path=None):
 def load(shared_snapshot, mosl_snapshot, switches=(), reviewed_path=None, lake_path=None, as_of=None, fy24_path=None):
     """MoslInputs from the shared (Angel) snapshot path and the MOSL snapshot path.
     switches: MOSL live switches; the reviewed facts (and, for m-b, the lake fixture) are read from their default fixtures.
-    Switch m-g also reads the FY24 facts (fy24_path; default: the candidate fixture, treated as reviewed, not approved)."""
+    Switch m-g also reads the FY24 facts (fy24_path; default: the FY24 fixture, reviewed per AB's approval of 3 Nov 2026)."""
     switches = MS.check(switches)
     reviewed = MS.load_reviewed(reviewed_path or MS.REVIEWED) if switches else None
     if 'g' in switches:

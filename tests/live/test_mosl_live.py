@@ -1,5 +1,7 @@
-"""MOSL in the live run: dry run and as-of date, E5 on MOSL's own series (zero = suspect), refusal, publish rows,
-`--broker all` ordering and the independence of Angel One and Groww."""
+"""MOSL in the live run (switches a-g, m-g on by default since AB's approval of 3 Nov 2026): dry run and as-of date, E5 on
+MOSL's own series (zero = suspect), refusal, publish rows, `--broker all` ordering and the independence of Angel One and Groww.
+MOSL reads its own market data from 1 Jun 2023 (db_snapshot_2026-11-03.json, mosl_lake_2026-11-03.json) and the 406 reviewed
+facts (mosl_facts_reviewed_2026-11-03.json); Angel One and Groww keep the 23 Oct snapshot."""
 import json
 import os
 
@@ -19,11 +21,13 @@ ROOT = os.path.join(os.path.dirname(__file__), '..', '..')
 SNAP = os.path.join(ROOT, 'snapshot', 'db_snapshot_2026-10-23.json')
 REVIEWED = os.path.join(ROOT, 'snapshot', 'facts_reviewed_2026-10-23.json')
 MSNAP = os.path.join(ROOT, 'snapshot', 'mosl_snapshot_2026-10-23.json')
-LAKE = os.path.join(ROOT, 'snapshot', 'mosl_lake_2026-11-02.json')
-LAKE_DB = os.path.join(ROOT, 'snapshot', 'mosl_lake_db_2026-11-02.json')
+LAKE = MS.LAKE_FIXTURE_G                    # the lake as the daily refresh writes it, from 2023-06-01
+LAKE_DB = MS.LAKE_DB_FIXTURE_G              # ... as the database held it on 2 Nov 2026 (io_contracts zero 12-15 Oct)
+SHARED_G = MS.SHARED_FIXTURE_G              # calendar and MCX contracts from 2023-06-01
+FACTS = MS.REVIEWED_ALL                     # 290 + the 116 FY24 facts, reviewed
 GDB_INPUTS = os.path.join(ROOT, 'out', 'groww', 'db_inputs.json')
 MDB_INPUTS = os.path.join(ROOT, 'out', 'mosl', 'db_inputs.json')
-FILES = ['--mosl-snapshot', MSNAP, '--mosl-facts', MS.REVIEWED, '--mosl-lake', LAKE]
+FILES = ['--mosl-snapshot', MSNAP, '--mosl-facts', FACTS, '--mosl-lake', LAKE, '--mosl-shared', SHARED_G]
 SECRET = 'sb_secret_TEST_ONLY_not_a_real_key'
 
 
@@ -60,7 +64,7 @@ def lake_rows(path=LAKE):
 
 
 def mosl_facts(status='reviewed'):
-    return [dict(f, status=status) for f in MS.load_reviewed()]
+    return [dict(f, status=status) for f in MS.load_reviewed(FACTS)]
 
 
 def db_tables(mosl_status='reviewed', with_inputs=True, lake=LAKE):
@@ -68,7 +72,10 @@ def db_tables(mosl_status='reviewed', with_inputs=True, lake=LAKE):
     `mosl_status`, and (with_inputs) the seed facts, assumptions and pins of out/mosl/db_inputs.json."""
     from tests.live.test_groww_live import db_tables as groww_db_tables
     t = groww_db_tables('reviewed')
-    t['sb_market_daily'] = list(t['sb_market_daily']) + lake_rows(lake)
+    G = json.load(open(SHARED_G))                    # market data from 2023-06-01, as the database holds it since step A1
+    t['sb_calendar'] = list(G['calendar'])
+    t['sb_market_daily'] = list(t['sb_market_daily']) + lake_rows(lake) + [
+        dict(r, source='exchangesdash_json') for r in G['market_daily'] if r['dataset'] == 'mcx' and r['trade_date'] < '2024-04-01']
     t['sb_disclosure_facts'] = list(t['sb_disclosure_facts']) + [dict(f, fact_id=846 + i) for i, f in enumerate(mosl_facts(mosl_status))]
     if with_inputs:
         r = json.load(open(MDB_INPUTS))
@@ -80,7 +87,7 @@ def db_tables(mosl_status='reviewed', with_inputs=True, lake=LAKE):
 
 @pytest.fixture(scope='module')
 def shared():
-    return json.load(open(SNAP))
+    return json.load(open(SHARED_G))
 
 
 @pytest.fixture(scope='module')
@@ -100,7 +107,7 @@ def writer_env(monkeypatch):
 
 # ── the dry run, its as-of date and what limits it ──
 def test_mosl_dry_run_headline_and_as_of(mosl):
-    assert mosl['broker'] == 'MOSL' and mosl['switches'] == 'abcdef' and mosl['as_of'] == '2026-10-21'
+    assert mosl['broker'] == 'MOSL' and mosl['switches'] == 'abcdefg' and mosl['as_of'] == '2026-10-21'
     assert mosl['limiting'] == 'mcx:contracts' and not mosl['report'].blocking, mosl['report'].summary()
     get = {(r['panel'], r['row_label']): r['value'] for r in mosl['rows'] if r['period_type'] in ('FY', 'Q', 'M')}
     assert get[('Consolidated', 'FY 2027')] == pytest.approx(8.718295, abs=5e-7)
@@ -109,14 +116,14 @@ def test_mosl_dry_run_headline_and_as_of(mosl):
     keys = [(r['panel'], r['period_type'], r['period_key'], r['table_name'], r['row_label']) for r in mosl['rows']]
     assert len(keys) == len(set(keys)) and 'MTF (net)' not in {k[0] for k in keys}
     md = report_md(mosl)
-    assert md.startswith('# Live run (dry run) · MOSL') and 'Switches: m-abcdef' in md and 'net brokerage + MTF NII' in md
+    assert md.startswith('# Live run (dry run) · MOSL') and 'Switches: m-abcdefg' in md and 'net brokerage + MTF NII' in md
     assert 'SOURCE NEEDED: MOSL does not publish an MTF yield' in md
 
 
 def test_mosl_matches_the_bridge_chain(mosl):
-    """The live run is the engine chain a-f on the same series: the rows equal the bridge's after-f numbers."""
+    """The live run is the engine chain a-g on the same series: the rows equal the bridge's after-g numbers."""
     from src.engine import mosl_bridge as B
-    t = B.adr(*B.run_switches('abcdef'))
+    t = B.adr(*B.run_switches('abcdefg', SHARED_G, MSNAP, lake_path=LAKE))
     get = {(r['period_key'], r['panel']): r['value'] for r in mosl['rows'] if r['row_label'] == r['period_key']}
     for (p, k, panel), v in t.items():
         if (k, panel) in get and get[(k, panel)] is not None:
@@ -201,7 +208,7 @@ def test_a_run_without_the_labelled_yield_assumption_is_refused(shared, msnap):
 def test_mosl_inputs_from_the_db_tables_and_the_db_seed_rows_equal_the_snapshot(shared, msnap):
     reader = TablesReader(db_tables())
     snap, facts = mosl_inputs(reader)
-    assert (len(snap['facts']), len(snap['assumptions']), len(snap['pins']), len(facts)) == (101, 12, 11, 290)
+    assert (len(snap['facts']), len(snap['assumptions']), len(snap['pins']), len(facts)) == (101, 12, 11, 406)
     assert all(f['broker_id'] == 'MOSL' for f in snap['facts'] + facts)
     run = live_run_mosl(shared, snap, facts, mosl_lake_rows(reader.table('sb_market_daily')))
     again = live_run_mosl(shared, msnap, mosl_facts(), lake_rows())
@@ -214,7 +221,7 @@ def test_publish_writes_mosl_rows_with_the_brokers_id(mosl, writer_env):
     run_id, counts = publish(mosl, SupabaseWriter(session=s, chunk=100000), notes_extra='MOSL complete through 2026-10-21')
     first = s.calls[0]
     assert first[1] == 'sb_runs' and first[2][0]['broker_id'] == 'MOSL' and first[2][0]['mode'] == 'live'
-    assert 'MOSL switches m-abcdef' in first[2][0]['notes'] and first[2][0]['as_of_date'] == '2026-10-21'
+    assert 'MOSL switches m-abcdefg' in first[2][0]['notes'] and first[2][0]['as_of_date'] == '2026-10-21'
     assert s.calls[-1][0] == 'PATCH' and s.calls[-1][2]['status'] == 'success'
     pk = {'sb_calibration': ('run_id', 'segment', 'period_key', 'param'),
           'sb_daily_revenue': ('run_id', 'trade_date', 'segment'),
@@ -255,7 +262,10 @@ def test_rows_for_other_brokers_are_unchanged(mosl):
 def test_parse():
     o = cli.parse(['--broker', 'mosl', '--db', '--mosl-lake', 'l.json'])
     assert o['broker'] == 'MOSL' and o['db'] and o['mosl_lake'] == 'l.json'
-    assert cli.parse([])['mosl_snapshot'].endswith('mosl_snapshot_2026-10-23.json')
+    o = cli.parse([])
+    assert o['mosl_snapshot'].endswith('mosl_snapshot_2026-10-23.json')
+    assert o['mosl_facts'].endswith('mosl_facts_reviewed_2026-11-03.json') and o['mosl_lake'].endswith('mosl_lake_2026-11-03.json')
+    assert o['mosl_shared'].endswith('db_snapshot_2026-11-03.json') and o['snapshot'].endswith('db_snapshot_2026-10-23.json')
     assert cli.parse(['--broker=all'])['broker'] == 'ALL'
     with pytest.raises(SystemExit):
         cli.parse(['--broker', 'zerodha'])
@@ -265,16 +275,35 @@ def test_dry_run_from_files_writes_mosl_under_its_own_as_of(monkeypatch, tmp_pat
     monkeypatch.chdir(tmp_path)
     rc = cli.main(['--broker', 'MOSL', SNAP, REVIEWED] + FILES)
     out = capsys.readouterr().out
-    assert rc == 0 and '· MOSL' in out and 'Nothing was written to the database' in out
+    assert rc == 0 and '· MOSL' in out and 'Nothing was written to the database' in out and 'Switches: m-abcdefg' in out
     assert 'MOSL complete through 2026-10-21 (limited by mcx:contracts)' in out
     assert 'Angel One live run' not in out                                  # MOSL needs no Angel run
     assert (tmp_path / 'out/live/2026-10-21/mosl/summary_rows.json').exists()
     assert not (tmp_path / 'out/live/2026-10-21/report.md').exists()
 
 
+def test_file_mode_defaults_give_a_full_non_refused_mosl_run_with_g_on(monkeypatch, tmp_path, capsys):
+    """`run_live.py --broker MOSL` / `all` with no file options: MOSL reads the defaults (406 reviewed facts, its own
+    snapshot from Jun 2023, the lake from Jun 2023) and is neither refused nor blocked; m-g is on."""
+    os.symlink(os.path.join(ROOT, 'snapshot'), tmp_path / 'snapshot')
+    monkeypatch.chdir(tmp_path)
+    rc = cli.main(['--broker', 'MOSL'])
+    out = capsys.readouterr().out
+    assert rc == 0 and 'MOSL not published' not in out and 'E5: BLOCKING' not in out and 'E5: pass' in out
+    assert not (tmp_path / 'out/live/2026-10-21/report.md').exists()                  # no Angel One run for MOSL alone
+    assert 'Switches: m-abcdefg' in out and 'MOSL complete through 2026-10-21 (limited by mcx:contracts)' in out
+    rows = json.load(open(tmp_path / 'out/live/2026-10-21/mosl/summary_rows.json'))
+    get = {(r['panel'], r['row_label']): r['value'] for r in rows if r['period_type'] in ('FY', 'Q')}
+    assert get[('Broking', 'Q2 FY 2024')] == pytest.approx(4.272250, abs=5e-7)
+    assert get[('Broking', 'Q4 FY 2024')] == pytest.approx(5.545791, abs=5e-7)
+    assert get[('Consolidated', 'Q2 FY 2024')] is None and get[('Broking', 'FY 2024')] is None
+    assert get[('Consolidated', 'Q2 FY 2027')] == pytest.approx(8.967060, abs=5e-7)
+
+
 def test_db_state_dry_run_has_an_earlier_as_of_and_is_blocked(monkeypatch, tmp_path, capsys):
     monkeypatch.chdir(tmp_path)
-    rc = cli.main(['--broker', 'MOSL', SNAP, REVIEWED, '--mosl-snapshot', MSNAP, '--mosl-facts', MS.REVIEWED, '--mosl-lake', LAKE_DB])
+    rc = cli.main(['--broker', 'MOSL', SNAP, REVIEWED, '--mosl-snapshot', MSNAP, '--mosl-facts', FACTS, '--mosl-lake', LAKE_DB,
+                  '--mosl-shared', SHARED_G])
     out = capsys.readouterr().out
     assert rc == 1 and 'as of 2026-10-09' in out and 'E5: BLOCKING' in out and 'WARNING MOSL not published' in out
     assert (tmp_path / 'out/live/2026-10-09/mosl/report.md').exists()
