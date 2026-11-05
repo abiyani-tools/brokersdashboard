@@ -59,7 +59,8 @@ def test_mcx_contracts_and_mtf_book_are_picked_up_once_published():
     mcx['daily_all'][0]['total_contracts'] = 18_289_605
     mcx['special_sessions'] = [{'date': '2024-04-11', 'total_contracts': 1_000}]      # MCX-only session
     sep = [{'date': '2026-10-22', 'total_contracts': 18_300_000}, {'date': '2026-10-23', 'total_contracts': 0}]
-    mtf = {'updated_at': '2026-11-05T03:26:03Z', 'nse': [{'date': '2026-10-22', 'closing_cr': 148_900.5},
+    mtf = {'updated_at': '2026-11-05T03:26:03Z', 'nse': [{'date': '2024-09-30', 'closing_cr': 77_000.0},
+                                                         {'date': '2026-10-22', 'closing_cr': 148_900.5},
                                                          {'date': '2026-10-23', 'closing_cr': None}],
            'bse': [{'date': '2026-10-22', 'closing_cr': 9_999.0}]}               # BSE's book is not the industry book
     rows = _by_key(lake_rows(dict(DATA, mcx=mcx, mcx_contracts=sep, mtf=mtf), SHAS, 'now'))
@@ -71,6 +72,7 @@ def test_mcx_contracts_and_mtf_book_are_picked_up_once_published():
     assert m['value'] == 148_900.5 and m['unit'] == 'Rs Cr' and m['status'] == 'ok'
     assert m['source'] == SOURCE and m['source_ref'].endswith('dashboard/data/mtf_daily.json[2026-10-22].nse.closing_cr')
     assert ('2026-10-23', 'mtf_industry', 'book_cr') not in rows
+    assert ('2024-09-30', 'mtf_industry', 'book_cr') not in rows        # before the workbook's MTF (MTF_JSON_START)
 
 
 @pytest.mark.parametrize('key,old_source', [('nse_fo:contracts', 'exchangesdash_json@b2049b5'),

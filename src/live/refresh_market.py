@@ -47,6 +47,9 @@ SOURCE = "exchangesdash_json"
 START = "2023-06-01"   # A1 (AB, 2 Nov 2026): June 2023. Before it BSE F&O is zero / ramping up after its 15 May 2023
                        # relaunch, which E5 blocks on. Was 2023-09-29. Needs sb_calendar's MCX flags right (fixed 2 Nov:
                        # out/calendar/fix_mcx_flags_2026-11-02.sql), else 5 Commodities 6M averages per broker read April 2024 alone.
+MTF_JSON_START = "2024-10-01"   # the workbook's first industry MTF day. mtf_daily.json starts on 2023-11-06, but the
+                                # engine's MTF shares begin in Q3 FY 2025 (Angel One: KeyError on 'Q3 FY 2024', 5 Nov 2026)
+                                # and earlier days would add MTF to Groww's FY 2025, so the file's earlier days are left out.
 PK = ("trade_date", "dataset", "metric", "source")
 
 
@@ -97,6 +100,8 @@ def lake_rows(data: dict, shas: dict, loaded_at: str) -> list[dict]:
         for r in _rows(data.get(key, {})):
             push(key, r["date"], "mcx", "contracts", r.get("total_contracts"), "total_contracts", "count", True)
     for r in data.get("mtf", {}).get("nse", []):
+        if r["date"] < MTF_JSON_START:
+            continue
         push("mtf", r["date"], "mtf_industry", "book_cr", r.get("closing_cr"), "nse.closing_cr", "Rs Cr", True)
     return sorted(out.values(), key=lambda x: (x["trade_date"], x["dataset"], x["metric"]))
 
