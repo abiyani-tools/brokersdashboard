@@ -9,3 +9,6 @@ out/live/*/summary_rows.json
 out/live/*/snapshot.json
 out/filings/*/payload.json
 out/groww_ir/
+out/pat/dev/
+out/pat/*/*_pat_lines.json
+out/pat/preview/
