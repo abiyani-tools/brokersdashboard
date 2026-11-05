@@ -42,7 +42,7 @@ def test_mapping_matches_the_23_oct_import():
     assert rows[('2026-10-22', 'bse_cash', 'trades')]['status'] == 'suspect'
     assert rows[('2026-10-22', 'bse_fo', 'contracts')]['status'] == 'ok'
     assert ('2025-10-21', 'nse_fo', 'contracts') in rows               # special sessions are kept
-    # not public yet: NSE cash trades, MCX contracts, MTF book
+    # not in these fixtures: NSE cash trades, MCX contracts, MTF book
     assert not [k for k in rows if k[1:] in (('nse_cash', 'trades'), ('mcx', 'contracts'),
                                              ('mtf_industry', 'book_cr'))]
 
@@ -59,7 +59,9 @@ def test_mcx_contracts_and_mtf_book_are_picked_up_once_published():
     mcx['daily_all'][0]['total_contracts'] = 18_289_605
     mcx['special_sessions'] = [{'date': '2024-04-11', 'total_contracts': 1_000}]      # MCX-only session
     sep = [{'date': '2026-10-22', 'total_contracts': 18_300_000}, {'date': '2026-10-23', 'total_contracts': 0}]
-    mtf = [{'date': '2026-10-22', 'book_cr': 148_900.5}]
+    mtf = {'updated_at': '2026-11-05T03:26:03Z', 'nse': [{'date': '2026-10-22', 'closing_cr': 148_900.5},
+                                                         {'date': '2026-10-23', 'closing_cr': None}],
+           'bse': [{'date': '2026-10-22', 'closing_cr': 9_999.0}]}               # BSE's book is not the industry book
     rows = _by_key(lake_rows(dict(DATA, mcx=mcx, mcx_contracts=sep, mtf=mtf), SHAS, 'now'))
     r = rows[('2026-10-22', 'mcx', 'contracts')]
     assert r['value'] == 18_300_000 and r['source_ref'].startswith('sucaanalytics-max/ExchangesDash@2222222:')
@@ -67,6 +69,8 @@ def test_mcx_contracts_and_mtf_book_are_picked_up_once_published():
     assert rows[('2026-10-23', 'mcx', 'contracts')]['status'] == 'suspect'
     m = rows[('2026-10-22', 'mtf_industry', 'book_cr')]
     assert m['value'] == 148_900.5 and m['unit'] == 'Rs Cr' and m['status'] == 'ok'
+    assert m['source'] == SOURCE and m['source_ref'].endswith('dashboard/data/mtf_daily.json[2026-10-22].nse.closing_cr')
+    assert ('2026-10-23', 'mtf_industry', 'book_cr') not in rows
 
 
 @pytest.mark.parametrize('key,old_source', [('nse_fo:contracts', 'exchangesdash_json@b2049b5'),
@@ -222,6 +226,36 @@ def test_a_failed_mtf_view_still_writes_the_exchangesdash_rows(monkeypatch, caps
     assert R.main(['--write']) == 1                                        # the step shows as failed ...
     assert len(written['sb_market_daily']) == len(lake_rows(DATA, SHAS, 'now'))   # ... after the lake rows are written
     assert 'industry MTF book: NOT read (RuntimeError: 401' in capsys.readouterr().out
+
+
+def test_a_failed_mtf_view_is_not_a_failure_when_mtf_daily_json_has_the_book(monkeypatch, capsys):
+    """5 Nov 2026: the view still answers 401, but the owner's mtf_daily.json has the book through 3 Nov."""
+    from src.live import refresh_market as R
+    data = dict(DATA, mtf={'nse': [{'date': '2026-11-03', 'closing_cr': 144_681.2453}]})
+    monkeypatch.setattr(R, 'fetch', lambda: (data, SHAS))
+
+    def boom():
+        raise RuntimeError('401 Client Error: Unauthorized')
+    monkeypatch.setattr(R, 'fetch_mtf_book', boom)
+    assert R.main([]) == 0
+    assert 'mtf_daily.json has the book' in capsys.readouterr().out
+
+
+def test_fetch_sends_the_github_token_when_set(monkeypatch):
+    from src.live.refresh_market import FILES, fetch
+    seen = []
+
+    class G(GH):
+        def get(self, url, params=None, headers=None, timeout=None):
+            if 'api.github.com' in url:
+                seen.append((headers or {}).get('Authorization'))
+            return super().get(url, params, headers, timeout)
+    files = {FILES['nse']: NSE, FILES['bse']: BSE, FILES['mcx']: MCX}
+    monkeypatch.delenv('GITHUB_TOKEN', raising=False)
+    fetch(G(files, missing=(FILES['mcx_contracts'], FILES['mtf'])))
+    monkeypatch.setenv('GITHUB_TOKEN', 'ghs_TEST_ONLY')
+    fetch(G(files, missing=(FILES['mcx_contracts'], FILES['mtf'])))
+    assert set(seen) == {None, 'Bearer ghs_TEST_ONLY'}
 
 
 def test_industry_mtf_book_pages_through_the_view(monkeypatch):
