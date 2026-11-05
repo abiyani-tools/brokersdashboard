@@ -15,8 +15,9 @@ name: daily
 # red in the job, prints an error annotation, and the "Groww IR archive failed" step adds a warning to the job summary; the
 # live run still goes ahead. The raw page is kept as the artifact groww-ir-raw. Fallback from AB's Mac: docs/GROWW_LIVE_SPEC.md,
 # "Running the archive from AB's Mac". Groww's switch g-i (signed off) reads this archive; g-h is off.
-# Industry MTF book: the ExchangesDash owner's view codex_public_nse_mtf_daily, read with their read-only key
-# (secret NSE_LAKE_ANON_KEY); without it the refresh skips that series and says so.
+# Industry MTF book: the `nse` rows of the owner's public dashboard/data/mtf_daily.json; also their view
+# codex_public_nse_mtf_daily with their read-only key (secret NSE_LAKE_ANON_KEY), which has answered 401 since 2 Nov 2026.
+# GITHUB_TOKEN (the job's own token) lifts GitHub's 60-an-hour limit on the refresh's commits lookups (403 on 4 Nov 2026).
 on:
   workflow_dispatch:
   schedule:
@@ -28,6 +29,7 @@ jobs:
       SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
       SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
       NSE_LAKE_ANON_KEY: ${{ secrets.NSE_LAKE_ANON_KEY }}
+      GITHUB_TOKEN: ${{ github.token }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5

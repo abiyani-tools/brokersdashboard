@@ -9,14 +9,17 @@ as seed/build_fixtures.py did for the 23 Oct import. Rows go under the stable so
 'octo_mcx@2026-10-22' rows, so each run replaces the whole series and the owner's corrections to past days
 come through. A zero on a trading day is stored as 'suspect' for E5 to block on.
 
-Three series are not public yet; the owner was asked to publish them under these names
-(docs/Prompt_for_ExchangesDash_owner.md) and they are read as soon as they appear:
+Three series were added to the owner's files after the 23 Oct import (docs/Prompt_for_ExchangesDash_owner.md):
   1. NSE cash trades     `cash_trades` in nse_dashboard_data.json rows
   2. MCX contracts       `total_contracts` in mcx_dashboard_data.json rows, or mcx_contracts_daily.json
-  3. industry MTF book   nse_mtf_daily.json rows {date, book_cr}
-The two new files are optional: a file the repo doesn't have is skipped. The owner's answer (2 Nov 2026): NSE cash
-trades and MCX total_contracts arrive in those files with their PR #33; the industry MTF book stays in their
-Supabase view `codex_public_nse_mtf_daily`, read with their read-only key (env NSE_LAKE_ANON_KEY; skipped if unset).
+  3. industry MTF book   `closing_cr` of the `nse` rows in mtf_daily.json (their MTF tab's file, NSE's mrg_trading)
+The optional files are skipped if the repo doesn't have them. The industry MTF book is also read from the owner's
+Supabase view `codex_public_nse_mtf_daily` with their read-only key (env NSE_LAKE_ANON_KEY; skipped if unset). That view
+has answered 401 since 2 Nov 2026 (MTF stopped at 19 Oct), so mtf_daily.json is the main source now; on the 507 days
+both have it equals the workbook's MTF book (AB, 5 Nov 2026).
+
+GitHub's API allows 60 unauthenticated requests an hour per IP, which shared runners exceed (403 "rate limit
+exceeded", 4 Nov 2026): the token in GITHUB_TOKEN, if set, is sent with the commits lookups.
 
 sb_calendar is extended the same way: each day after its last date on which NSE or MCX traded (a row in
 the NSE or MCX file) is added, equity / MCX flags from which file has it. A day in a file's
@@ -37,7 +40,7 @@ FILES = {
     "bse": "dashboard/data/bse_dashboard_data.json",
     "mcx": "dashboard/data/mcx_dashboard_data.json",
     "mcx_contracts": "dashboard/data/mcx_contracts_daily.json",     # optional
-    "mtf": "dashboard/data/nse_mtf_daily.json",                     # optional
+    "mtf": "dashboard/data/mtf_daily.json",                         # optional; industry MTF book
 }
 REQUIRED = ("nse", "bse", "mcx")
 SOURCE = "exchangesdash_json"
@@ -93,8 +96,8 @@ def lake_rows(data: dict, shas: dict, loaded_at: str) -> list[dict]:
     for key in ("mcx", "mcx_contracts"):
         for r in _rows(data.get(key, {})):
             push(key, r["date"], "mcx", "contracts", r.get("total_contracts"), "total_contracts", "count", True)
-    for r in _rows(data.get("mtf", {})):
-        push("mtf", r["date"], "mtf_industry", "book_cr", r.get("book_cr"), "book_cr", "Rs Cr", True)
+    for r in data.get("mtf", {}).get("nse", []):
+        push("mtf", r["date"], "mtf_industry", "book_cr", r.get("closing_cr"), "nse.closing_cr", "Rs Cr", True)
     return sorted(out.values(), key=lambda x: (x["trade_date"], x["dataset"], x["metric"]))
 
 
@@ -130,6 +133,8 @@ def fetch(session=None):
         import requests
         session = requests.Session()
     headers = {"Accept": "application/vnd.github+json", "User-Agent": "brokersdashboard-refresh"}
+    if os.environ.get("GITHUB_TOKEN"):
+        headers["Authorization"] = f"Bearer {os.environ['GITHUB_TOKEN']}"
     data, shas = {}, {}
     for k, path in FILES.items():
         resp = session.get(f"https://api.github.com/repos/{REPO}/commits", params={"path": path, "per_page": 1},
@@ -219,10 +224,11 @@ def main(argv=None) -> int:
         view, msg, mtf_failed = [], f"industry MTF book: NOT read ({type(e).__name__}: {e}); the other rows are still written", True
         if os.environ.get("GITHUB_ACTIONS"):
             print(f"::warning title=Industry MTF book not read::{msg}")
+    have_mtf = any(r["dataset"] == "mtf_industry" for r in rows)
     rows += mtf_rows(view, loaded_at)
-    print(f"  {msg}")
+    print(f"  {msg}" + (" (mtf_daily.json has the book, so nothing is missing)" if mtf_failed and have_mtf else ""))
     print(summary(rows))
-    rc = 1 if mtf_failed else 0                      # the step still shows as failed, after the rows are written
+    rc = 1 if mtf_failed and not have_mtf else 0     # the step still shows as failed, after the rows are written
     if "--write" not in argv:
         print("dry run: nothing written (pass --write to upsert into sb_market_daily and extend sb_calendar)")
         return rc
