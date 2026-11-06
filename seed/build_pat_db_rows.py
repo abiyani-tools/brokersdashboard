@@ -8,6 +8,8 @@ Adds sb_assumptions rows (key prefix pat_, from seed/pat_assumptions.json) and s
 quarterly P&L lines and shares outstanding (segment 'consolidated', extracted_by 'claude', status 'staged'). Staged
 facts are not used by a live run until reviewed (status 'reviewed'), as for every other filing fact.
 Idempotent: running the SQL twice adds nothing. Changes no existing row.
+Full-year rows (Angel One's FY 2025 / FY 2026 totals) are left out: sb_disclosure_facts takes period_type M or Q
+only, and the model reads quarters. The FY 2026 figures behind the derived Q3 FY 2026 rows stay in those rows' notes.
 """
 import json
 from pathlib import Path
@@ -23,6 +25,8 @@ def facts():
         if d['conflicts']:
             raise SystemExit(f'{name}: unresolved conflicts between filings: {d["conflicts"]}')
         for f in d['facts'] + [d['shares']]:
+            if f['period_type'] == 'FY':
+                continue     # the table takes M / Q only; see the module docstring
             rows.append(dict(broker_id=f['broker_id'], period_type=f['period_type'] or 'Q', period_key=f['period_key'] or '',
                              metric=f['metric'], segment=f['segment'], value=f['value'], unit=f['unit'],
                              table_label=f['table_label'], source_ref=f['source_ref'], extracted_by='claude',

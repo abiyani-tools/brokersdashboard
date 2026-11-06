@@ -4,136 +4,102 @@ Each row is one filed figure as printed (unit as filed). Tick it off against the
 
 | Broker | Period | Metric | Value | Unit | Source | Note |
 |---|---|---|---:|---|---|---|
-| ANGELONE | FY 2025 | pl_depreciation | 1,034.00 | Rs Mn | `investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` |  |
-| ANGELONE | FY 2026 | pl_depreciation | 1,250.00 | Rs Mn | `investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` |  |
 | ANGELONE | Q1 FY 2026 | pl_depreciation | 299.00 | Rs Mn | `investor_presentation:ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf#page=29` |  |
 | ANGELONE | Q1 FY 2027 | pl_depreciation | 351.00 | Rs Mn | `investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` |  |
 | ANGELONE | Q2 FY 2026 | pl_depreciation | 307.00 | Rs Mn | `investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` |  |
 | ANGELONE | Q2 FY 2027 | pl_depreciation | 348.00 | Rs Mn | `investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` |  |
 | ANGELONE | Q3 FY 2026 | pl_depreciation | 315.00 | Rs Mn | `investor_presentation:ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf#page=29; investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` | [DERIVED: FY26 1250 − Q1 299 − Q2 307 − Q4 329] |
 | ANGELONE | Q4 FY 2026 | pl_depreciation | 329.00 | Rs Mn | `investor_presentation:ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf#page=29` |  |
-| ANGELONE | FY 2025 | pl_employee | 7,496.00 | Rs Mn | `investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` |  |
-| ANGELONE | FY 2026 | pl_employee | 8,839.00 | Rs Mn | `investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` |  |
 | ANGELONE | Q1 FY 2026 | pl_employee | 2,274.00 | Rs Mn | `investor_presentation:ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf#page=29` |  |
 | ANGELONE | Q1 FY 2027 | pl_employee | 2,297.00 | Rs Mn | `investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` |  |
 | ANGELONE | Q2 FY 2026 | pl_employee | 2,275.00 | Rs Mn | `investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` |  |
 | ANGELONE | Q2 FY 2027 | pl_employee | 2,095.00 | Rs Mn | `investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` |  |
 | ANGELONE | Q3 FY 2026 | pl_employee | 2,240.00 | Rs Mn | `investor_presentation:ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf#page=29; investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` | [DERIVED: FY26 8839 − Q1 2274 − Q2 2275 − Q4 2050] |
 | ANGELONE | Q4 FY 2026 | pl_employee | 2,050.00 | Rs Mn | `investor_presentation:ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf#page=29` |  |
-| ANGELONE | FY 2025 | pl_esop | 1,056.00 | Rs Mn | `investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` |  |
-| ANGELONE | FY 2026 | pl_esop | 1,832.00 | Rs Mn | `investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` |  |
 | ANGELONE | Q1 FY 2026 | pl_esop | 465.00 | Rs Mn | `investor_presentation:ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf#page=29` |  |
 | ANGELONE | Q1 FY 2027 | pl_esop | 389.00 | Rs Mn | `investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` |  |
 | ANGELONE | Q2 FY 2026 | pl_esop | 470.00 | Rs Mn | `investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` |  |
 | ANGELONE | Q2 FY 2027 | pl_esop | 460.00 | Rs Mn | `investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` |  |
 | ANGELONE | Q3 FY 2026 | pl_esop | 504.00 | Rs Mn | `investor_presentation:ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf#page=29; investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` | [DERIVED: FY26 1832 − Q1 465 − Q2 470 − Q4 393] |
 | ANGELONE | Q4 FY 2026 | pl_esop | 393.00 | Rs Mn | `investor_presentation:ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf#page=29` |  |
-| ANGELONE | FY 2025 | pl_fee_commission_expense | 8,246.00 | Rs Mn | `investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` |  |
-| ANGELONE | FY 2026 | pl_fee_commission_expense | 7,202.00 | Rs Mn | `investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` |  |
 | ANGELONE | Q1 FY 2026 | pl_fee_commission_expense | 1,689.00 | Rs Mn | `investor_presentation:ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf#page=29` |  |
 | ANGELONE | Q1 FY 2027 | pl_fee_commission_expense | 2,031.00 | Rs Mn | `investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` |  |
 | ANGELONE | Q2 FY 2026 | pl_fee_commission_expense | 1,700.00 | Rs Mn | `investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` |  |
 | ANGELONE | Q2 FY 2027 | pl_fee_commission_expense | 1,911.00 | Rs Mn | `investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` |  |
 | ANGELONE | Q3 FY 2026 | pl_fee_commission_expense | 1,825.00 | Rs Mn | `investor_presentation:ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf#page=29; investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` | [DERIVED: FY26 7202 − Q1 1689 − Q2 1700 − Q4 1988] |
 | ANGELONE | Q4 FY 2026 | pl_fee_commission_expense | 1,988.00 | Rs Mn | `investor_presentation:ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf#page=29` |  |
-| ANGELONE | FY 2025 | pl_fees_commission | 38,739.00 | Rs Mn | `investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` |  |
-| ANGELONE | FY 2026 | pl_fees_commission | 34,842.00 | Rs Mn | `investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` |  |
 | ANGELONE | Q1 FY 2026 | pl_fees_commission | 7,780.00 | Rs Mn | `investor_presentation:ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf#page=29` |  |
 | ANGELONE | Q1 FY 2027 | pl_fees_commission | 9,575.00 | Rs Mn | `investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` |  |
 | ANGELONE | Q2 FY 2026 | pl_fees_commission | 8,167.00 | Rs Mn | `investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` |  |
 | ANGELONE | Q2 FY 2027 | pl_fees_commission | 9,095.00 | Rs Mn | `investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` |  |
 | ANGELONE | Q3 FY 2026 | pl_fees_commission | 8,895.00 | Rs Mn | `investor_presentation:ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf#page=29; investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` | [DERIVED: FY26 34842 − Q1 7780 − Q2 8167 − Q4 10000] |
 | ANGELONE | Q4 FY 2026 | pl_fees_commission | 10,000.00 | Rs Mn | `investor_presentation:ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf#page=29` |  |
-| ANGELONE | FY 2025 | pl_finance_cost | 2,948.00 | Rs Mn | `investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` |  |
-| ANGELONE | FY 2026 | pl_finance_cost | 4,367.00 | Rs Mn | `investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` |  |
 | ANGELONE | Q1 FY 2026 | pl_finance_cost | 829.00 | Rs Mn | `investor_presentation:ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf#page=29` |  |
 | ANGELONE | Q1 FY 2027 | pl_finance_cost | 1,292.00 | Rs Mn | `investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` |  |
 | ANGELONE | Q2 FY 2026 | pl_finance_cost | 932.00 | Rs Mn | `investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` |  |
 | ANGELONE | Q2 FY 2027 | pl_finance_cost | 1,475.00 | Rs Mn | `investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` |  |
 | ANGELONE | Q3 FY 2026 | pl_finance_cost | 1,270.00 | Rs Mn | `investor_presentation:ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf#page=29; investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` | [DERIVED: FY26 4367 − Q1 829 − Q2 932 − Q4 1336] |
 | ANGELONE | Q4 FY 2026 | pl_finance_cost | 1,336.00 | Rs Mn | `investor_presentation:ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf#page=29` |  |
-| ANGELONE | FY 2025 | pl_fv_gain | 235.00 | Rs Mn | `investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` |  |
-| ANGELONE | FY 2026 | pl_fv_gain | 207.00 | Rs Mn | `investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` |  |
 | ANGELONE | Q1 FY 2026 | pl_fv_gain | 62.00 | Rs Mn | `investor_presentation:ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf#page=29` |  |
 | ANGELONE | Q1 FY 2027 | pl_fv_gain | 53.00 | Rs Mn | `investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` |  |
 | ANGELONE | Q2 FY 2026 | pl_fv_gain | 57.00 | Rs Mn | `investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` |  |
 | ANGELONE | Q2 FY 2027 | pl_fv_gain | 74.00 | Rs Mn | `investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` |  |
 | ANGELONE | Q3 FY 2026 | pl_fv_gain | 43.00 | Rs Mn | `investor_presentation:ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf#page=29; investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` | [DERIVED: FY26 207 − Q1 62 − Q2 57 − Q4 45] |
 | ANGELONE | Q4 FY 2026 | pl_fv_gain | 45.00 | Rs Mn | `investor_presentation:ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf#page=29` |  |
-| ANGELONE | FY 2025 | pl_impairment | 25.00 | Rs Mn | `investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` |  |
-| ANGELONE | FY 2026 | pl_impairment | 31.00 | Rs Mn | `investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` |  |
 | ANGELONE | Q1 FY 2026 | pl_impairment | -5.00 | Rs Mn | `investor_presentation:ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf#page=29` |  |
 | ANGELONE | Q1 FY 2027 | pl_impairment | 6.00 | Rs Mn | `investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` |  |
 | ANGELONE | Q2 FY 2026 | pl_impairment | -8.00 | Rs Mn | `investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` |  |
 | ANGELONE | Q2 FY 2027 | pl_impairment | -2.00 | Rs Mn | `investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` |  |
 | ANGELONE | Q3 FY 2026 | pl_impairment | 17.00 | Rs Mn | `investor_presentation:ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf#page=29; investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` | [DERIVED: FY26 31 − Q1 -5 − Q2 -8 − Q4 27] |
 | ANGELONE | Q4 FY 2026 | pl_impairment | 27.00 | Rs Mn | `investor_presentation:ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf#page=29` |  |
-| ANGELONE | FY 2025 | pl_interest_income | 13,410.00 | Rs Mn | `investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` |  |
-| ANGELONE | FY 2026 | pl_interest_income | 16,317.00 | Rs Mn | `investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` |  |
 | ANGELONE | Q1 FY 2026 | pl_interest_income | 3,564.00 | Rs Mn | `investor_presentation:ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf#page=29` |  |
 | ANGELONE | Q1 FY 2027 | pl_interest_income | 4,669.00 | Rs Mn | `investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` |  |
 | ANGELONE | Q2 FY 2026 | pl_interest_income | 3,794.00 | Rs Mn | `investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` |  |
 | ANGELONE | Q2 FY 2027 | pl_interest_income | 5,100.00 | Rs Mn | `investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` |  |
 | ANGELONE | Q3 FY 2026 | pl_interest_income | 4,409.00 | Rs Mn | `investor_presentation:ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf#page=29; investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` | [DERIVED: FY26 16317 − Q1 3564 − Q2 3794 − Q4 4550] |
 | ANGELONE | Q4 FY 2026 | pl_interest_income | 4,550.00 | Rs Mn | `investor_presentation:ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf#page=29` |  |
-| ANGELONE | FY 2025 | pl_other_expenses | 15,752.00 | Rs Mn | `investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` |  |
-| ANGELONE | FY 2026 | pl_other_expenses | 15,282.00 | Rs Mn | `investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` |  |
 | ANGELONE | Q1 FY 2026 | pl_other_expenses | 4,235.00 | Rs Mn | `investor_presentation:ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf#page=29` |  |
 | ANGELONE | Q1 FY 2027 | pl_other_expenses | 4,726.00 | Rs Mn | `investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` |  |
 | ANGELONE | Q2 FY 2026 | pl_other_expenses | 3,427.00 | Rs Mn | `investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` |  |
 | ANGELONE | Q2 FY 2027 | pl_other_expenses | 3,443.00 | Rs Mn | `investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` |  |
 | ANGELONE | Q3 FY 2026 | pl_other_expenses | 3,471.00 | Rs Mn | `investor_presentation:ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf#page=29; investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` | [DERIVED: FY26 15282 − Q1 4235 − Q2 3427 − Q4 4149] |
 | ANGELONE | Q4 FY 2026 | pl_other_expenses | 4,149.00 | Rs Mn | `investor_presentation:ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf#page=29` |  |
-| ANGELONE | FY 2025 | pl_other_income | 93.00 | Rs Mn | `investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` |  |
-| ANGELONE | FY 2026 | pl_other_income | 156.00 | Rs Mn | `investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` |  |
 | ANGELONE | Q1 FY 2026 | pl_other_income | 26.00 | Rs Mn | `investor_presentation:ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf#page=29` |  |
 | ANGELONE | Q1 FY 2027 | pl_other_income | 40.00 | Rs Mn | `investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` |  |
 | ANGELONE | Q2 FY 2026 | pl_other_income | 24.00 | Rs Mn | `investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` |  |
 | ANGELONE | Q2 FY 2027 | pl_other_income | 46.00 | Rs Mn | `investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` |  |
 | ANGELONE | Q3 FY 2026 | pl_other_income | 28.00 | Rs Mn | `investor_presentation:ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf#page=29; investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` | [DERIVED: FY26 156 − Q1 26 − Q2 24 − Q4 78] |
 | ANGELONE | Q4 FY 2026 | pl_other_income | 78.00 | Rs Mn | `investor_presentation:ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf#page=29` |  |
-| ANGELONE | FY 2025 | pl_pat | 11,721.00 | Rs Mn | `investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` |  |
-| ANGELONE | FY 2026 | pl_pat | 9,151.00 | Rs Mn | `investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` |  |
 | ANGELONE | Q1 FY 2026 | pl_pat | 1,145.00 | Rs Mn | `investor_presentation:ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf#page=29` |  |
 | ANGELONE | Q1 FY 2027 | pl_pat | 2,314.00 | Rs Mn | `investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` |  |
 | ANGELONE | Q2 FY 2026 | pl_pat | 2,117.00 | Rs Mn | `investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` |  |
 | ANGELONE | Q2 FY 2027 | pl_pat | 3,350.00 | Rs Mn | `investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` |  |
 | ANGELONE | Q3 FY 2026 | pl_pat | 2,687.00 | Rs Mn | `investor_presentation:ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf#page=29; investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` | [DERIVED: FY26 9151 − Q1 1145 − Q2 2117 − Q4 3202] |
 | ANGELONE | Q4 FY 2026 | pl_pat | 3,202.00 | Rs Mn | `investor_presentation:ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf#page=29` |  |
-| ANGELONE | FY 2025 | pl_pbt | 15,920.00 | Rs Mn | `investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` |  |
-| ANGELONE | FY 2026 | pl_pbt | 12,718.00 | Rs Mn | `investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` |  |
 | ANGELONE | Q1 FY 2026 | pl_pbt | 1,644.00 | Rs Mn | `investor_presentation:ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf#page=29` |  |
 | ANGELONE | Q1 FY 2027 | pl_pbt | 3,247.00 | Rs Mn | `investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` |  |
 | ANGELONE | Q2 FY 2026 | pl_pbt | 2,940.00 | Rs Mn | `investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` |  |
 | ANGELONE | Q2 FY 2027 | pl_pbt | 4,585.00 | Rs Mn | `investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` |  |
 | ANGELONE | Q3 FY 2026 | pl_pbt | 3,735.00 | Rs Mn | `investor_presentation:ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf#page=29; investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` | [DERIVED: FY26 12718 − Q1 1644 − Q2 2940 − Q4 4399] |
 | ANGELONE | Q4 FY 2026 | pl_pbt | 4,399.00 | Rs Mn | `investor_presentation:ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf#page=29` |  |
-| ANGELONE | FY 2025 | pl_revenue_ops | 52,384.00 | Rs Mn | `investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` |  |
-| ANGELONE | FY 2026 | pl_revenue_ops | 51,366.00 | Rs Mn | `investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` |  |
 | ANGELONE | Q1 FY 2026 | pl_revenue_ops | 11,405.00 | Rs Mn | `investor_presentation:ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf#page=29` |  |
 | ANGELONE | Q1 FY 2027 | pl_revenue_ops | 14,297.00 | Rs Mn | `investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` |  |
 | ANGELONE | Q2 FY 2026 | pl_revenue_ops | 12,018.00 | Rs Mn | `investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` |  |
 | ANGELONE | Q2 FY 2027 | pl_revenue_ops | 14,270.00 | Rs Mn | `investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` |  |
 | ANGELONE | Q3 FY 2026 | pl_revenue_ops | 13,349.00 | Rs Mn | `investor_presentation:ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf#page=29; investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` | [DERIVED: FY26 51366 − Q1 11405 − Q2 12018 − Q4 14594] |
 | ANGELONE | Q4 FY 2026 | pl_revenue_ops | 14,594.00 | Rs Mn | `investor_presentation:ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf#page=29` |  |
-| ANGELONE | FY 2025 | pl_tax | 4,199.00 | Rs Mn | `investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` |  |
-| ANGELONE | FY 2026 | pl_tax | 3,579.00 | Rs Mn | `investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` |  |
 | ANGELONE | Q1 FY 2026 | pl_tax | 500.00 | Rs Mn | `investor_presentation:ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf#page=29` |  |
 | ANGELONE | Q1 FY 2027 | pl_tax | 933.00 | Rs Mn | `investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` |  |
 | ANGELONE | Q2 FY 2026 | pl_tax | 823.00 | Rs Mn | `investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` |  |
 | ANGELONE | Q2 FY 2027 | pl_tax | 1,235.00 | Rs Mn | `investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` |  |
 | ANGELONE | Q3 FY 2026 | pl_tax | 1,060.00 | Rs Mn | `investor_presentation:ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf#page=29; investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` | [DERIVED: FY26 3579 − Q1 500 − Q2 823 − Q4 1196] |
 | ANGELONE | Q4 FY 2026 | pl_tax | 1,196.00 | Rs Mn | `investor_presentation:ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf#page=29` |  |
-| ANGELONE | FY 2025 | pl_total_expenses | 36,557.00 | Rs Mn | `investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` |  |
-| ANGELONE | FY 2026 | pl_total_expenses | 38,803.00 | Rs Mn | `investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` |  |
 | ANGELONE | Q1 FY 2026 | pl_total_expenses | 9,787.00 | Rs Mn | `investor_presentation:ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf#page=29` |  |
 | ANGELONE | Q1 FY 2027 | pl_total_expenses | 11,090.00 | Rs Mn | `investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` |  |
 | ANGELONE | Q2 FY 2026 | pl_total_expenses | 9,102.00 | Rs Mn | `investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` |  |
 | ANGELONE | Q2 FY 2027 | pl_total_expenses | 9,730.00 | Rs Mn | `investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` |  |
 | ANGELONE | Q3 FY 2026 | pl_total_expenses | 9,641.00 | Rs Mn | `investor_presentation:ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf#page=29; investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` | [DERIVED: FY26 38803 − Q1 9787 − Q2 9102 − Q4 10273] |
 | ANGELONE | Q4 FY 2026 | pl_total_expenses | 10,273.00 | Rs Mn | `investor_presentation:ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf#page=29` |  |
-| ANGELONE | FY 2025 | pl_total_income | 52,477.00 | Rs Mn | `investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` |  |
-| ANGELONE | FY 2026 | pl_total_income | 51,522.00 | Rs Mn | `investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` |  |
 | ANGELONE | Q1 FY 2026 | pl_total_income | 11,431.00 | Rs Mn | `investor_presentation:ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf#page=29` |  |
 | ANGELONE | Q1 FY 2027 | pl_total_income | 14,337.00 | Rs Mn | `investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` |  |
 | ANGELONE | Q2 FY 2026 | pl_total_income | 12,042.00 | Rs Mn | `investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` |  |
@@ -141,8 +107,6 @@ Each row is one filed figure as printed (unit as filed). Tick it off against the
 | ANGELONE | Q3 FY 2026 | pl_total_income | 13,377.00 | Rs Mn | `investor_presentation:ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf#page=29; investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` | [DERIVED: FY26 51522 − Q1 11431 − Q2 12042 − Q4 14672] |
 | ANGELONE | Q4 FY 2026 | pl_total_income | 14,672.00 | Rs Mn | `investor_presentation:ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf#page=29` |  |
 | ANGELONE | Q2 FY 2027 | shares_outstanding_cr | 91.45 | crore shares | `investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=30` | [DERIVED: the filing prints no share count; net worth ÷ book value per share. Replace with the shareholding-pattern count when staged] |
-| ANGELONE | FY 2025 | trading_days | 247.00 | days | `investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` |  |
-| ANGELONE | FY 2026 | trading_days | 246.00 | days | `investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` |  |
 | ANGELONE | Q1 FY 2026 | trading_days | 61.00 | days | `investor_presentation:ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf#page=29` |  |
 | ANGELONE | Q1 FY 2027 | trading_days | 60.00 | days | `investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` |  |
 | ANGELONE | Q2 FY 2026 | trading_days | 64.00 | days | `investor_presentation:ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf#page=29` |  |
