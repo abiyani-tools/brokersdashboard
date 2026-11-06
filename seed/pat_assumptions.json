@@ -1,0 +1,313 @@
+{
+ "_about": "PAT model assumptions (sb_assumptions rows, key prefix pat_). Each names the workbook cell it came from (20260714_brokers dashboard v2.xlsx); value_text holds a rule choice. Edit a value here or in sb_assumptions, never in code.",
+ "assumptions": [
+  {
+   "broker_id": "*",
+   "key": "pat_tax_rate",
+   "value": 0.25,
+   "unit": "fraction",
+   "source_ref": "excel:Angel One - ADR model (A+B)!C22 and Groww - ADR Model!C23 (=(income-costs)*0.75)",
+   "note": null
+  },
+  {
+   "broker_id": "*",
+   "key": "pat_retention",
+   "value": 0.75,
+   "unit": "fraction",
+   "source_ref": "excel:PAT predictor Q2FY27!D78 and W73 ('Deployed @ 75%' of the previous quarter's PAT)",
+   "note": "Share of the previous period's PAT that funds MTF book growth before borrowing"
+  },
+  {
+   "broker_id": "*",
+   "key": "pat_fy27_trading_days",
+   "value": 247,
+   "unit": "days",
+   "source_ref": "excel:Angel One - ADR model (A+B)!C15",
+   "note": "FY27 remaining trading days = 247 − days already traded, split by weekdays. [SOURCE NEEDED: NSE holiday list for FY27]"
+  },
+  {
+   "broker_id": "*",
+   "key": "pat_fy28_trading_days",
+   "value": 247,
+   "unit": "days",
+   "source_ref": "excel:Angel One - ADR model (A+B)!C37 (=C15)",
+   "note": "Split equally across the four FY28 quarters. [SOURCE NEEDED: NSE holiday list for FY28]"
+  },
+  {
+   "broker_id": "*",
+   "key": "pat_discount_fwd",
+   "value": 0.18,
+   "unit": "fraction",
+   "source_ref": "excel:Angel One - ADR model (A+B)!G28, G50; Groww - ADR Model!G29, G51",
+   "note": "1-year discount on a forward price"
+  },
+  {
+   "broker_id": "ANGELONE",
+   "key": "pat_adr_window_fy27",
+   "value": 20,
+   "unit": "trading days",
+   "source_ref": "excel:Angel One - ADR model (A+B)!C14 (=E9, 20-day A+B)",
+   "note": "Base ADR (broking, cash and MTF) for the rest of FY27 and the start of the quarterly growth path"
+  },
+  {
+   "broker_id": "ANGELONE",
+   "key": "pat_adr_qoq_growth",
+   "value": 0.03,
+   "unit": "per quarter",
+   "source_ref": "AB instruction, 5 Nov 2026 (replaces the workbook's FY28 ADR growth: Angel 27% broking / 35% MTF, Groww 27% / 50%)",
+   "note": "Broking and MTF ADR grow by this each quarter from the ADR window's level: the current quarter's remaining days at the window ADR, the next quarter × (1+g), and so on through Q4 FY28"
+  },
+  {
+   "broker_id": "ANGELONE",
+   "key": "pat_mtf_yield",
+   "value": 0.1499,
+   "unit": "p.a.",
+   "source_ref": "excel:PAT predictor Q2FY27!C75 (=C48/(14.99%/4))",
+   "note": "MTF book = MTF income ÷ yield"
+  },
+  {
+   "broker_id": "ANGELONE",
+   "key": "pat_funding_rate",
+   "value": 0.09,
+   "unit": "p.a.",
+   "source_ref": "excel:PAT predictor Q2FY27!D82 (9%/4), N82 (9%)",
+   "note": "Cost of borrowing for MTF book growth not funded by retained PAT"
+  },
+  {
+   "broker_id": "ANGELONE",
+   "key": "pat_dep_share_of_cash",
+   "value": 0.4,
+   "unit": "fraction",
+   "source_ref": "excel:PAT predictor Q2FY27!G33 (depository = 40% of cash broking)",
+   "note": null
+  },
+  {
+   "broker_id": "ANGELONE",
+   "key": "pat_dist_cqgr",
+   "value": 0.05,
+   "unit": "per quarter",
+   "source_ref": "excel:PAT predictor Q2FY27!J46 (=I46*1.05)",
+   "note": null
+  },
+  {
+   "broker_id": "ANGELONE",
+   "key": "pat_dist_growth_fy28",
+   "value": 0.2,
+   "unit": "fraction",
+   "source_ref": "excel:Angel One - Final!J127 (D132 = D101*(1+J127))",
+   "note": null
+  },
+  {
+   "broker_id": "ANGELONE",
+   "key": "pat_treasury_cqgr",
+   "value": 0.0,
+   "unit": "per quarter",
+   "source_ref": "excel:PAT predictor Q2FY27!J50 (=I50, flat after the first projected quarter)",
+   "note": null
+  },
+  {
+   "broker_id": "ANGELONE",
+   "key": "pat_treasury_growth_fy28",
+   "value": 0.15,
+   "unit": "fraction",
+   "source_ref": "excel:Angel One - ADR model (A+B)!C39 (=C17*(1+15%))",
+   "note": null
+  },
+  {
+   "broker_id": "ANGELONE",
+   "key": "pat_employee_growth",
+   "value": 0.07,
+   "unit": "fraction",
+   "source_ref": "excel:PAT predictor Q2FY27!O6, I64 (=AVERAGE(FY26 quarters)*(1+O6))",
+   "note": "Includes ESOP expense (sheet H64 = 229.7 + 38.9)"
+  },
+  {
+   "broker_id": "ANGELONE",
+   "key": "pat_employee_growth_fy28",
+   "value": 0.12,
+   "unit": "fraction",
+   "source_ref": "excel:PAT predictor Q2FY27!N64 (=L64*1.12)",
+   "note": null
+  },
+  {
+   "broker_id": "ANGELONE",
+   "key": "pat_depreciation_growth",
+   "value": 0.12,
+   "unit": "fraction",
+   "source_ref": "excel:PAT predictor Q2FY27!O8, I65 (=same quarter last year*(1+O8))",
+   "note": null
+  },
+  {
+   "broker_id": "ANGELONE",
+   "key": "pat_depreciation_growth_fy28",
+   "value": 0.12,
+   "unit": "fraction",
+   "source_ref": "excel:PAT predictor Q2FY27!N65 (=L65*1.12)",
+   "note": null
+  },
+  {
+   "broker_id": "ANGELONE",
+   "key": "pat_other_exp_growth",
+   "value": 0.1,
+   "unit": "fraction",
+   "source_ref": "excel:PAT predictor Q2FY27!O7, I66 (=same quarter last year*(1+O7))",
+   "note": null
+  },
+  {
+   "broker_id": "ANGELONE",
+   "key": "pat_other_exp_growth_fy28",
+   "value": 0.1,
+   "unit": "fraction",
+   "source_ref": "excel:PAT predictor Q2FY27!N66 (=L66*(1+M66), FY27 growth); 10% used",
+   "note": null
+  },
+  {
+   "broker_id": "ANGELONE",
+   "key": "pat_impairment_growth",
+   "value": 0.1,
+   "unit": "fraction",
+   "source_ref": "excel:PAT predictor Q2FY27!I63 (=AVERAGE(FY26 quarters)*1.1), N63 (=L63*1.1)",
+   "note": null
+  },
+  {
+   "broker_id": "ANGELONE",
+   "key": "pat_pe",
+   "value": null,
+   "value_text": "18,22.5,27",
+   "unit": "x (bear,base,bull)",
+   "source_ref": "excel:Angel One - ADR model (A+B)!C47:E47",
+   "note": null
+  },
+  {
+   "broker_id": "ANGELONE",
+   "key": "pat_discount_today",
+   "value": 0.09,
+   "unit": "fraction",
+   "source_ref": "excel:Angel One - ADR model (A+B)!G51",
+   "note": "Second discount from the FY28 price to today"
+  },
+  {
+   "broker_id": "GROWW",
+   "key": "pat_adr_window_fy27",
+   "value": 45,
+   "unit": "trading days",
+   "source_ref": "excel:Groww - ADR Model!C15 (=E8, 45-day A+B)",
+   "note": "Base ADR (broking, cash and MTF) for the rest of FY27 and the start of the quarterly growth path"
+  },
+  {
+   "broker_id": "GROWW",
+   "key": "pat_adr_qoq_growth",
+   "value": 0.035,
+   "unit": "per quarter",
+   "source_ref": "AB instruction, 5 Nov 2026 (replaces the workbook's FY28 ADR growth: Angel 27% broking / 35% MTF, Groww 27% / 50%)",
+   "note": "Broking and MTF ADR grow by this each quarter from the ADR window's level: the current quarter's remaining days at the window ADR, the next quarter × (1+g), and so on through Q4 FY28"
+  },
+  {
+   "broker_id": "GROWW",
+   "key": "pat_mtf_yield",
+   "value": 0.1499,
+   "unit": "p.a.",
+   "source_ref": "excel:PAT predictor Q2FY27!Y70 (=Y46/(14.99%/4))",
+   "note": "Groww's filed MTF yield is 14.9% (KPI handbook)"
+  },
+  {
+   "broker_id": "GROWW",
+   "key": "pat_funding_rate",
+   "value": 0.08,
+   "unit": "p.a.",
+   "source_ref": "excel:PAT predictor Q2FY27!Y77 (8%/4); FY28 AF59 used 8.5%, unified at 8%",
+   "note": null
+  },
+  {
+   "broker_id": "GROWW",
+   "key": "pat_dist_cqgr",
+   "value": 0.05,
+   "unit": "per quarter",
+   "source_ref": "excel:PAT predictor Q2FY27!AG4 (5%)",
+   "note": "Applied to PL + LAS and other operating income"
+  },
+  {
+   "broker_id": "GROWW",
+   "key": "pat_dist_growth_fy28",
+   "value": 0.5,
+   "unit": "fraction",
+   "source_ref": "excel:Groww - Final!J126 (D132 = D102*(1+J126))",
+   "note": "Applied to PL + LAS and other operating income"
+  },
+  {
+   "broker_id": "GROWW",
+   "key": "pat_treasury_cqgr",
+   "value": null,
+   "value_text": "with_broking",
+   "unit": "rule",
+   "source_ref": "excel:PAT predictor Q2FY27!AA48 (=Z48+((AA42-Z42)/Z42*Z48))",
+   "note": "Float income grows in line with broking revenue"
+  },
+  {
+   "broker_id": "GROWW",
+   "key": "pat_treasury_growth_fy28",
+   "value": 0.15,
+   "unit": "fraction",
+   "source_ref": "excel:Groww - ADR Model!C40 (=C18*(1+15%))",
+   "note": null
+  },
+  {
+   "broker_id": "GROWW",
+   "key": "pat_employee_growth",
+   "value": 0.1,
+   "unit": "fraction",
+   "source_ref": "excel:PAT predictor Q2FY27!Z60 (=W60*1.1, Q4 FY26 +10%)",
+   "note": "Base = last quarter of the previous FY"
+  },
+  {
+   "broker_id": "GROWW",
+   "key": "pat_employee_growth_fy28",
+   "value": 0.15,
+   "unit": "fraction",
+   "source_ref": "excel:PAT predictor Q2FY27!AG60",
+   "note": null
+  },
+  {
+   "broker_id": "GROWW",
+   "key": "pat_depreciation_growth",
+   "value": 0.1,
+   "unit": "fraction",
+   "source_ref": "excel:PAT predictor Q2FY27!Z61 (=W61*1.1)",
+   "note": "Base = last quarter of the previous FY"
+  },
+  {
+   "broker_id": "GROWW",
+   "key": "pat_depreciation_growth_fy28",
+   "value": 0.15,
+   "unit": "fraction",
+   "source_ref": "excel:PAT predictor Q2FY27!AG61",
+   "note": null
+  },
+  {
+   "broker_id": "GROWW",
+   "key": "pat_other_exp_rule",
+   "value": null,
+   "value_text": "share_of_broking",
+   "unit": "rule",
+   "source_ref": "design 5 Nov 2026 (AB): Groww has no fees & commission line, so other expenses scale with broking revenue",
+   "note": "Ratio = other expenses ÷ broking revenue over the last 4 reported quarters"
+  },
+  {
+   "broker_id": "GROWW",
+   "key": "pat_pe",
+   "value": null,
+   "value_text": "38,44,50",
+   "unit": "x (bear,base,bull)",
+   "source_ref": "excel:Groww - ADR Model!C26:E26",
+   "note": null
+  },
+  {
+   "broker_id": "GROWW",
+   "key": "pat_discount_today",
+   "value": 0.1,
+   "unit": "fraction",
+   "source_ref": "excel:Groww - ADR Model!G52",
+   "note": null
+  }
+ ]
+}

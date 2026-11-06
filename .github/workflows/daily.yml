@@ -60,6 +60,15 @@ jobs:
         run: python -m src.live.refresh_prices --write
       - name: Live run from the DB and publish, Angel One then Groww then MOSL (E5 -> engine -> E1 coverage -> Summary rows -> sb_*)
         run: python run_live.py --db --publish --broker all
+      - name: PAT model from the published runs into sb_pat_lines (Angel One, Groww)
+        id: pat
+        continue-on-error: true
+        run: python run_pat.py --db --publish --broker all
+      - name: PAT model failed (table missing, facts not reviewed, or an input gap)
+        if: steps.pat.outcome == 'failure'
+        run: |
+          echo "::warning title=PAT model not published::see the PAT step above; the ADR run is unaffected"
+          echo "### PAT model NOT published today (ADR runs unaffected)" >> "$GITHUB_STEP_SUMMARY"
       - name: Keep the raw Groww IR page
         if: always()
         uses: actions/upload-artifact@v4
@@ -73,5 +82,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: live-run
-          path: out/live/
+          path: |
+            out/live/
+            out/pat/
           retention-days: 30
