@@ -36,7 +36,7 @@ MOSL_MARKET_KEYS = MOSL_LAKE_KEYS + MOSL_SHARED_KEYS
 
 MONEY = {"Rs Mn": 1e6, "Rs Bn": 1e9, "Rs Cr": 1e7}
 FRACTION_UNITS = {"fraction"}
-KNOWN_UNITS = set(MONEY) | FRACTION_UNITS | {"Mn", "days", "'000", "count", "p.a.", "Rs Mn/day", "Rs Cr/day", "Rs"}
+KNOWN_UNITS = set(MONEY) | FRACTION_UNITS | {"Mn", "days", "'000", "count", "p.a.", "Rs Mn/day", "Rs Cr/day", "Rs", "crore shares"}
 
 
 class MissingInput(KeyError):
