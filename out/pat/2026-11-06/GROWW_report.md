@@ -29,22 +29,22 @@ Shares 623.90 Cr · close ₹215.08 (2026-11-06) · other exp ÷ broking 33.61% 
 | FY 2027 EPS | 4.96 | 4.96 | 4.96 |
 | FY 2027 P/E | 38.00 | 44.00 | 50.00 |
 | FY 2027 Price (P/E × EPS) | 188.49 | 218.25 | 248.01 |
-| FY 2027 Discounted | 159.73 | 184.96 | 210.18 |
-| FY 2027 Upside vs close | -25.7% | -14.0% | -2.3% |
+| FY 2027 Discounted | 157.07 | 181.87 | 206.67 |
+| FY 2027 Upside vs close | -27.0% | -15.4% | -3.9% |
 | FY 2028 EPS | 5.97 | 5.97 | 5.97 |
 | FY 2028 P/E | 38.00 | 44.00 | 50.00 |
 | FY 2028 Price (P/E × EPS) | 226.77 | 262.57 | 298.38 |
-| FY 2028 Discounted | 192.18 | 222.52 | 252.86 |
-| FY 2028 Target price today | 174.71 | 202.29 | 229.88 |
-| FY 2028 Upside vs close | -18.8% | -5.9% | +6.9% |
+| FY 2028 Discounted | 188.97 | 218.81 | 248.65 |
+| FY 2028 Target price today | 171.79 | 198.92 | 226.05 |
+| FY 2028 Upside vs close | -20.1% | -7.5% | +5.1% |
 
 ## Against the workbook
 
 | | Workbook | Model | Change |
 |---|---:|---:|---:|
-| FY27 PAT (`Groww - ADR Model!C23`) | 2,726.12 | 3,094.69 | +13.5% |
-| FY28 PAT (`!C45`) | 3,761.23 | 3,723.21 | -1.0% |
-| FY28 target today (base) (`!D52`) | 205.28 | 202.29 | -1.5% |
+| FY27 PAT (`PAT predictor Q2FY27!AC51`) | 3,021.36 | 3,094.69 | +2.4% |
+| FY28 PAT (`Groww - ADR Model!C28`) | 4,115.26 | 3,723.21 | -9.5% |
+| FY28 target today (base) (`!D35`) | 220.86 | 198.92 | -9.9% |
 
 ## Rules (projected periods)
 

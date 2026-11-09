@@ -1,5 +1,5 @@
 {
- "_about": "PAT model assumptions (sb_assumptions rows, key prefix pat_). Each names the workbook cell it came from (20260714_brokers dashboard v2.xlsx); value_text holds a rule choice. Edit a value here or in sb_assumptions, never in code.",
+ "_about": "PAT model assumptions (sb_assumptions rows, key prefix pat_). Each names the workbook cell it came from (20260714_brokers dashboard v2.xlsx); value_text holds a rule choice. Edit a value here or in sb_assumptions, never in code. P/E, discounts and quarterly ADR growth follow the 06.11 workbook (AB, 9 Nov 2026) and stay editable inputs.",
  "assumptions": [
   {
    "broker_id": "*",
@@ -36,10 +36,10 @@
   {
    "broker_id": "*",
    "key": "pat_discount_fwd",
-   "value": 0.18,
+   "value": 0.2,
    "unit": "fraction",
-   "source_ref": "excel:Angel One - ADR model (A+B)!G28, G50; Groww - ADR Model!G29, G51",
-   "note": "1-year discount on a forward price"
+   "source_ref": "excel[New model - 06.11.26/20260714_brokers dashboard v2 - new.xlsx]:Angel One - ADR model (A+B)!G33; Groww - ADR Model!G34 (20%)",
+   "note": "1-year discount on a forward price (AB, 9 Nov 2026: follow the 06.11 workbook; was 18%)"
   },
   {
    "broker_id": "ANGELONE",
@@ -54,8 +54,8 @@
    "key": "pat_adr_qoq_growth",
    "value": 0.03,
    "unit": "per quarter",
-   "source_ref": "AB instruction, 5 Nov 2026 (replaces the workbook's FY28 ADR growth: Angel 27% broking / 35% MTF, Groww 27% / 50%)",
-   "note": "Broking and MTF ADR grow by this each quarter from the ADR window's level: the current quarter's remaining days at the window ADR, the next quarter × (1+g), and so on through Q4 FY28"
+   "source_ref": "AB instruction, 5 Nov 2026; same value in excel[New model - 06.11.26/20260714_brokers dashboard v2 - new.xlsx]:Angel One - ADR model (A+B)!E57 (3%)",
+   "note": "Broking and MTF ADR grow by this each quarter from the ADR window's level: the current quarter's remaining days at the window ADR, the next quarter × (1+g), and so on through Q4 FY28. Input: edit in sb_assumptions."
   },
   {
    "broker_id": "ANGELONE",
@@ -173,18 +173,18 @@
    "broker_id": "ANGELONE",
    "key": "pat_pe",
    "value": null,
-   "value_text": "18,22.5,27",
+   "value_text": "20,24,28",
    "unit": "x (bear,base,bull)",
-   "source_ref": "excel:Angel One - ADR model (A+B)!C47:E47",
-   "note": null
+   "source_ref": "excel[New model - 06.11.26/20260714_brokers dashboard v2 - new.xlsx]:Angel One - ADR model (A+B)!C30:E30",
+   "note": "Input: P/E bear, base, bull (AB, 9 Nov 2026: follow the 06.11 workbook; was 18, 22.5, 27). Edit in sb_assumptions."
   },
   {
    "broker_id": "ANGELONE",
    "key": "pat_discount_today",
-   "value": 0.09,
+   "value": 0.1,
    "unit": "fraction",
-   "source_ref": "excel:Angel One - ADR model (A+B)!G51",
-   "note": "Second discount from the FY28 price to today"
+   "source_ref": "excel[New model - 06.11.26/20260714_brokers dashboard v2 - new.xlsx]:Angel One - ADR model (A+B)!G34 (10%)",
+   "note": "Second discount from the FY28 price to today (AB, 9 Nov 2026: follow the 06.11 workbook; was 9%)"
   },
   {
    "broker_id": "GROWW",
@@ -199,8 +199,8 @@
    "key": "pat_adr_qoq_growth",
    "value": 0.035,
    "unit": "per quarter",
-   "source_ref": "AB instruction, 5 Nov 2026 (replaces the workbook's FY28 ADR growth: Angel 27% broking / 35% MTF, Groww 27% / 50%)",
-   "note": "Broking and MTF ADR grow by this each quarter from the ADR window's level: the current quarter's remaining days at the window ADR, the next quarter × (1+g), and so on through Q4 FY28"
+   "source_ref": "AB instruction, 5 Nov 2026; same value in excel[New model - 06.11.26/20260714_brokers dashboard v2 - new.xlsx]:Groww - ADR Model!F58 (3.5%)",
+   "note": "Broking and MTF ADR grow by this each quarter from the ADR window's level: the current quarter's remaining days at the window ADR, the next quarter × (1+g), and so on through Q4 FY28. Input: edit in sb_assumptions."
   },
   {
    "broker_id": "GROWW",
@@ -298,15 +298,15 @@
    "value": null,
    "value_text": "38,44,50",
    "unit": "x (bear,base,bull)",
-   "source_ref": "excel:Groww - ADR Model!C26:E26",
-   "note": null
+   "source_ref": "excel[New model - 06.11.26/20260714_brokers dashboard v2 - new.xlsx]:Groww - ADR Model!C31:E31 (=Groww - ADR Model!D207:F207; unchanged)",
+   "note": "Input: P/E bear, base, bull. Edit in sb_assumptions."
   },
   {
    "broker_id": "GROWW",
    "key": "pat_discount_today",
    "value": 0.1,
    "unit": "fraction",
-   "source_ref": "excel:Groww - ADR Model!G52",
+   "source_ref": "excel[New model - 06.11.26/20260714_brokers dashboard v2 - new.xlsx]:Groww - ADR Model!G35 (10%, unchanged)",
    "note": null
   }
  ]

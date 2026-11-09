@@ -29,24 +29,24 @@ Shares 91.45 Cr · close ₹331 (2026-11-06) · fees ÷ broking 23.43% (quarters
 | | Bear | Base | Bull |
 |---|---:|---:|---:|
 | FY 2027 EPS | 14.19 | 14.19 | 14.19 |
-| FY 2027 P/E | 18.00 | 22.50 | 27.00 |
-| FY 2027 Price (P/E × EPS) | 255.48 | 319.34 | 383.21 |
-| FY 2027 Discounted | 216.50 | 270.63 | 324.76 |
-| FY 2027 Upside vs close | -34.6% | -18.2% | -1.9% |
+| FY 2027 P/E | 20.00 | 24.00 | 28.00 |
+| FY 2027 Price (P/E × EPS) | 283.86 | 340.63 | 397.41 |
+| FY 2027 Discounted | 236.55 | 283.86 | 331.17 |
+| FY 2027 Upside vs close | -28.5% | -14.2% | +0.1% |
 | FY 2028 EPS | 18.96 | 18.96 | 18.96 |
-| FY 2028 P/E | 18.00 | 22.50 | 27.00 |
-| FY 2028 Price (P/E × EPS) | 341.26 | 426.58 | 511.89 |
-| FY 2028 Discounted | 289.20 | 361.51 | 433.81 |
-| FY 2028 Target price today | 265.33 | 331.66 | 397.99 |
-| FY 2028 Upside vs close | -19.8% | +0.2% | +20.2% |
+| FY 2028 P/E | 20.00 | 24.00 | 28.00 |
+| FY 2028 Price (P/E × EPS) | 379.18 | 455.02 | 530.85 |
+| FY 2028 Discounted | 315.98 | 379.18 | 442.38 |
+| FY 2028 Target price today | 287.26 | 344.71 | 402.16 |
+| FY 2028 Upside vs close | -13.2% | +4.1% | +21.5% |
 
 ## Against the workbook
 
 | | Workbook | Model | Change |
 |---|---:|---:|---:|
-| FY27 PAT (`Angel One - ADR model (A+B)!C22`) | 870.43 | 1,297.95 | +49.1% |
-| FY28 PAT (`!C44`) | 1,387.49 | 1,733.79 | +25.0% |
-| FY28 target today (base) (`!D51`) | 265.39 | 331.66 | +25.0% |
+| FY27 PAT (`PAT predictor Q2FY27!L53`) | 1,063.41 | 1,297.95 | +22.1% |
+| FY28 PAT (`Angel One - ADR model (A+B)!C27`) | 1,564.86 | 1,733.79 | +10.8% |
+| FY28 target today (base) (`!D34`) | 310.91 | 344.71 | +10.9% |
 
 ## Rules (projected periods)
 

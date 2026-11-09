@@ -13,7 +13,7 @@
 --      b. Groww: 623.905 Cr (31 Mar 2026 capital 1,247.81 ÷ 2, p7, period blank) → 624.21 Cr at 30 Sep 2026.
 --         Source: BILLIONBRAINS_14102026124408_outcomefinalsigned.pdf p8 balance sheet, "Equity share capital"
 --         1,248.42 Rs Cr at 30 September. 1,248.42 ÷ face value 2 = 624.21 Cr. period_key gets 'Q2 FY 2027'.
---         The current NULL period_key also defeats db_inputs.sql's not-exists check, so a re-run would insert a duplicate.
+--         (In the DB its period_key is '' today; the model takes the shares row with the latest period_key.)
 --   2. Mark reviewed the 198 PAT facts: segment 'consolidated', extracted_by 'claude', metric pl_* / trading_days /
 --      shares_outstanding_cr.
 --   3. Mark reviewed the older Angel One facts that the model also reads, which are still staged in the 3 Nov snapshot:

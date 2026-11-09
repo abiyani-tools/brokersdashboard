@@ -17,11 +17,11 @@ import os
 
 from src.engine import pat as P
 
-SHEET = {   # workbook headline cells, for the bridge in the report (20260714_brokers dashboard v2.xlsx)
-    'ANGELONE': {'FY27 PAT': (870.43, "Angel One - ADR model (A+B)!C22"), 'FY28 PAT': (1387.49, '!C44'),
-                 'FY28 target today (base)': (265.39, '!D51')},
-    'GROWW': {'FY27 PAT': (2726.12, 'Groww - ADR Model!C23'), 'FY28 PAT': (3761.23, '!C45'),
-              'FY28 target today (base)': (205.28, '!D52')},
+SHEET = {   # workbook headline cells, for the bridge in the report (New model - 06.11.26/20260714_brokers dashboard v2 - new.xlsx)
+    'ANGELONE': {'FY27 PAT': (1063.41, "PAT predictor Q2FY27!L53"), 'FY28 PAT': (1564.86, "Angel One - ADR model (A+B)!C27"),
+                 'FY28 target today (base)': (310.91, '!D34')},
+    'GROWW': {'FY27 PAT': (3021.36, 'PAT predictor Q2FY27!AC51'), 'FY28 PAT': (4115.26, 'Groww - ADR Model!C28'),
+              'FY28 target today (base)': (220.86, '!D35')},
 }
 
 

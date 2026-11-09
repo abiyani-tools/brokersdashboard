@@ -97,18 +97,20 @@ Workbook: `New model - 06.11.26/20260714_brokers dashboard v2 - new.xlsx`, sheet
 | Q4 FY 2027 | 604.8 | 615.6 | 786.2 | 810.5 |
 
 
-## FY28 valuation: the 06.11 workbook has moved away from the model's `pat_*` assumptions
+## FY28 valuation: model vs the 06.11 workbook
+
+AB, 9 Nov 2026: P/E and discounts now follow the 06.11 workbook (`seed/pat_assumptions.json`, DB update `out/pat/assumptions_2026-11-09.sql`); P/E and quarterly ADR growth stay editable inputs. The ADR starting point still differs.
 
 The `pat_*` source cells name the 14 Jul workbook (`../20260714_brokers dashboard v2.xlsx`), where every one was re-read and matches.
 AB's 06.11 workbook rebuilt the FY28 block of `Angel One - ADR model (A+B)` and `Groww - ADR Model`; these values now differ:
 
 | Item | Model (`sb_assumptions` / run) | 06.11 workbook | Cell |
 |---|---|---|---|
-| Angel P/E bear / base / bull | 18 / 22.5 / 27 (`pat_pe`) | 20 / 24 / 28 | `Angel One - ADR model (A+B)!C30:E30` |
-| Angel forward discount | 18% (`pat_discount_fwd`) | 20% | `!G33` |
-| Angel discount to today | 9% (`pat_discount_today`) | 10% | `!G34` |
+| Angel P/E bear / base / bull | 20 / 24 / 28 (`pat_pe`; was 18 / 22.5 / 27) | 20 / 24 / 28 | `Angel One - ADR model (A+B)!C30:E30` |
+| Angel forward discount | 20% (`pat_discount_fwd`; was 18%) | 20% | `!G33` |
+| Angel discount to today | 10% (`pat_discount_today`; was 9%) | 10% | `!G34` |
 | Groww P/E | 38 / 44 / 50 | 38 / 44 / 50 (same) | `Groww - ADR Model!C31:E31` |
-| Groww forward discount | 18% (`pat_discount_fwd`) | 20% | `!G34` |
+| Groww forward discount | 20% (`pat_discount_fwd`; was 18%) | 20% | `!G34` |
 | Groww discount to today | 10% | 10% (same) | `!G35` |
 | FY28 ADR starting point | 20-day (Angel) / 45-day (Groww) ADR from the engine, then × 1.03 / 1.035 a quarter | `SUMMARY - <broker>!C11` "Q3 FY27 (Estimate)" (Angel 20.376, Groww 23.543 Rs Cr a day), then the same quarterly growth | Angel `!D57:D63`, Groww `!E58:E64` |
 | FY28 operating ADR (broking + MTF) | Angel 21.892, Groww 24.096 | Angel 22.609, Groww 26.575 | Angel `!D63`, Groww `!E64` |
@@ -117,7 +119,7 @@ AB's 06.11 workbook rebuilt the FY28 block of `Angel One - ADR model (A+B)` and 
 | FY28 total costs | Angel 4,781.9; Groww 2,731.7 | Angel 5,102.6; Groww 2,905.3 | `PAT predictor Q2FY27!N67`, `!AF63` |
 | Shares (Cr) | Angel 91.450; Groww 623.905 (filings, staged) | Angel 91.512; Groww 621.096 (Excel stock data type) | `!D2` |
 | FY28 PAT | Angel 1,733.8; Groww 3,723.2 | Angel 1,564.9; Groww 4,115.3 | Angel `!C27`, Groww `!C28` |
-| FY28 target today bear / base / bull (Rs) | Angel 265.33 / 331.66 / 397.99; Groww 174.71 / 202.29 / 229.88 | Angel 259.09 / 310.91 / 362.73; Groww 190.74 / 220.86 / 250.98 | Angel `!C34:E34`, Groww `!C35:E35` |
+| FY28 target today bear / base / bull (Rs) | Angel 287.26 / 344.71 / 402.16; Groww 171.79 / 198.92 / 226.05 (was Angel 265.33 / 331.66 / 397.99; Groww 174.71 / 202.29 / 229.88) | Angel 259.09 / 310.91 / 362.73; Groww 190.74 / 220.86 / 250.98 | Angel `!C34:E34`, Groww `!C35:E35` |
 
 ## What drives the gaps
 
@@ -125,6 +127,6 @@ AB's 06.11 workbook rebuilt the FY28 block of `Angel One - ADR model (A+B)` and 
 2. **Q2 FY27 is filed in the model, estimated in the workbook.** Angel Q2 costs are 973.0 filed against 1,058.5 in `I67`, and PAT is 335.0 against 290.1 in `I53`. Groww Q2 costs are 555.9 against 605.1 in `Z63`, and PAT is 724.7 against 738.5 in `Z51`. The workbook's Q3/Q4 build on its own Q2 estimates.
 3. **Revenue split.** The model's Angel treasury is interest income minus MTF, with other income on its own line. The workbook's `Other interest income` (row 50) includes other income, so the treasury line differs while Q1 FY27 total income agrees (1,433.7 both). The Groww workbook has no float, PL + LAS or other-operating lines, so only broking, MTF and totals are compared.
 4. **FY28 MTF income** is lower in the model (Angel −94, Groww −301 Cr). The model grows MTF ADR at 3% / 3.5% a quarter from today's ADR. The workbook's PAT predictor FY28 uses its earlier growth assumptions (`N48`, `AF46`).
-5. **Valuation inputs** (table above): the 06.11 workbook uses a higher Angel P/E and 20% / 10% discounts, and starts the ADR path from its Q3 FY27 estimate instead of the 20/45-day ADR.
+5. **Valuation inputs**: P/E and discounts now match (9 Nov). The workbook still starts the ADR path from its Q3 FY27 estimate instead of the 20/45-day ADR.
 
-None of these are changed in the model or the workbook. Changing a `pat_*` value is an `sb_assumptions` update, which needs AB's decision.
+Apart from P/E and discounts (AB, 9 Nov 2026), neither side is changed.
