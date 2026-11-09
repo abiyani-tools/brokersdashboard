@@ -12,3 +12,4 @@ out/groww_ir/
 out/pat/dev/
 out/pat/*/*_pat_lines.json
 out/pat/preview/
+out/pat/*/*_valuation_lines.json
