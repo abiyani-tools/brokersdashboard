@@ -99,7 +99,7 @@ class TestPat(unittest.TestCase):
 
     def test_quarterly_adr_growth(self):
         """Q4 FY27 broking = days × window ADR × (1 + g); FY28 ADR = window ADR × average of (1 + g)^2..^5."""
-        for b, g in (('ANGELONE', 0.03), ('GROWW', 0.035)):
+        for b, g in (('ANGELONE', 0.03), ('GROWW', 0.04)):   # Groww 4% from the 09.11 workbook (AB, 9 Nov 2026)
             m = self.m[b]
             q4 = m['quarters']['Q4 FY 2027']
             base = m['fy27']['adr_broking']
@@ -152,12 +152,13 @@ class TestPatDbInputs(unittest.TestCase):
             def table(self, name, **eq):
                 return [r for r in tables[name] if all(str(r.get(k)) == str(v) for k, v in eq.items())]
 
-        run, daily, got, assume, px, shares = db_inputs(Reader(), 'GROWW')
+        run, daily, got, assume, prices, shares = db_inputs(Reader(), 'GROWW')
+        px = prices[-1]
         self.assertEqual(run['run_id'], 'new')
         self.assertEqual(len(daily), len(tables['sb_daily_revenue']))
         self.assertFalse(any(f['metric'] == 'pl_pat' and f['segment'] == '' for f in got))
         self.assertFalse(any(f['period_key'] == 'Q3 FY 2027' for f in got))
-        self.assertTrue(all(a['key'].startswith('pat_') for a in assume))
+        self.assertTrue(all(a['key'].startswith(('pat_', 'val_')) for a in assume))
         self.assertAlmostEqual(shares, 623.905, places=3)
         m = P.build('GROWW', got, daily, assume, dict(price=px['close'], date=px['trade_date']), shares)
         self.assertGreater(m['fy28']['pat'], 0)

@@ -1,4 +1,5 @@
-"""PAT model run (PLAN 5.7): quarterly P&L → FY27E / FY28E → valuation, per broker.
+"""PAT model run (PLAN 5.7) and valuation (PLAN 5.8): quarterly P&L → FY27E / FY28E → P/E valuation, then the
+regression / ratio / ADR triangulation (src/engine/valuation.py), per broker.
 
     python3 run_pat.py                    # dry run on local inputs (out/pat/dev, snapshot facts), report to out/pat/<as_of>/
     python3 run_pat.py --broker GROWW
@@ -6,7 +7,7 @@
 
 Local inputs: daily ADR rows and prices in out/pat/dev/<BROKER>_{daily,prices}.json (the published run, read from
 /api/brokers), facts from snapshot/ (reviewed) plus the staged P&L extracts in out/pat/facts_*_pl.json, and
-assumptions from seed/pat_assumptions.json.
+assumptions from seed/pat_assumptions.json and seed/valuation_assumptions.json. --publish also writes sb_valuation_lines.
 """
 from __future__ import annotations
 
@@ -16,6 +17,7 @@ import json
 import os
 
 from src.engine import pat as P
+from src.engine import valuation as V
 
 SHEET = {   # workbook headline cells, for the bridge in the report (New model - 06.11.26/20260714_brokers dashboard v2 - new.xlsx)
     'ANGELONE': {'FY27 PAT': (1063.41, "PAT predictor Q2FY27!L53"), 'FY28 PAT': (1564.86, "Angel One - ADR model (A+B)!C27"),
@@ -42,6 +44,34 @@ def local_facts(broker):
     return facts
 
 
+def local_history(broker):
+    """Angel One's older quarterly PAT and quarter-end share counts (out/pat/facts_angel_pat_history.json, staged from
+    the outcome filings) for the P/E series; comparative-sourced PAT is left out. Not part of the PAT model's facts."""
+    path = 'out/pat/facts_angel_pat_history.json'
+    if broker != 'ANGELONE' or not os.path.exists(path):
+        return []
+    h = json.load(open(path))
+    out = []
+    for f in h['facts']:
+        if f['metric'] == 'pl_pat' and 'COMPARATIVE' in (f.get('note') or ''):
+            continue
+        if f['metric'] == 'shares_outstanding_cr':   # a separate metric, so the PAT model's share count is untouched
+            f = dict(f, metric='shares_period_end_cr', value=f['value_current_basis'])
+        out.append(f)
+    return out
+
+
+def valuation(b, m, daily, prices, assumptions, facts):
+    """The valuation model on top of a PAT model m; None (with a warning) when its inputs are missing."""
+    A = P.Assume(assumptions, b)
+    targets = {s: m['valuation'][('FY 2028', s)]['target_today'] for s in P.SCENARIOS}
+    try:
+        return V.build(b, daily, prices, targets, A, V.pe_quarters(facts, A), m['shares_cr'])
+    except (V.ValuationInputMissing, P.PatInputMissing) as e:
+        print(f'::warning title=Valuation {b} skipped::{e}')
+        return None
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--broker', default='all')
@@ -53,7 +83,8 @@ def main():
     if a.db:
         return db_run(['ANGELONE', 'GROWW'] if a.broker == 'all' else [a.broker], a.publish)
     brokers = ['ANGELONE', 'GROWW'] if a.broker == 'all' else [a.broker]
-    assumptions = json.load(open('seed/pat_assumptions.json'))['assumptions']
+    assumptions = (json.load(open('seed/pat_assumptions.json'))['assumptions']
+                   + json.load(open('seed/valuation_assumptions.json'))['assumptions'])
     for b in brokers:
         daily = json.load(open(f'out/pat/dev/{b}_daily.json'))
         px = json.load(open(f'out/pat/dev/{b}_prices.json'))['prices'][-1]
@@ -63,7 +94,11 @@ def main():
         out = f"out/pat/{m['as_of']}"
         os.makedirs(out, exist_ok=True)
         json.dump(P.rows(m, daily['run']['run_id']), open(f'{out}/{b}_pat_lines.json', 'w'), indent=1)
-        open(f'{out}/{b}_report.md', 'w').write(report(m, daily['run']['run_id']))
+        prices = json.load(open(f'out/pat/dev/{b}_prices.json'))['prices']
+        v = valuation(b, m, daily['rows'], prices, assumptions, facts + local_history(b))
+        if v:
+            json.dump(V.lines(v, daily['run']['run_id']), open(f'{out}/{b}_valuation_lines.json', 'w'), indent=1)
+        open(f'{out}/{b}_report.md', 'w').write(report(m, daily['run']['run_id'], v))
         print(open(f'{out}/{b}_report.md').read())
     preview(brokers, out)
 
@@ -76,7 +111,7 @@ def db_inputs(reader, broker):
     run = max(runs, key=lambda r: r['started_at'])
     daily = reader.table('sb_daily_revenue', run_id=run['run_id'])
     facts = [f for f in reader.table('sb_disclosure_facts', broker_id=broker) if f['status'] == 'reviewed']
-    assumptions = [a for b in ('*', broker) for a in reader.table('sb_assumptions', broker_id=b) if a['key'].startswith('pat_')]
+    assumptions = [a for b in ('*', broker) for a in reader.table('sb_assumptions', broker_id=b) if a['key'].startswith(('pat_', 'val_'))]
     prices = sorted(reader.table('sb_share_prices', broker_id=broker), key=lambda r: r['trade_date'])
     if not prices:
         raise P.PatInputMissing(f'{broker}: no share prices')
@@ -87,7 +122,7 @@ def db_inputs(reader, broker):
     shares = [f for f in facts if f['metric'] == 'shares_outstanding_cr']
     if not shares:
         raise P.PatInputMissing(f'{broker}: shares outstanding not reviewed')
-    return run, daily, facts, assumptions, prices[-1], max(shares, key=lambda f: f['period_key'])['value']
+    return run, daily, facts, assumptions, prices, max(shares, key=lambda f: f['period_key'])['value']
 
 
 def db_run(brokers, publish):
@@ -97,7 +132,8 @@ def db_run(brokers, publish):
     failed = []
     for b in brokers:
         try:
-            run, daily, facts, assumptions, px, shares = db_inputs(reader, b)
+            run, daily, facts, assumptions, prices, shares = db_inputs(reader, b)
+            px = prices[-1]
             m = P.build(b, facts, daily, assumptions, dict(price=float(px['close']), date=px['trade_date']), float(shares))
         except P.PatInputMissing as e:
             print(f'::warning title=PAT {b} skipped::{e}')
@@ -106,12 +142,21 @@ def db_run(brokers, publish):
         out = f"out/pat/{m['as_of']}"
         os.makedirs(out, exist_ok=True)
         rows = P.rows(m, run['run_id'])
-        open(f'{out}/{b}_report.md', 'w').write(report(m, run['run_id']))
+        # the P/E series reads every reviewed consolidated quarter, not only the PAT model's (prices are already sorted)
+        v = valuation(b, m, daily, prices, assumptions, facts)
+        vrows = V.lines(v, run['run_id']) if v else []
+        open(f'{out}/{b}_report.md', 'w').write(report(m, run['run_id'], v))
         if writer:
             writer.upsert('sb_pat_lines', rows, on_conflict=('run_id', 'period_key', 'line', 'scenario'))
             print(f"{b}: {len(rows)} sb_pat_lines rows for run {run['run_id'][:8]}")
+            if vrows:
+                try:
+                    writer.upsert('sb_valuation_lines', vrows, on_conflict=('run_id', 'section', 'period_key', 'line', 'scenario'))
+                    print(f"{b}: {len(vrows)} sb_valuation_lines rows")
+                except Exception as e:   # the table may not exist yet (migration 20261109): the PAT lines still stand
+                    print(f'::warning title=Valuation {b} not written::{e}')
         else:
-            print(f"{b}: dry run, {len(rows)} rows (nothing written)")
+            print(f"{b}: dry run, {len(rows)} PAT rows, {len(vrows)} valuation rows (nothing written)")
     if failed and len(failed) == len(brokers):
         raise SystemExit(f'PAT model skipped for every broker: {failed}')
 
@@ -165,7 +210,7 @@ def preview(brokers, out):
         f'A = filed quarter, E = estimate. Rs Cr unless stated.</p>{"<hr>".join(secs)}</body></html>')
 
 
-def report(m, run_id):
+def report(m, run_id, val=None):
     b, f27, f28 = m['broker'], m['fy27'], m['fy28']
     cols = list(P.FY27_Q) + ['FY 2027', 'FY 2028']
     per = {**m['quarters'], 'FY 2027': f27, 'FY 2028': f28}
@@ -190,6 +235,24 @@ def report(m, run_id):
     mine = {'FY27 PAT': f27['pat'], 'FY28 PAT': f28['pat'], 'FY28 target today (base)': m['valuation'][('FY 2028', 'base')]['target_today']}
     for k, (v, cell) in SHEET[b].items():
         L.append(f'| {k} (`{cell}`) | {v:,.2f} | {mine[k]:,.2f} | {mine[k] / v - 1:+.1%} |')
+    if val:
+        L += ['', f"## Valuation: three methods (close ₹{val['close']['price']:.2f} on {val['close']['date']})", '',
+              '| ₹ per share | Weight | Bear | Base | Bull |', '|---|---:|---:|---:|---:|']
+        for k in V.METHODS:
+            L.append(f"| {V.LABELS[k]} | {val['weights'][k]:.0%} | " + ' | '.join(f"{val['values'][k][s]:,.2f}" for s in V.SCENARIOS) + ' |')
+        L.append('| **Net value** | | ' + ' | '.join(f"**{val['net'][s]:,.2f}**" for s in V.SCENARIOS) + ' |')
+        L.append('| Upside vs close | | ' + ' | '.join(f"{val['upside'][s]:+.1%}" for s in V.SCENARIOS) + ' |')
+        r, q = val['regression'], val['ratio']
+        L += ['', f"- Current ADR {val['adr_now']:.2f} Cr / day: mean of {val['adr_quarter_days']} days of {val['adr_quarter']} (broking + MTF)",
+              f"- Regression: price = {r['slope']:.3f} × {val['dma_days']}-day ADR + {r['intercept']:.2f}, R² {r['r2']:.3f}, "
+              f"{r['n']} days {r['fit_from']} to {r['fit_to']}",
+              f"- Ratio: price ÷ {val['dma_days']}-day ADR mean {q['mean']:.3f}, SD {q['sd']:.3f} (STDEV.P), {q['n']} days",
+              '- ADR: the FY 2028 target price today above']
+        if val['pe']:
+            for k, w in val['pe']['windows'].items():
+                if w:
+                    L.append(f"- P/E band {k}: mean {w['mean']:.2f}, SD {w['sd']:.2f}, current {w['current']:.2f} "
+                             f"({w['since']} to {w['to']}, {w['n']} days)")
     L += ['', '## Rules (projected periods)', '']
     for (pk, line), r in sorted(m['rules'].items()):
         if r != 'filed':

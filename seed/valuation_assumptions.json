@@ -1,0 +1,68 @@
+{
+ "_about": "Valuation assumptions (sb_assumptions rows, key prefix val_), read by src/engine/valuation.py. Each names its workbook cell (New Model - 09.11.26/20260714_brokers dashboard v2.xlsx) or AB's instruction. Edit a value here or in sb_assumptions, never in code.",
+ "assumptions": [
+  {
+   "broker_id": "*",
+   "key": "val_weights",
+   "value": null,
+   "value_text": "0.2,0.3,0.5",
+   "unit": "fraction (regression,ratio,adr)",
+   "source_ref": "excel[New Model - 09.11.26/20260714_brokers dashboard v2.xlsx]:Groww - ADR Model!H71:H73; Angel One - ADR model (A+B)!G70:G72",
+   "note": "Triangulation weights, used as SUMPRODUCT for both brokers (AB, 9 Nov 2026, point 1: the Angel sheet's plain AVERAGE is replaced)"
+  },
+  {
+   "broker_id": "*",
+   "key": "val_regression_band",
+   "value": 0.1,
+   "value_text": null,
+   "unit": "fraction",
+   "source_ref": "excel[New Model - 09.11.26/20260714_brokers dashboard v2.xlsx]:Angel One - ADR model (A+B)!B70; Groww - ADR Model!C71",
+   "note": "Bear / bull = slope × ADR × (1 ∓ band) + intercept"
+  },
+  {
+   "broker_id": "*",
+   "key": "val_dma_days",
+   "value": 45,
+   "value_text": null,
+   "unit": "trading days",
+   "source_ref": "excel[New Model - 09.11.26/20260714_brokers dashboard v2.xlsx]:Angel One Revenue!N48 (=AVERAGE(M4:M48)); Groww Revenue!N48",
+   "note": "Moving average of daily ADR (broking + MTF) the price is regressed on and divided by"
+  },
+  {
+   "broker_id": "*",
+   "key": "val_pe_since",
+   "value": null,
+   "value_text": "2025-04-01",
+   "unit": "date",
+   "source_ref": "excel[New Model - 09.11.26/20260714_brokers dashboard v2.xlsx]:Angel One - ADR model (A+B)!AE80:AF84 (since Apr-25)",
+   "note": "Start of the second P/E band window; the first is the last 3 years (X80:X84)"
+  },
+  {
+   "broker_id": "ANGELONE",
+   "key": "val_series_start",
+   "value": null,
+   "value_text": "2025-01-01",
+   "unit": "date",
+   "source_ref": "excel[New Model - 09.11.26/20260714_brokers dashboard v2.xlsx]:Angel One Revenue!C1 (Start date)",
+   "note": "First ADR day of the regression / ratio series; the fit starts at the 45th day (2025-03-04 in the workbook)"
+  },
+  {
+   "broker_id": "GROWW",
+   "key": "val_series_start",
+   "value": null,
+   "value_text": "2025-11-12",
+   "unit": "date",
+   "source_ref": "excel[New Model - 09.11.26/20260714_brokers dashboard v2.xlsx]:Groww Revenue!B4 (first date)",
+   "note": "First ADR day of the regression / ratio series (Groww listed 12 Nov 2025); the fit starts at the 45th day (2026-01-14 in the workbook)"
+  },
+  {
+   "broker_id": "ANGELONE",
+   "key": "val_results_dates",
+   "value": null,
+   "value_text": "Q4 FY 2022=2022-04-20;Q3 FY 2023=2023-01-16;Q4 FY 2023=2023-04-17;Q1 FY 2024=2023-07-13;Q2 FY 2024=2023-10-12;Q3 FY 2024=2024-01-15;Q4 FY 2024=2024-04-17;Q1 FY 2025=2024-07-15;Q2 FY 2025=2024-10-14;Q3 FY 2025=2025-01-13;Q4 FY 2025=2025-04-16;Q1 FY 2026=2025-07-16;Q2 FY 2026=2025-10-15;Q3 FY 2026=2026-01-15;Q4 FY 2026=2026-04-16;Q1 FY 2027=2026-07-15;Q2 FY 2027=2026-10-15",
+   "unit": "date per quarter",
+   "source_ref": "outcome_of_board_meeting letters, page 1 (\"held today\"), one per quarter: out/pat/facts_angel_pat_history.md",
+   "note": "Results (board meeting) date of each quarter: from that date its consolidated PAT counts in the trailing 12 months of the P/E series. [SOURCE NEEDED: NSE dissemination timestamps; the letters are same-day]"
+  }
+ ]
+}

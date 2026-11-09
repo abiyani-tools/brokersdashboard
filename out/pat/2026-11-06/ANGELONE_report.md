@@ -29,16 +29,16 @@ Shares 91.45 Cr · close ₹331 (2026-11-06) · fees ÷ broking 23.43% (quarters
 | | Bear | Base | Bull |
 |---|---:|---:|---:|
 | FY 2027 EPS | 14.19 | 14.19 | 14.19 |
-| FY 2027 P/E | 20.00 | 24.00 | 28.00 |
-| FY 2027 Price (P/E × EPS) | 283.86 | 340.63 | 397.41 |
-| FY 2027 Discounted | 236.55 | 283.86 | 331.17 |
-| FY 2027 Upside vs close | -28.5% | -14.2% | +0.1% |
+| FY 2027 P/E | 22.00 | 27.00 | 32.00 |
+| FY 2027 Price (P/E × EPS) | 312.25 | 383.21 | 454.18 |
+| FY 2027 Discounted | 260.21 | 319.34 | 378.48 |
+| FY 2027 Upside vs close | -21.4% | -3.5% | +14.3% |
 | FY 2028 EPS | 18.96 | 18.96 | 18.96 |
-| FY 2028 P/E | 20.00 | 24.00 | 28.00 |
-| FY 2028 Price (P/E × EPS) | 379.18 | 455.02 | 530.85 |
-| FY 2028 Discounted | 315.98 | 379.18 | 442.38 |
-| FY 2028 Target price today | 287.26 | 344.71 | 402.16 |
-| FY 2028 Upside vs close | -13.2% | +4.1% | +21.5% |
+| FY 2028 P/E | 22.00 | 27.00 | 32.00 |
+| FY 2028 Price (P/E × EPS) | 417.10 | 511.89 | 606.69 |
+| FY 2028 Discounted | 347.58 | 426.58 | 505.57 |
+| FY 2028 Target price today | 315.98 | 387.80 | 459.61 |
+| FY 2028 Upside vs close | -4.5% | +17.2% | +38.9% |
 
 ## Against the workbook
 
@@ -46,7 +46,28 @@ Shares 91.45 Cr · close ₹331 (2026-11-06) · fees ÷ broking 23.43% (quarters
 |---|---:|---:|---:|
 | FY27 PAT (`PAT predictor Q2FY27!L53`) | 1,063.41 | 1,297.95 | +22.1% |
 | FY28 PAT (`Angel One - ADR model (A+B)!C27`) | 1,564.86 | 1,733.79 | +10.8% |
-| FY28 target today (base) (`!D34`) | 310.91 | 344.71 | +10.9% |
+| FY28 target today (base) (`!D34`) | 310.91 | 387.80 | +24.7% |
+
+## Valuation: three methods (close ₹331.00 on 2026-11-06)
+
+| ₹ per share | Weight | Bear | Base | Bull |
+|---|---:|---:|---:|---:|
+| Regression | 20% | 293.07 | 312.26 | 331.45 |
+| Ratio analysis | 30% | 300.73 | 345.55 | 390.36 |
+| ADR (PAT model) | 50% | 315.98 | 387.80 | 459.61 |
+| **Net value** | | **306.82** | **360.01** | **413.20** |
+| Upside vs close | | -7.3% | +8.8% | +24.8% |
+
+- Current ADR 19.99 Cr / day: mean of 25 days of Q3 FY 2027 (broking + MTF)
+- Regression: price = 9.599 × 45-day ADR + 120.35, R² 0.238, 413 days 2025-03-04 to 2026-11-06
+- Ratio: price ÷ 45-day ADR mean 17.283, SD 2.242 (STDEV.P), 413 days
+- ADR: the FY 2028 target price today above
+- P/E band 3m: mean 25.37, SD 1.30, current 26.20 (2026-08-06 to 2026-11-06, 64 days)
+- P/E band 6m: mean 28.59, SD 3.92, current 26.20 (2026-05-06 to 2026-11-06, 128 days)
+- P/E band 1y: mean 29.18, SD 3.23, current 26.20 (2025-11-06 to 2026-11-06, 248 days)
+- P/E band 2y: mean 24.73, SD 5.69, current 26.20 (2024-11-06 to 2026-11-06, 494 days)
+- P/E band 3y: mean 23.65, SD 5.33, current 26.20 (2023-11-06 to 2026-11-06, 739 days)
+- P/E band apr25: mean 26.51, SD 4.77, current 26.20 (2025-04-01 to 2026-11-06, 396 days)
 
 ## Rules (projected periods)
 

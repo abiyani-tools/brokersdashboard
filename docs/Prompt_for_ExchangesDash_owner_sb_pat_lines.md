@@ -1,6 +1,6 @@
 # Note for the ExchangesDash owner: `sb_pat_lines` now exists on the brokers side
 
-*From Tusk (Abhishek Biyani) · draft 9 Nov 2026, not sent*
+*From Tusk (Abhishek Biyani) · sent 9 Nov 2026 as a comment on sucaanalytics-max/ExchangesDash#57 (worded for PR #6 being merged)*
 
 Hi Jay,
 
