@@ -80,5 +80,7 @@ python3 seed/build_pat_db_rows.py       # → out/pat/db_inputs.sql (assumptions
 python3 run_pat.py --db [--publish]     # CI: latest live run, reviewed facts, sb_pat_lines
 ```
 
-To go live: (1) apply `migrations/20261105_sb_pat_lines.sql`, (2) apply `out/pat/db_inputs.sql`, (3) review the staged
-facts, (4) notify the ExchangesDash owner (mirror schema), (5) the daily job then publishes after each ADR run.
+To go live: (1) ✅ apply `migrations/20261105_sb_pat_lines.sql` (6 Nov), (2) ✅ apply `out/pat/db_inputs.sql` (6 Nov),
+(3) review the staged facts: evidence `out/pat/review_check/check_report.md`, SQL `out/pat/review_apply.sql` (draft), (4) merge PR #6,
+(5) notify the ExchangesDash owner (`docs/Prompt_for_ExchangesDash_owner_sb_pat_lines.md`; dashboard tab already merged, #57 / #58),
+(6) the daily job then publishes after each ADR run. Workbook cross-check: `out/pat/<as_of>/workbook_crosscheck.md`.

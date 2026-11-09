@@ -1,0 +1,199 @@
+broker_id,period_key,metric,staged_value,found_value,file,page,status,comment
+ANGELONE,Q1 FY 2026,pl_depreciation,299.0,299.0,ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf,29,MATCH,"(f) Depreciation, amortization and impairment 351 329 299 1,250 1,034"
+ANGELONE,Q1 FY 2026,pl_employee,2274.0,2274.0,ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf,29,MATCH,"(d) Employee benefits expenses 2,297 2,050 2,274 8,839 7,496"
+ANGELONE,Q1 FY 2026,pl_esop,465.0,465.0,ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf,29,MATCH,"(e) Expense on Employee Stock Option Scheme 389 393 465 1,832 1,056"
+ANGELONE,Q1 FY 2026,pl_fee_commission_expense,1689.0,1689.0,ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf,29,MATCH,"(b) Fees and commission expense 2,031 1,988 1,689 7,202 8,246"
+ANGELONE,Q1 FY 2026,pl_fees_commission,7780.0,7780.0,ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf,29,MATCH,"(b) Fees and commission income 9,575 10,000 7,780 34,842 38,739"
+ANGELONE,Q1 FY 2026,pl_finance_cost,829.0,829.0,ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf,29,MATCH,"(a) Finance costs 1,292 1,336 829 4,367 2,948"
+ANGELONE,Q1 FY 2026,pl_fv_gain,62.0,62.0,ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf,29,MATCH,(c) Net gain on fair value changes 53 45 62 207 235
+ANGELONE,Q1 FY 2026,pl_impairment,-5.0,-5.0,ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf,29,MATCH,(c) Impairment on financial instruments 6 27 -5 31 25
+ANGELONE,Q1 FY 2026,pl_interest_income,3564.0,3564.0,ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf,29,MATCH,"(a) Interest Income 4,669 4,550 3,564 16,317 13,410"
+ANGELONE,Q1 FY 2026,pl_other_expenses,4235.0,4235.0,ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf,29,MATCH,"(g) Other expenses 4,726 4,149 4,235 15,282 15,752"
+ANGELONE,Q1 FY 2026,pl_other_income,26.0,26.0,ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf,29,MATCH,(d) Other Income (II) 40 78 26 156 93
+ANGELONE,Q1 FY 2026,pl_pat,1145.0,1145.0,ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf,29,MATCH,"Profit for the period / year (VIII-IX=X) 2,314 3,202 1,145 9,151 11,721"
+ANGELONE,Q1 FY 2026,pl_pbt,1644.0,1644.0,ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf,29,MATCH,"Profit before tax (III-IV+V=VI) 3,247 4,399 1,644 12,718 15,920"
+ANGELONE,Q1 FY 2026,pl_revenue_ops,11405.0,11405.0,ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf,29,MATCH,"Total Revenue from operations (I) 14,297 14,594 11,405 51,366 52,384"
+ANGELONE,Q1 FY 2026,pl_tax,500.0,500.0,ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf,29,MATCH,"Total Income tax expense (VII) 933 1,196 500 3,579 4,199"
+ANGELONE,Q1 FY 2026,pl_total_expenses,9787.0,9787.0,ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf,29,MATCH,"Total Expenses (IV) 11,090 10,273 9,787 38,803 36,557"
+ANGELONE,Q1 FY 2026,pl_total_income,11431.0,11431.0,ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf,29,MATCH,"Total Income (I+II=III) 14,337 14,672 11,431 51,522 52,477"
+ANGELONE,Q1 FY 2026,trading_days,61.0,61.0,ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf,29,MATCH,# of Trading Days 60 60 61 246 247
+ANGELONE,Q1 FY 2027,pl_depreciation,351.0,351.0,ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf,29,MATCH,"(f) Depreciation, amortization and impairment 348 351 307 1,250 1,034"
+ANGELONE,Q1 FY 2027,pl_employee,2297.0,2297.0,ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf,29,MATCH,"(d) Employee benefits expenses 2,095 2,297 2,275 8,839 7,496"
+ANGELONE,Q1 FY 2027,pl_esop,389.0,389.0,ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf,29,MATCH,"(e) Expense on Employee Stock Option Scheme 460 389 470 1,832 1,056"
+ANGELONE,Q1 FY 2027,pl_fee_commission_expense,2031.0,2031.0,ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf,29,MATCH,"(b) Fees and commission expense 1,911 2,031 1,700 7,202 8,246"
+ANGELONE,Q1 FY 2027,pl_fees_commission,9575.0,9575.0,ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf,29,MATCH,"(b) Fees and commission income 9,095 9,575 8,167 34,842 38,739"
+ANGELONE,Q1 FY 2027,pl_finance_cost,1292.0,1292.0,ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf,29,MATCH,"(a) Finance costs 1,475 1,292 932 4,367 2,948"
+ANGELONE,Q1 FY 2027,pl_fv_gain,53.0,53.0,ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf,29,MATCH,(c) Net gain on fair value changes 74 53 57 207 235
+ANGELONE,Q1 FY 2027,pl_impairment,6.0,6.0,ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf,29,MATCH,(c) Impairment on financial instruments -2 6 -8 31 25
+ANGELONE,Q1 FY 2027,pl_interest_income,4669.0,4669.0,ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf,29,MATCH,"(a) Interest Income 5,100 4,669 3,794 16,317 13,410"
+ANGELONE,Q1 FY 2027,pl_other_expenses,4726.0,4726.0,ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf,29,MATCH,"(g) Other expenses 3,443 4,726 3,427 15,282 15,752"
+ANGELONE,Q1 FY 2027,pl_other_income,40.0,40.0,ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf,29,MATCH,(d) Other Income (II) 46 40 24 156 93
+ANGELONE,Q1 FY 2027,pl_pat,2314.0,2314.0,ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf,29,MATCH,"Profit for the period / year (VIII-IX=X) 3,350 2,314 2,117 9,151 11,721"
+ANGELONE,Q1 FY 2027,pl_pbt,3247.0,3247.0,ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf,29,MATCH,"Profit before tax (III-IV+V=VI) 4,585 3,247 2,940 12,718 15,920"
+ANGELONE,Q1 FY 2027,pl_revenue_ops,14297.0,14297.0,ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf,29,MATCH,"Total Revenue from operations (I) 14,270 14,297 12,018 51,366 52,384"
+ANGELONE,Q1 FY 2027,pl_tax,933.0,933.0,ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf,29,MATCH,"Total Income tax expense (VII) 1,235 933 823 3,579 4,199"
+ANGELONE,Q1 FY 2027,pl_total_expenses,11090.0,11090.0,ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf,29,MATCH,"Total Expenses (IV) 9,730 11,090 9,102 38,803 36,557"
+ANGELONE,Q1 FY 2027,pl_total_income,14337.0,14337.0,ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf,29,MATCH,"Total Income (I+II=III) 14,315 14,337 12,042 51,522 52,477"
+ANGELONE,Q1 FY 2027,trading_days,60.0,60.0,ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf,29,MATCH,# of Trading Days 65 60 64 246 247
+ANGELONE,Q2 FY 2026,pl_depreciation,307.0,307.0,ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf,29,MATCH,"(f) Depreciation, amortization and impairment 348 351 307 1,250 1,034"
+ANGELONE,Q2 FY 2026,pl_employee,2275.0,2275.0,ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf,29,MATCH,"(d) Employee benefits expenses 2,095 2,297 2,275 8,839 7,496"
+ANGELONE,Q2 FY 2026,pl_esop,470.0,470.0,ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf,29,MATCH,"(e) Expense on Employee Stock Option Scheme 460 389 470 1,832 1,056"
+ANGELONE,Q2 FY 2026,pl_fee_commission_expense,1700.0,1700.0,ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf,29,MATCH,"(b) Fees and commission expense 1,911 2,031 1,700 7,202 8,246"
+ANGELONE,Q2 FY 2026,pl_fees_commission,8167.0,8167.0,ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf,29,MATCH,"(b) Fees and commission income 9,095 9,575 8,167 34,842 38,739"
+ANGELONE,Q2 FY 2026,pl_finance_cost,932.0,932.0,ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf,29,MATCH,"(a) Finance costs 1,475 1,292 932 4,367 2,948"
+ANGELONE,Q2 FY 2026,pl_fv_gain,57.0,57.0,ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf,29,MATCH,(c) Net gain on fair value changes 74 53 57 207 235
+ANGELONE,Q2 FY 2026,pl_impairment,-8.0,-8.0,ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf,29,MATCH,(c) Impairment on financial instruments -2 6 -8 31 25
+ANGELONE,Q2 FY 2026,pl_interest_income,3794.0,3794.0,ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf,29,MATCH,"(a) Interest Income 5,100 4,669 3,794 16,317 13,410"
+ANGELONE,Q2 FY 2026,pl_other_expenses,3427.0,3427.0,ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf,29,MATCH,"(g) Other expenses 3,443 4,726 3,427 15,282 15,752"
+ANGELONE,Q2 FY 2026,pl_other_income,24.0,24.0,ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf,29,MATCH,(d) Other Income (II) 46 40 24 156 93
+ANGELONE,Q2 FY 2026,pl_pat,2117.0,2117.0,ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf,29,MATCH,"Profit for the period / year (VIII-IX=X) 3,350 2,314 2,117 9,151 11,721"
+ANGELONE,Q2 FY 2026,pl_pbt,2940.0,2940.0,ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf,29,MATCH,"Profit before tax (III-IV+V=VI) 4,585 3,247 2,940 12,718 15,920"
+ANGELONE,Q2 FY 2026,pl_revenue_ops,12018.0,12018.0,ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf,29,MATCH,"Total Revenue from operations (I) 14,270 14,297 12,018 51,366 52,384"
+ANGELONE,Q2 FY 2026,pl_tax,823.0,823.0,ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf,29,MATCH,"Total Income tax expense (VII) 1,235 933 823 3,579 4,199"
+ANGELONE,Q2 FY 2026,pl_total_expenses,9102.0,9102.0,ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf,29,MATCH,"Total Expenses (IV) 9,730 11,090 9,102 38,803 36,557"
+ANGELONE,Q2 FY 2026,pl_total_income,12042.0,12042.0,ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf,29,MATCH,"Total Income (I+II=III) 14,315 14,337 12,042 51,522 52,477"
+ANGELONE,Q2 FY 2026,trading_days,64.0,64.0,ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf,29,MATCH,# of Trading Days 65 60 64 246 247
+ANGELONE,Q2 FY 2027,pl_depreciation,348.0,348.0,ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf,29,MATCH,"(f) Depreciation, amortization and impairment 348 351 307 1,250 1,034"
+ANGELONE,Q2 FY 2027,pl_employee,2095.0,2095.0,ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf,29,MATCH,"(d) Employee benefits expenses 2,095 2,297 2,275 8,839 7,496"
+ANGELONE,Q2 FY 2027,pl_esop,460.0,460.0,ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf,29,MATCH,"(e) Expense on Employee Stock Option Scheme 460 389 470 1,832 1,056"
+ANGELONE,Q2 FY 2027,pl_fee_commission_expense,1911.0,1911.0,ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf,29,MATCH,"(b) Fees and commission expense 1,911 2,031 1,700 7,202 8,246"
+ANGELONE,Q2 FY 2027,pl_fees_commission,9095.0,9095.0,ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf,29,MATCH,"(b) Fees and commission income 9,095 9,575 8,167 34,842 38,739"
+ANGELONE,Q2 FY 2027,pl_finance_cost,1475.0,1475.0,ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf,29,MATCH,"(a) Finance costs 1,475 1,292 932 4,367 2,948"
+ANGELONE,Q2 FY 2027,pl_fv_gain,74.0,74.0,ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf,29,MATCH,(c) Net gain on fair value changes 74 53 57 207 235
+ANGELONE,Q2 FY 2027,pl_impairment,-2.0,-2.0,ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf,29,MATCH,(c) Impairment on financial instruments -2 6 -8 31 25
+ANGELONE,Q2 FY 2027,pl_interest_income,5100.0,5100.0,ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf,29,MATCH,"(a) Interest Income 5,100 4,669 3,794 16,317 13,410"
+ANGELONE,Q2 FY 2027,pl_other_expenses,3443.0,3443.0,ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf,29,MATCH,"(g) Other expenses 3,443 4,726 3,427 15,282 15,752"
+ANGELONE,Q2 FY 2027,pl_other_income,46.0,46.0,ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf,29,MATCH,(d) Other Income (II) 46 40 24 156 93
+ANGELONE,Q2 FY 2027,pl_pat,3350.0,3350.0,ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf,29,MATCH,"Profit for the period / year (VIII-IX=X) 3,350 2,314 2,117 9,151 11,721"
+ANGELONE,Q2 FY 2027,pl_pbt,4585.0,4585.0,ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf,29,MATCH,"Profit before tax (III-IV+V=VI) 4,585 3,247 2,940 12,718 15,920"
+ANGELONE,Q2 FY 2027,pl_revenue_ops,14270.0,14270.0,ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf,29,MATCH,"Total Revenue from operations (I) 14,270 14,297 12,018 51,366 52,384"
+ANGELONE,Q2 FY 2027,pl_tax,1235.0,1235.0,ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf,29,MATCH,"Total Income tax expense (VII) 1,235 933 823 3,579 4,199"
+ANGELONE,Q2 FY 2027,pl_total_expenses,9730.0,9730.0,ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf,29,MATCH,"Total Expenses (IV) 9,730 11,090 9,102 38,803 36,557"
+ANGELONE,Q2 FY 2027,pl_total_income,14315.0,14315.0,ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf,29,MATCH,"Total Income (I+II=III) 14,315 14,337 12,042 51,522 52,477"
+ANGELONE,Q2 FY 2027,trading_days,65.0,65.0,ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf,29,MATCH,# of Trading Days 65 60 64 246 247
+ANGELONE,Q3 FY 2026,pl_depreciation,315.0,315.0,ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf + ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf,29,DERIVED_OK,FY26 1250 - Q1 299 - Q2 307 - Q4 329
+ANGELONE,Q3 FY 2026,pl_employee,2240.0,2240.0,ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf + ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf,29,DERIVED_OK,FY26 8839 - Q1 2274 - Q2 2275 - Q4 2050
+ANGELONE,Q3 FY 2026,pl_esop,504.0,504.0,ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf + ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf,29,DERIVED_OK,FY26 1832 - Q1 465 - Q2 470 - Q4 393
+ANGELONE,Q3 FY 2026,pl_fee_commission_expense,1825.0,1825.0,ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf + ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf,29,DERIVED_OK,FY26 7202 - Q1 1689 - Q2 1700 - Q4 1988
+ANGELONE,Q3 FY 2026,pl_fees_commission,8895.0,8895.0,ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf + ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf,29,DERIVED_OK,FY26 34842 - Q1 7780 - Q2 8167 - Q4 10000
+ANGELONE,Q3 FY 2026,pl_finance_cost,1270.0,1270.0,ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf + ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf,29,DERIVED_OK,FY26 4367 - Q1 829 - Q2 932 - Q4 1336
+ANGELONE,Q3 FY 2026,pl_fv_gain,43.0,43.0,ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf + ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf,29,DERIVED_OK,FY26 207 - Q1 62 - Q2 57 - Q4 45
+ANGELONE,Q3 FY 2026,pl_impairment,17.0,17.0,ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf + ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf,29,DERIVED_OK,FY26 31 - Q1 -5 - Q2 -8 - Q4 27
+ANGELONE,Q3 FY 2026,pl_interest_income,4409.0,4409.0,ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf + ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf,29,DERIVED_OK,FY26 16317 - Q1 3564 - Q2 3794 - Q4 4550
+ANGELONE,Q3 FY 2026,pl_other_expenses,3471.0,3471.0,ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf + ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf,29,DERIVED_OK,FY26 15282 - Q1 4235 - Q2 3427 - Q4 4149
+ANGELONE,Q3 FY 2026,pl_other_income,28.0,28.0,ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf + ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf,29,DERIVED_OK,FY26 156 - Q1 26 - Q2 24 - Q4 78
+ANGELONE,Q3 FY 2026,pl_pat,2687.0,2687.0,ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf + ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf,29,DERIVED_OK,FY26 9151 - Q1 1145 - Q2 2117 - Q4 3202
+ANGELONE,Q3 FY 2026,pl_pbt,3735.0,3735.0,ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf + ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf,29,DERIVED_OK,FY26 12718 - Q1 1644 - Q2 2940 - Q4 4399
+ANGELONE,Q3 FY 2026,pl_revenue_ops,13349.0,13349.0,ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf + ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf,29,DERIVED_OK,FY26 51366 - Q1 11405 - Q2 12018 - Q4 14594
+ANGELONE,Q3 FY 2026,pl_tax,1060.0,1060.0,ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf + ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf,29,DERIVED_OK,FY26 3579 - Q1 500 - Q2 823 - Q4 1196
+ANGELONE,Q3 FY 2026,pl_total_expenses,9641.0,9641.0,ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf + ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf,29,DERIVED_OK,FY26 38803 - Q1 9787 - Q2 9102 - Q4 10273
+ANGELONE,Q3 FY 2026,pl_total_income,13377.0,13377.0,ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf + ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf,29,DERIVED_OK,FY26 51522 - Q1 11431 - Q2 12042 - Q4 14672
+ANGELONE,Q3 FY 2026,trading_days,61.0,61.0,ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf + ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf,29,DERIVED_OK,FY26 246 - Q1 61 - Q2 64 - Q4 60
+ANGELONE,Q4 FY 2026,pl_depreciation,329.0,329.0,ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf,29,MATCH,"(f) Depreciation, amortization and impairment 351 329 299 1,250 1,034"
+ANGELONE,Q4 FY 2026,pl_employee,2050.0,2050.0,ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf,29,MATCH,"(d) Employee benefits expenses 2,297 2,050 2,274 8,839 7,496"
+ANGELONE,Q4 FY 2026,pl_esop,393.0,393.0,ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf,29,MATCH,"(e) Expense on Employee Stock Option Scheme 389 393 465 1,832 1,056"
+ANGELONE,Q4 FY 2026,pl_fee_commission_expense,1988.0,1988.0,ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf,29,MATCH,"(b) Fees and commission expense 2,031 1,988 1,689 7,202 8,246"
+ANGELONE,Q4 FY 2026,pl_fees_commission,10000.0,10000.0,ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf,29,MATCH,"(b) Fees and commission income 9,575 10,000 7,780 34,842 38,739"
+ANGELONE,Q4 FY 2026,pl_finance_cost,1336.0,1336.0,ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf,29,MATCH,"(a) Finance costs 1,292 1,336 829 4,367 2,948"
+ANGELONE,Q4 FY 2026,pl_fv_gain,45.0,45.0,ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf,29,MATCH,(c) Net gain on fair value changes 53 45 62 207 235
+ANGELONE,Q4 FY 2026,pl_impairment,27.0,27.0,ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf,29,MATCH,(c) Impairment on financial instruments 6 27 -5 31 25
+ANGELONE,Q4 FY 2026,pl_interest_income,4550.0,4550.0,ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf,29,MATCH,"(a) Interest Income 4,669 4,550 3,564 16,317 13,410"
+ANGELONE,Q4 FY 2026,pl_other_expenses,4149.0,4149.0,ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf,29,MATCH,"(g) Other expenses 4,726 4,149 4,235 15,282 15,752"
+ANGELONE,Q4 FY 2026,pl_other_income,78.0,78.0,ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf,29,MATCH,(d) Other Income (II) 40 78 26 156 93
+ANGELONE,Q4 FY 2026,pl_pat,3202.0,3202.0,ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf,29,MATCH,"Profit for the period / year (VIII-IX=X) 2,314 3,202 1,145 9,151 11,721"
+ANGELONE,Q4 FY 2026,pl_pbt,4399.0,4399.0,ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf,29,MATCH,"Profit before tax (III-IV+V=VI) 3,247 4,399 1,644 12,718 15,920"
+ANGELONE,Q4 FY 2026,pl_revenue_ops,14594.0,14594.0,ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf,29,MATCH,"Total Revenue from operations (I) 14,297 14,594 11,405 51,366 52,384"
+ANGELONE,Q4 FY 2026,pl_tax,1196.0,1196.0,ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf,29,MATCH,"Total Income tax expense (VII) 933 1,196 500 3,579 4,199"
+ANGELONE,Q4 FY 2026,pl_total_expenses,10273.0,10273.0,ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf,29,MATCH,"Total Expenses (IV) 11,090 10,273 9,787 38,803 36,557"
+ANGELONE,Q4 FY 2026,pl_total_income,14672.0,14672.0,ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf,29,MATCH,"Total Income (I+II=III) 14,337 14,672 11,431 51,522 52,477"
+ANGELONE,Q4 FY 2026,trading_days,60.0,60.0,ANGEL8896_15072026184909_15072026InvestorPresentationAOLupdate.pdf,29,MATCH,# of Trading Days 60 60 61 246 247
+GROWW,Q1 FY 2026,pl_depreciation,7.14,7.14,BILLIONBRAINS_15072026112913_outcomefinal.pdf,6,MATCH,Depreciation and amortisation expense 17.63 24.46 7.14 47.87
+GROWW,Q1 FY 2026,pl_employee,136.63,136.63,BILLIONBRAINS_15072026112913_outcomefinal.pdf,6,MATCH,Employee benefits expense 182.00 173.40 136.63 590.83
+GROWW,Q1 FY 2026,pl_finance_cost,16.42,16.42,BILLIONBRAINS_15072026112913_outcomefinal.pdf,6,MATCH,Finance costs 7.31 8.00 16.42 45.94
+GROWW,Q1 FY 2026,pl_other_expenses,284.48,284.48,BILLIONBRAINS_15072026112913_outcomefinal.pdf,6,MATCH,"Other expenses 348.74 393.32 284.48 1,307.35"
+GROWW,Q1 FY 2026,pl_other_income,44.07,44.07,BILLIONBRAINS_15072026112913_outcomefinal.pdf,6,MATCH,Other income 47.25 30.17 44.07 171.30
+GROWW,Q1 FY 2026,pl_pat,378.35,378.35,BILLIONBRAINS_15072026112913_outcomefinal.pdf,6,MATCH,"Profit for the period/year 735.04 686.36 378.35 2,083.01"
+GROWW,Q1 FY 2026,pl_pbt,503.17,503.17,BILLIONBRAINS_15072026112913_outcomefinal.pdf,6,MATCH,"Profit before tax for the period/year 992.27 935.70 503.17 2,821.42"
+GROWW,Q1 FY 2026,pl_revenue_ops,904.4,904.4,BILLIONBRAINS_15072026112913_outcomefinal.pdf,6,MATCH,"Revenue from operations 1,501.42 1,505.37 904.40 4,644.58"
+GROWW,Q1 FY 2026,pl_tax,124.82,124.82,BILLIONBRAINS_15072026112913_outcomefinal.pdf,6,MATCH,Total tax expense for the period/year 257.23 249.34 124.82 738.41
+GROWW,Q1 FY 2026,pl_total_expenses,444.67,444.67,BILLIONBRAINS_15072026112913_outcomefinal.pdf,6,MATCH,"Total expenses 555.68 599.18 444.67 1,991.99"
+GROWW,Q1 FY 2026,pl_total_income,948.47,948.47,BILLIONBRAINS_15072026112913_outcomefinal.pdf,6,MATCH,"Total income 1,548.67 1,535.54 948.47 4,815.88"
+GROWW,Q1 FY 2027,pl_depreciation,17.63,17.63,BILLIONBRAINS_14102026124408_outcomefinalsigned.pdf,7,MATCH,Depreciation and amortisation expense 18.20 17.63 6.80 35.83 13.94 47.87
+GROWW,Q1 FY 2027,pl_employee,182.0,182.0,BILLIONBRAINS_14102026124408_outcomefinalsigned.pdf,7,MATCH,Employee benefits expense 168.89 182.00 123.76 350.89 260.39 590.83
+GROWW,Q1 FY 2027,pl_finance_cost,7.31,7.31,BILLIONBRAINS_14102026124408_outcomefinalsigned.pdf,7,MATCH,Finance costs 4.71 7.31 11.03 12.02 27.45 45.94
+GROWW,Q1 FY 2027,pl_other_expenses,348.74,348.74,BILLIONBRAINS_14102026124408_outcomefinalsigned.pdf,7,MATCH,"Other expenses 364.13 348.74 291.01 712.87 575.49 1,307.35"
+GROWW,Q1 FY 2027,pl_other_income,47.25,47.25,BILLIONBRAINS_14102026124408_outcomefinalsigned.pdf,7,MATCH,Other income 39.01 47.25 52.06 86.26 96.13 171.30
+GROWW,Q1 FY 2027,pl_pat,735.04,735.04,BILLIONBRAINS_14102026124408_outcomefinalsigned.pdf,7,MATCH,"Profit for the period/year 724.70 735.04 471.34 1,459.74 849.69 2,083.01"
+GROWW,Q1 FY 2027,pl_pbt,992.27,992.27,BILLIONBRAINS_14102026124408_outcomefinalsigned.pdf,7,MATCH,"Profit before tax for the period/year 983.86 992.27 637.68 1,976.13 1,140.85 2,821.42"
+GROWW,Q1 FY 2027,pl_revenue_ops,1501.42,1501.42,BILLIONBRAINS_14102026124408_outcomefinalsigned.pdf,7,MATCH,"Revenue from operations 1,501.53 1,501.42 1,018.74 3,002.95 1,923.14 4,644.58"
+GROWW,Q1 FY 2027,pl_tax,257.23,257.23,BILLIONBRAINS_14102026124408_outcomefinalsigned.pdf,7,MATCH,Total tax expense for the period/year 259.16 257.23 166.34 516.39 291.16 738.41
+GROWW,Q1 FY 2027,pl_total_expenses,555.68,555.68,BILLIONBRAINS_14102026124408_outcomefinalsigned.pdf,7,MATCH,"Total expenses 555.93 555.68 432.60 1,111.61 877.27 1,991.99"
+GROWW,Q1 FY 2027,pl_total_income,1548.67,1548.67,BILLIONBRAINS_14102026124408_outcomefinalsigned.pdf,7,MATCH,"Total income 1,540.54 1,548.67 1,070.80 3,089.21 2,019.27 4,815.88"
+GROWW,Q2 FY 2026,pl_depreciation,6.8,6.8,BILLIONBRAINS_14102026124408_outcomefinalsigned.pdf,7,MATCH,Depreciation and amortisation expense 18.20 17.63 6.80 35.83 13.94 47.87
+GROWW,Q2 FY 2026,pl_employee,123.76,123.76,BILLIONBRAINS_14102026124408_outcomefinalsigned.pdf,7,MATCH,Employee benefits expense 168.89 182.00 123.76 350.89 260.39 590.83
+GROWW,Q2 FY 2026,pl_finance_cost,11.03,11.03,BILLIONBRAINS_14102026124408_outcomefinalsigned.pdf,7,MATCH,Finance costs 4.71 7.31 11.03 12.02 27.45 45.94
+GROWW,Q2 FY 2026,pl_other_expenses,291.01,291.01,BILLIONBRAINS_14102026124408_outcomefinalsigned.pdf,7,MATCH,"Other expenses 364.13 348.74 291.01 712.87 575.49 1,307.35"
+GROWW,Q2 FY 2026,pl_other_income,52.06,52.06,BILLIONBRAINS_14102026124408_outcomefinalsigned.pdf,7,MATCH,Other income 39.01 47.25 52.06 86.26 96.13 171.30
+GROWW,Q2 FY 2026,pl_pat,471.34,471.34,BILLIONBRAINS_14102026124408_outcomefinalsigned.pdf,7,MATCH,"Profit for the period/year 724.70 735.04 471.34 1,459.74 849.69 2,083.01"
+GROWW,Q2 FY 2026,pl_pbt,637.68,637.68,BILLIONBRAINS_14102026124408_outcomefinalsigned.pdf,7,MATCH,"Profit before tax for the period/year 983.86 992.27 637.68 1,976.13 1,140.85 2,821.42"
+GROWW,Q2 FY 2026,pl_revenue_ops,1018.74,1018.74,BILLIONBRAINS_14102026124408_outcomefinalsigned.pdf,7,MATCH,"Revenue from operations 1,501.53 1,501.42 1,018.74 3,002.95 1,923.14 4,644.58"
+GROWW,Q2 FY 2026,pl_tax,166.34,166.34,BILLIONBRAINS_14102026124408_outcomefinalsigned.pdf,7,MATCH,Total tax expense for the period/year 259.16 257.23 166.34 516.39 291.16 738.41
+GROWW,Q2 FY 2026,pl_total_expenses,432.6,432.6,BILLIONBRAINS_14102026124408_outcomefinalsigned.pdf,7,MATCH,"Total expenses 555.93 555.68 432.60 1,111.61 877.27 1,991.99"
+GROWW,Q2 FY 2026,pl_total_income,1070.8,1070.8,BILLIONBRAINS_14102026124408_outcomefinalsigned.pdf,7,MATCH,"Total income 1,540.54 1,548.67 1,070.80 3,089.21 2,019.27 4,815.88"
+GROWW,Q2 FY 2027,pl_depreciation,18.2,18.2,BILLIONBRAINS_14102026124408_outcomefinalsigned.pdf,7,MATCH,Depreciation and amortisation expense 18.20 17.63 6.80 35.83 13.94 47.87
+GROWW,Q2 FY 2027,pl_employee,168.89,168.89,BILLIONBRAINS_14102026124408_outcomefinalsigned.pdf,7,MATCH,Employee benefits expense 168.89 182.00 123.76 350.89 260.39 590.83
+GROWW,Q2 FY 2027,pl_finance_cost,4.71,4.71,BILLIONBRAINS_14102026124408_outcomefinalsigned.pdf,7,MATCH,Finance costs 4.71 7.31 11.03 12.02 27.45 45.94
+GROWW,Q2 FY 2027,pl_other_expenses,364.13,364.13,BILLIONBRAINS_14102026124408_outcomefinalsigned.pdf,7,MATCH,"Other expenses 364.13 348.74 291.01 712.87 575.49 1,307.35"
+GROWW,Q2 FY 2027,pl_other_income,39.01,39.01,BILLIONBRAINS_14102026124408_outcomefinalsigned.pdf,7,MATCH,Other income 39.01 47.25 52.06 86.26 96.13 171.30
+GROWW,Q2 FY 2027,pl_pat,724.7,724.7,BILLIONBRAINS_14102026124408_outcomefinalsigned.pdf,7,MATCH,"Profit for the period/year 724.70 735.04 471.34 1,459.74 849.69 2,083.01"
+GROWW,Q2 FY 2027,pl_pbt,983.86,983.86,BILLIONBRAINS_14102026124408_outcomefinalsigned.pdf,7,MATCH,"Profit before tax for the period/year 983.86 992.27 637.68 1,976.13 1,140.85 2,821.42"
+GROWW,Q2 FY 2027,pl_revenue_ops,1501.53,1501.53,BILLIONBRAINS_14102026124408_outcomefinalsigned.pdf,7,MATCH,"Revenue from operations 1,501.53 1,501.42 1,018.74 3,002.95 1,923.14 4,644.58"
+GROWW,Q2 FY 2027,pl_tax,259.16,259.16,BILLIONBRAINS_14102026124408_outcomefinalsigned.pdf,7,MATCH,Total tax expense for the period/year 259.16 257.23 166.34 516.39 291.16 738.41
+GROWW,Q2 FY 2027,pl_total_expenses,555.93,555.93,BILLIONBRAINS_14102026124408_outcomefinalsigned.pdf,7,MATCH,"Total expenses 555.93 555.68 432.60 1,111.61 877.27 1,991.99"
+GROWW,Q2 FY 2027,pl_total_income,1540.54,1540.54,BILLIONBRAINS_14102026124408_outcomefinalsigned.pdf,7,MATCH,"Total income 1,540.54 1,548.67 1,070.80 3,089.21 2,019.27 4,815.88"
+GROWW,Q3 FY 2025,pl_depreciation,65.16,65.16,BILLIONBRAINS_14012026123241_OutcomeSigned.pdf,6,MATCH,Depreciation and amortisation expense 94.75 68.04 65.16 234.17 179.56 246.00
+GROWW,Q3 FY 2025,pl_employee,-3175.56,-3175.56,BILLIONBRAINS_14012026123241_OutcomeSigned.pdf,6,MATCH,"Employee benefits expense 1,570.49 1,237.61 (3,175.56) 4,174.33 1,951.30 3,151.75"
+GROWW,Q3 FY 2025,pl_finance_cost,161.55,161.55,BILLIONBRAINS_14012026123241_OutcomeSigned.pdf,6,MATCH,Finance costs 104.96 110.27 161.55 379.41 266.16 425.49
+GROWW,Q3 FY 2025,pl_other_expenses,2771.58,2771.58,BILLIONBRAINS_14012026123241_OutcomeSigned.pdf,6,MATCH,"Other expenses 3,385.35 2,910.07 2,771.58 9,140.24 9,214.26 12,141.62"
+GROWW,Q3 FY 2025,pl_other_income,299.12,299.12,BILLIONBRAINS_14012026123241_OutcomeSigned.pdf,6,MATCH,"Other income 450.00 520.55 299.12 1,411.29 1,113.56 1,599.22"
+GROWW,Q3 FY 2025,pl_pat,7571.1,7571.1,BILLIONBRAINS_14012026123241_OutcomeSigned.pdf,6,MATCH,"Profit for the period/year 5,469.33 4,713.39 7,571.10 13,966.46 15,152.84 18,243.73"
+GROWW,Q3 FY 2025,pl_pbt,10215.69,10215.69,BILLIONBRAINS_14012026123241_OutcomeSigned.pdf,6,MATCH,"Profit before income tax for the period/year 7,448.52 6,376.77 10,215.69 18,857.15 20,500.86 24,637.82"
+GROWW,Q3 FY 2025,pl_revenue_ops,9745.35,9745.35,BILLIONBRAINS_14012026123241_OutcomeSigned.pdf,6,MATCH,"Revenue from operations 12,160.72 10,187.42 9,745.35 31,392.12 31,007.17 39,017.23"
+GROWW,Q3 FY 2025,pl_tax,2644.59,2644.59,BILLIONBRAINS_14012026123241_OutcomeSigned.pdf,6,MATCH,"Total tax expense period/year 1,979.19 1,663.38 2,644.59 4,890.69 5,348.02 6,394.09"
+GROWW,Q3 FY 2025,pl_total_expenses,-177.27,-177.27,BILLIONBRAINS_14012026123241_OutcomeSigned.pdf,6,MATCH,"Total expenses 5,155.55 4,325.99 (177.27) 13,928.15 11,611.28 15,964.86"
+GROWW,Q3 FY 2025,pl_total_income,10044.47,10044.47,BILLIONBRAINS_14012026123241_OutcomeSigned.pdf,6,MATCH,"Total income 12,610.72 10,707.97 10,044.47 32,803.41 32,120.73 40,616.45"
+GROWW,Q3 FY 2026,pl_depreciation,94.75,94.75,BILLIONBRAINS_20042026130140_Boardoutcomesigned.pdf,8,MATCH,Depreciation and amortisation expense 244.55 94.75 66.44 478.72 246.00
+GROWW,Q3 FY 2026,pl_employee,1570.49,1570.49,BILLIONBRAINS_20042026130140_Boardoutcomesigned.pdf,8,MATCH,"Employee benefits expense 1,734.00 1,570.49 1,200.45 5,908.33 3,151.75"
+GROWW,Q3 FY 2026,pl_finance_cost,104.96,104.96,BILLIONBRAINS_20042026130140_Boardoutcomesigned.pdf,8,MATCH,Finance costs 80.02 104.96 159.33 459.43 425.49
+GROWW,Q3 FY 2026,pl_other_expenses,3385.35,3385.35,BILLIONBRAINS_20042026130140_Boardoutcomesigned.pdf,8,MATCH,"Other expenses 3,933.22 3,385.35 2,927.36 13,073.46 12,141.62"
+GROWW,Q3 FY 2026,pl_other_income,450.0,450.0,BILLIONBRAINS_20042026130140_Boardoutcomesigned.pdf,8,MATCH,"Other income 301.68 450.00 485.66 1,712.97 1,599.22"
+GROWW,Q3 FY 2026,pl_pat,5469.33,5469.33,BILLIONBRAINS_20042026130140_Boardoutcomesigned.pdf,8,MATCH,"Profit for the period/year 6,863.54 5,469.33 3,090.89 20,830.00 18,243.73"
+GROWW,Q3 FY 2026,pl_pbt,7448.52,7448.52,BILLIONBRAINS_20042026130140_Boardoutcomesigned.pdf,8,MATCH,"Profit before tax for the period/year 9,356.96 7,448.52 4,136.96 28,214.11 24,637.82"
+GROWW,Q3 FY 2026,pl_revenue_ops,12160.72,12160.72,BILLIONBRAINS_20042026130140_Boardoutcomesigned.pdf,8,MATCH,"Revenue from operations 15,053.67 12,160.72 8,010.06 46,445.79 39,017.23"
+GROWW,Q3 FY 2026,pl_tax,1979.19,1979.19,BILLIONBRAINS_20042026130140_Boardoutcomesigned.pdf,8,MATCH,"Total tax expense period/year 2,493.42 1,979.19 1,046.07 7,384.11 6,394.09"
+GROWW,Q3 FY 2026,pl_total_expenses,5155.55,5155.55,BILLIONBRAINS_20042026130140_Boardoutcomesigned.pdf,8,MATCH,"Total expenses 5,991.79 5,155.55 4,353.58 19,919.94 15,964.86"
+GROWW,Q3 FY 2026,pl_total_income,12610.72,12610.72,BILLIONBRAINS_20042026130140_Boardoutcomesigned.pdf,8,MATCH,"Total income 15,355.35 12,610.72 8,495.72 48,158.76 40,616.45"
+GROWW,Q4 FY 2025,pl_depreciation,66.44,66.44,BILLIONBRAINS_20042026130140_Boardoutcomesigned.pdf,8,MATCH,Depreciation and amortisation expense 244.55 94.75 66.44 478.72 246.00
+GROWW,Q4 FY 2025,pl_employee,1200.45,1200.45,BILLIONBRAINS_20042026130140_Boardoutcomesigned.pdf,8,MATCH,"Employee benefits expense 1,734.00 1,570.49 1,200.45 5,908.33 3,151.75"
+GROWW,Q4 FY 2025,pl_finance_cost,159.33,159.33,BILLIONBRAINS_20042026130140_Boardoutcomesigned.pdf,8,MATCH,Finance costs 80.02 104.96 159.33 459.43 425.49
+GROWW,Q4 FY 2025,pl_other_expenses,2927.36,2927.36,BILLIONBRAINS_20042026130140_Boardoutcomesigned.pdf,8,MATCH,"Other expenses 3,933.22 3,385.35 2,927.36 13,073.46 12,141.62"
+GROWW,Q4 FY 2025,pl_other_income,485.66,485.66,BILLIONBRAINS_20042026130140_Boardoutcomesigned.pdf,8,MATCH,"Other income 301.68 450.00 485.66 1,712.97 1,599.22"
+GROWW,Q4 FY 2025,pl_pat,3090.89,3090.89,BILLIONBRAINS_20042026130140_Boardoutcomesigned.pdf,8,MATCH,"Profit for the period/year 6,863.54 5,469.33 3,090.89 20,830.00 18,243.73"
+GROWW,Q4 FY 2025,pl_pbt,4136.96,4136.96,BILLIONBRAINS_20042026130140_Boardoutcomesigned.pdf,8,MATCH,"Profit before tax for the period/year 9,356.96 7,448.52 4,136.96 28,214.11 24,637.82"
+GROWW,Q4 FY 2025,pl_revenue_ops,8010.06,8010.06,BILLIONBRAINS_20042026130140_Boardoutcomesigned.pdf,8,MATCH,"Revenue from operations 15,053.67 12,160.72 8,010.06 46,445.79 39,017.23"
+GROWW,Q4 FY 2025,pl_tax,1046.07,1046.07,BILLIONBRAINS_20042026130140_Boardoutcomesigned.pdf,8,MATCH,"Total tax expense period/year 2,493.42 1,979.19 1,046.07 7,384.11 6,394.09"
+GROWW,Q4 FY 2025,pl_total_expenses,4353.58,4353.58,BILLIONBRAINS_20042026130140_Boardoutcomesigned.pdf,8,MATCH,"Total expenses 5,991.79 5,155.55 4,353.58 19,919.94 15,964.86"
+GROWW,Q4 FY 2025,pl_total_income,8495.72,8495.72,BILLIONBRAINS_20042026130140_Boardoutcomesigned.pdf,8,MATCH,"Total income 15,355.35 12,610.72 8,495.72 48,158.76 40,616.45"
+GROWW,Q4 FY 2026,pl_depreciation,24.46,24.46,BILLIONBRAINS_15072026112913_outcomefinal.pdf,6,MATCH,Depreciation and amortisation expense 17.63 24.46 7.14 47.87
+GROWW,Q4 FY 2026,pl_employee,173.4,173.4,BILLIONBRAINS_15072026112913_outcomefinal.pdf,6,MATCH,Employee benefits expense 182.00 173.40 136.63 590.83
+GROWW,Q4 FY 2026,pl_finance_cost,8.0,8.0,BILLIONBRAINS_15072026112913_outcomefinal.pdf,6,MATCH,Finance costs 7.31 8.00 16.42 45.94
+GROWW,Q4 FY 2026,pl_other_expenses,393.32,393.32,BILLIONBRAINS_15072026112913_outcomefinal.pdf,6,MATCH,"Other expenses 348.74 393.32 284.48 1,307.35"
+GROWW,Q4 FY 2026,pl_other_income,30.17,30.17,BILLIONBRAINS_15072026112913_outcomefinal.pdf,6,MATCH,Other income 47.25 30.17 44.07 171.30
+GROWW,Q4 FY 2026,pl_pat,686.36,686.36,BILLIONBRAINS_15072026112913_outcomefinal.pdf,6,MATCH,"Profit for the period/year 735.04 686.36 378.35 2,083.01"
+GROWW,Q4 FY 2026,pl_pbt,935.7,935.7,BILLIONBRAINS_15072026112913_outcomefinal.pdf,6,MATCH,"Profit before tax for the period/year 992.27 935.70 503.17 2,821.42"
+GROWW,Q4 FY 2026,pl_revenue_ops,1505.37,1505.37,BILLIONBRAINS_15072026112913_outcomefinal.pdf,6,MATCH,"Revenue from operations 1,501.42 1,505.37 904.40 4,644.58"
+GROWW,Q4 FY 2026,pl_tax,249.34,249.34,BILLIONBRAINS_15072026112913_outcomefinal.pdf,6,MATCH,Total tax expense for the period/year 257.23 249.34 124.82 738.41
+GROWW,Q4 FY 2026,pl_total_expenses,599.18,599.18,BILLIONBRAINS_15072026112913_outcomefinal.pdf,6,MATCH,"Total expenses 555.68 599.18 444.67 1,991.99"
+GROWW,Q4 FY 2026,pl_total_income,1535.54,1535.54,BILLIONBRAINS_15072026112913_outcomefinal.pdf,6,MATCH,"Total income 1,548.67 1,535.54 948.47 4,815.88"
+ANGELONE,Q2 FY 2027,shares_outstanding_cr,91.4496,91.4496,ANGEL8896_15102026174556_CoveringInvestorsPresentation.pdf,30,DERIVED_OK,"Networth Sep26 67,124 Rs Mn / BV Rs 73.4 = 914.496 Mn = 91.4496 Cr; arithmetic ok, both inputs read on p30. CROSS-CHECK: Outcome.pdf p5 (scanned image) prints Equity share capital (face value Re. 1 each) 914.59 Rs Mn at 30 Sep 2026 = 91.459 Cr (diff +0.0094 Cr, 0.010%); BV 73.4 is rounded so derived figure is good only to about +/-0.06 Cr"
+GROWW,,shares_outstanding_cr,623.905,623.905,BILLIONBRAINS_14102026124408_outcomefinalsigned.pdf,7,DERIVED_OK,"Paid up equity share capital (FV INR 2/- per share) 1,247.81 Rs Cr / 2 = 623.905 Cr. That is the 31 Mar 2026 (audited) figure; p8 balance sheet shows Equity share capital 1,248.42 at 30 Sep 2026 = 624.21 Cr. Staged period_key is blank"
