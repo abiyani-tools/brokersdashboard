@@ -1,7 +1,6 @@
 # Note for the ExchangesDash owner: new table `sb_valuation_lines` and a Valuation tab
 
-*From Tusk (Abhishek Biyani) · DRAFT, NOT SENT. Send only after `migrations/20261109_sb_valuation_lines.sql` is applied
-in the brokers-dashboard project. Post it as a comment on the ExchangesDash PR that adds the tab (branch `brokers-valuation`).*
+*From Tusk (Abhishek Biyani) · sent 9 Nov 2026 as a comment on sucaanalytics-max/ExchangesDash#75 (the Valuation tab PR), after the migration was applied*
 
 Hi Jay,
 

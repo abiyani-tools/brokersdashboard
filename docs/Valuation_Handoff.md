@@ -1,7 +1,8 @@
 # Valuation tab (PLAN 5.8) — handoff, 9 Nov 2026
 
-Engine work is committed on branch `feat/valuation` (from main `1b281a0`). The dashboard branch `brokers-valuation`
-in `../exchangesdash-valuation` is not committed or pushed yet. **Nothing is applied to any DB.**
+**Live state, 9 Nov late evening:** engine merged into main (PR #8, `8d69df8`); migration applied; `out/valuation/db_inputs.sql`
+steps 1–3 applied (step 4, the review of the Angel P/E history, waits on AB); dashboard PR sucaanalytics-max/ExchangesDash#75
+open with the mirror note posted. The first valuation rows arrive with the daily run of Tue 10 Nov (19:47 IST schedule).
 
 ## What AB asked for (9 Nov)
 - A **Valuation** tab for Angel One and Groww, based on the 09.11 workbook
@@ -121,7 +122,9 @@ in `../exchangesdash-valuation` is not committed or pushed yet. **Nothing is app
 
 ## Next steps (in order)
 1. ~~Re-run the gates~~, ~~window tests~~, ~~mirror note~~: done 9 Nov 23:19.
-2. Show AB, step by step (rule 7), then on his OK:
+2. Done 9 Nov: (a) PR #8 merged; (b) migration applied; (c) steps 1–3 applied; (d) ExchangesDash#75 opened, note posted.
+   Remaining: step 4 of db_inputs.sql after AB's check; after Tue's run, confirm rows in `sb_valuation_lines` and that the
+   numbers match the dry run's method; ExchangesDash#75 review / merge by the owner. Original plan, for reference:
    - (a) commit here, run the gate, push, PR
    - (b) apply `migrations/20261109_sb_valuation_lines.sql`
    - (c) apply `out/valuation/db_inputs.sql` steps 1–3; step 4 after AB checks `out/pat/facts_angel_pat_history.md`
