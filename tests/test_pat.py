@@ -118,6 +118,9 @@ class TestPat(unittest.TestCase):
         self.assertIn(('FY 2028', 'target_today', 'base'), keys)
         self.assertIn(('FY 2028', 'close', ''), keys)
         self.assertIn(('FY 2027', 'shares', ''), keys)
+        self.assertIn(('FY 2026', 'pat', ''), keys)                   # 3-year P&L (10 Nov 2026)
+        self.assertIn(('FY 2028', 'adr_consol', ''), keys)
+        self.assertIn(('inputs', 'in_pe', 'base'), keys)
         self.assertTrue(all(r['regime'] in ('actual', 'projected') for r in rows))
 
 

@@ -212,16 +212,22 @@ def preview(brokers, out):
 
 def report(m, run_id, val=None):
     b, f27, f28 = m['broker'], m['fy27'], m['fy28']
-    cols = list(P.FY27_Q) + ['FY 2027', 'FY 2028']
-    per = {**m['quarters'], 'FY 2027': f27, 'FY 2028': f28}
+    cols = ['FY 2026'] + list(P.FY27_Q) + ['FY 2027', 'FY 2028']
+    per = {'FY 2026': m['fy26'], **m['quarters'], 'FY 2027': f27, 'FY 2028': f28}
+    k = m['kit']
     L = [f"# PAT model — {b} (dry run) · ADR run {run_id[:8]} as of {m['as_of']}", '',
          f"Shares {m['shares_cr']:.2f} Cr · close ₹{m['close']['price']} ({m['close']['date']}) · "
          + (f"fees ÷ broking {m['ratios']['fees_to_broking']:.2%}" if m['ratios']['fees_to_broking']
             else f"other exp ÷ broking {m['ratios']['other_exp_to_broking']:.2%}")
          + f" (quarters {', '.join(m['ratios']['last4'])})", '',
+         f"Start: {k['start_rule']}: broking {k['adr_broking0']:.3f} + MTF {k['adr_mtf0']:.3f} = "
+         f"{k['adr_broking0'] + k['adr_mtf0']:.3f} Cr / day (45-day average {k['adr_45dma']:.3f}, reference) · QoQ growth "
+         f"{k['g']:.1%} · build-up: " + ', '.join(f"{q.replace(' FY 20', ' FY')} {v['adr_consol']:.2f}" for q, v in k['buildup'].items())
+         + f" · FY28 average {f28['adr_consol']:.2f}", '',
          '| Rs Cr | ' + ' | '.join(c.replace(' FY 20', ' FY') + (' A' if per[c]['regime'] == 'actual' else ' E') for c in cols) + ' |',
          '|---|' + '---:|' * len(cols)]
-    for line in ('trading_days',) + P.REVENUE_LINES[b] + ('total_income',) + P.COST_LINES[b] + ('total_costs', 'pbt', 'tax', 'pat', 'mtf_book'):
+    for line in (('trading_days',) + P.REVENUE_LINES[b] + ('total_income',) + P.COST_LINES[b]
+                 + ('total_costs', 'pbt', 'tax', 'pat', 'mtf_book', 'op_revenue', 'treasury_rev', 'other_inc')):
         L.append(f'| {P.LABELS[line]} | ' + ' | '.join('' if per[c].get(line) is None else f'{per[c][line]:,.1f}' for c in cols) + ' |')
     L += ['', '## Valuation', '', '| | Bear | Base | Bull |', '|---|---:|---:|---:|']
     for pk in ('FY 2027', 'FY 2028'):
@@ -255,7 +261,7 @@ def report(m, run_id, val=None):
                              f"({w['since']} to {w['to']}, {w['n']} days)")
     L += ['', '## Rules (projected periods)', '']
     for (pk, line), r in sorted(m['rules'].items()):
-        if r != 'filed':
+        if not r.startswith('filed'):
             L.append(f'- {pk} · {P.LABELS[line]}: {r}')
     return '\n'.join(L) + '\n'
 
