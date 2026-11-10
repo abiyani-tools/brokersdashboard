@@ -1,0 +1,22 @@
+name: freshness
+# 06:15 IST check (src/live/freshness.py): is every broker's latest published run as of the last NSE trading day?
+# Fails, with an error annotation per broker naming the cause (upstream series late, or our run not published), so
+# GitHub emails AB. Read only: sb_runs and the public ExchangesDash JSON. Needs SUPABASE_URL, SUPABASE_SERVICE_KEY.
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '45 0 * * 2-6'     # 06:15 IST, Tue-Sat
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    env:
+      SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+      SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+      GITHUB_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - run: pip install -r requirements.txt
+      - name: Published runs are as of the last trading day
+        run: python -m src.live.freshness

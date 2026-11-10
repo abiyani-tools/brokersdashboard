@@ -18,10 +18,15 @@ name: daily
 # Industry MTF book: the `nse` rows of the owner's public dashboard/data/mtf_daily.json; also their view
 # codex_public_nse_mtf_daily with their read-only key (secret NSE_LAKE_ANON_KEY), which has answered 401 since 2 Nov 2026.
 # GITHUB_TOKEN (the job's own token) lifts GitHub's 60-an-hour limit on the refresh's commits lookups (403 on 4 Nov 2026).
+# Schedule (AB, 10 Nov 2026): day D's ADR must be published by 06:00 IST on D+1. ExchangesDash's files for D land
+# ~01:00-03:30 IST on D+1 (19:47 IST was before them, and GitHub started that run 5-8 h late). Two tries, 02:00 and
+# 04:30 IST, Tue-Sat IST (= Mon-Fri UTC); a second run that finds no new day republishes the same as-of date.
+# The 'freshness' workflow checks at 06:15 IST and fails, with the cause, if any broker is behind.
 on:
   workflow_dispatch:
   schedule:
-    - cron: '17 14 * * 1-5'    # 19:47 IST, Mon-Fri, after the exchange files post
+    - cron: '30 20 * * 1-5'    # 02:00 IST, Tue-Sat
+    - cron: '0 23 * * 1-5'     # 04:30 IST, Tue-Sat
 jobs:
   run:
     runs-on: ubuntu-latest
