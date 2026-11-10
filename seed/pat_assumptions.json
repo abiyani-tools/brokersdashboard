@@ -47,7 +47,7 @@
    "value": 20,
    "unit": "trading days",
    "source_ref": "excel:Angel One - ADR model (A+B)!C14 (=E9, 20-day A+B)",
-   "note": "Base ADR (broking, cash and MTF) for the rest of FY27 and the start of the quarterly growth path"
+   "note": "Unused since 10 Nov 2026: the PAT model no longer reads this key. The start of the growth path is now the current quarter's QTD ADR (previous quarter's full-quarter ADR under 5 engine days; AB, 10 Nov 2026). Was: base ADR (broking, cash and MTF) for the rest of FY27 and the start of the quarterly growth path."
   },
   {
    "broker_id": "ANGELONE",
@@ -55,7 +55,7 @@
    "value": 0.03,
    "unit": "per quarter",
    "source_ref": "AB instruction, 5 Nov 2026; same value in excel[New model - 06.11.26/20260714_brokers dashboard v2 - new.xlsx]:Angel One - ADR model (A+B)!E57 (3%)",
-   "note": "Broking and MTF ADR grow by this each quarter from the ADR window's level: the current quarter's remaining days at the window ADR, the next quarter × (1+g), and so on through Q4 FY28. Input: edit in sb_assumptions."
+   "note": "Broking and MTF ADR grow by this each quarter from the start ADR (the current quarter's QTD ADR; the previous quarter's full-quarter ADR under 5 engine days): the current quarter's remaining days at the start ADR, the next quarter × (1+g), and so on through Q4 FY28. Default of the PAT Predictor page's input (in_qoq_growth). Input: edit in sb_assumptions."
   },
   {
    "broker_id": "ANGELONE",
@@ -192,7 +192,7 @@
    "value": 45,
    "unit": "trading days",
    "source_ref": "excel:Groww - ADR Model!C15 (=E8, 45-day A+B)",
-   "note": "Base ADR (broking, cash and MTF) for the rest of FY27 and the start of the quarterly growth path"
+   "note": "Unused since 10 Nov 2026: the PAT model no longer reads this key. The start of the growth path is now the current quarter's QTD ADR (previous quarter's full-quarter ADR under 5 engine days; AB, 10 Nov 2026). Was: base ADR (broking, cash and MTF) for the rest of FY27 and the start of the quarterly growth path."
   },
   {
    "broker_id": "GROWW",
@@ -200,7 +200,7 @@
    "value": 0.04,
    "unit": "per quarter",
    "source_ref": "excel[New Model - 09.11.26/20260714_brokers dashboard v2.xlsx]:Groww - ADR Model!F58 (4%)",
-   "note": "Broking and MTF ADR grow by this each quarter from the ADR window's level: the current quarter's remaining days at the window ADR, the next quarter × (1+g), and so on through Q4 FY28. (AB, 9 Nov 2026: follow the 09.11 workbook; was 3.5%.) Input: edit in sb_assumptions."
+   "note": "Broking and MTF ADR grow by this each quarter from the start ADR (the current quarter's QTD ADR; the previous quarter's full-quarter ADR under 5 engine days): the current quarter's remaining days at the start ADR, the next quarter × (1+g), and so on through Q4 FY28. (AB, 9 Nov 2026: follow the 09.11 workbook; was 3.5%.) Default of the PAT Predictor page's input (in_qoq_growth). Input: edit in sb_assumptions."
   },
   {
    "broker_id": "GROWW",

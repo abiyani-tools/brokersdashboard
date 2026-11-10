@@ -4,7 +4,9 @@ Built on the workbook's `PAT predictor Q2FY27` (quarterly cost and revenue rules
 model (A+B)` / `Groww - ADR Model` sheets (FY28 ADR growth, P/E bands, discounting), with the fixes AB
 approved on 5 Nov 2026 (docs/PAT_Model.md):
   - reported quarters are the filed figures; the rest of FY27 is projected, so FY27E = reported + projected
-  - broking, MTF and cash revenue come from the engine's published daily ADR (window per broker)
+  - broking, MTF and cash revenue come from the engine's published daily ADR: the start (step 0) is the current
+    quarter's ADR so far (QTD), or the previous quarter's full-quarter ADR when the current quarter has fewer than
+    5 engine days (AB, 10 Nov 2026; replaces the 20- / 45-day window, pat_adr_window_fy27 is no longer read)
   - finance cost follows the MTF book implied by that MTF revenue: previous period + funding rate ×
     (book growth − retained share of the previous period's PAT), the same rule in FY27 and FY28
   - fees & commission expense (Angel) = its ratio to broking revenue (last 4 reported quarters) × projected
@@ -45,7 +47,26 @@ LABELS = {
     'adr_broking': 'Broking ADR', 'adr_mtf': 'MTF ADR', 'eps': 'EPS', 'pe': 'P/E', 'price_fwd': 'Price (P/E × EPS)',
     'price_disc': 'Discounted', 'target_today': 'Target price today', 'upside': 'Upside vs close',
     'shares': 'Shares outstanding', 'close': 'Share price (close)',
+    # top block of the PAT predictor (sums to total income) and the ADR build-up (broking + MTF gross)
+    'op_revenue': 'Operating revenue', 'treasury_rev': 'Treasury revenue', 'other_inc': 'Other income (top block)',
+    'adr_consol': 'Consolidated ADR (broking + MTF)', 'adr_45dma': 'Consolidated ADR, 45-day average (reference)',
+    # the page's inputs (defaults) and the recompute kit (src/engine/pat_kit.py)
+    'in_qoq_growth': 'QoQ ADR growth', 'in_pe': 'P/E', 'in_discount_fwd': 'Discount FY28 → FY27',
+    'in_discount_today': 'Discount FY27 → today',
+    'k_step': 'Quarters after the current one', 'k_tax': 'Tax rate', 'k_retention': 'Retained share of PAT',
+    'k_funding_rate': 'Funding rate', 'k_mtf_yield': 'MTF yield', 'k_fy28_days': 'FY28 trading days',
+    'k_dist_growth_fy28': 'FY28 distribution / lending growth', 'k_treasury_growth_fy28': 'FY28 treasury / float growth',
+    'k_adr_broking0': 'Start broking ADR', 'k_adr_mtf0': 'Start MTF ADR', 'k_adr_cash0': 'Start cash broking ADR',
+    'k_dep_share_of_cash': 'Depository share of cash broking', 'k_fee_ratio': 'Fees & commission ÷ broking',
+    'k_oexp_ratio': 'Other expenses ÷ broking',
+    'k_prev_finance': 'Previous quarter: finance cost', 'k_prev_mtf_book': 'Previous quarter: MTF book',
+    'k_prev_pat': 'Previous quarter: PAT', 'k_prev_broking': 'Previous quarter: broking revenue',
+    'k_prev_float': 'Previous quarter: float income',
+    'k_sofar_broking': 'Engine broking revenue so far', 'k_sofar_mtf': 'Engine MTF revenue so far',
+    'k_sofar_cash': 'Engine cash broking revenue so far', 'k_rem_days': 'Remaining trading days',
 }
+TREASURY = {'ANGELONE': 'treasury', 'GROWW': 'float'}     # the top block's treasury revenue line
+MIN_QTD_DAYS = 5                                           # start rule: fewer engine days → previous full quarter
 
 
 class PatInputMissing(RuntimeError):
@@ -242,14 +263,28 @@ def build(broker, facts, daily, assumptions, close, shares=None):
     proj_q = [q for q in FY27_Q if q not in Q]
     wd = {q: weekdays(max(asof, q_end(q_prev(q))), q_end(q)) for q in proj_q}
     tot_wd = sum(wd.values()) or 1
-    w27 = int(A('pat_adr_window_fy27'))
-    adr_b, adr_m, adr_c = adr.window('broking', w27), adr.window('mtf', w27), adr.window('cash', w27)
-    # quarterly ADR growth path: the current quarter's remaining days at the window ADR, then × (1 + g) a quarter
+    # start rule (AB, 10 Nov 2026): the current quarter's ADR so far; under 5 engine days, the previous full quarter
+    cur = q_of(adr.as_of)
+    start_q = cur if adr.in_quarter('broking', cur)[1] >= MIN_QTD_DAYS else q_prev(cur)
+    n0 = adr.in_quarter('broking', start_q)[1]
+    if not n0:
+        raise PatInputMissing(f'{broker}: no engine days in {start_q} for the start ADR')
+    adr_b, adr_m, adr_c = (adr.in_quarter(k, start_q)[0] / n0 for k in ('broking', 'mtf', 'cash'))
+    if start_q == cur:
+        start = f'{cur} QTD ADR'
+        start_rule = f'{cur} QTD ADR: engine daily revenue ÷ {n0} days to {adr.as_of}'
+    else:
+        start = f'{start_q} ADR'
+        start_rule = (f'{start_q} full-quarter ADR ({n0} days): {cur} has fewer than {MIN_QTD_DAYS} engine days '
+                      f'to {adr.as_of}')
+    # quarterly ADR growth path: the current quarter's remaining days at the start ADR, then × (1 + g) a quarter
     g_q = A('pat_adr_qoq_growth')
     first_proj = q_of(adr.as_of) if q_of(adr.as_of) in FY27_Q else None
     step = lambda q: 0 if first_proj is None else (int(q[-4:]) * 4 + int(q[1])) - (int(first_proj[-4:]) * 4 + int(first_proj[1]))
 
     tax, ret, rate = A('pat_tax_rate'), A('pat_retention'), A('pat_funding_rate')
+    kit_q = {}                                     # per projected quarter: what the page's recompute needs
+    prev0 = (Q.get(q_prev(proj_q[0])) or hist[q_prev(proj_q[0])]) if proj_q else None
     for q in proj_q:
         p = Q.get(q_prev(q)) or hist[q_prev(q)]
         ly = hist[q_prev(q, 4)]
@@ -262,8 +297,11 @@ def build(broker, facts, daily, assumptions, close, shares=None):
         cash = so_far['cash'][0] + rem * adr_c * f
         grow = f' × (1 + {g_q:.1%})^{step(q)}' if step(q) else ''
         done = f'engine daily {{}} to {adr.as_of} ({so_far["broking"][1]} days) + ' if so_far['broking'][1] else ''
-        rules[(q, 'broking')] = done.format('broking') + f'{rem:.1f} days × {w27}-day ADR {adr_b:.3f}{grow}'
-        rules[(q, 'mtf')] = done.format('MTF') + f'{rem:.1f} days × {w27}-day ADR {adr_m:.3f}{grow}'
+        rules[(q, 'broking')] = done.format('broking') + f'{rem:.1f} days × {start} {adr_b:.3f}{grow}'
+        rules[(q, 'mtf')] = done.format('MTF') + f'{rem:.1f} days × {start} {adr_m:.3f}{grow}'
+        kit_q[q] = dict(sofar_broking=so_far['broking'][0], sofar_mtf=so_far['mtf'][0], sofar_cash=so_far['cash'][0],
+                        rem_days=rem, step=step(q),
+                        rem_rule=f'{left} FY27 days left ({fy_days} − {traded} traded) × {wd[q]} of {tot_wd} weekdays')
         if broker == 'ANGELONE':
             L['depository'] = A('pat_dep_share_of_cash') * cash
             rules[(q, 'depository')] = f'{A("pat_dep_share_of_cash"):.0%} × cash broking {cash:.1f}'
@@ -326,9 +364,10 @@ def build(broker, facts, daily, assumptions, close, shares=None):
     b28, m28 = adr_b * path, adr_m * path
     F = {'trading_days': d28, 'adr_broking': b28, 'adr_mtf': m28, 'broking': b28 * d28, 'mtf': m28 * d28}
     expo = f'(1 + {g_q:.1%})^{k28[0]}..^{k28[-1]}'
-    rules[('FY 2028', 'broking')] = (f'{w27}-day broking ADR {adr_b:.3f} × average of {expo} = {b28:.3f} a day × {d28} days')
-    rules[('FY 2028', 'mtf')] = (f'{w27}-day MTF ADR {adr_m:.3f} × average of {expo} = {m28:.3f} a day × {d28} days')
+    rules[('FY 2028', 'broking')] = (f'{start} broking {adr_b:.3f} × average of {expo} = {b28:.3f} a day × {d28} days')
+    rules[('FY 2028', 'mtf')] = (f'{start} MTF {adr_m:.3f} × average of {expo} = {m28:.3f} a day × {d28} days')
     rules[('FY 2028', 'adr_broking')] = rules[('FY 2028', 'broking')]
+    rules[('FY 2028', 'adr_mtf')] = rules[('FY 2028', 'mtf')]
     gd, gt = A('pat_dist_growth_fy28'), A('pat_treasury_growth_fy28')
     if broker == 'ANGELONE':
         F['depository'] = fy27['depository'] * F['broking'] / fy27['broking']
@@ -370,7 +409,56 @@ def build(broker, facts, daily, assumptions, close, shares=None):
     F['pat'] = F['pbt'] - F['tax']
     F['regime'] = 'projected'
     fy27.update(adr_broking=adr_b, adr_mtf=adr_m)
+    rules[('FY 2027', 'adr_broking')] = f'start: {start_rule} (broking)'
+    rules[('FY 2027', 'adr_mtf')] = f'start: {start_rule} (MTF gross)'
 
+    # FY26 = the four filed quarters (the 3-year P&L's first column)
+    fy26 = {k: sum(hist[q][k] for q in prev_fy) for k in REVENUE_LINES[broker] + COST_LINES[broker] +
+            ('total_income', 'total_costs', 'pbt', 'tax', 'pat')}
+    fy26['mtf_book'] = sum(hist[q]['mtf_book'] for q in prev_fy) / 4
+    fy26['pat_margin'] = fy26['pat'] / fy26['total_income']
+    for k in fy26:
+        rules[('FY 2026', k)] = 'filed: Q1–Q4 FY 2026' + (' (average)' if k == 'mtf_book' else '')
+    rules[('FY 2026', 'pat_margin')] = 'filed: Q1–Q4 FY 2026, PAT ÷ total income'
+    fy26['regime'] = 'actual'
+
+    # top block of the PAT predictor: operating (broking + MTF) + treasury + the rest = total income
+    tr = TREASURY[broker]
+    rest = ('depository + distribution + other' if broker == 'ANGELONE'
+            else 'PL + LAS + other operating + other income')
+    for pk, L in (('FY 2026', fy26), ('FY 2027', fy27), ('FY 2028', F)):
+        L['op_revenue'] = L['broking'] + L['mtf']
+        L['treasury_rev'] = L[tr]
+        L['other_inc'] = L['total_income'] - L['op_revenue'] - L['treasury_rev']
+        rules[(pk, 'op_revenue')] = 'broking + MTF' + (
+            f' = consolidated ADR {b28 + m28:.3f} × {d28} days' if pk == 'FY 2028' else '')
+        rules[(pk, 'treasury_rev')] = LABELS[tr]
+        rules[(pk, 'other_inc')] = f'total income − operating − treasury ({rest})'
+
+    # ADR build-up: consolidated ADR (broking + MTF gross) from the current quarter through Q4 FY28
+    b_q = [cur]
+    while b_q[-1] != 'Q4 FY 2028' and int(b_q[-1][-4:]) <= 2028:
+        b_q.append(q_prev(b_q[-1], -1))
+    buildup = {q: dict(step=step(q), adr_consol=(adr_b + adr_m) * (1 + g_q) ** step(q))
+               for q in b_q if int(q[-4:]) <= 2028}
+    for q, v in buildup.items():
+        rules[(q, 'adr_consol')] = (f'{start} (broking {adr_b:.3f} + MTF {adr_m:.3f}) = {adr_b + adr_m:.3f}'
+                                    + (f' × (1 + {g_q:.1%})^{v["step"]}' if v['step'] else ''))
+    F['adr_consol'] = (adr_b + adr_m) * path
+    rules[('FY 2028', 'adr_consol')] = (f'{start} {adr_b + adr_m:.3f} × average of {expo} = {F["adr_consol"]:.3f} '
+                                        f'(FY28 broking + MTF ADR)')
+    rules[('FY 2028', 'trading_days')] = f'{d28} (pat_fy28_trading_days)'
+    a45 = adr.window('broking', 45) + adr.window('mtf', 45)
+
+    # inputs of the page (defaults) and the constants of the recompute kit (src/engine/pat_kit.py)
+    kit = dict(start_q=start_q, start_days=n0, start_rule=start_rule, adr_45dma=a45,
+               adr_45dma_rule=f'mean of the last {min(45, len(adr.days))} engine days to {adr.as_of} (broking + MTF gross)',
+               g=g_q, tax=tax, retention=ret, funding_rate=rate, mtf_yield=y, fy28_days=d28, dist_growth_fy28=gd,
+               treasury_growth_fy28=gt, adr_broking0=adr_b, adr_mtf0=adr_m, adr_cash0=adr_c,
+               dep_share_of_cash=A('pat_dep_share_of_cash') if broker == 'ANGELONE' else None,
+               fee_ratio=fee_ratio, oexp_ratio=oexp_ratio, quarters=kit_q, buildup=buildup,
+               prev_q=q_prev(proj_q[0]) if proj_q else None,
+               prev=None if prev0 is None else dict(prev0, regime=prev0.get('regime', 'actual')))
     # valuation
     shares_cr = shares if shares is not None else t.get((None, 'shares_outstanding_cr'))
     if not shares_cr:
@@ -387,9 +475,67 @@ def build(broker, facts, daily, assumptions, close, shares=None):
             tgt = d1 / (1 + today) if period == 'FY 2028' else d1
             val[(period, s)] = dict(eps=eps, pe=x, price_fwd=price, price_disc=d1, target_today=tgt,
                                     upside=tgt / close['price'] - 1)
-    return dict(broker=broker, as_of=adr.as_of, quarters=Q, fy27=fy27, fy28=F, valuation=val, rules=rules,
+    kit.update(pe=pe, discount_fwd=disc, discount_today=today)
+    return dict(broker=broker, as_of=adr.as_of, quarters=Q, fy26=fy26, fy27=fy27, fy28=F, valuation=val, rules=rules,
                 shares_cr=shares_cr, close=close, ratios=dict(fees_to_broking=fee_ratio, other_exp_to_broking=oexp_ratio,
-                last4=last4), skipped=skipped, assumptions={k: (A(k), A.ref(k)) for k in A.rows})
+                last4=last4), skipped=skipped, assumptions={k: (A(k), A.ref(k)) for k in A.rows}, kit=kit)
+
+
+def _qkey(q):
+    return int(q[-4:]) * 4 + int(q[1])
+
+
+def kit_rows(model, run_id):
+    """The ADR build-up (adr_consol, k_step) and the 'inputs' rows: the page's editable defaults (in_*), the 45-day
+    reference and the constants src/engine/pat_kit.py needs to recompute the P&L from them (k_*)."""
+    b, K, out = model['broker'], model['kit'], []
+
+    def add(pk, line, value, unit, regime, rule, order, scenario=''):
+        out.append(dict(run_id=run_id, broker_id=b, period_key=pk, line=line, label=LABELS[line], scenario=scenario,
+                        value=float(value), unit=unit, regime=regime, rule=rule, sort_order=order))
+
+    proj = {q for q in K['quarters']}
+    for q in sorted(set(K['buildup']) | proj, key=_qkey):
+        step = K['buildup'][q]['step'] if q in K['buildup'] else K['quarters'][q]['step']
+        add(q, 'k_step', step, 'n', 'projected', 'quarters after the current one (the power of 1 + g)', 1001)
+        if q in K['buildup']:
+            add(q, 'adr_consol', K['buildup'][q]['adr_consol'], 'Rs Cr / day', 'projected',
+                model['rules'][(q, 'adr_consol')], 800)
+    add('FY 2028', 'adr_consol', model['fy28']['adr_consol'], 'Rs Cr / day', 'projected',
+        model['rules'][('FY 2028', 'adr_consol')], 800)
+    src =lambda key: f'{key} (sb_assumptions)'
+    add('inputs', 'adr_45dma', K['adr_45dma'], 'Rs Cr / day', 'actual', K['adr_45dma_rule'], 1000)
+    add('inputs', 'in_qoq_growth', K['g'], 'fraction', 'projected', src('pat_adr_qoq_growth'), 1010)
+    for s, x in zip(SCENARIOS, K['pe']):
+        add('inputs', 'in_pe', x, 'x', 'projected', src('pat_pe'), 1011, scenario=s)
+    add('inputs', 'in_discount_fwd', K['discount_fwd'], 'fraction', 'projected', src('pat_discount_fwd'), 1012)
+    add('inputs', 'in_discount_today', K['discount_today'], 'fraction', 'projected', src('pat_discount_today'), 1013)
+    consts = [('k_tax', K['tax'], 'fraction', src('pat_tax_rate')),
+              ('k_retention', K['retention'], 'fraction', src('pat_retention')),
+              ('k_funding_rate', K['funding_rate'], 'fraction', src('pat_funding_rate')),
+              ('k_mtf_yield', K['mtf_yield'], 'fraction', src('pat_mtf_yield')),
+              ('k_fy28_days', K['fy28_days'], 'days', src('pat_fy28_trading_days')),
+              ('k_dist_growth_fy28', K['dist_growth_fy28'], 'fraction', src('pat_dist_growth_fy28')),
+              ('k_treasury_growth_fy28', K['treasury_growth_fy28'], 'fraction', src('pat_treasury_growth_fy28'))]
+    for k, what in (('k_adr_broking0', 'broking'), ('k_adr_mtf0', 'MTF gross'), ('k_adr_cash0', 'cash broking')):
+        consts.append((k, K[k[2:]], 'Rs Cr / day', f"{K['start_rule']} ({what})"))
+    if b == 'ANGELONE':
+        consts += [('k_dep_share_of_cash', K['dep_share_of_cash'], 'fraction', src('pat_dep_share_of_cash')),
+                   ('k_fee_ratio', K['fee_ratio'], 'fraction', 'fees & commission ÷ broking, last 4 reported quarters')]
+    else:
+        consts.append(('k_oexp_ratio', K['oexp_ratio'], 'fraction', 'other expenses ÷ broking, last 4 reported quarters'))
+    for i, (k, v, unit, rule) in enumerate(consts):
+        add('inputs', k, v, unit, 'actual' if k.startswith(('k_adr_', 'k_fee', 'k_oexp')) else 'projected', rule, 1020 + i)
+    if K['prev'] is not None:
+        pv = K['prev']
+        prev = ['finance', 'mtf_book', 'pat', 'broking'] + (['float'] if b == 'GROWW' else [])
+        for i, k in enumerate(prev):
+            add('inputs', f'k_prev_{k}', pv[k], 'Rs Cr', pv['regime'], f"{K['prev_q']}: {LABELS[k]}", 1050 + i)
+    for q, v in K['quarters'].items():
+        for i, k in enumerate(('sofar_broking', 'sofar_mtf', 'sofar_cash')):
+            add(q, f'k_{k}', v[k], 'Rs Cr', 'actual', f"engine daily revenue in {q} to {model['as_of']}", 1060 + i)
+        add(q, 'k_rem_days', v['rem_days'], 'days', 'projected', v['rem_rule'], 1063)
+    return out
 
 
 def rows(model, run_id):
@@ -397,8 +543,9 @@ def rows(model, run_id):
     out, order = [], 0
     b = model['broker']
     lines = (('trading_days', 'adr_broking', 'adr_mtf') + REVENUE_LINES[b] + ('total_income', 'mtf_book') +
-             COST_LINES[b] + ('total_costs', 'pbt', 'tax', 'pat', 'pat_margin'))
-    periods = [(q, model['quarters'][q]) for q in FY27_Q] + [('FY 2027', model['fy27']), ('FY 2028', model['fy28'])]
+             COST_LINES[b] + ('total_costs', 'pbt', 'tax', 'pat', 'pat_margin', 'op_revenue', 'treasury_rev', 'other_inc'))
+    periods = ([('FY 2026', model['fy26'])] + [(q, model['quarters'][q]) for q in FY27_Q]
+               + [('FY 2027', model['fy27']), ('FY 2028', model['fy28'])])
     for line in lines:
         order += 1
         for pk, L in periods:
@@ -423,4 +570,4 @@ def rows(model, run_id):
         out.append(dict(run_id=run_id, broker_id=b, period_key=pk, line='close', label=LABELS['close'], scenario='',
                         value=float(model['close']['price']), unit='Rs', regime='actual',
                         rule=f"close on {model['close']['date']} (sb_share_prices)", sort_order=991))
-    return out
+    return out + kit_rows(model, run_id)
