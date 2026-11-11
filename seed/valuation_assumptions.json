@@ -63,6 +63,15 @@
    "unit": "date per quarter",
    "source_ref": "outcome_of_board_meeting letters, page 1 (\"held today\"), one per quarter: out/pat/facts_angel_pat_history.md",
    "note": "Results (board meeting) date of each quarter: from that date its consolidated PAT counts in the trailing 12 months of the P/E series. [SOURCE NEEDED: NSE dissemination timestamps; the letters are same-day]"
+  },
+  {
+   "broker_id": "GROWW",
+   "key": "val_results_dates",
+   "value": null,
+   "value_text": "Q3 FY 2025=2025-11-12;Q4 FY 2025=2025-11-12;Q1 FY 2026=2025-11-12;Q2 FY 2026=2025-11-21;Q3 FY 2026=2026-01-14;Q4 FY 2026=2026-04-20;Q1 FY 2027=2026-07-15;Q2 FY 2027=2026-10-14",
+   "unit": "date per quarter",
+   "source_ref": "outcome of board meeting letters, page 1 (\"held today\"): BILLIONBRAINS_21112025102506_BMoutcomeintimati.pdf (November 21, 2025), _14012026123241_OutcomeSigned.pdf (January 14, 2026), _20042026130140_Boardoutcomesigned.pdf (April 20, 2026), _15072026112913_outcomefinal.pdf (July 15, 2026), _14102026124408_outcomefinalsigned.pdf (October 14, 2026); the quarters before the listing on the listing day, 2025-11-12",
+   "note": "Results date of each quarter: from that date its consolidated PAT counts in the trailing 12 months of the P/E series (the Angel One rule). Q3 FY25 to Q1 FY26 ended before Groww listed (12 Nov 2025) and count from the listing day, as in the workbook's 'Groww charts'!G (which brings each later quarter in at its quarter end instead). Q3 FY25 PAT (Rs 757 Cr) includes a negative employee cost; it leaves the TTM on 14 Jan 2026."
   }
  ]
 }

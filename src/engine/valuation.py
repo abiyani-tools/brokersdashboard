@@ -142,12 +142,19 @@ def triangulate(values, weights):
     return {s: sum(weights[m] * values[m][s] for m in METHODS) for s in SCENARIOS}
 
 
-# ── P/E bands (Angel One) ────────────────────────────────────────────────────
+# ── P/E bands (Angel One, Groww) ─────────────────────────────────────────────
+def fiscal_order(quarter):
+    """'Q3 FY 2025' -> (2025, 3), so quarters sort in time order; anything else sorts as itself."""
+    p = str(quarter).split()
+    return (int(p[2]), int(p[0][1:])) if len(p) == 3 and p[0][:1] == 'Q' and p[1] == 'FY' else (0, str(quarter))
+
+
 def ttm_pe(prices, quarters, shares_cr):
     """[{date, close, shares, ttm_pat, pe}]: quarters = [(results_date, quarter, pat_cr[, shares_cr])]. On each date
     the last four quarters whose results date is on or before it; the share count is the latest of those quarters'
     (on today's split basis, as the closes are), else shares_cr. Dates before four quarters are known are left out."""
-    qs = sorted(quarters)
+    # by results date, then by fiscal quarter: quarters can share a date (Groww's pre-listing quarters, all on the listing day)
+    qs = sorted(quarters, key=lambda q: (q[0], fiscal_order(q[1])))
     out = []
     for p in prices:
         d = p['trade_date']
@@ -263,10 +270,11 @@ def build(broker, daily, prices, pat_targets, A, pe_quarters=None, shares_cr=Non
         if series:
             last = series[-1]['date']
             bands = {}
-            for key, _, n in WINDOWS:   # 'all' has no P/E window of its own: the page shows the workbook's 3y and apr25
-                if n is None:
-                    continue
-                since = pe_since if n == 'pe_since' else months_back(last, n)
+            for key, _, n in WINDOWS:
+                # 'all' is the whole P/E series (Groww's workbook chart: 'Groww charts'!G3:G203, from the listing).
+                # Under All the page shows the workbook's 3y and apr25 bands where the series covers them (Angel One),
+                # else this one (Groww, listed 12 Nov 2025)
+                since = series[0]['date'] if n is None else pe_since if n == 'pe_since' else months_back(last, n)
                 b = pe_bands(series, since) if covered(series[0]['date'], since) else None
                 if b:
                     bands[key] = b

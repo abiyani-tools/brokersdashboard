@@ -142,6 +142,26 @@ class TestWindows(unittest.TestCase):
         keys = {(r['section'], r['period_key'], r['line'], r['scenario']) for r in V.lines(m, 'run')}
         self.assertEqual(len(keys), len(V.lines(m, 'run')))                  # the table's primary key holds
 
+    def test_groww_pe_from_its_results_dates(self):
+        """Groww's TTM P/E: the pre-listing quarters count from the listing day, each later quarter from its results
+        date, so the series starts on 21 Nov 2025 (Q2 FY26 results); the whole series is the 'all' band."""
+        from src.engine.pat import Assume
+        A = Assume(json.load(open(Path(__file__).parents[1] / 'seed/valuation_assumptions.json'))['assumptions'], 'GROWW')
+        pat = {'Q3 FY 2025': (7571.1, 'Rs Mn'), 'Q4 FY 2025': (3090.89, 'Rs Mn'), 'Q1 FY 2026': (378.35, 'Rs Cr'),
+               'Q2 FY 2026': (471.34, 'Rs Cr'), 'Q3 FY 2026': (5469.33, 'Rs Mn'), 'Q4 FY 2026': (686.36, 'Rs Cr')}
+        facts = [dict(period_type='Q', period_key=q, metric='pl_pat', segment='consolidated', value=v, unit=u)
+                 for q, (v, u) in pat.items()]
+        q = V.pe_quarters(facts, A)
+        self.assertEqual([x[0] for x in q], ['2025-11-12'] * 3 + ['2025-11-21', '2026-01-14', '2026-04-20'])
+        px = [dict(trade_date=d, close=c) for d, c in (('2025-11-12', 131.33), ('2025-11-20', 150.0), ('2025-11-21', 155.0),
+                                                       ('2026-01-13', 160.0), ('2026-01-14', 161.0), ('2026-04-20', 170.0))]
+        s = V.ttm_pe(px, q, 623.905)
+        self.assertEqual([r['date'] for r in s], ['2025-11-21', '2026-01-13', '2026-01-14', '2026-04-20'])
+        self.assertAlmostEqual(s[0]['ttm_pat'], 757.11 + 309.089 + 378.35 + 471.34, places=6)      # Q3 FY25 .. Q2 FY26
+        self.assertAlmostEqual(s[2]['ttm_pat'], 309.089 + 378.35 + 471.34 + 546.933, places=6)     # Q4 FY25 .. Q3 FY26
+        self.assertAlmostEqual(s[0]['pe'], 155.0 * 623.905 / s[0]['ttm_pat'])
+        self.assertEqual(V.pe_bands(s, s[0]['date'])['n'], 4)
+
 
 if __name__ == '__main__':
     unittest.main()
