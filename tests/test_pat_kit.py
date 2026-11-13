@@ -77,9 +77,31 @@ class TestPatKit(unittest.TestCase):
             kit = K.kit_from_rows(P.rows(m, 'run-x'))
             d = kit['defaults']
             for dg in (-0.01, 0.01):
-                g = d['g'] + dg
-                rows = P.rows(self.build(b, pat_adr_qoq_growth=g), 'run-x')
+                g = d['g'] + dg                      # broking only: MTF stays at its published rate
+                rows = P.rows(self.build(b, pat_adr_qoq_growth=g, pat_mtf_qoq_growth=d['gm']), 'run-x')
                 self.check_same(K.recompute(kit, g, d['pe'], d['disc'], d['today']), rows, (b, g))
+
+    def test_separate_mtf_growth_equals_rebuild(self):
+        """Broking and MTF at their own QoQ growth (AB, 13 Nov 2026): recompute(g, gm) = build() with
+        pat_adr_qoq_growth = g and pat_mtf_qoq_growth = gm; MTF moves, broking does not."""
+        for b, m in self.m.items():
+            kit = K.kit_from_rows(P.rows(m, 'run-x'))
+            d = kit['defaults']
+            if b == 'ANGELONE':                      # no pat_mtf_qoq_growth row: MTF at the broking rate
+                self.assertAlmostEqual(d['gm'], d['g'], delta=1e-12)
+            else:                                    # Groww's own row (seed/pat_assumptions.json)
+                self.assertAlmostEqual(d['gm'], 0.127, delta=1e-12)
+            for gm in (0.0, 0.07):
+                rebuilt = self.build(b, pat_mtf_qoq_growth=gm)
+                rows = P.rows(rebuilt, 'run-x')
+                got = K.recompute(kit, d['g'], d['pe'], d['disc'], d['today'], gm)
+                self.check_same(got, rows, (b, gm))
+                self.assertAlmostEqual(K.kit_from_rows(rows)['defaults']['gm'], gm, delta=1e-12)
+                self.assertAlmostEqual(got[('FY 2028', 'broking', '')], m['fy28']['broking'], delta=TOL)
+                self.assertGreater(abs(got[('FY 2028', 'mtf', '')] - m['fy28']['mtf']), 1.0)
+                q4 = {key(r): r['value'] for r in rows}
+                self.assertAlmostEqual(q4[('FY 2028', 'adr_mtf', '')] / m['kit']['adr_mtf0'],
+                                       sum((1 + gm) ** k for k in (2, 3, 4, 5)) / 4, delta=1e-9)
 
     def test_other_pe_and_discounts_equal_rebuild(self):
         for b, m in self.m.items():
