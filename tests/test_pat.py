@@ -89,6 +89,26 @@ class TestPat(unittest.TestCase):
         f27 = self.m['GROWW']['fy27']
         self.assertAlmostEqual(self.m['GROWW']['fy28']['employee'], f27['employee'] * 1.15, places=6)
 
+    def test_groww_restated_mix_wins(self):
+        """AB, 13 Nov 2026: the October 2026 letter's restated mix (segment '') beats the July letter's rows tagged
+        'cls_pre_q2fy27'. Q3 FY26 broking = (F&O 53.5% + cash 16.5% + commodity 3.5%) × 1,261.07 = 926.89 (the July
+        cash share 18.2% gave 948.33); other expenses ÷ broking over Q3 FY26..Q2 FY27 = 1,444.73 ÷ 4,259.72 = 33.92%."""
+        m = self.m['GROWW']
+        t = P.fact_table(__import__('run_pat').local_facts('GROWW'), 'GROWW')
+        self.assertAlmostEqual(t[('Q3 FY 2026', 'revmix_cash')], 0.165)
+        self.assertAlmostEqual(t[('Q1 FY 2027', 'revmix_cash')], 0.161)
+        self.assertAlmostEqual(m['ratios']['other_exp_to_broking'], 0.33916, places=4)
+
+    def test_fact_table_segment_priority(self):
+        """An untagged row wins over a segment-tagged one in either order; a tagged row is the fallback."""
+        cur = dict(broker_id='GROWW', period_key='Q', metric='revmix_cash', value=0.165, unit='fraction', segment='')
+        old = dict(cur, value=0.182, segment='cls_pre_q2fy27')
+        only = dict(old, period_key='Q0', value=0.193)
+        for rows in ([cur, old, only], [old, cur, only]):
+            t = P.fact_table(rows, 'GROWW')
+            self.assertEqual(t[('Q', 'revmix_cash')], 0.165)
+            self.assertEqual(t[('Q0', 'revmix_cash')], 0.193)
+
     def test_costs_follow_adr(self):
         """Fees & commission (Angel) and other expenses (Groww) scale with broking revenue; finance cost with MTF."""
         hi = {}
