@@ -132,13 +132,18 @@ def _cr(f):
 
 
 def fact_table(facts, broker):
-    """{(period_key, metric): value} in Rs Cr (fractions stay fractions); the latest reviewed / staged row wins."""
-    t = {}
+    """{(period_key, metric): value} in Rs Cr (fractions stay fractions); the latest reviewed / staged row wins.
+    A row with no segment (or 'consolidated') beats one tagged with another segment, whatever the order: Groww's
+    October 2026 letter restated the product mix, and the July letter's figures stay in the DB tagged
+    'cls_pre_q2fy27'. They are used only for quarters the restated mix does not cover (AB, 13 Nov 2026)."""
+    t, rank = {}, {}
     for f in facts:
         if f.get('broker_id', broker) != broker or f.get('period_key') is None:
             continue
         v = f['value'] if f['unit'] in ('fraction', 'days', 'crore shares', 'count') else _cr(f)
-        t[(f['period_key'], f['metric'])] = v
+        key, r = (f['period_key'], f['metric']), int((f.get('segment') or '') in ('', 'consolidated'))
+        if r >= rank.get(key, 0):
+            t[key], rank[key] = v, r
     return t
 
 
