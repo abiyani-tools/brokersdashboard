@@ -284,7 +284,22 @@ def build(broker, facts, daily, assumptions, close, shares=None):
 
     tax, ret, rate = A('pat_tax_rate'), A('pat_retention'), A('pat_funding_rate')
     kit_q = {}                                     # per projected quarter: what the page's recompute needs
-    prev0 = (Q.get(q_prev(proj_q[0])) or hist[q_prev(proj_q[0])]) if proj_q else None
+    # Groww employee & depreciation (AB, 13 Nov 2026): FY26 quarterly average × (1 + the average uplift of the filed
+    # FY27 quarters over that average); before any FY27 quarter is filed, the assumption pat_*_growth is the uplift
+    groww_cost = {}
+    if broker == 'GROWW':
+        filed27 = [q for q in FY27_Q if q in Q]
+        for k, key in (('employee', 'pat_employee_growth'), ('depreciation', 'pat_depreciation_growth')):
+            avg26 = sum(hist[x][k] for x in prev_fy) / 4
+            if filed27:
+                ups = [hist[q][k] / avg26 - 1 for q in filed27]
+                g = sum(ups) / len(ups)
+                why = (f'average uplift of {", ".join(q.replace(" FY 20", " FY") for q in filed27)} filed over it '
+                       f'({", ".join(f"{u:+.1%}" for u in ups)})')
+            else:
+                g, why = A(key), key
+            groww_cost[k] = (avg26 * (1 + g), f'FY26 quarterly average {avg26:.2f} × (1 + {g:.1%}): {why}')
+    prev0 =(Q.get(q_prev(proj_q[0])) or hist[q_prev(proj_q[0])]) if proj_q else None
     for q in proj_q:
         p = Q.get(q_prev(q)) or hist[q_prev(q)]
         ly = hist[q_prev(q, 4)]
@@ -336,11 +351,8 @@ def build(broker, facts, daily, assumptions, close, shares=None):
             L['impairment'] = sum(hist[x]['impairment'] for x in prev_fy) / 4 * (1 + A('pat_impairment_growth'))
             rules[(q, 'impairment')] = f'FY26 quarterly average × (1 + {A("pat_impairment_growth"):.0%})'
         else:
-            q4 = hist[prev_fy[-1]]
-            L['employee'] = q4['employee'] * (1 + A('pat_employee_growth'))
-            rules[(q, 'employee')] = f'Q4 FY26 × (1 + {A("pat_employee_growth"):.0%})'
-            L['depreciation'] = q4['depreciation'] * (1 + A('pat_depreciation_growth'))
-            rules[(q, 'depreciation')] = f'Q4 FY26 × (1 + {A("pat_depreciation_growth"):.0%})'
+            for k in ('employee', 'depreciation'):
+                L[k], rules[(q, k)] = groww_cost[k]
             L['other_expenses'] = oexp_ratio * L['broking']
             rules[(q, 'other_expenses')] = f'{oexp_ratio:.2%} of broking (last 4 reported quarters)'
         L['total_costs'] = sum(L[k] for k in COST_LINES[broker])
