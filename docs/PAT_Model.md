@@ -28,8 +28,8 @@ Output table: `sb_pat_lines` (`migrations/20261105_sb_pat_lines.sql`). Rs Cr thr
    | **Finance cost** | previous + funding rate ÷ 4 × new borrowing; new borrowing = book growth less 75% of the previous quarter's PAT, not below 0 (a shrinking book repays borrowing); cost not below 0 |
    | **Fees & commission (Angel)** | (fees ÷ broking over the last 4 reported quarters) × projected broking |
    | **Other expenses (Groww)** | (other expenses ÷ broking over the last 4 reported quarters) × projected broking |
-   | Employee | Angel: FY26 quarterly average × 1.07 · Groww: Q4 FY26 × 1.10 |
-   | Depreciation | Angel: same quarter last year × 1.12 · Groww: Q4 FY26 × 1.10 |
+   | Employee | Angel: FY26 quarterly average × 1.07 · Groww: FY26 quarterly average × (1 + average uplift of the filed FY27 quarters over it; AB, 13 Nov 2026) |
+   | Depreciation | Angel: same quarter last year × 1.12 · Groww: as employee (FY26 quarterly average × average FY27 uplift) |
    | Other expenses (Angel) | same quarter last year × 1.10 |
    | Impairment (Angel) | FY26 quarterly average × 1.10 |
    | Tax | 25% of PBT |

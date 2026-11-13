@@ -77,11 +77,17 @@ class TestPat(unittest.TestCase):
         self.assertAlmostEqual(q3['employee'], 285.43, delta=0.1)           # J64 = AVERAGE(C64:F64)*(1+7%)
         self.assertAlmostEqual(q3['impairment'], 0.86, delta=0.01)          # J63 = AVERAGE(C63:F63)*1.1
 
-    def test_groww_rules_match_workbook(self):
-        """Unchanged rules reproduce 'PAT predictor Q2FY27'!AA60:AA61 (Q4 FY26 × 1.1)."""
-        q3 = self.m['GROWW']['quarters']['Q3 FY 2027']
-        self.assertAlmostEqual(q3['employee'], 190.74, delta=0.1)
-        self.assertAlmostEqual(q3['depreciation'], 26.90, delta=0.05)
+    def test_groww_employee_depreciation(self):
+        """AB, 13 Nov 2026: FY26 quarterly average × (1 + average uplift of Q1, Q2 FY27 filed over it).
+        Employee: FY26 136.63, 123.76, 157.049, 173.40 → avg 147.710; Q1 182.00 (+23.2%), Q2 168.89 (+14.3%)
+        → × 1.1878 = 175.445. Depreciation: 7.14, 6.80, 9.475, 24.46 → avg 11.969; Q1 17.63 (+47.3%),
+        Q2 18.20 (+52.1%) → × 1.4968 = 17.915. With both quarters filed this equals their average."""
+        for q in ('Q3 FY 2027', 'Q4 FY 2027'):
+            L = self.m['GROWW']['quarters'][q]
+            self.assertAlmostEqual(L['employee'], 175.445, delta=0.01)
+            self.assertAlmostEqual(L['depreciation'], 17.915, delta=0.01)
+        f27 = self.m['GROWW']['fy27']
+        self.assertAlmostEqual(self.m['GROWW']['fy28']['employee'], f27['employee'] * 1.15, places=6)
 
     def test_costs_follow_adr(self):
         """Fees & commission (Angel) and other expenses (Groww) scale with broking revenue; finance cost with MTF."""

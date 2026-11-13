@@ -257,7 +257,7 @@
    "value": 0.1,
    "unit": "fraction",
    "source_ref": "excel:PAT predictor Q2FY27!Z60 (=W60*1.1, Q4 FY26 +10%)",
-   "note": "Base = last quarter of the previous FY"
+   "note": "Fallback only (AB, 13 Nov 2026): once an FY27 quarter is filed, the uplift is the average of the filed FY27 quarters over the FY26 quarterly average"
   },
   {
    "broker_id": "GROWW",
@@ -273,7 +273,7 @@
    "value": 0.1,
    "unit": "fraction",
    "source_ref": "excel:PAT predictor Q2FY27!Z61 (=W61*1.1)",
-   "note": "Base = last quarter of the previous FY"
+   "note": "Fallback only (AB, 13 Nov 2026): once an FY27 quarter is filed, the uplift is the average of the filed FY27 quarters over the FY26 quarterly average"
   },
   {
    "broker_id": "GROWW",
