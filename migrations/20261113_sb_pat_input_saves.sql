@@ -2,7 +2,8 @@
 -- growth, the P/E per scenario and the two discounts on the PAT tab, presses Save, and the values become the broker's
 -- sb_assumptions rows, which the engine reads on its next run (so the published PAT and valuation lines use them) and
 -- which the page shows again on every visit until changed.
--- APPLIED 13 Nov 2026 (AB: "Yes, apply it"), as migration sb_pat_input_saves, without this file's begin / commit
+-- SUPERSEDED in part by 20261113_sb_pat_save_no_password.sql (no password, the last Save wins: steps 2, 5 and 6
+-- below are replaced or dropped). APPLIED 13 Nov 2026 (AB: "Yes, apply it"), as migration sb_pat_input_saves, without this file's begin / commit
 -- (the migration tool wraps it in its own transaction). The security advisor's "SECURITY DEFINER function executable
 -- by anon / authenticated" warnings for the two public functions are intended: they are the page's only way in, and
 -- the save is gated by the password, the rate limit and the value checks.
