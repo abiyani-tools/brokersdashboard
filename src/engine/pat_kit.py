@@ -6,7 +6,10 @@ the kit rows (period 'inputs', lines k_* / in_*; per quarter k_step, k_sofar_*, 
 defaults recompute() reproduces every published P&L, top-block, build-up and valuation line of pat.build() / rows().
 
     kit = kit_from_rows(rows)                    # rows as /api/brokers?view=pat returns them
-    out = recompute(kit, g, pe, disc, today)     # {(period_key, line, scenario): value}
+    out = recompute(kit, g, pe, disc, today, gm)  # {(period_key, line, scenario): value}
+
+g is the QoQ growth of broking (and cash) ADR, gm that of MTF ADR (AB, 13 Nov 2026: two inputs instead of one; gm
+None = the published in_mtf_qoq_growth, or g for a run published before that row).
 
 Lines that do not depend on g (Angel: distribution, treasury, other and the cost lines other than finance and fees &
 commission; Groww: lending, other operating, other, employee, depreciation; FY 2026; trading days; shares; close) are
@@ -53,13 +56,16 @@ def kit_from_rows(rows):
     step = {pk: v for (pk, line, _), v in V.items() if line == 'k_step'}
     pe = [V[('inputs', 'in_pe', s)] for s in SCENARIOS]
     return dict(broker=broker, values=V, inputs=inp, proj=proj, buildup=buildup, step=step,
-                defaults=dict(g=inp['in_qoq_growth'], pe=pe, disc=inp['in_discount_fwd'],
-                              today=inp['in_discount_today']))
+                defaults=dict(g=inp['in_qoq_growth'], gm=inp.get('in_mtf_qoq_growth', inp['in_qoq_growth']), pe=pe,
+                              disc=inp['in_discount_fwd'], today=inp['in_discount_today']))
 
 
-def recompute(kit, g, pe, disc, today):
-    """Every published line (not the inputs) at growth g, P/E [bear, base, bull] and the two discount rates."""
+def recompute(kit, g, pe, disc, today, gm=None):
+    """Every published line (not the inputs) at broking growth g, MTF growth gm, P/E [bear, base, bull] and the two
+    discount rates."""
     b, V, k = kit['broker'], kit['values'], kit['inputs']
+    if gm is None:
+        gm = k.get('in_mtf_qoq_growth', g)
     pub = lambda pk, line: V[(pk, line, '')]
     out = {key: v for key, v in V.items() if key[0] != 'inputs' and not key[1].startswith(('k_', 'in_'))}
     b0, m0, c0 = k['k_adr_broking0'], k['k_adr_mtf0'], k['k_adr_cash0']
@@ -69,11 +75,11 @@ def recompute(kit, g, pe, disc, today):
     prev = dict(finance=k.get('k_prev_finance'), mtf_book=k.get('k_prev_mtf_book'), pat=k.get('k_prev_pat'),
                 broking=k.get('k_prev_broking'), float=k.get('k_prev_float'))
     for q in kit['proj']:
-        f = (1 + g) ** kit['step'][q]
+        f, fm = (1 + g) ** kit['step'][q], (1 + gm) ** kit['step'][q]
         rem = pub(q, 'k_rem_days')
         L = {}
         L['broking'] = pub(q, 'k_sofar_broking') + rem * b0 * f
-        L['mtf'] = pub(q, 'k_sofar_mtf') + rem * m0 * f
+        L['mtf'] = pub(q, 'k_sofar_mtf') + rem * m0 * fm
         cash = pub(q, 'k_sofar_cash') + rem * c0 * f
         if b == 'ANGELONE':
             L['depository'] = k['k_dep_share_of_cash'] * cash
@@ -102,7 +108,8 @@ def recompute(kit, g, pe, disc, today):
 
     # FY28
     path = sum((1 + g) ** kit['step'][q] for q in FY28_Q) / 4
-    b28, m28 = b0 * path, m0 * path
+    path_m = sum((1 + gm) ** kit['step'][q] for q in FY28_Q) / 4
+    b28, m28 = b0 * path, m0 * path_m
     d28 = k['k_fy28_days']
     gd, gt = k['k_dist_growth_fy28'], k['k_treasury_growth_fy28']
     F = dict(adr_broking=b28, adr_mtf=m28, broking=b28 * d28, mtf=m28 * d28)
@@ -133,8 +140,8 @@ def recompute(kit, g, pe, disc, today):
 
     # build-up, top block, margins, valuation
     for q in kit['buildup']:
-        out[(q, 'adr_consol', '')] = (b0 + m0) * (1 + g) ** kit['step'][q]
-    F['adr_consol'] = (b0 + m0) * path
+        out[(q, 'adr_consol', '')] = b0 * (1 + g) ** kit['step'][q] + m0 * (1 + gm) ** kit['step'][q]
+    F['adr_consol'] = b28 + m28
     shares, close = pub('FY 2028', 'shares'), pub('FY 2028', 'close')
     for pk, L in (('FY 2027', Y27), ('FY 2028', F)):
         L['pat_margin'] = L['pat'] / L['total_income']

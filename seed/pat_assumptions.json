@@ -200,7 +200,15 @@
    "value": 0.04,
    "unit": "per quarter",
    "source_ref": "excel[New Model - 09.11.26/20260714_brokers dashboard v2.xlsx]:Groww - ADR Model!F58 (4%)",
-   "note": "Broking and MTF ADR grow by this each quarter from the start ADR (the current quarter's QTD ADR; the previous quarter's full-quarter ADR under 5 engine days): the current quarter's remaining days at the start ADR, the next quarter × (1+g), and so on through Q4 FY28. (AB, 9 Nov 2026: follow the 09.11 workbook; was 3.5%.) Default of the PAT Predictor page's input (in_qoq_growth). Input: edit in sb_assumptions."
+   "note": "Broking (and cash) ADR grows by this each quarter from the start ADR (the current quarter's QTD ADR; the previous quarter's full-quarter ADR under 5 engine days): the current quarter's remaining days at the start ADR, the next quarter × (1+g), and so on through Q4 FY28. MTF has its own rate since 13 Nov 2026 (pat_mtf_qoq_growth). (AB, 9 Nov 2026: follow the 09.11 workbook; was 3.5%.) Default of the PAT Predictor page's broking input (in_qoq_growth). Input: edit on the page and Save, or in sb_assumptions."
+  },
+  {
+   "broker_id": "GROWW",
+   "key": "pat_mtf_qoq_growth",
+   "value": 0.127,
+   "unit": "per quarter",
+   "source_ref": "AB instruction, 13 Nov 2026: add about Rs 500 Cr of MTF book a quarter",
+   "note": "MTF ADR grows by this each quarter from the start MTF ADR, like broking at pat_adr_qoq_growth. 12.7% = Rs 500 Cr ÷ the start book Rs 3,939 Cr (start MTF ADR Rs 2.3903 Cr/day × 247 days ÷ 14.99% yield, run of 11 Nov 2026), so the first projected quarter adds about Rs 500 Cr and later ones compound. Default of the PAT Predictor page's MTF input (in_mtf_qoq_growth). Input: edit on the page and Save, or in sb_assumptions."
   },
   {
    "broker_id": "GROWW",

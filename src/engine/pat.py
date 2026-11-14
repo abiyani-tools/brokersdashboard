@@ -12,6 +12,8 @@ approved on 5 Nov 2026 (docs/PAT_Model.md):
   - fees & commission expense (Angel) = its ratio to broking revenue (last 4 reported quarters) × projected
     broking revenue, in every forecast period; Groww's other expenses scale with broking the same way
   - Groww's other income is its own filed figure
+  - broking and MTF ADR grow at their own QoQ rates (AB, 13 Nov 2026): pat_adr_qoq_growth for broking (and cash),
+    pat_mtf_qoq_growth for MTF; without a pat_mtf_qoq_growth row MTF grows at the broking rate
 Every number is in Rs Cr (per-share figures in Rs). Each output line carries its rule in words.
 
 Inputs (all plain data, no I/O here):
@@ -51,7 +53,7 @@ LABELS = {
     'op_revenue': 'Operating revenue', 'treasury_rev': 'Treasury revenue', 'other_inc': 'Other income (top block)',
     'adr_consol': 'Consolidated ADR (broking + MTF)', 'adr_45dma': 'Consolidated ADR, 45-day average (reference)',
     # the page's inputs (defaults) and the recompute kit (src/engine/pat_kit.py)
-    'in_qoq_growth': 'QoQ ADR growth', 'in_pe': 'P/E', 'in_discount_fwd': 'Discount FY28 → FY27',
+    'in_qoq_growth': 'QoQ broking ADR growth', 'in_mtf_qoq_growth': 'QoQ MTF ADR growth', 'in_pe': 'P/E', 'in_discount_fwd': 'Discount FY28 → FY27',
     'in_discount_today': 'Discount FY27 → today',
     'k_step': 'Quarters after the current one', 'k_tax': 'Tax rate', 'k_retention': 'Retained share of PAT',
     'k_funding_rate': 'Funding rate', 'k_mtf_yield': 'MTF yield', 'k_fy28_days': 'FY28 trading days',
@@ -282,8 +284,10 @@ def build(broker, facts, daily, assumptions, close, shares=None):
         start = f'{start_q} ADR'
         start_rule = (f'{start_q} full-quarter ADR ({n0} days): {cur} has fewer than {MIN_QTD_DAYS} engine days '
                       f'to {adr.as_of}')
-    # quarterly ADR growth path: the current quarter's remaining days at the start ADR, then × (1 + g) a quarter
+    # quarterly ADR growth path: the current quarter's remaining days at the start ADR, then × (1 + g) a quarter;
+    # broking (and cash) at g_q, MTF at its own g_m (the broking rate when the broker has no pat_mtf_qoq_growth row)
     g_q = A('pat_adr_qoq_growth')
+    g_m = A('pat_mtf_qoq_growth') if 'pat_mtf_qoq_growth' in A.rows else g_q
     first_proj = q_of(adr.as_of) if q_of(adr.as_of) in FY27_Q else None
     step = lambda q: 0 if first_proj is None else (int(q[-4:]) * 4 + int(q[1])) - (int(first_proj[-4:]) * 4 + int(first_proj[1]))
 
@@ -311,14 +315,15 @@ def build(broker, facts, daily, assumptions, close, shares=None):
         rem = left * wd[q] / tot_wd
         so_far = {k: adr.in_quarter(k, q) for k in ('broking', 'mtf', 'cash')}
         L = {'trading_days': so_far['broking'][1] + rem}
-        f = (1 + g_q) ** step(q)
+        f, fm = (1 + g_q) ** step(q), (1 + g_m) ** step(q)
         L['broking'] = so_far['broking'][0] + rem * adr_b * f
-        L['mtf'] = so_far['mtf'][0] + rem * adr_m * f
+        L['mtf'] = so_far['mtf'][0] + rem * adr_m * fm
         cash = so_far['cash'][0] + rem * adr_c * f
         grow = f' × (1 + {g_q:.1%})^{step(q)}' if step(q) else ''
+        grow_m = f' × (1 + {g_m:.1%})^{step(q)}' if step(q) else ''
         done = f'engine daily {{}} to {adr.as_of} ({so_far["broking"][1]} days) + ' if so_far['broking'][1] else ''
         rules[(q, 'broking')] = done.format('broking') + f'{rem:.1f} days × {start} {adr_b:.3f}{grow}'
-        rules[(q, 'mtf')] = done.format('MTF') + f'{rem:.1f} days × {start} {adr_m:.3f}{grow}'
+        rules[(q, 'mtf')] = done.format('MTF') + f'{rem:.1f} days × {start} {adr_m:.3f}{grow_m}'
         kit_q[q] = dict(sofar_broking=so_far['broking'][0], sofar_mtf=so_far['mtf'][0], sofar_cash=so_far['cash'][0],
                         rem_days=rem, step=step(q),
                         rem_rule=f'{left} FY27 days left ({fy_days} − {traded} traded) × {wd[q]} of {tot_wd} weekdays')
@@ -377,12 +382,14 @@ def build(broker, facts, daily, assumptions, close, shares=None):
     d28 = A('pat_fy28_trading_days')
     fy28_q = ('Q1 FY 2028', 'Q2 FY 2028', 'Q3 FY 2028', 'Q4 FY 2028')
     k28 = [step(q) if first_proj else 0 for q in fy28_q]
-    path = sum((1 + g_q) ** k for k in k28) / 4                     # average growth factor over FY28
-    b28, m28 = adr_b * path, adr_m * path
+    path = sum((1 + g_q) ** k for k in k28) / 4                     # average growth factor over FY28 (broking)
+    path_m = sum((1 + g_m) ** k for k in k28) / 4                   # the same for MTF
+    b28, m28 = adr_b * path, adr_m * path_m
     F = {'trading_days': d28, 'adr_broking': b28, 'adr_mtf': m28, 'broking': b28 * d28, 'mtf': m28 * d28}
     expo = f'(1 + {g_q:.1%})^{k28[0]}..^{k28[-1]}'
+    expo_m = f'(1 + {g_m:.1%})^{k28[0]}..^{k28[-1]}'
     rules[('FY 2028', 'broking')] = (f'{start} broking {adr_b:.3f} × average of {expo} = {b28:.3f} a day × {d28} days')
-    rules[('FY 2028', 'mtf')] = (f'{start} MTF {adr_m:.3f} × average of {expo} = {m28:.3f} a day × {d28} days')
+    rules[('FY 2028', 'mtf')] = (f'{start} MTF {adr_m:.3f} × average of {expo_m} = {m28:.3f} a day × {d28} days')
     rules[('FY 2028', 'adr_broking')] = rules[('FY 2028', 'broking')]
     rules[('FY 2028', 'adr_mtf')] = rules[('FY 2028', 'mtf')]
     gd, gt = A('pat_dist_growth_fy28'), A('pat_treasury_growth_fy28')
@@ -456,21 +463,23 @@ def build(broker, facts, daily, assumptions, close, shares=None):
     b_q = [cur]
     while b_q[-1] != 'Q4 FY 2028' and int(b_q[-1][-4:]) <= 2028:
         b_q.append(q_prev(b_q[-1], -1))
-    buildup = {q: dict(step=step(q), adr_consol=(adr_b + adr_m) * (1 + g_q) ** step(q))
+    buildup = {q: dict(step=step(q), adr_consol=adr_b * (1 + g_q) ** step(q) + adr_m * (1 + g_m) ** step(q))
                for q in b_q if int(q[-4:]) <= 2028}
     for q, v in buildup.items():
-        rules[(q, 'adr_consol')] = (f'{start} (broking {adr_b:.3f} + MTF {adr_m:.3f}) = {adr_b + adr_m:.3f}'
-                                    + (f' × (1 + {g_q:.1%})^{v["step"]}' if v['step'] else ''))
-    F['adr_consol'] = (adr_b + adr_m) * path
-    rules[('FY 2028', 'adr_consol')] = (f'{start} {adr_b + adr_m:.3f} × average of {expo} = {F["adr_consol"]:.3f} '
-                                        f'(FY28 broking + MTF ADR)')
+        s = v['step']
+        rules[(q, 'adr_consol')] = (f'{start} broking {adr_b:.3f}' + (f' × (1 + {g_q:.1%})^{s}' if s else '')
+                                    + f' + MTF {adr_m:.3f}' + (f' × (1 + {g_m:.1%})^{s}' if s else '')
+                                    + f' = {v["adr_consol"]:.3f}')
+    F['adr_consol'] = b28 + m28
+    rules[('FY 2028', 'adr_consol')] = (f'FY28 broking {b28:.3f} ({expo}) + MTF {m28:.3f} ({expo_m}) '
+                                        f'= {F["adr_consol"]:.3f} a day')
     rules[('FY 2028', 'trading_days')] = f'{d28} (pat_fy28_trading_days)'
     a45 = adr.window('broking', 45) + adr.window('mtf', 45)
 
     # inputs of the page (defaults) and the constants of the recompute kit (src/engine/pat_kit.py)
     kit = dict(start_q=start_q, start_days=n0, start_rule=start_rule, adr_45dma=a45,
                adr_45dma_rule=f'mean of the last {min(45, len(adr.days))} engine days to {adr.as_of} (broking + MTF gross)',
-               g=g_q, tax=tax, retention=ret, funding_rate=rate, mtf_yield=y, fy28_days=d28, dist_growth_fy28=gd,
+               g=g_q, g_mtf=g_m, g_mtf_own='pat_mtf_qoq_growth' in A.rows, tax=tax, retention=ret, funding_rate=rate, mtf_yield=y, fy28_days=d28, dist_growth_fy28=gd,
                treasury_growth_fy28=gt, adr_broking0=adr_b, adr_mtf0=adr_m, adr_cash0=adr_c,
                dep_share_of_cash=A('pat_dep_share_of_cash') if broker == 'ANGELONE' else None,
                fee_ratio=fee_ratio, oexp_ratio=oexp_ratio, quarters=kit_q, buildup=buildup,
@@ -514,7 +523,7 @@ def kit_rows(model, run_id):
     proj = {q for q in K['quarters']}
     for q in sorted(set(K['buildup']) | proj, key=_qkey):
         step = K['buildup'][q]['step'] if q in K['buildup'] else K['quarters'][q]['step']
-        add(q, 'k_step', step, 'n', 'projected', 'quarters after the current one (the power of 1 + g)', 1001)
+        add(q, 'k_step', step, 'n', 'projected', 'quarters after the current one (the power of 1 + growth)', 1001)
         if q in K['buildup']:
             add(q, 'adr_consol', K['buildup'][q]['adr_consol'], 'Rs Cr / day', 'projected',
                 model['rules'][(q, 'adr_consol')], 800)
@@ -523,6 +532,9 @@ def kit_rows(model, run_id):
     src =lambda key: f'{key} (sb_assumptions)'
     add('inputs', 'adr_45dma', K['adr_45dma'], 'Rs Cr / day', 'actual', K['adr_45dma_rule'], 1000)
     add('inputs', 'in_qoq_growth', K['g'], 'fraction', 'projected', src('pat_adr_qoq_growth'), 1010)
+    add('inputs', 'in_mtf_qoq_growth', K['g_mtf'], 'fraction', 'projected',
+        src('pat_mtf_qoq_growth') if K['g_mtf_own'] else 'pat_adr_qoq_growth (sb_assumptions; no pat_mtf_qoq_growth row)',
+        1014)
     for s, x in zip(SCENARIOS, K['pe']):
         add('inputs', 'in_pe', x, 'x', 'projected', src('pat_pe'), 1011, scenario=s)
     add('inputs', 'in_discount_fwd', K['discount_fwd'], 'fraction', 'projected', src('pat_discount_fwd'), 1012)
