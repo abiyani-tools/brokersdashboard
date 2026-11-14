@@ -155,6 +155,25 @@ class TestPatKit(unittest.TestCase):
             d = kit['defaults']
             self.check_same(K.recompute(kit, d['g'], d['pe'], d['disc'], d['today']), rows, (b, 'fallback'))
 
+    def test_groww_finance_floor(self):
+        """AB, 14 Nov 2026: Groww's finance cost never falls below its latest filed quarter (Q2 FY27, 4.71), and FY28
+        is 4 × Q4 FY27 plus new borrowing, not below 4 × 4.71. A shrinking MTF book (a low MTF ADR) used to repay it
+        towards 0; a growing one beyond retained PAT still adds 8%/4 of the new borrowing. Angel One has no floor."""
+        low = [dict(r, revenue_cr=2.0) if r['segment'] == 'mtf_gross' else r for r in moving_daily()]
+        m = self.build('GROWW', daily=low)
+        for q in ('Q3 FY 2027', 'Q4 FY 2027'):
+            self.assertAlmostEqual(m['quarters'][q]['finance'], 4.71, places=6, msg=q)
+        self.assertAlmostEqual(m['fy28']['finance'], 4 * 4.71, places=6)
+        rows = P.rows(m, 'run-x')
+        kit = K.kit_from_rows(rows)
+        self.assertAlmostEqual(kit['inputs']['k_finance_base'], 4.71)
+        d = kit['defaults']
+        self.check_same(K.recompute(kit, d['g'], d['pe'], d['disc'], d['today']), rows, 'GROWW low MTF')
+        # the growth path (moving_daily's MTF is about twice Groww's): above the floor, by the borrowing rule
+        hi = self.m['GROWW']
+        self.assertGreater(hi['quarters']['Q3 FY 2027']['finance'], 4.71)
+        self.assertNotIn('k_finance_base', K.kit_from_rows(P.rows(self.m['ANGELONE'], 'run-x'))['inputs'])
+
 
 if __name__ == '__main__':
     unittest.main()

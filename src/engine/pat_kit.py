@@ -70,6 +70,7 @@ def recompute(kit, g, pe, disc, today, gm=None):
     out = {key: v for key, v in V.items() if key[0] != 'inputs' and not key[1].startswith(('k_', 'in_'))}
     b0, m0, c0 = k['k_adr_broking0'], k['k_adr_mtf0'], k['k_adr_cash0']
     tax, ret, rate, y = k['k_tax'], k['k_retention'], k['k_funding_rate'], k['k_mtf_yield']
+    base = k.get('k_finance_base')       # Groww's finance floor (14 Nov 2026); absent: the cost may fall to 0
 
     # projected FY27 quarters, in order
     prev = dict(finance=k.get('k_prev_finance'), mtf_book=k.get('k_prev_mtf_book'), pat=k.get('k_prev_pat'),
@@ -89,7 +90,8 @@ def recompute(kit, g, pe, disc, today, gm=None):
             L[line] = pub(q, line)
         L['total_income'] = sum(L[x] for x in REVENUE_LINES[b])
         L['mtf_book'] = L['mtf'] / (y / 4)
-        L['finance'] = max(prev['finance'] + rate / 4 * new_borrowing(L['mtf_book'], prev['mtf_book'], ret * prev['pat']), 0.0)
+        L['finance'] = max(prev['finance'] + rate / 4 * new_borrowing(L['mtf_book'], prev['mtf_book'], ret * prev['pat']),
+                           base if base is not None else 0.0)
         if b == 'ANGELONE':
             L['fees_commission'] = k['k_fee_ratio'] * L['broking']
         else:
@@ -124,7 +126,11 @@ def recompute(kit, g, pe, disc, today, gm=None):
     F['other'] = Y27['other']
     F['total_income'] = sum(F[x] for x in REVENUE_LINES[b])
     F['mtf_book'] = F['mtf'] / y
-    F['finance'] = max(Y27['finance'] + rate * new_borrowing(F['mtf_book'], Y27['mtf_book'], ret * Y27['pat']), 0.0)
+    nb28 = new_borrowing(F['mtf_book'], Y27['mtf_book'], ret * Y27['pat'])
+    if base is not None:                 # the Q4 FY27 run-rate × 4, not below 4 × the floor
+        F['finance'] = max(4 * out[(FY27_Q[-1], 'finance', '')] + rate * nb28, 4 * base)
+    else:
+        F['finance'] = max(Y27['finance'] + rate * nb28, 0.0)
     if b == 'ANGELONE':
         F['fees_commission'] = k['k_fee_ratio'] * F['broking']
         for line in ('employee', 'depreciation', 'other_expenses', 'impairment'):

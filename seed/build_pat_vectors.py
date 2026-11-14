@@ -40,6 +40,7 @@ def main(src, dst):
              ('g + 0.015', g + 0.015, gm, pe, d['disc'], d['today']),
              ('gm 12.7%', g, 0.127, pe, d['disc'], d['today']),
              ('g 2%, gm 0%', 0.02, 0.0, pe, d['disc'], d['today']),
+             ('gm 30% (MTF book outgrows retained PAT: new borrowing)', g, 0.30, pe, d['disc'], d['today']),
              ('pe 20/25/30, disc 15%, today 8%', g, gm, [20.0, 25.0, 30.0], 0.15, 0.08)]
     doc['cases'] = []
     for name, cg, cgm, cpe, disc, today in cases:
