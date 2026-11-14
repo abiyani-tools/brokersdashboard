@@ -8,7 +8,8 @@ approved on 5 Nov 2026 (docs/PAT_Model.md):
     quarter's ADR so far (QTD), or the previous quarter's full-quarter ADR when the current quarter has fewer than
     5 engine days (AB, 10 Nov 2026; replaces the 20- / 45-day window, pat_adr_window_fy27 is no longer read)
   - finance cost follows the MTF book implied by that MTF revenue: previous period + funding rate ×
-    (book growth − retained share of the previous period's PAT), the same rule in FY27 and FY28
+    (book growth − retained share of the previous period's PAT), the same rule in FY27 and FY28; Groww's never
+    falls below its latest filed quarter (× 4 in FY28), since that cost is not MTF debt (AB, 14 Nov 2026)
   - fees & commission expense (Angel) = its ratio to broking revenue (last 4 reported quarters) × projected
     broking revenue, in every forecast period; Groww's other expenses scale with broking the same way
   - Groww's other income is its own filed figure
@@ -60,7 +61,7 @@ LABELS = {
     'k_dist_growth_fy28': 'FY28 distribution / lending growth', 'k_treasury_growth_fy28': 'FY28 treasury / float growth',
     'k_adr_broking0': 'Start broking ADR', 'k_adr_mtf0': 'Start MTF ADR', 'k_adr_cash0': 'Start cash broking ADR',
     'k_dep_share_of_cash': 'Depository share of cash broking', 'k_fee_ratio': 'Fees & commission ÷ broking',
-    'k_oexp_ratio': 'Other expenses ÷ broking',
+    'k_oexp_ratio': 'Other expenses ÷ broking', 'k_finance_base': 'Finance cost floor (latest filed quarter)',
     'k_prev_finance': 'Previous quarter: finance cost', 'k_prev_mtf_book': 'Previous quarter: MTF book',
     'k_prev_pat': 'Previous quarter: PAT', 'k_prev_broking': 'Previous quarter: broking revenue',
     'k_prev_float': 'Previous quarter: float income',
@@ -252,6 +253,11 @@ def build(broker, facts, daily, assumptions, close, shares=None):
                 rules[(q, k)] = 'filed'
     reported = [q for q in sorted(hist, key=lambda q: (q[-4:], q[1]))]
     last4 = reported[-4:]
+    # Groww's finance cost (AB, 14 Nov 2026): its filed finance cost is not MTF debt (a Rs 4,000 Cr book borrowed at 8%
+    # would cost ~Rs 80 Cr a quarter; it files ~Rs 5 Cr), so the latest filed quarter is a floor that a shrinking MTF
+    # book never repays; interest on new borrowing (book growth beyond retained PAT) still adds to it
+    fin_base_q = reported[-1] if broker == 'GROWW' else None
+    fin_base = hist[fin_base_q]['finance'] if fin_base_q else None
     if len(last4) < 4:
         raise PatInputMissing(f'{broker}: fewer than 4 reported quarters')
     ratio = lambda num: sum(hist[q][num] for q in last4) / sum(hist[q]['broking'] for q in last4)
@@ -346,9 +352,11 @@ def build(broker, facts, daily, assumptions, close, shares=None):
         # costs
         L['mtf_book'] = L['mtf'] / (y / 4)
         extra = new_borrowing(L['mtf_book'], p['mtf_book'], ret * p['pat'])
-        L['finance'] = max(p['finance'] + rate / 4 * extra, 0.0)
+        L['finance'] = max(p['finance'] + rate / 4 * extra, fin_base if fin_base is not None else 0.0)
         rules[(q, 'finance')] = (f'previous {p["finance"]:.1f} + {rate:.1%}/4 × new borrowing {extra:,.0f} (book {L["mtf_book"]:,.0f} '
-                                 f'− {p["mtf_book"]:,.0f}, less {ret:.0%} of previous PAT {p["pat"]:.1f}, not below 0)')
+                                 f'− {p["mtf_book"]:,.0f}, less {ret:.0%} of previous PAT {p["pat"]:.1f}, '
+                                 + (f'not below {fin_base_q.replace(" FY 20", " FY")} filed {fin_base:.2f})' if fin_base is not None
+                                    else 'not below 0)'))
         if broker == 'ANGELONE':
             L['fees_commission'] = fee_ratio * L['broking']
             rules[(q, 'fees_commission')] = f'{fee_ratio:.2%} of broking (last 4 reported quarters)'
@@ -411,9 +419,16 @@ def build(broker, facts, daily, assumptions, close, shares=None):
     F['total_income'] = sum(F[k] for k in REVENUE_LINES[broker])
     F['mtf_book'] = F['mtf'] / y
     extra = new_borrowing(F['mtf_book'], fy27['mtf_book'], ret * fy27['pat'])
-    F['finance'] = max(fy27['finance'] + rate * extra, 0.0)
-    rules[('FY 2028', 'finance')] = (f'FY27 {fy27["finance"]:.1f} + {rate:.1%} × new borrowing {extra:,.0f} (book {F["mtf_book"]:,.0f} '
-                                     f'− {fy27["mtf_book"]:,.0f}, less {ret:.0%} of FY27 PAT {fy27["pat"]:.1f}, not below 0)')
+    if fin_base is not None:   # Groww: the Q4 FY27 run-rate × 4, plus new borrowing, not below 4 × the filed floor
+        q4f = Q[FY27_Q[-1]]['finance']
+        F['finance'] = max(4 * q4f + rate * extra, 4 * fin_base)
+        rules[('FY 2028', 'finance')] = (f'4 × Q4 FY27 {q4f:.2f} + {rate:.1%} × new borrowing {extra:,.0f} (book {F["mtf_book"]:,.0f} '
+                                         f'− {fy27["mtf_book"]:,.0f}, less {ret:.0%} of FY27 PAT {fy27["pat"]:.1f}), not below '
+                                         f'4 × {fin_base_q.replace(" FY 20", " FY")} filed {fin_base:.2f}')
+    else:
+        F['finance'] = max(fy27['finance'] + rate * extra, 0.0)
+        rules[('FY 2028', 'finance')] = (f'FY27 {fy27["finance"]:.1f} + {rate:.1%} × new borrowing {extra:,.0f} (book {F["mtf_book"]:,.0f} '
+                                         f'− {fy27["mtf_book"]:,.0f}, less {ret:.0%} of FY27 PAT {fy27["pat"]:.1f}, not below 0)')
     if broker == 'ANGELONE':
         F['fees_commission'] = fee_ratio * F['broking']
         rules[('FY 2028', 'fees_commission')] = f'{fee_ratio:.2%} of broking'
@@ -482,7 +497,8 @@ def build(broker, facts, daily, assumptions, close, shares=None):
                g=g_q, g_mtf=g_m, g_mtf_own='pat_mtf_qoq_growth' in A.rows, tax=tax, retention=ret, funding_rate=rate, mtf_yield=y, fy28_days=d28, dist_growth_fy28=gd,
                treasury_growth_fy28=gt, adr_broking0=adr_b, adr_mtf0=adr_m, adr_cash0=adr_c,
                dep_share_of_cash=A('pat_dep_share_of_cash') if broker == 'ANGELONE' else None,
-               fee_ratio=fee_ratio, oexp_ratio=oexp_ratio, quarters=kit_q, buildup=buildup,
+               fee_ratio=fee_ratio, oexp_ratio=oexp_ratio, finance_base=fin_base, finance_base_q=fin_base_q,
+               quarters=kit_q, buildup=buildup,
                prev_q=q_prev(proj_q[0]) if proj_q else None,
                prev=None if prev0 is None else dict(prev0, regime=prev0.get('regime', 'actual')))
     # valuation
@@ -553,8 +569,10 @@ def kit_rows(model, run_id):
                    ('k_fee_ratio', K['fee_ratio'], 'fraction', 'fees & commission ÷ broking, last 4 reported quarters')]
     else:
         consts.append(('k_oexp_ratio', K['oexp_ratio'], 'fraction', 'other expenses ÷ broking, last 4 reported quarters'))
+        consts.append(('k_finance_base', K['finance_base'], 'Rs Cr',
+                       f"{K['finance_base_q']} filed finance cost: the floor of each projected quarter (FY28: 4 ×)"))
     for i, (k, v, unit, rule) in enumerate(consts):
-        add('inputs', k, v, unit, 'actual' if k.startswith(('k_adr_', 'k_fee', 'k_oexp')) else 'projected', rule, 1020 + i)
+        add('inputs', k, v, unit, 'actual' if k.startswith(('k_adr_', 'k_fee', 'k_oexp', 'k_finance')) else 'projected', rule, 1020 + i)
     if K['prev'] is not None:
         pv = K['prev']
         prev = ['finance', 'mtf_book', 'pat', 'broking'] + (['float'] if b == 'GROWW' else [])
