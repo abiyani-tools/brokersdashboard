@@ -18,10 +18,27 @@ name: daily
 # Industry MTF book: the `nse` rows of the owner's public dashboard/data/mtf_daily.json; also their view
 # codex_public_nse_mtf_daily with their read-only key (secret NSE_LAKE_ANON_KEY), which has answered 401 since 2 Nov 2026.
 # GITHUB_TOKEN (the job's own token) lifts GitHub's 60-an-hour limit on the refresh's commits lookups (403 on 4 Nov 2026).
+# Night runs (added 10 Nov 2026, so trading day D is on the dashboard before 06:00 IST on D+1): MCX closes at 23:30-23:55
+# IST and ExchangesDash publishes D's MCX contract count only after that, so the 19:47 IST run can't have D. Two night runs,
+# 03:45 and 04:45 IST, publish D once it is complete. Each one stops after the market refresh unless a later day than
+# Angel One's latest published run is complete (src/live/gate.py), so a night with nothing new publishes nothing. They are
+# dispatched on time (input night=true) by pg_cron in the brokers-dashboard project (migrations/20261110_night_run_trigger.sql),
+# because GitHub's own schedule has started this job 6-9 hours late; the two night crons below are only the fallback.
+# The night runs skip the Groww IR archive (one page a weekday, taken by the evening run). Runs never overlap (concurrency).
 on:
   workflow_dispatch:
+    inputs:
+      night:
+        description: 'Night run: publish only if a new day is complete (set by the on-time trigger)'
+        type: boolean
+        default: false
   schedule:
-    - cron: '17 14 * * 1-5'    # 19:47 IST, Mon-Fri, after the exchange files post
+    - cron: '17 14 * * 1-5'    # 19:47 IST, Mon-Fri, after the exchange files post (not gated)
+    - cron: '15 22 * * 1-5'    # 03:45 IST, Tue-Sat: night run, gated (fallback for the pg_cron dispatch)
+    - cron: '15 23 * * 1-5'    # 04:45 IST, Tue-Sat: second night run, gated
+concurrency:
+  group: daily
+  cancel-in-progress: false
 jobs:
   run:
     runs-on: ubuntu-latest
@@ -37,15 +54,25 @@ jobs:
       - run: pip install -r requirements.txt
       - name: Check secrets are present
         run: test -n "$SUPABASE_URL" && test -n "$SUPABASE_SERVICE_KEY"
-      - name: Parity gate
-        run: python -m pytest tests/ -q
+      - name: Night run or evening run
+        id: night
+        run: |
+          echo "night=${{ (github.event_name == 'workflow_dispatch' && inputs.night) || (github.event_name == 'schedule' && github.event.schedule != '17 14 * * 1-5') }}" >> "$GITHUB_OUTPUT"
       # Read only from ExchangesDash's public JSON; if GitHub is unreachable the run goes on with the rows
       # already in sb_market_daily (the step shows as failed, and E5 still checks every input)
       - name: Refresh NSE / BSE volumes in sb_market_daily from ExchangesDash
         continue-on-error: true
         run: python -m src.live.refresh_market --write
+      - name: Night run gate (go on only if a new day is complete)
+        id: gate
+        if: steps.night.outputs.night == 'true'
+        run: python -m src.live.gate
+      - name: Parity gate
+        if: steps.night.outputs.night != 'true' || steps.gate.outputs.go == 'true'
+        run: python -m pytest tests/ -q
       - name: Archive Groww's investor-relations page into sb_broker_daily
         id: groww_ir
+        if: steps.night.outputs.night != 'true'
         continue-on-error: true
         run: python -m src.live.refresh_groww_ir --write
       - name: Groww IR archive failed (groww.in blocked, page changed, or table missing)
@@ -56,12 +83,15 @@ jobs:
       # Share prices for the dashboard's price vs ADR-DMA charts (src/live/refresh_prices.py): full Yahoo history each run
       # (Yahoo restates the past after a split); a failure warns and never stops the ADR run. Also: workflow 'prices'.
       - name: Share prices into sb_share_prices (Yahoo, ANGELONE / MOTILALOFS / GROWW)
+        if: steps.night.outputs.night != 'true' || steps.gate.outputs.go == 'true'
         continue-on-error: true
         run: python -m src.live.refresh_prices --write
       - name: Live run from the DB and publish, Angel One then Groww then MOSL (E5 -> engine -> E1 coverage -> Summary rows -> sb_*)
+        if: steps.night.outputs.night != 'true' || steps.gate.outputs.go == 'true'
         run: python run_live.py --db --publish --broker all
       - name: PAT model from the published runs into sb_pat_lines (Angel One, Groww)
         id: pat
+        if: steps.night.outputs.night != 'true' || steps.gate.outputs.go == 'true'
         continue-on-error: true
         run: python run_pat.py --db --publish --broker all
       - name: PAT model failed (table missing, facts not reviewed, or an input gap)
