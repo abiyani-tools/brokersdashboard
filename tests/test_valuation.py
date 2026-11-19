@@ -165,3 +165,72 @@ class TestWindows(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
+
+class TestPriceToBook(unittest.TestCase):
+    """Consolidated P/B (AB, 19 Nov 2026): close ÷ (net worth ÷ shares) of the latest quarter whose results are out."""
+    FACTS = [
+        dict(period_type='Q', segment='consolidated', metric='net_worth', period_key='Q4 FY 2026', value=12888.1, unit='Rs Cr'),
+        dict(period_type='Q', segment='consolidated', metric='shares_period_end_cr', period_key='Q4 FY 2026', value=60.0, unit='crore shares'),
+        dict(period_type='Q', segment='consolidated', metric='net_worth', period_key='Q1 FY 2027', value=140000.0, unit='Rs Mn'),
+        dict(period_type='Q', segment='consolidated', metric='shares_period_end_cr', period_key='Q1 FY 2027', value=60.5, unit='crore shares'),
+        # no results date: left out
+        dict(period_type='Q', segment='consolidated', metric='net_worth', period_key='Q2 FY 2027', value=15000.0, unit='Rs Cr'),
+        dict(period_type='Q', segment='consolidated', metric='shares_period_end_cr', period_key='Q2 FY 2027', value=61.0, unit='crore shares'),
+        # no share count: left out
+        dict(period_type='Q', segment='consolidated', metric='net_worth', period_key='Q3 FY 2026', value=13631.7, unit='Rs Cr'),
+        # standalone: ignored
+        dict(period_type='Q', segment='standalone', metric='net_worth', period_key='Q4 FY 2025', value=1.0, unit='Rs Cr'),
+    ]
+
+    @staticmethod
+    def A(d):
+        return lambda k, default=None: d.get(k, default)
+
+    def test_quarters(self):
+        A = self.A(dict(val_results_dates='Q3 FY 2026=2026-01-28; Q4 FY 2026=2026-04-29;Q1 FY 2027=2026-07-28;Q4 FY 2025=2025-04-29'))
+        self.assertEqual(V.pb_quarters(self.FACTS, A), [
+            ('2026-04-29', 'Q4 FY 2026', 12888.1, 60.0), ('2026-07-28', 'Q1 FY 2027', 14000.0, 60.5)])
+        self.assertEqual(V.pb_quarters(self.FACTS, self.A({})), [])
+
+    def test_series_steps_on_results_dates(self):
+        qs = [('2026-04-29', 'Q4 FY 2026', 12000.0, 60.0), ('2026-07-28', 'Q1 FY 2027', 14000.0, 70.0)]
+        prices = [dict(trade_date=d, close=c) for d, c in
+                  (('2026-04-28', 900.0), ('2026-04-29', 1000.0), ('2026-07-27', 1100.0), ('2026-07-28', 1200.0), ('2026-07-29', None))]
+        s = V.pb_series(prices, qs)
+        self.assertEqual([r['date'] for r in s], ['2026-04-29', '2026-07-27', '2026-07-28'])   # none before the first results
+        self.assertAlmostEqual(s[0]['bvps'], 200.0)                      # 12,000 ÷ 60
+        self.assertAlmostEqual(s[0]['pb'], 5.0)                          # 1,000 ÷ 200
+        self.assertEqual(s[1]['quarter'], 'Q4 FY 2026')                  # the day before Q1 FY27's results
+        self.assertAlmostEqual(s[2]['pb'], 1200.0 / 200.0)               # 14,000 ÷ 70 = 200
+        self.assertEqual(s[2]['quarter'], 'Q1 FY 2027')
+
+    def test_bands_per_window_and_lines(self):
+        import datetime as dt
+        d0 = dt.date(2023, 1, 2)
+        days = [(d0 + dt.timedelta(days=i)).isoformat() for i in range(0, 1400, 1)]
+        prices = [dict(trade_date=d, close=100.0 + (i % 37)) for i, d in enumerate(days)]
+        qs = [('2023-01-02', 'Q2 FY 2023', 5000.0, 50.0)]
+        A = self.A(dict(val_pe_since='2025-04-01'))
+        m = V.build_pb('MOSL', prices, qs, A)
+        self.assertEqual(set(m['windows']), {'3m', '6m', '1y', '2y', '3y', 'apr25'})   # no 'all'
+        last = m['series'][-1]['date']
+        for k, n in (('1y', 12), ('3y', 36)):
+            xs = [r['pb'] for r in m['series'] if r['date'] >= V.months_back(last, n)]
+            self.assertAlmostEqual(m['windows'][k]['mean'], V.mean(xs))
+            self.assertAlmostEqual(m['windows'][k]['sd'], V.stdev_s(xs))
+        self.assertEqual(m['windows']['apr25']['since'], '2025-04-01')
+        rows = V.pb_lines(m, 'run-1')
+        self.assertEqual(len({(r['section'], r['period_key'], r['line'], r['scenario']) for r in rows}), len(rows))
+        self.assertEqual(sum(r['section'] == 'pb' and r['line'] == 'pb' for r in rows), len(m['series']))
+        self.assertEqual([r['line'] for r in rows if r['section'] == 'pb_book'], ['net_worth', 'shares', 'bvps'])
+        self.assertAlmostEqual(next(r['value'] for r in rows if r['line'] == 'bvps' and r['section'] == 'pb_book'), 100.0)
+        # a series that starts after a window's start leaves that window out
+        late = V.build_pb('MOSL', prices[-200:], qs, A)
+        self.assertNotIn('1y', late['windows'])
+        self.assertIn('6m', late['windows'])
+        self.assertIsNone(V.build_pb('MOSL', prices, [], A))
+
+    def test_pb_dates_win_over_results_dates(self):
+        A = self.A({'val_pb_dates': 'Q4 FY 2026=2026-04-01', 'val_results_dates': 'Q4 FY 2026=2026-04-29'})
+        self.assertEqual(V.pb_quarters(self.FACTS, A)[0][0], '2026-04-01')

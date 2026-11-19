@@ -1,0 +1,169 @@
+{
+ "source": "MOSL pb.xlsx",
+ "sha256": "b0dd1373fbc6af108eb2ec0ae8e141cea0b15279c5563620bdd6af97ea3b0963",
+ "sheet": "Motilal Oswal Financial Servi1",
+ "first_day": "2020-01-01",
+ "last_day": "2026-11-18",
+ "book": [
+  {
+   "quarter": "Q1 FY 2024",
+   "quarter_end": "2023-06-30",
+   "from": "2023-06-30",
+   "row": 844,
+   "net_worth": 6683.89,
+   "shares": 59.1805,
+   "bvps": 112.9408,
+   "close": 182,
+   "pb": 1.61146425938644
+  },
+  {
+   "quarter": "Q2 FY 2024",
+   "quarter_end": "2023-09-30",
+   "from": "2023-10-03",
+   "row": 780,
+   "net_worth": 7464.51,
+   "shares": 59.295,
+   "bvps": 125.8878,
+   "close": 229.3125,
+   "pb": 1.82156316804391
+  },
+  {
+   "quarter": "Q3 FY 2024",
+   "quarter_end": "2023-12-31",
+   "from": "2024-01-01",
+   "row": 719,
+   "net_worth": 8126.03,
+   "shares": 59.4122,
+   "bvps": 136.7737,
+   "close": 315.0125,
+   "pb": 2.30316565625626
+  },
+  {
+   "quarter": "Q4 FY 2024",
+   "quarter_end": "2024-03-31",
+   "from": "2024-04-01",
+   "row": 657,
+   "net_worth": 8677.66,
+   "shares": 59.7044,
+   "bvps": 145.3437,
+   "close": 438.175,
+   "pb": 3.02524374168755,
+   "revised": {
+    "on": "2024-06-10",
+    "row": 610,
+    "first_net_worth": 8632.86,
+    "first_shares": 59.6029
+   }
+  },
+  {
+   "quarter": "Q1 FY 2025",
+   "quarter_end": "2024-06-30",
+   "from": "2024-07-01",
+   "row": 596,
+   "net_worth": 9561.24,
+   "shares": 59.7044,
+   "bvps": 160.1431,
+   "close": 591.5,
+   "pb": 3.69357045125952
+  },
+  {
+   "quarter": "Q2 FY 2025",
+   "quarter_end": "2024-09-30",
+   "from": "2024-09-30",
+   "row": 533,
+   "net_worth": 11069.66,
+   "shares": 59.8574,
+   "bvps": 184.9337,
+   "close": 762.1,
+   "pb": 4.12093561813595
+  },
+  {
+   "quarter": "Q3 FY 2025",
+   "quarter_end": "2024-12-31",
+   "from": "2024-12-31",
+   "row": 471,
+   "net_worth": 11635.73,
+   "shares": 59.9279,
+   "bvps": 194.1622,
+   "close": 953.8,
+   "pb": 4.91238660054998
+  },
+  {
+   "quarter": "Q4 FY 2025",
+   "quarter_end": "2025-03-31",
+   "from": "2025-04-01",
+   "row": 408,
+   "net_worth": 10921.26,
+   "shares": 59.9314,
+   "bvps": 182.2294,
+   "close": 602.35,
+   "pb": 3.30544862578179
+  },
+  {
+   "quarter": "Q1 FY 2026",
+   "quarter_end": "2025-06-30",
+   "from": "2025-06-30",
+   "row": 348,
+   "net_worth": 12077.12,
+   "shares": 59.9511,
+   "bvps": 201.4496,
+   "close": 870.05,
+   "pb": 4.3189454335067
+  },
+  {
+   "quarter": "Q2 FY 2026",
+   "quarter_end": "2025-09-30",
+   "from": "2025-09-30",
+   "row": 284,
+   "net_worth": 12871.38,
+   "shares": 60.0509,
+   "bvps": 214.3411,
+   "close": 893.6,
+   "pb": 4.16905577511096
+  },
+  {
+   "quarter": "Q3 FY 2026",
+   "quarter_end": "2025-12-31",
+   "from": "2025-12-31",
+   "row": 222,
+   "net_worth": 13437.61,
+   "shares": 60.1131,
+   "bvps": 223.5388,
+   "close": 855.75,
+   "pb": 3.82819489365139
+  },
+  {
+   "quarter": "Q4 FY 2026",
+   "quarter_end": "2026-03-31",
+   "from": "2026-04-01",
+   "row": 161,
+   "net_worth": 12704.4,
+   "shares": 60.186,
+   "bvps": 211.0855,
+   "close": 680,
+   "pb": 3.22144278821328
+  },
+  {
+   "quarter": "Q1 FY 2027",
+   "quarter_end": "2026-06-30",
+   "from": "2026-06-30",
+   "row": 102,
+   "net_worth": 13978.13,
+   "shares": 60.2147,
+   "bvps": 232.1384,
+   "close": 951.3,
+   "pb": 4.09798712791202
+  },
+  {
+   "quarter": "Q2 FY 2027",
+   "quarter_end": "2026-09-30",
+   "from": "2026-09-30",
+   "row": 37,
+   "net_worth": 15540.83,
+   "shares": 60.2977,
+   "bvps": 257.7349,
+   "close": 994,
+   "pb": 3.85667585067254
+  }
+ ]
+}
