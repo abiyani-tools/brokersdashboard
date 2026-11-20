@@ -5,6 +5,9 @@ regression / ratio / ADR triangulation (src/engine/valuation.py), per broker.
     python3 run_pat.py --broker GROWW
     python3 run_pat.py --db [--publish]   # read the latest live run, facts and assumptions from the DB; --publish writes sb_pat_lines
 
+Motilal Oswal (PB_ONLY) has no PAT model: --db publishes only its consolidated P/B lines (valuation.build_pb) on its
+latest live run, from reviewed net_worth / shares_period_end_cr facts and its val_results_dates row.
+
 Local inputs: daily ADR rows and prices in out/pat/dev/<BROKER>_{daily,prices}.json (the published run, read from
 /api/brokers), facts from snapshot/ (reviewed) plus the staged P&L extracts in out/pat/facts_*_pl.json, and
 assumptions from seed/pat_assumptions.json and seed/valuation_assumptions.json. --publish also writes sb_valuation_lines.
@@ -81,7 +84,7 @@ def main():
     if a.publish and not a.db:
         raise SystemExit('--publish needs --db')
     if a.db:
-        return db_run(['ANGELONE', 'GROWW'] if a.broker == 'all' else [a.broker], a.publish)
+        return db_run(['ANGELONE', 'GROWW', *PB_ONLY] if a.broker == 'all' else [a.broker], a.publish)
     brokers = ['ANGELONE', 'GROWW'] if a.broker == 'all' else [a.broker]
     assumptions = (json.load(open('seed/pat_assumptions.json'))['assumptions']
                    + json.load(open('seed/valuation_assumptions.json'))['assumptions'])
@@ -101,6 +104,35 @@ def main():
         open(f'{out}/{b}_report.md', 'w').write(report(m, daily['run']['run_id'], v))
         print(open(f'{out}/{b}_report.md').read())
     preview(brokers, out)
+
+
+# Brokers with a P/B band chart but no PAT model or ADR valuation (AB, 19 Nov 2026): only the P/B lines are published
+PB_ONLY = ('MOSL',)
+
+
+def pb_db_run(reader, writer, b):
+    """The P/B lines of a broker without a PAT model, on its latest successful live ADR run (the run the page reads
+    the valuation of): reviewed net worth and share-count facts, val_results_dates, sb_share_prices."""
+    runs = [r for r in reader.table('sb_runs', broker_id=b, mode='live') if r['status'] == 'success']
+    if not runs:
+        raise V.ValuationInputMissing(f'{b}: no successful live run')
+    run = max(runs, key=lambda r: r['started_at'])
+    facts = [f for f in reader.table('sb_disclosure_facts', broker_id=b) if f['status'] == 'reviewed']
+    assumptions = [a for x in ('*', b) for a in reader.table('sb_assumptions', broker_id=x) if a['key'].startswith('val_')]
+    prices = sorted(reader.table('sb_share_prices', broker_id=b), key=lambda r: r['trade_date'])
+    A = P.Assume(assumptions, b)
+    m = V.build_pb(b, prices, V.pb_quarters(facts, A), A)
+    if not m:
+        raise V.ValuationInputMissing(f'{b}: no dated quarter with a net worth and a share count, or no closes after one')
+    rows = V.pb_lines(m, run['run_id'])
+    last = m['series'][-1]
+    bands = ', '.join('{} {:.2f}±{:.2f}'.format(k, w['mean'], w['sd']) for k, w in m['windows'].items())
+    print(f"{b}: P/B {last['pb']:.2f}x on {last['date']} (BVPS {last['bvps']:.2f}, {last['quarter']}); bands {bands}")
+    if writer:
+        writer.upsert('sb_valuation_lines', rows, on_conflict=('run_id', 'section', 'period_key', 'line', 'scenario'))
+        print(f"{b}: {len(rows)} sb_valuation_lines rows (P/B) for run {run['run_id'][:8]}")
+    else:
+        print(f"{b}: dry run, {len(rows)} P/B rows (nothing written)")
 
 
 def db_inputs(reader, broker):
@@ -131,6 +163,13 @@ def db_run(brokers, publish):
     writer = SupabaseWriter() if publish else None
     failed = []
     for b in brokers:
+        if b in PB_ONLY:
+            try:
+                pb_db_run(reader, writer, b)
+            except V.ValuationInputMissing as e:
+                print(f'::warning title=P/B {b} skipped::{e}')
+                failed.append(b)
+            continue
         try:
             run, daily, facts, assumptions, prices, shares = db_inputs(reader, b)
             px = prices[-1]

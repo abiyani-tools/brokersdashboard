@@ -19,6 +19,11 @@ Angel One also gets the consolidated trailing-12-month P/E series behind the wor
 (last 3 years, and since 1 Apr 2025; mean ± 1 / 2 sample SD, STDEV.S): close × shares ÷ the sum of the last four
 filed quarters' consolidated PAT, a quarter counting from its results date (AB, point 6).
 
+Motilal Oswal gets a consolidated P/B series with mean ± 1 / 2 SD bands over 3M, 6M, 1Y, 2Y, 3Y and since 1 Apr 2025
+(AB, 19 Nov 2026): close ÷ (net worth ÷ shares of the quarter in force, from the day ACE Equity switches to it, which AB
+chose to match: the quarter end). build_pb / pb_lines;
+it needs no ADR or PAT model, so it runs for a broker without one.
+
 Everything here is plain data in, plain data out (no I/O). Rs Cr, per-share figures in Rs.
 """
 from __future__ import annotations
@@ -190,13 +195,107 @@ def pe_quarters(facts, A):
     return sorted((dates[q], q, v, shares.get(q)) for q, v in pat.items() if q in dates)
 
 
-def pe_bands(series, since):
+def pe_bands(series, since, key='pe'):
+    """Mean and sample SD (STDEV.S) of series[key] over the days from `since`; None with fewer than two days."""
     xs = [r for r in series if r['date'] >= since]
     if len(xs) < 2:
         return None
-    pes = [r['pe'] for r in xs]
-    m, sd = mean(pes), stdev_s(pes)
-    return dict(since=xs[0]['date'], to=xs[-1]['date'], n=len(xs), mean=m, sd=sd, current=xs[-1]['pe'])
+    vs = [r[key] for r in xs]
+    m, sd = mean(vs), stdev_s(vs)
+    return dict(since=xs[0]['date'], to=xs[-1]['date'], n=len(xs), mean=m, sd=sd, current=xs[-1][key])
+
+
+# ── P/B bands (Motilal Oswal; AB, 19 Nov 2026) ───────────────────────────────
+# Consolidated price-to-book: close ÷ (consolidated net worth ÷ shares outstanding at the quarter end), the latest
+# quarter whose book is in force on the day: from val_pb_dates (Motilal Oswal: the day ACE Equity switches to it, the
+# quarter end or the first trading day after; AB, 19 Nov 2026), else from the results date.
+# Mean ± 1 / 2 sample SD over each window (3M, 6M, 1Y, 2Y, 3Y, since 1 Apr 2025), as the P/E bands.
+def pb_quarters(facts, A):
+    """[(from_date, quarter, net_worth_cr, shares_cr)] from consolidated quarterly `net_worth` facts (Rs Cr, or
+    Rs Mn ÷ 10) and the share count (shares_period_end_cr, on today's split / bonus basis), dated by the
+    day each book comes in: the val_pb_dates assumption (Motilal Oswal: the day ACE switches to it, AB's choice), else
+    val_results_dates. A quarter without a date or a share count is left out."""
+    txt = A('val_pb_dates', '') or A('val_results_dates', '')
+    if not txt:
+        return []
+    dates = dict(x.strip().split('=') for x in str(txt).split(';') if x.strip())
+    nw, shares = {}, {}
+    for f in facts:
+        if f.get('period_type') != 'Q' or (f.get('segment') or 'consolidated') != 'consolidated':
+            continue
+        if f['metric'] == 'net_worth':
+            nw[f['period_key']] = f['value'] / 10 if f['unit'] == 'Rs Mn' else f['value']
+        elif f['metric'] == 'shares_period_end_cr' and f.get('period_key'):
+            shares[f['period_key']] = f['value']
+    return sorted((dates[q], q, v, shares[q]) for q, v in nw.items() if q in dates and shares.get(q))
+
+
+def pb_series(prices, quarters):
+    """[{date, close, quarter, net_worth, shares, bvps, pb}] for every close on or after the first results date."""
+    qs = sorted(quarters)
+    out = []
+    for p in sorted(prices, key=lambda p: p['trade_date']):
+        d = p['trade_date']
+        known = [q for q in qs if q[0] <= d]
+        if not known or p.get('close') is None:
+            continue
+        rd, q, nw, sh = known[-1]
+        bvps = nw / sh
+        if bvps <= 0:
+            continue
+        out.append(dict(date=d, close=float(p['close']), quarter=q, results_date=rd, net_worth=nw, shares=sh,
+                        bvps=bvps, pb=float(p['close']) / bvps))
+    return out
+
+
+def build_pb(broker, prices, quarters, A):
+    """The P/B model: the daily series and a band per covered window ('all' left out: the six periods AB asked for).
+    None when there are no dated quarters or no closes after the first one."""
+    if not quarters:
+        return None
+    series = pb_series(prices, quarters)
+    if not series:
+        return None
+    pe_since, last = str(A('val_pe_since')), series[-1]['date']
+    bands = {}
+    for key, _, n in WINDOWS:
+        if n is None:
+            continue
+        since = pe_since if n == 'pe_since' else months_back(last, n)
+        b = pe_bands(series, since, 'pb') if covered(series[0]['date'], since) else None
+        if b:
+            bands[key] = b
+    return dict(broker=broker, as_of=last, series=series, windows=bands, quarters=sorted(quarters))
+
+
+def pb_lines(model, run_id):
+    """sb_valuation_lines rows of a P/B model: 'pb_bands' (period_key = the window: pb_mean, pb_sd, pb_current),
+    'pb_book' (period_key = the quarter: net_worth, shares, bvps, with its results date) and 'pb' (period_key = the
+    trade date: pb and bvps)."""
+    b, out = model['broker'], []
+
+    def add(section, period_key, line, value, unit, label, rule, order):
+        out.append(dict(run_id=run_id, broker_id=b, section=section, period_key=period_key, line=line, scenario='',
+                        label=label, value=float(value), unit=unit, rule=rule, sort_order=order))
+    order = 0
+    for k, w in model['windows'].items():
+        for line, lbl in (('pb_mean', 'P/B mean'), ('pb_sd', 'P/B SD'), ('pb_current', 'P/B current')):
+            order += 1
+            add('pb_bands', k, line, w[line[3:]], 'x', lbl,
+                f"{w['since']} to {w['to']}, {w['n']} days" + (' (STDEV.S)' if line == 'pb_sd' else ''), order)
+    for rd, q, nw, sh in model['quarters']:
+        src = f'{q}, in force from {rd}'
+        order += 1
+        add('pb_book', q, 'net_worth', nw, 'Rs Cr', 'Consolidated net worth', src, order)
+        order += 1
+        add('pb_book', q, 'shares', sh, 'Cr shares', 'Shares outstanding (quarter end, today\'s basis)', src, order)
+        order += 1
+        add('pb_book', q, 'bvps', nw / sh, 'Rs', 'Book value per share', f'{nw:,.1f} ÷ {sh:.4f} ({src})', order)
+    for r in model['series']:
+        add('pb', r['date'], 'pb', r['pb'], 'x', 'Consolidated P/B',
+            f"close {r['close']:.2f} ÷ BVPS {r['bvps']:.2f} ({r['quarter']}: net worth {r['net_worth']:,.1f} ÷ {r['shares']:.4f} Cr shares)", 0)
+        add('pb', r['date'], 'bvps', r['bvps'], 'Rs', 'Book value per share', f"{r['quarter']} (in force from {r['results_date']})", 0)
+    return out
 
 
 # ── the whole thing ──────────────────────────────────────────────────────────
