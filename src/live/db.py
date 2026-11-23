@@ -15,6 +15,30 @@ DEFAULT_URL = "https://everjfpbnlbcpuarnhob.supabase.co"
 KEY_ENV = "SUPABASE_SERVICE_KEY"
 URL_ENV = "SUPABASE_URL"
 PAGE = 1000
+# Each sb_* table's primary key, the order SupabaseReader pages it in. PostgREST pages with Range headers, and without
+# an order Postgres returns rows in no fixed order, so successive pages of a table over PAGE rows can overlap (a row
+# twice) and leave others out. That happened on 23 Nov 2026: MOSL's 2,483 sb_share_prices rows came back with
+# repeats, and its P/B upsert failed with "ON CONFLICT DO UPDATE command cannot affect row a second time".
+PK_ORDER = {
+    "sb_assumptions": "broker_id,key",
+    "sb_broker_daily": "broker_id,snapshot_date,metric,period_key",
+    "sb_brokers": "broker_id",
+    "sb_calendar": "trade_date",
+    "sb_calibration": "run_id,segment,period_key,param",
+    "sb_daily_revenue": "run_id,trade_date,segment",
+    "sb_disclosure_facts": "fact_id",
+    "sb_documents": "doc_id",
+    "sb_input_saves": "id",
+    "sb_market_daily": "trade_date,dataset,metric,source",
+    "sb_market_monthly": "fy_month,dataset,metric,source",
+    "sb_parity_expected": "broker_id,kind,key",
+    "sb_parity_pins": "broker_id,key,period_key",
+    "sb_pat_lines": "run_id,period_key,line,scenario",
+    "sb_runs": "run_id",
+    "sb_share_prices": "broker_id,trade_date",
+    "sb_summary_cells": "run_id,panel,period_type,period_key,table_name,row_label",
+    "sb_valuation_lines": "run_id,section,period_key,line,scenario",
+}
 
 
 class MissingCredentials(RuntimeError):
@@ -53,6 +77,8 @@ class SupabaseReader:
 
     def table(self, name: str, **eq) -> list[dict]:
         params = {"select": "*"}
+        if name in PK_ORDER:   # a fixed order, so the pages are disjoint slices of one sequence (see PK_ORDER)
+            params["order"] = PK_ORDER[name]
         params.update({k: f"eq.{v}" for k, v in eq.items()})
         rows: list[dict] = []
         start = 0

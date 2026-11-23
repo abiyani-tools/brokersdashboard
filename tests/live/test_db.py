@@ -55,6 +55,26 @@ def test_db_reader_paginates_and_never_exposes_the_key(monkeypatch):
     assert SECRET not in repr(r) and SECRET not in str(vars(r))
 
 
+def test_db_reader_pages_sb_tables_in_primary_key_order(monkeypatch):
+    # without an order the pages can overlap (23 Nov 2026: MOSL's share prices came back with repeats)
+    monkeypatch.setenv(KEY_ENV, SECRET)
+    s = FakeSession([{"i": i} for i in range(3)])
+    SupabaseReader(session=s, page_size=2).table("sb_share_prices", broker_id="MOSL")
+    assert all(params["order"] == "broker_id,trade_date" for _, params, _ in s.calls) and len(s.calls) == 2
+    # a table outside the brokers project's sb_* set (the lake's views) is read as before
+    s2 = FakeSession([])
+    SupabaseReader(session=s2).table("codex_public_nse_mtf_daily")
+    assert "order" not in s2.calls[0][1]
+
+
+def test_every_sb_table_has_its_primary_key_order():
+    # the tables the engine reads; keep in step with the schema (each value is the table's primary key)
+    from src.live.db import PK_ORDER
+    for t in ("sb_runs", "sb_daily_revenue", "sb_market_daily", "sb_disclosure_facts", "sb_assumptions",
+              "sb_share_prices", "sb_calendar", "sb_calibration", "sb_valuation_lines", "sb_pat_lines"):
+        assert PK_ORDER.get(t), t
+
+
 def test_db_reader_error_does_not_echo_headers(monkeypatch):
     monkeypatch.setenv(KEY_ENV, SECRET)
     r = SupabaseReader(session=FakeSession([{"message": "permission denied"}], status=401))
