@@ -23,7 +23,7 @@
    "value": 247,
    "unit": "days",
    "source_ref": "excel:Angel One - ADR model (A+B)!C15",
-   "note": "FY27 remaining trading days = 247 − days already traded, split by weekdays. [SOURCE NEEDED: NSE holiday list for FY27]"
+   "note": "Fallback only: a run with seed/nse_holidays.json (every live run from 25 Nov 2026) counts each quarter's NSE trading days instead. Old rule: 247 − days already traded, split by weekdays."
   },
   {
    "broker_id": "*",
@@ -31,7 +31,7 @@
    "value": 247,
    "unit": "days",
    "source_ref": "excel:Angel One - ADR model (A+B)!C37 (=C15)",
-   "note": "Split equally across the four FY28 quarters. [SOURCE NEEDED: NSE holiday list for FY28]"
+   "note": "Fallback only: with seed/nse_holidays.json FY28 days = the sum of its quarters' NSE trading days (254, estimated holidays). Old rule: 247."
   },
   {
    "broker_id": "*",

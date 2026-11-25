@@ -104,6 +104,37 @@ def weekdays(a, b):
     return n
 
 
+class Calendar:
+    """NSE trading days from seed/nse_holidays.json (AB, 25 Nov 2026): weekdays less weekday holidays, declared by NSE
+    or estimated (calendar 2026's occasions at their later dates). Special sessions (Budget day, Muhurat) are not
+    projected."""
+    def __init__(self, cal):
+        self.covers_to = dt.date.fromisoformat(cal['covers_to'])
+        self.hol = {h['date']: h for h in cal['holidays']}
+
+    def days(self, a, b):
+        """(trading days in (a, b], weekday holidays in it) for dates a < b."""
+        if b > self.covers_to:
+            raise PatInputMissing(f'NSE holiday calendar ends {self.covers_to}, before {b}')
+        n, off, d = 0, [], a + dt.timedelta(days=1)
+        while d <= b:
+            if d.weekday() < 5:
+                if d.isoformat() in self.hol:
+                    off.append(self.hol[d.isoformat()])
+                else:
+                    n += 1
+            d += dt.timedelta(days=1)
+        return n, off
+
+    @staticmethod
+    def why(off):
+        if not off:
+            return 'no weekday holiday'
+        est = sum(h['status'] == 'estimated' for h in off)
+        names = ', '.join(f"{h['name']} {dt.date.fromisoformat(h['date']).strftime('%d %b')}" for h in off)
+        return f'less {names}' + (f' ({est} estimated)' if est else '')
+
+
 # ── assumptions ──────────────────────────────────────────────────────────────
 class Assume:
     def __init__(self, rows, broker):
@@ -226,7 +257,9 @@ def new_borrowing(book, prev_book, retained):
 
 
 # ── the model ────────────────────────────────────────────────────────────────
-def build(broker, facts, daily, assumptions, close, shares=None):
+def build(broker, facts, daily, assumptions, close, shares=None, holidays=None):
+    """holidays: seed/nse_holidays.json. With it, each projected quarter's days are its NSE trading days after the
+    ADR date and FY28's are the sum of its quarters'; without it (old runs, vectors) the 247-day split applies."""
     A = Assume(assumptions, broker)
     y = A('pat_mtf_yield')
     t = fact_table(facts, broker)
@@ -268,14 +301,25 @@ def build(broker, facts, daily, assumptions, close, shares=None):
         raise PatInputMissing(f'{broker}: FY26 quarters incomplete: {[q for q in prev_fy if q not in hist]}')
     other_avg = sum(hist[q]['other'] for q in last4) / 4
 
-    # FY27 trading days left (workbook 247 basis), split by weekdays
-    fy_days = A('pat_fy27_trading_days')
-    traded = sum(1 for d in adr.days if d >= '2026-04-01')
-    left = max(fy_days - traded, 0)
     asof = dt.date.fromisoformat(adr.as_of)
     proj_q = [q for q in FY27_Q if q not in Q]
-    wd = {q: weekdays(max(asof, q_end(q_prev(q))), q_end(q)) for q in proj_q}
-    tot_wd = sum(wd.values()) or 1
+    cal = Calendar(holidays) if holidays else None
+    rem_q = {}                                     # projected quarter → (days after the ADR date, rule)
+    if cal:   # each quarter's NSE trading days after the ADR date (AB, 25 Nov 2026)
+        for q in proj_q:
+            a = max(asof, q_end(q_prev(q)))
+            n, off = cal.days(a, q_end(q))
+            rem_q[q] = (n, f'{n} NSE trading days {(a + dt.timedelta(days=1)):%d %b %Y} – {q_end(q):%d %b %Y}: '
+                           f'{weekdays(a, q_end(q))} weekdays {Calendar.why(off)}')
+    else:     # FY27 trading days left (workbook 247 basis), split by weekdays
+        fy_days = A('pat_fy27_trading_days')
+        traded = sum(1 for d in adr.days if d >= '2026-04-01')
+        left = max(fy_days - traded, 0)
+        wd = {q: weekdays(max(asof, q_end(q_prev(q))), q_end(q)) for q in proj_q}
+        tot_wd = sum(wd.values()) or 1
+        for q in proj_q:
+            rem_q[q] = (left * wd[q] / tot_wd,
+                        f'{left} FY27 days left ({fy_days} − {traded} traded) × {wd[q]} of {tot_wd} weekdays')
     # start rule (AB, 10 Nov 2026): the current quarter's ADR so far; under 5 engine days, the previous full quarter
     cur = q_of(adr.as_of)
     start_q = cur if adr.in_quarter('broking', cur)[1] >= MIN_QTD_DAYS else q_prev(cur)
@@ -317,7 +361,7 @@ def build(broker, facts, daily, assumptions, close, shares=None):
     prev0 =(Q.get(q_prev(proj_q[0])) or hist[q_prev(proj_q[0])]) if proj_q else None
     for q in proj_q:
         p = Q.get(q_prev(q)) or hist[q_prev(q)]
-        rem = left * wd[q] / tot_wd
+        rem, rem_rule = rem_q[q]
         so_far = {k: adr.in_quarter(k, q) for k in ('broking', 'mtf', 'cash')}
         L = {'trading_days': so_far['broking'][1] + rem}
         f, fm = (1 + g_q) ** step(q), (1 + g_m) ** step(q)
@@ -331,7 +375,7 @@ def build(broker, facts, daily, assumptions, close, shares=None):
         rules[(q, 'mtf')] = done.format('MTF') + f'{rem:.1f} days × {start} {adr_m:.3f}{grow_m}'
         kit_q[q] = dict(sofar_broking=so_far['broking'][0], sofar_mtf=so_far['mtf'][0], sofar_cash=so_far['cash'][0],
                         rem_days=rem, step=step(q),
-                        rem_rule=f'{left} FY27 days left ({fy_days} − {traded} traded) × {wd[q]} of {tot_wd} weekdays')
+                        rem_rule=rem_rule)
         if broker == 'ANGELONE':
             L['depository'] = A('pat_dep_share_of_cash') * cash
             rules[(q, 'depository')] = f'{A("pat_dep_share_of_cash"):.0%} × cash broking {cash:.1f}'
@@ -387,7 +431,14 @@ def build(broker, facts, daily, assumptions, close, shares=None):
     fy27['regime'] = 'projected' if proj_q else 'actual'
 
     # FY28: the four quarters continue the quarterly ADR growth path (days split equally); every cost linked as in FY27
-    d28 = A('pat_fy28_trading_days')
+    if cal:   # FY28 days = the sum of its quarters' NSE trading days (the FY28 ADR stays the equal-weighted average)
+        q28 = [(q, cal.days(q_end(q_prev(q)), q_end(q))) for q in ('Q1 FY 2028', 'Q2 FY 2028', 'Q3 FY 2028', 'Q4 FY 2028')]
+        d28 = sum(n for _, (n, _) in q28)
+        d28_rule = ('NSE trading days ' + ' + '.join(f'{q[:2]} {n}' for q, (n, _) in q28) + f' = {d28}; '
+                    + '; '.join(f'{q[:2]} {Calendar.why(off)}' for q, (_, off) in q28 if off))
+    else:
+        d28 = A('pat_fy28_trading_days')
+        d28_rule = f'{d28} (pat_fy28_trading_days)'
     fy28_q = ('Q1 FY 2028', 'Q2 FY 2028', 'Q3 FY 2028', 'Q4 FY 2028')
     k28 = [step(q) if first_proj else 0 for q in fy28_q]
     path = sum((1 + g_q) ** k for k in k28) / 4                     # average growth factor over FY28 (broking)
@@ -488,13 +539,13 @@ def build(broker, facts, daily, assumptions, close, shares=None):
     F['adr_consol'] = b28 + m28
     rules[('FY 2028', 'adr_consol')] = (f'FY28 broking {b28:.3f} ({expo}) + MTF {m28:.3f} ({expo_m}) '
                                         f'= {F["adr_consol"]:.3f} a day')
-    rules[('FY 2028', 'trading_days')] = f'{d28} (pat_fy28_trading_days)'
+    rules[('FY 2028', 'trading_days')] = d28_rule
     a45 = adr.window('broking', 45) + adr.window('mtf', 45)
 
     # inputs of the page (defaults) and the constants of the recompute kit (src/engine/pat_kit.py)
     kit = dict(start_q=start_q, start_days=n0, start_rule=start_rule, adr_45dma=a45,
                adr_45dma_rule=f'mean of the last {min(45, len(adr.days))} engine days to {adr.as_of} (broking + MTF gross)',
-               g=g_q, g_mtf=g_m, g_mtf_own='pat_mtf_qoq_growth' in A.rows, tax=tax, retention=ret, funding_rate=rate, mtf_yield=y, fy28_days=d28, dist_growth_fy28=gd,
+               g=g_q, g_mtf=g_m, g_mtf_own='pat_mtf_qoq_growth' in A.rows, tax=tax, retention=ret, funding_rate=rate, mtf_yield=y, fy28_days=d28, fy28_days_rule=d28_rule, dist_growth_fy28=gd,
                treasury_growth_fy28=gt, adr_broking0=adr_b, adr_mtf0=adr_m, adr_cash0=adr_c,
                dep_share_of_cash=A('pat_dep_share_of_cash') if broker == 'ANGELONE' else None,
                fee_ratio=fee_ratio, oexp_ratio=oexp_ratio, finance_base=fin_base, finance_base_q=fin_base_q,
@@ -559,7 +610,7 @@ def kit_rows(model, run_id):
               ('k_retention', K['retention'], 'fraction', src('pat_retention')),
               ('k_funding_rate', K['funding_rate'], 'fraction', src('pat_funding_rate')),
               ('k_mtf_yield', K['mtf_yield'], 'fraction', src('pat_mtf_yield')),
-              ('k_fy28_days', K['fy28_days'], 'days', src('pat_fy28_trading_days')),
+              ('k_fy28_days', K['fy28_days'], 'days', K.get('fy28_days_rule') or src('pat_fy28_trading_days')),
               ('k_dist_growth_fy28', K['dist_growth_fy28'], 'fraction', src('pat_dist_growth_fy28')),
               ('k_treasury_growth_fy28', K['treasury_growth_fy28'], 'fraction', src('pat_treasury_growth_fy28'))]
     for k, what in (('k_adr_broking0', 'broking'), ('k_adr_mtf0', 'MTF gross'), ('k_adr_cash0', 'cash broking')):

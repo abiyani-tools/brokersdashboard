@@ -51,12 +51,13 @@ class TestPatKit(unittest.TestCase):
         cls.m = {b: cls.build(b) for b in cls.facts}
 
     @classmethod
-    def build(cls, b, daily=None, **override):
+    def build(cls, b, daily=None, holidays=None, **override):
         facts = cls.facts[b]
         shares = next(f['value'] for f in facts if f['metric'] == 'shares_outstanding_cr')
         assume = cls.assume + [dict(broker_id=b, key=k, value=v, value_text='20,25,30' if k == 'pat_pe' else None)
                                for k, v in override.items()]
-        return P.build(b, facts, daily or moving_daily(), assume, dict(price=300.0, date='2026-11-04'), shares)
+        return P.build(b, facts, daily or moving_daily(), assume, dict(price=300.0, date='2026-11-04'), shares,
+                       holidays=holidays)
 
     def check_same(self, got, rows, msg):
         want = model_lines(rows)
@@ -173,6 +174,23 @@ class TestPatKit(unittest.TestCase):
         hi = self.m['GROWW']
         self.assertGreater(hi['quarters']['Q3 FY 2027']['finance'], 4.71)
         self.assertNotIn('k_finance_base', K.kit_from_rows(P.rows(self.m['ANGELONE'], 'run-x'))['inputs'])
+
+
+    def test_nse_calendar_reproduces_and_rebuilds(self):
+        """AB, 25 Nov 2026: with the NSE holiday calendar the page's recompute (k_rem_days, k_fy28_days as published)
+        still equals the engine, at the published growth and at another one."""
+        cal = json.load(open(ROOT / 'seed/nse_holidays.json'))
+        for b in self.facts:
+            m = self.build(b, holidays=cal)
+            self.assertEqual(m['fy28']['trading_days'], 254, b)
+            rows = P.rows(m, 'run-x')
+            kit = K.kit_from_rows(rows)
+            self.assertIn('NSE trading days', {key(r): r for r in rows}[('inputs', 'k_fy28_days', '')]['rule'])
+            d = kit['defaults']
+            self.check_same(K.recompute(kit, d['g'], d['pe'], d['disc'], d['today']), rows, (b, 'calendar'))
+            g = d['g'] + 0.01
+            rebuilt = P.rows(self.build(b, holidays=cal, pat_adr_qoq_growth=g, pat_mtf_qoq_growth=d['gm']), 'run-x')
+            self.check_same(K.recompute(kit, g, d['pe'], d['disc'], d['today']), rebuilt, (b, 'calendar', g))
 
 
 if __name__ == '__main__':
