@@ -68,12 +68,13 @@ class TestPat(unittest.TestCase):
             self.assertAlmostEqual(done - in_q3 + proj, 247, places=6)
 
     def test_angel_rules_match_workbook(self):
-        """Unchanged rules reproduce 'PAT predictor Q2FY27'!J63:K66 (Rs Cr)."""
+        """Employee and impairment reproduce 'PAT predictor Q2FY27'!J63:J64 (Rs Cr). Depreciation and other expenses
+        follow the employee rule (AB, 25 Nov 2026), replacing the workbook's same quarter last year (J65:K66)."""
         q3, q4 = self.m['ANGELONE']['quarters']['Q3 FY 2027'], self.m['ANGELONE']['quarters']['Q4 FY 2027']
-        self.assertAlmostEqual(q3['other_expenses'], 381.78, delta=0.1)     # J66 = E66*(1+10%)
-        self.assertAlmostEqual(q4['other_expenses'], 456.44, delta=0.1)     # K66 = F66*(1+10%)
-        self.assertAlmostEqual(q3['depreciation'], 35.28, delta=0.05)       # J65 = E65*(1+12%)
-        self.assertAlmostEqual(q4['depreciation'], 36.88, delta=0.05)       # K65
+        for q in (q3, q4):
+            self.assertAlmostEqual(q['other_expenses'], 420.26, delta=0.01)  # (423.5+342.7+347.1+414.9)/4 × 1.10
+            self.assertAlmostEqual(q['depreciation'], 35.00, delta=0.01)     # (29.9+30.7+31.5+32.9)/4 × 1.12
+        self.assertIn('FY26 quarterly average', self.m['ANGELONE']['rules'][('Q3 FY 2027', 'depreciation')])
         self.assertAlmostEqual(q3['employee'], 285.43, delta=0.1)           # J64 = AVERAGE(C64:F64)*(1+7%)
         self.assertAlmostEqual(q3['impairment'], 0.86, delta=0.01)          # J63 = AVERAGE(C63:F63)*1.1
 

@@ -317,7 +317,6 @@ def build(broker, facts, daily, assumptions, close, shares=None):
     prev0 =(Q.get(q_prev(proj_q[0])) or hist[q_prev(proj_q[0])]) if proj_q else None
     for q in proj_q:
         p = Q.get(q_prev(q)) or hist[q_prev(q)]
-        ly = hist[q_prev(q, 4)]
         rem = left * wd[q] / tot_wd
         so_far = {k: adr.in_quarter(k, q) for k in ('broking', 'mtf', 'cash')}
         L = {'trading_days': so_far['broking'][1] + rem}
@@ -360,12 +359,13 @@ def build(broker, facts, daily, assumptions, close, shares=None):
         if broker == 'ANGELONE':
             L['fees_commission'] = fee_ratio * L['broking']
             rules[(q, 'fees_commission')] = f'{fee_ratio:.2%} of broking (last 4 reported quarters)'
-            L['employee'] = sum(hist[x]['employee'] for x in prev_fy) / 4 * (1 + A('pat_employee_growth'))
-            rules[(q, 'employee')] = f'FY26 quarterly average × (1 + {A("pat_employee_growth"):.0%})'
-            L['depreciation'] = ly['depreciation'] * (1 + A('pat_depreciation_growth'))
-            rules[(q, 'depreciation')] = f'same quarter last year × (1 + {A("pat_depreciation_growth"):.0%})'
-            L['other_expenses'] = ly['other_expenses'] * (1 + A('pat_other_exp_growth'))
-            rules[(q, 'other_expenses')] = f'same quarter last year × (1 + {A("pat_other_exp_growth"):.0%})'
+            # employee, depreciation and other expenses (AB, 25 Nov 2026: depreciation and other expenses follow the
+            # employee rule, replacing same quarter last year × growth): FY26 quarterly average × (1 + growth)
+            for k, key in (('employee', 'pat_employee_growth'), ('depreciation', 'pat_depreciation_growth'),
+                           ('other_expenses', 'pat_other_exp_growth')):
+                avg26 = sum(hist[x][k] for x in prev_fy) / 4
+                L[k] = avg26 * (1 + A(key))
+                rules[(q, k)] = f'FY26 quarterly average {avg26:.2f} × (1 + {A(key):.0%})'
             L['impairment'] = sum(hist[x]['impairment'] for x in prev_fy) / 4 * (1 + A('pat_impairment_growth'))
             rules[(q, 'impairment')] = f'FY26 quarterly average × (1 + {A("pat_impairment_growth"):.0%})'
         else:
