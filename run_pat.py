@@ -22,6 +22,12 @@ import os
 from src.engine import pat as P
 from src.engine import valuation as V
 
+HOLIDAYS = 'seed/nse_holidays.json'     # NSE trading days per quarter (AB, 25 Nov 2026)
+
+
+def holidays():
+    return json.load(open(HOLIDAYS))
+
 SHEET = {   # workbook headline cells, for the bridge in the report (New model - 06.11.26/20260714_brokers dashboard v2 - new.xlsx)
     'ANGELONE': {'FY27 PAT': (1063.41, "PAT predictor Q2FY27!L53"), 'FY28 PAT': (1564.86, "Angel One - ADR model (A+B)!C27"),
                  'FY28 target today (base)': (310.91, '!D34')},
@@ -93,7 +99,8 @@ def main():
         px = json.load(open(f'out/pat/dev/{b}_prices.json'))['prices'][-1]
         facts = local_facts(b)
         shares = next(f['value'] for f in facts if f['metric'] == 'shares_outstanding_cr')
-        m = P.build(b, facts, daily['rows'], assumptions, dict(price=px['close'], date=px['trade_date']), shares)
+        m = P.build(b, facts, daily['rows'], assumptions, dict(price=px['close'], date=px['trade_date']), shares,
+                    holidays=holidays())
         out = f"out/pat/{m['as_of']}"
         os.makedirs(out, exist_ok=True)
         json.dump(P.rows(m, daily['run']['run_id']), open(f'{out}/{b}_pat_lines.json', 'w'), indent=1)
@@ -173,7 +180,8 @@ def db_run(brokers, publish):
         try:
             run, daily, facts, assumptions, prices, shares = db_inputs(reader, b)
             px = prices[-1]
-            m = P.build(b, facts, daily, assumptions, dict(price=float(px['close']), date=px['trade_date']), float(shares))
+            m = P.build(b, facts, daily, assumptions, dict(price=float(px['close']), date=px['trade_date']), float(shares),
+                        holidays=holidays())
         except P.PatInputMissing as e:
             print(f'::warning title=PAT {b} skipped::{e}')
             failed.append(b)

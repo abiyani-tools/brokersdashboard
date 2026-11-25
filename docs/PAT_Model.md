@@ -19,7 +19,7 @@ Output table: `sb_pat_lines` (`migrations/20261105_sb_pat_lines.sql`). Rs Cr thr
    |---|---|
    | Broking, MTF (and Angel's cash, for depository) | engine daily revenue to the run's date + remaining days × the start ADR (step 0, the **start rule** below); each later quarter × (1 + quarterly ADR growth g: Angel 3%, Groww 4%) |
    | **Start rule** (AB, 10 Nov 2026) | start ADR (broking, MTF gross, cash) = the current quarter's engine revenue so far ÷ its engine days so far (QTD); if the current quarter has fewer than 5 engine days, the previous quarter's full-quarter ADR. Replaces the 20-day (Angel) / 45-day (Groww) window; `pat_adr_window_fy27` is no longer read. The 45-day average is published as a reference row only |
-   | Remaining days | 247 − FY27 days already traded, split across the quarters by weekdays (workbook's 247) |
+   | Remaining days | each quarter's NSE trading days after the ADR date: weekdays less weekday holidays in `seed/nse_holidays.json` (AB, 25 Nov 2026; was 247 − days traded, split by weekdays). 2026 holidays are NSE's declared list; 2027–Mar 2028 are estimated: calendar 2026's occasions at their later dates (Maharashtra list, DoPT O.M. 16.07.2026), replaced by NSE's circular when published. Today: Q3 FY27 27 days after 20 Nov, Q4 FY27 60 |
    | Depository (Angel) | 40% × cash broking |
    | Distribution (Angel); PL + LAS, other operating (Groww) | previous quarter × (1 + 5%) |
    | Treasury (Angel) | previous quarter (flat) · Float (Groww): previous quarter × broking growth |
@@ -35,7 +35,7 @@ Output table: `sb_pat_lines` (`migrations/20261105_sb_pat_lines.sql`). Rs Cr thr
    | Tax | 25% of PBT |
 
 3. **FY27E** = the four quarters. **FY28E**: broking and MTF ADR continue the quarterly growth path (Q1 FY28 is two
-   quarters after the current one, so × (1 + g)^2 … Q4 FY28 × (1 + g)^5; FY28 ADR = the average of the four) × 247 days
+   quarters after the current one, so × (1 + g)^2 … Q4 FY28 × (1 + g)^5; FY28 ADR = the average of the four) × FY28's NSE trading days (60 + 66 + 65 + 63 = 254 from the calendar; 247 before 25 Nov 2026)
    (AB, 5 Nov 2026; replaces the workbook's FY28 growth of 27% broking / 35% or 50% MTF); depository with broking; distribution / lending / other
    operating × (1 + 20% / 50%); treasury / float × 1.15; finance cost, fees & commission and Groww's other expenses
    by the same linked rules as FY27; employee, depreciation, other expenses as the workbook (× 1.12 / 1.15 / 1.10).

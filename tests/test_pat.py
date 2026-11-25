@@ -67,6 +67,29 @@ class TestPat(unittest.TestCase):
             in_q3 = sum(1 for d in synthetic_daily() if d['segment'] == 'fo' and d['trade_date'] >= '2026-10-01')
             self.assertAlmostEqual(done - in_q3 + proj, 247, places=6)
 
+    def test_nse_calendar_days(self):
+        """AB, 25 Nov 2026: projected days are NSE trading days, not a 247-day split. The ADR here ends 3 Nov 2026."""
+        cal = json.load(open(ROOT / 'seed/nse_holidays.json'))
+        declared = [h['date'] for h in cal['holidays'] if h['status'] == 'declared'
+                    and dt.date.fromisoformat(h['date']).weekday() < 5]
+        self.assertEqual(len(declared), 16)                       # NSE 2026 list: 16 weekday trading holidays
+        facts = __import__('run_pat').local_facts('ANGELONE')
+        shares = next(f['value'] for f in facts if f['metric'] == 'shares_outstanding_cr')
+        m = P.build('ANGELONE', facts, synthetic_daily(), self.assume, dict(price=300.0, date='2026-11-04'), shares,
+                    holidays=cal)
+        d, wd = dt.date(2026, 11, 4), 0
+        while d <= dt.date(2026, 12, 31):
+            wd += d.weekday() < 5
+            d += dt.timedelta(days=1)
+        q3, q4 = m['quarters']['Q3 FY 2027'], m['quarters']['Q4 FY 2027']
+        q3_done = sum(1 for r in synthetic_daily() if r['segment'] == 'fo' and r['trade_date'] >= '2026-10-01')
+        self.assertEqual(q3['trading_days'], q3_done + wd - 3)    # less Diwali-Balipratipada, Guru Nanak, Christmas
+        self.assertEqual(q4['trading_days'], 64 - 4)              # less Republic Day, Id-Ul-Fitr, Holi, Good Friday
+        self.assertEqual(m['fy28']['trading_days'], 60 + 66 + 65 + 63)
+        self.assertIn('Christmas 25 Dec', m['kit']['quarters']['Q3 FY 2027']['rem_rule'])
+        with self.assertRaises(P.PatInputMissing):
+            P.Calendar(cal).days(dt.date(2028, 3, 31), dt.date(2028, 4, 3))
+
     def test_angel_rules_match_workbook(self):
         """Employee and impairment reproduce 'PAT predictor Q2FY27'!J63:J64 (Rs Cr). Depreciation and other expenses
         follow the employee rule (AB, 25 Nov 2026), replacing the workbook's same quarter last year (J65:K66)."""
