@@ -59,6 +59,9 @@ CHARTS = {
     'commodity_derivatives': {'value': (IR.M_COMM, 'money', None)},
     'mtf_net_book': {'value': (IR.M_MTF, 'money', None)},
 }
+# Charts the archive can do without. Groww took the SIP chart off the page by 23 Nov 2026 (every run from then on
+# refused the whole page, MTF book included); nothing in the engine reads SIP, so its absence is a warning, not a stop.
+OPTIONAL_CHARTS = frozenset({'mf_sip'})
 UNIT = {'money': 'Rs Mn', 'count': 'count'}
 _MN = re.compile(r'^₹\s*([\d,]+(?:\.\d+)?)\s*Mn$')
 
@@ -130,11 +133,13 @@ def parse_charts(next_data):
         if not isinstance(c, dict) or 'id' not in c:
             _fail(f'a chart without an id: {str(c)[:100]}')
         by_id[c['id']] = c
-    missing = sorted(set(CHARTS) - set(by_id))
+    missing = sorted(set(CHARTS) - set(by_id) - OPTIONAL_CHARTS)
     if missing:
         _fail(f'chart id(s) missing: {missing}; the page has {sorted(by_id)}')
     out = {}
     for cid, lines in CHARTS.items():
+        if cid not in by_id:                          # an optional chart the page no longer has
+            continue
         c = by_id[cid]
         data = c.get('data')
         if not isinstance(data, list) or len(data) < MIN_POINTS:
@@ -164,7 +169,8 @@ def parse_charts(next_data):
     if len(set(last.values())) != 1:
         _fail(f'charts end on different quarters: {last}')
     for cid, lines in CHARTS.items():
-        _check_unit(cid, by_id[cid], lines, out[cid]['points'])
+        if cid in out:
+            _check_unit(cid, by_id[cid], lines, out[cid]['points'])
     return out
 
 
@@ -202,6 +208,8 @@ def build_rows(parsed, fetched_at, snapshot_date, html_sha, broker=IR.BROKER):
     is_open = q_end >= snapshot_date                  # the last point is quarter-to-date while the quarter runs
     rows = []
     for cid, lines in CHARTS.items():
+        if cid not in parsed:
+            continue
         labels = parsed[cid]['labels']
         for key, (metric, kind, _) in lines.items():
             for i, lab in enumerate(labels):
@@ -234,7 +242,7 @@ def parse_page(html, fetched_at):
     check_period_plausible(rows, snapshot_date)
     extra = sorted({c.get('id') for c in _chart_list(extract_next_data(html))} - set(CHARTS))
     return rows, {'snapshot_date': snapshot_date, 'fetched_at': fetched_at.isoformat(timespec='seconds'),
-                  'sha256': sha, 'extra_chart_ids': extra}
+                  'sha256': sha, 'extra_chart_ids': extra, 'missing_optional': sorted(set(CHARTS) - set(parsed))}
 
 
 # ── trading day covered by the QTD point ──
@@ -271,11 +279,16 @@ def report(rows, meta, inf, note):
              f'{len({r["period_key"] for r in rows})} quarters, {sum(r["is_qtd"] for r in rows)} quarter-to-date']
     if meta['extra_chart_ids']:
         lines.append(f'note: charts on the page that are not archived: {meta["extra_chart_ids"]}')
+    if meta.get('missing_optional'):
+        lines.append(f'WARNING: optional chart(s) no longer on the page, not archived: {meta["missing_optional"]}')
     qtd = {r['metric']: r for r in rows if r['is_qtd']}
     for m in IR.ALL_METRICS:
         closed = [r for r in rows if r['metric'] == m and not r['is_qtd']]
         last = closed[-1] if closed else None
         q = qtd.get(m)
+        if not any(r['metric'] == m for r in rows):
+            lines.append(f'  {m:32}   — not on the page')
+            continue
         lines.append(f'  {m:32} {len([r for r in rows if r["metric"] == m]):3} pts  '
                      + (f'last closed {last["period_key"]} {last["value"]:,.1f} {last["unit"]}' if last else '')
                      + (f'   QTD {q["period_key"]} {q["value"]:,.1f}' if q else ''))
@@ -329,6 +342,8 @@ def main(argv=None):
         print(f'PAGE STRUCTURE CHANGED: {e}\n(raw page saved to {raw_path})')
         _annotate('error', 'groww.in page structure changed', str(e))
         return 1
+    if meta['missing_optional']:
+        _annotate('warning', 'groww.in chart(s) gone', f'not on the page any more, not archived: {meta["missing_optional"]}')
 
     source = args.exchange
     if source == 'auto':
