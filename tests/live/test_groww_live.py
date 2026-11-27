@@ -85,12 +85,14 @@ def writer_env(monkeypatch):
 
 # ── the dry run ──
 def test_groww_dry_run_from_the_angel_run(angel, groww):
-    assert groww['broker'] == 'GROWW' and groww['switches'] == 'abcdefg' and groww['as_of'] == angel['as_of'] == '2026-10-21'
+    assert groww['broker'] == 'GROWW' and groww['switches'] == 'abcdefgj' and groww['as_of'] == angel['as_of'] == '2026-10-21'
     assert not groww['report'].blocking, groww['report'].summary()
     get = {(r['panel'], r['row_label']): r['value'] for r in groww['rows'] if r['period_type'] in ('FY', 'Q', 'M')}
-    assert get[('Consolidated', 'FY 2027')] == pytest.approx(20.007085, abs=5e-7)
+    # g-j (25 Nov 2026): the open quarter's cash x 6.535245 / 6.852245 (Angel's projected vs Groww's last reported
+    # trades per order); before g-j FY 2027 was 20.007085 and October 23.617623; Q2 FY 2027 (reported) is unchanged
+    assert get[('Consolidated', 'FY 2027')] == pytest.approx(19.986347, abs=5e-7)
     assert get[('Consolidated', 'Q2 FY 2027')] == pytest.approx(18.528112, abs=5e-7)
-    assert get[('Consolidated', 'FY 2027 October')] == pytest.approx(23.617623, abs=5e-7)
+    assert get[('Consolidated', 'FY 2027 October')] == pytest.approx(23.397479, abs=5e-7)
     keys = [(r['panel'], r['period_type'], r['period_key'], r['table_name'], r['row_label']) for r in groww['rows']]
     assert len(keys) == len(set(keys)) and 'MTF (net)' not in {k[0] for k in keys}      # Groww: gross MTF only
     md = report_md(groww)

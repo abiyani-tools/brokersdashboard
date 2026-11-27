@@ -2,7 +2,7 @@
 
 Implied orders = the model's daily Groww orders summed over the quarter: F&O (Angel-calibrated market orders x Groww share) + cash (market trades / Angel trades per order x Groww share) + commodity. Disclosed = total broking orders (Stocks + Derivatives; no segment split), KPI Handbook Operational KPIs row 10, latest handbook (Q2 FY27). Mn orders.
 
-"Parity" = the workbook (no switches). "Live" = switches abcdefg. The shares are on the legacy basis (denominator = exchange turnover) in both, as in the workbook. "Live, new-basis shares" halves the F&O and cash orders: the share on Groww's published basis (denominator = exchange turnover x 2).
+"Parity" = the workbook (no switches). "Live" = switches abcdefgj. The shares are on the legacy basis (denominator = exchange turnover) in both, as in the workbook. "Live, new-basis shares" halves the F&O and cash orders: the share on Groww's published basis (denominator = exchange turnover x 2).
 
 | Quarter | Disclosed | Parity: F&O | cash | comm | total | gap | Live: F&O | cash | comm | total | gap | Live, new-basis shares: total | gap |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|

@@ -2,7 +2,7 @@
 
 MTF from Groww's own book: daily revenue = Groww MTF net book (IR page: quarter-end levels, interpolated; latest level in the open quarter) x 14.95% / FY trading days; reported quarters still tie to disclosed revenue.
 
-Before: switches abcdefgh · after: abcdefghi
+Before: switches abcdefghj · after: abcdefghij
 
 Consolidated ADR, Rs crore per trading day (MTF gross):
 
@@ -29,7 +29,7 @@ g-i: Groww's own MTF net book (IR page; Rs Cr) and the calibration factor k per 
 
 Book basis of the MTF days: interpolated 496, latest 13. Rule: an archived level for the day, else (closed quarter) linear interpolation in calendar days between the two quarter-end levels, else (open quarter) the latest level held flat. g-i also covers every calendar equity day (509 to the as-of date), so it fills the days the industry-book series lacks (2026-04-08, 2026-10-21).
 
-g-i on top of g-a..g-g alone (without g-h), Consolidated, Rs crore per trading day:
+g-i on top of the published chain alone (g-a, g-b, g-c, g-d, g-e, g-f, g-g, g-j; without g-h), Consolidated, Rs crore per trading day:
 
 | Period | Before | After | Δ % |
 |---|---:|---:|---:|

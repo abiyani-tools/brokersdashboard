@@ -80,6 +80,8 @@ def params(G, res):
         for q, p in table.items():
             out[(name, 'take rate Rs/order', q)] = p['take_rate']
             out[(name, 'share (ADTO, legacy basis)', q)] = p['share']
+    for q, p in c['cash_quarter'].items():
+        out[('Cash', 'trades per order', q)] = p['tpo']
     if 'comm_quarter' in c:
         for q, p in c['comm_quarter'].items():
             out[('Commodities', 'take rate Rs/order', q)] = p['take_rate']
@@ -128,13 +130,14 @@ def bridge(letter, angel_snapshot=ANGEL_SNAPSHOT, groww_snapshot=GROWW_SNAPSHOT)
         key = ('bse_fo', 'contracts')
         ov = I_b.market_overrides.get(key, {})
         market = {d: (I_a.mkt[key][d], v) for d, v in ov.items()}
-    alone = []                                   # g-i does not depend on g-h: its effect on top of a-g alone
+    alone = []                                   # g-i does not depend on g-h: its effect on the published chain alone
     if letter == 'i':
-        I_c, G_c, r_c = run_switches(tuple('abcdefg'), angel_snapshot, groww_snapshot)
-        I_d, G_d, r_d = run_switches(tuple('abcdefgi'), angel_snapshot, groww_snapshot)
+        I_c, G_c, r_c = run_switches(tuple(GS.ORDER), angel_snapshot, groww_snapshot)
+        I_d, G_d, r_d = run_switches(tuple(GS.ORDER + 'i'), angel_snapshot, groww_snapshot)
         t_c, t_d = adr(I_c, G_c, r_c), adr(I_d, G_d, r_d)
         alone = [dict(period=k, panel=panel, before=t_c[(p, k, panel)], after=t_d[(p, k, panel)])
                  for p, k in PERIODS for panel in SP.PANELS]
+    live_j = live_dry_run_effect(letter) if letter == 'j' else None
     qtd = [dict(p['qtd_ratio'], share_before=r_a['calib'][t][q]['share'], share_after=p['share'])
            for t in ('cash_quarter', 'fo_quarter') for q, p in r_b['calib'][t].items()
            if letter == 'h' and 'qtd_ratio' in p]
@@ -148,7 +151,33 @@ def bridge(letter, angel_snapshot=ANGEL_SNAPSHOT, groww_snapshot=GROWW_SNAPSHOT)
                 excluded=sorted(special_dates(I_b, G_b) - special_dates(I_a, G_a)),
                 not_live=sum(1 for seg in ('fo', 'cash') for r in r_b['daily'][seg].values()
                              if r['regime'] == 'not_live'),
-                basis=r_b['calib'].get('fy_days'))
+                basis=r_b['calib'].get('fy_days'), live_j=live_j)
+
+
+LIVE_DRY_RUN = ('snapshot/db_snapshot_2026-10-23.json', 'snapshot/facts_reviewed_2026-10-23.json',
+                'snapshot/groww_snapshot_2026-10-23.json', 'snapshot/groww_facts_reviewed_2026-10-31.json')
+
+
+def live_dry_run_effect(letter, paths=LIVE_DRY_RUN):
+    """g-j on the live dry run (the CLI's default snapshots): Groww from the Angel One live run, where Q2 FY27 is a
+    reported quarter, so Angel's Q3 FY27 projection differs from Q2's trades per order. (The parity fixtures above have
+    Q2 FY27 projected too, so g-j is a no-op there.) {'tpo': {...}, 'rows': [...]} for the published chain without and
+    with the letter (no IR switches)."""
+    from ..live.groww_run import live_run_groww
+    from ..live.run import live_run
+    angel = live_run(paths[0], paths[1])
+    gsnap, facts = json.load(open(paths[2])), GS.load_reviewed(paths[3])
+    chain = GS.ORDER.replace(letter, '')
+    a = live_run_groww(angel, gsnap, facts, switches=chain)
+    b = live_run_groww(angel, gsnap, facts, switches=chain + letter)
+    get = lambda g: {(r['panel'], r['row_label']): r['value'] for r in g['rows'] if r['period_type'] in ('FY', 'Q', 'M')}
+    ga, gb = get(a), get(b)
+    rows = [dict(period=k, panel=panel, before=ga[(panel, k)], after=gb[(panel, k)])
+            for k in ('FY 2027', 'Q2 FY 2027', 'Q3 FY 2027', 'FY 2027 October') for panel in ('Consolidated', 'Cash')]
+    cq = lambda g, q: g['calib']['cash_quarter'][q]['tpo']
+    return dict(as_of=a['as_of'], chain=chain, rows=rows,
+                tpo={'Q2 FY 2027 (reported)': cq(a, 'Q2 FY 2027'), 'Q3 FY 2027 before': cq(a, 'Q3 FY 2027'),
+                     'Q3 FY 2027 after': cq(b, 'Q3 FY 2027')})
 
 
 def _book_days(res):
@@ -243,8 +272,21 @@ def markdown(b):
               'between the two quarter-end levels, else (open quarter) the latest level held flat. g-i also covers every '
               'calendar equity day (509 to the as-of date), so it fills the days the industry-book series lacks '
               '(2026-04-08, 2026-10-21).', '']
+    if b.get('live_j'):
+        lj = b['live_j']
+        L += [f"On the parity fixtures above g-j is a no-op: their Q2 FY27 trades per order is itself Angel's projection, "
+              f"equal to Q3's. Where it bites, the live dry run (the CLI's default snapshots, as of {lj['as_of']}; Angel One's "
+              f"live run, Q2 FY27 reported), switches {lj['chain']} -> {lj['chain']}j:", '',
+              'Cash trades per order: ' + '; '.join(f'{k} {v:.6f}' for k, v in lj['tpo'].items()), '',
+              '| Period | Panel | Before | After | Δ | Δ % |', '|---|---|---:|---:|---:|---:|']
+        for r in lj['rows']:
+            L.append(f"| {r['period']} | {r['panel']} | {_f6(r['before'])} | {_f6(r['after'])} | "
+                     f"{_f6(r['after'] - r['before'], '+')} | {100 * (r['after'] / r['before'] - 1):+.4f}% |")
+        L += ['', 'The open quarter\'s cash moves by Q3-before / Q2 = '
+              f"{lj['tpo']['Q3 FY 2027 before'] / lj['tpo']['Q2 FY 2027 (reported)'] - 1:+.4%}; Consolidated moves by the "
+              'same rupees; reported quarters do not move.', '']
     if b.get('alone'):
-        L += ['g-i on top of g-a..g-g alone (without g-h), Consolidated, Rs crore per trading day:', '',
+        L += [f"g-i on top of the published chain alone (g-{', g-'.join(GS.ORDER)}; without g-h), Consolidated, Rs crore per trading day:", '',
               '| Period | Before | After | Δ % |', '|---|---:|---:|---:|']
         for r in b['alone']:
             if r['panel'] == 'Consolidated' and r['period'] in HEADLINE:
@@ -303,7 +345,7 @@ def disclosed_orders(reviewed=None, handbook_path=GS.ORDERS_HANDBOOK):
     return hb
 
 
-def orders_check(after='abcdefg', angel_snapshot=ANGEL_SNAPSHOT, groww_snapshot=GROWW_SNAPSHOT):
+def orders_check(after=GS.ORDER, angel_snapshot=ANGEL_SNAPSHOT, groww_snapshot=GROWW_SNAPSHOT):
     """Rows per reported quarter: disclosed orders, the parity model and the model after `after` (all in Mn)."""
     disc = disclosed_orders()
     imp0 = implied_orders(run_switches((), angel_snapshot, groww_snapshot)[2])
@@ -318,7 +360,7 @@ def orders_check(after='abcdefg', angel_snapshot=ANGEL_SNAPSHOT, groww_snapshot=
     return rows
 
 
-def orders_markdown(rows, after='abcdefg'):
+def orders_markdown(rows, after=GS.ORDER):
     L = ['# Groww: model-implied vs disclosed total orders', '',
          'Implied orders = the model\'s daily Groww orders summed over the quarter: F&O (Angel-calibrated market orders '
          'x Groww share) + cash (market trades / Angel trades per order x Groww share) + commodity. Disclosed = total '

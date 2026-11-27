@@ -28,6 +28,7 @@ This spec proposes the live switches, the Groww counterpart of Angel One's a–i
 | g-e | **One estimate rule** (D4) | Mix of carry, trailing-3, ×1.05 typed growths and typed MTF shares | Unreported quarters carry the last actual share and take rate; no typed growth. Overrides go in `sb_assumptions` with a note | — |
 | g-f | **MTF basis** (D7) | Angel's 14.95% yield, 246 days | 14.95% (Groww's stated fixed pricing, calls only) × the actual trading days of each FY; share = the disclosed MTF revenue ÷ the industry book | transcripts Q2 FY26 p6, Q1 FY27 p13 |
 | g-g | **Special sessions and periods** | Partial latest period; stale labels | The same live rules as Angel One: special sessions out of the F&O, cash and commodity averages; labels from the calendar; comparisons follow the selected period | Angel switches d, h |
+| g-j | **Cash trades per order** (added 25 Nov 2026) | An unreported quarter uses Angel One's projected trades per order (mean of its last 3 quarters) | Carry Groww's last reported quarter's trades per order, the one its cash take rate was calibrated on | Backtest below (g-j) |
 
 ## Kept as they are (D5, D6), labelled in the UI
 
@@ -83,7 +84,7 @@ The raw page lands in `out/groww_ir/` (git-ignored); keep it. A second run on th
 
 ## Optional IR switches g-h and g-i (built 31 Oct 2026; off until AB signs off)
 
-They read the archived IR page (`snapshot/groww_ir_2026-10-31.json` built from the saved page, or the table `sb_broker_daily`) and, for g-h, the exchange turnover (`snapshot/groww_exchange_2026-10-31.json`, or `sb_market_daily`). They are not in the published chain (`SWITCHES = 'abcdefg'`). In the live CLI: `--groww-extra h|i|hi` (or env `GROWW_EXTRA`); `--publish` with them on is refused. Bridges: `out/bridges/groww_h.md`, `groww_i.md`. Backtests: `out/groww/backtest_ir_switches.md`.
+They read the archived IR page (`snapshot/groww_ir_2026-10-31.json` built from the saved page, or the table `sb_broker_daily`) and, for g-h, the exchange turnover (`snapshot/groww_exchange_2026-10-31.json`, or `sb_market_daily`). They are not in the published chain (`SWITCHES = 'abcdefgj'`). In the live CLI: `--groww-extra h|i|hi` (or env `GROWW_EXTRA`); `--publish` with them on is refused. Bridges: `out/bridges/groww_h.md`, `groww_i.md`. Backtests: `out/groww/backtest_ir_switches.md`.
 
 - **g-h** (needs g-d, g-e): an unreported quarter's F&O and cash share = last reported share x (Groww QTD turnover share / Groww turnover share in the last reported quarter); Groww turnover share = Groww turnover / NSE+BSE exchange turnover over the same days (cash: stocks turnover vs `cash_traded_value`; F&O: equity-derivatives premium vs NSE index + stock option premium + BSE `options_premium_turnover`). The QTD days are quarter start .. the trading day the page runs through (`covers_through`, inferred). Take rate unchanged. Backtest: it helps cash and does not help F&O; overall not a clear win over g-e's carry.
 - **g-i** (needs g-f): daily MTF revenue = Groww's MTF net book x 14.95% / FY trading days (the g-f convention), the book from the IR page: an archived level for the day, else (closed quarter) linear interpolation in calendar days between the two quarter-end levels, else (open quarter) the latest level held flat. It covers every calendar equity day, so it also fills the days the industry-book series lacks. Interaction with g-f: a reported quarter's book is scaled by k = disclosed MTF revenue / (sum of own book x 14.95% / FY days), so reported quarters still tie to the disclosed revenue exactly (g-f's calibration, with Groww's book as the daily shape); the open quarter has no disclosed revenue, k = 1. Backtest: the g-i path (k = 1) is closer to the disclosed revenue than g-f's industry-book method (mean abs error 8.7% vs 20.8% over Q4 FY25..Q2 FY27); the open-quarter rule on day 1 (previous quarter-end level held flat) is not (16.5%, understates like the industry method).
@@ -91,7 +92,43 @@ They read the archived IR page (`snapshot/groww_ir_2026-10-31.json` built from t
 ## Sign-off, 31 Oct 2026
 
 AB approved:
-- **g-i (MTF from Groww's own book): ON** in the published run, after the independent check (`out/checks/groww_switch_i.md`, 349/349 agree). If the IR archive is missing on a given day, the run publishes g-a…g-g, with a warning and a note in `sb_runs.notes`.
+- **g-i (MTF from Groww's own book): ON** in the published run, after the independent check (`out/checks/groww_switch_i.md`, 349/349 agree). If the IR archive is missing on a given day, the run publishes g-a…g-g and g-j, with a warning and a note in `sb_runs.notes`.
 - **g-h (quarter-to-date turnover share): OFF.** Its backtest showed no clear gain over carry. Revisit once the daily archive has a few quarters.
 
 `src/live/cli.py` `SIGNED_OFF_EXTRA = 'i'`; `--groww-extra none` turns the IR switches off for a run.
+
+## g-j: cash trades per order (25 Nov 2026; in the published chain)
+
+**Why.** Groww's daily cash revenue = market trades x share / trades per order (tpo) x take rate. Groww reports no cash
+orders, so tpo is Angel One's. In a reported quarter tpo cancels: the take rate is calibrated as revenue / (N x share /
+tpo), so the quarter ties to the disclosed revenue whatever tpo is. In the open quarter the take rate and share carry,
+but tpo switched to Angel's projection for the quarter (mean of Angel's last 3 quarters). In Q3 FY27 that moved tpo from
+6.85224 (Q2 FY27, reported) to 6.53525 and lifted Groww's cash revenue by 6.85224 / 6.53525 - 1 = +4.85%, with no
+Groww data behind it (audit finding H3, 4 Nov 2026).
+
+**Rule.** An unreported quarter uses the tpo of the last reported quarter (the one the take rate was calibrated on).
+Then tpo cancels again: open-quarter cash revenue = market trades x share x (last reported revenue / (its market
+trades x its share)), i.e. Groww's revenue per share-weighted market trade carries, like the take rate and share
+under g-e. With g-h on, the QTD share still applies. Reported quarters, F&O, commodities and MTF are untouched.
+
+**Backtest** (`python3 -m src.engine.groww_tpo_backtest`; Q2 FY26..Q2 FY27, out of sample):
+
+| Test | Rule | Mean abs error | Bias |
+|---|---|---:|---:|
+| A. Angel's tpo, projection vs actual | mean of last 3 (before g-j) | 7.0% | -6.3% |
+| | mean of last 2 | 4.9% | -4.6% |
+| | carry last | 4.4% | -3.8% |
+| B. Groww revenue per share-weighted trade | no tpo adjustment (g-j) | **3.1%** | +0.5% |
+| | Angel's actual tpo, in hindsight | 3.4% | -3.4% |
+| | Angel's projected tpo (before g-j) | 5.0% | +3.2% |
+
+Angel's tpo rose four quarters running (5.70 to 6.85), so the 3-quarter mean lags and adds 5-7% to the open quarter's
+revenue each time; in the last three quarters the actual move went the other way. For Groww, Angel's tpo does not help
+even with hindsight. Five quarters is a small sample; Angel's tpo is derived from its reported cash orders and its
+share, so errors in that share pass into it.
+
+**Effect** on the 24 Nov live data (data to 23 Nov): Q3 FY27 Groww cash ADR x 6.53525 / 6.85224 = -4.63%, about
+Rs 4.87 Cr to Rs 4.64 Cr per day (-Rs 0.23 Cr/day, about -1% of consolidated ADR). The 31 Oct fixture is a no-op (its
+Q2 FY27 tpo is itself projected, equal to Q3's); the tests put the live tpo values into Angel's calibration. Angel One's
+own cash rule is not changed (its carry-last test is better too; a separate decision). Groww's F&O also borrows
+Angel's contracts per order (monthly); not tested here.

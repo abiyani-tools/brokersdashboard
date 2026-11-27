@@ -1,5 +1,5 @@
-"""Groww parity -> live switches g-a ... g-g (docs/GROWW_LIVE_SPEC.md), applied in order a -> g, and the two
-optional IR switches g-h and g-i (EXTRA, off in the published chain; they read the archived investor-relations page).
+"""Groww parity -> live switches g-a ... g-g and g-j (docs/GROWW_LIVE_SPEC.md), applied in order a -> g, j, and the
+two optional IR switches g-h and g-i (EXTRA, off in the published chain; they read the archived investor-relations page).
 
 Same discipline as Angel's switches (src/engine/switches.py):
 - a switch is a named, independent addition; with none on, Groww is the workbook (262 / 262 cells);
@@ -21,7 +21,7 @@ from collections import namedtuple
 
 from .inputs import quarter_seq
 
-ORDER = 'abcdefg'                     # the published chain
+ORDER = 'abcdefgj'                    # the published chain (g-j added 25 Nov 2026, after g-g)
 EXTRA = 'hi'                          # g-h, g-i: read the IR archive; off until AB signs off
 ALL = ORDER + EXTRA
 REQUIRES = {'h': 'de', 'i': 'f'}      # h replaces g-e's carried shares (needs d, e); i builds on g-f's MTF basis
@@ -34,6 +34,8 @@ DESCRIPTIONS = {
     'e': 'One estimate rule: unreported quarters carry the last actual share and take rate; no typed growth',
     'f': 'MTF basis: 14.95% x actual FY trading days; share = disclosed MTF revenue / industry book',
     'g': 'Special sessions out of F&O, cash and commodity averages; labels and comparisons from the calendar',
+    'j': "Cash trades per order: an unreported quarter carries Groww's last reported quarter's value (the one its take "
+         "rate was calibrated on), not Angel One's projection for the quarter",
     'h': "Quarter-to-date turnover share: an unreported quarter's F&O and cash share = last reported share x "
          "(Groww QTD share of NSE+BSE turnover / its share in the last reported quarter), take rate carried",
     'i': "MTF from Groww's own book: daily revenue = Groww MTF net book (IR page: quarter-end levels, interpolated; "
@@ -79,6 +81,7 @@ FACT_SWITCHES = {
     'e': [],
     'f': [('mtf_rev', ['Q2 FY 2027']), ('fact', 'mtf_yield', ['Q1 FY 2027'], 'fraction')],
     'g': [],
+    'j': [],
 }
 
 # switch -> pin / assumption values it sets

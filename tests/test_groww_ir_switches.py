@@ -27,10 +27,10 @@ def ir_rows():
 
 # ── wiring ──
 def test_published_chain_is_unchanged_and_extras_are_separate():
-    assert GS.ORDER == 'abcdefg' and GS.EXTRA == 'hi' and GS.ALL == 'abcdefghi'
+    assert GS.ORDER == 'abcdefgj' and GS.EXTRA == 'hi' and GS.ALL == 'abcdefgjhi'
     from src.live.groww_run import SWITCHES
-    assert SWITCHES == 'abcdefg'
-    assert GS.cumulative('h') == (frozenset('abcdefg'), frozenset('abcdefgh'))
+    assert SWITCHES == 'abcdefgj'
+    assert GS.cumulative('h') == (frozenset('abcdefgj'), frozenset('abcdefgjh'))
 
 
 def test_h_needs_d_and_e():
@@ -137,7 +137,7 @@ def _g(sw, ir=None):
 def test_h_bridge_shows_the_arithmetic_and_consolidated_numbers():
     b = B.bridge('h')
     txt = B.markdown(b)
-    assert b['before'] == list('abcdefg') and b['after'] == list('abcdefgh')
+    assert b['before'] == sorted('abcdefgj') and b['after'] == sorted('abcdefgjh')
     assert 'g-h arithmetic' in txt and 'Q3 FY 2027 (to 2026-10-30)' in txt and 'FY 2027 October' in txt
     cons = {r['period']: r for r in b['rows'] if r['panel'] == 'Consolidated'}
     assert cons['Q2 FY 2027']['after'] == cons['Q2 FY 2027']['before'] and cons['FY 2026']['after'] == cons['FY 2026']['before']
@@ -199,7 +199,7 @@ def test_i_needs_f():
     with pytest.raises(GS.SwitchError, match='needs g-f'):
         GS.check('abcdeg' + 'i')
     GS.check('abcdefgi')                       # i does not need h
-    assert GS.cumulative('i') == (frozenset('abcdefgh'), frozenset('abcdefghi'))
+    assert GS.cumulative('i') == (frozenset('abcdefgjh'), frozenset('abcdefgjhi'))
 
 
 def test_i_without_ir_raises():
@@ -277,7 +277,7 @@ def test_i_a_missing_quarter_end_level_raises():
 def test_i_bridge_and_consolidated_numbers():
     b = B.bridge('i')
     txt = B.markdown(b)
-    assert b['before'] == list('abcdefgh') and 'calibration factor k' in txt and 'days added: 2026-04-08' in txt
+    assert b['before'] == sorted('abcdefgjh') and 'calibration factor k' in txt and 'days added: 2026-04-08' in txt
     assert 'g-h arithmetic' not in txt and 'without g-h' in txt
     cons = {r['period']: r for r in b['rows'] if r['panel'] == 'Consolidated'}
     assert cons['Q2 FY 2027']['after'] == pytest.approx(cons['Q2 FY 2027']['before'], rel=1e-12)   # ties: same days, same total

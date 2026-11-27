@@ -2,7 +2,7 @@
 
 Quarter-to-date turnover share: an unreported quarter's F&O and cash share = last reported share x (Groww QTD share of NSE+BSE turnover / its share in the last reported quarter), take rate carried.
 
-Before: switches abcdefg · after: abcdefgh
+Before: switches abcdefgj · after: abcdefghj
 
 Consolidated ADR, Rs crore per trading day (MTF gross):
 
