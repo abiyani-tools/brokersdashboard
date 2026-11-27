@@ -439,6 +439,8 @@ def test_angel_and_groww_dry_run_output_is_byte_identical_to_before_mosl(monkeyp
             raw = json.dumps(rounded(json.loads(raw)), sort_keys=True).encode()
         return hashlib.md5(raw).hexdigest()
     got = {f: digest(f) for f in ('summary_rows.json', 'report.md', 'groww/summary_rows.json', 'groww/report.md')}
+    # Groww pins moved on 25 Nov 2026 with g-j (published chain abcdefgj): the open quarter's cash rows x 6.53525 / 6.85224
+    # (96 of 1,302 rows, all Q3 FY27 / October / FY 2027 / as-of); was 60a939b9... and 1cb10c58... Angel One's are unchanged.
     assert got == {'summary_rows.json': 'ab06a0b196b3c03dac61e636c7f72dac', 'report.md': 'c586391fe3aacaf5d0673ed9cca799c4',
-                   'groww/summary_rows.json': '60a939b904526f53ba5f7039cf3895a6',
-                   'groww/report.md': '1cb10c582088dc06a3dcfce9de0cd0e2'}
+                   'groww/summary_rows.json': 'f93fb8fb428964befb4a20b8760b09f6',
+                   'groww/report.md': '3d33abc27cd3e67b7ef682ba6c2dd8d3'}

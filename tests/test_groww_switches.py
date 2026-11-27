@@ -67,7 +67,8 @@ def test_no_switches_is_the_workbook():
 
 
 def test_order_and_unknown_switch():
-    assert GS.ORDER == 'abcdefg' and GS.cumulative('d') == (frozenset('abc'), frozenset('abcd'))
+    assert GS.ORDER == 'abcdefgj' and GS.cumulative('d') == (frozenset('abc'), frozenset('abcd'))
+    assert GS.cumulative('j') == (frozenset('abcdefg'), frozenset('abcdefgj'))
     with pytest.raises(GS.SwitchError):
         GS.check('x')
     with pytest.raises(GS.SwitchError):
@@ -427,7 +428,7 @@ def test_orders_check_matches_an_independent_sum():
 
 
 # ── bridges ──
-@pytest.mark.parametrize('x', list('abcdefg'))
+@pytest.mark.parametrize('x', list('abcdefgj'))
 def test_each_bridge_builds_and_adds_up(x):
     b = B.bridge(x)
     txt = B.markdown(b)
@@ -444,9 +445,9 @@ def test_each_bridge_builds_and_adds_up(x):
 
 
 def test_bridges_chain_end_to_end():
-    """Each bridge's 'after' is the next one's 'before': the effects add up from parity to all seven switches."""
+    """Each bridge's 'after' is the next one's 'before': the effects add up from parity to all eight switches."""
     prev = None
-    for x in 'abcdefg':
+    for x in 'abcdefgj':
         b = B.bridge(x)
         if prev is not None:
             assert {(r['period'], r['panel']): r['before'] for r in b['rows']} == \
@@ -474,3 +475,95 @@ def test_angel_is_untouched():
     rows = parity.compare(res, cells, I.snap['parity_expected'])
     rep = parity.report(rows)
     assert sum(v[0] for v in rep.values()) == 8797 and sum(v[1] for v in rep.values()) == 8774
+
+
+# ── g-j: cash trades per order in an unreported quarter ──
+# Angel One's cash trades per order as the live run had them on 24 Nov 2026 (sb_calibration, run 40a8d3c6): Q2 FY27
+# reported 6.85224, Q3 FY27 projected 6.53525 (= mean of Q4 FY26 6.16541, Q1 FY27 6.58808, Q2 FY27 6.85224). The
+# 31 Oct fixture still has Q2 FY27 projected (Q2 = Q3 = 6.150236), where g-j is a no-op, so the test puts the live
+# values into Angel's calibration.
+LIVE_TPO = {'Q4 FY 2026': 6.16541, 'Q1 FY 2027': 6.58808, 'Q2 FY 2027': 6.85224, 'Q3 FY 2027': 6.53525}
+
+
+def _run_live_tpo(sw):
+    I, G, _ = run(sw)
+    angel = copy.deepcopy(daily.run(I))
+    for q, v in LIVE_TPO.items():
+        angel['calib']['cash_quarter'][q]['tpo'] = v
+    return I, G, groww.run(I, G, angel)
+
+
+def test_j_is_a_no_op_when_angel_projects_the_same_ratio():
+    a, j = run('abcdefg')[2], run('abcdefgj')[2]
+    assert a['calib']['cash_quarter']['Q2 FY 2027']['tpo'] == a['calib']['cash_quarter']['Q3 FY 2027']['tpo']
+    for seg in ('fo', 'cash', 'comm', 'mtf'):
+        assert daily_of('abcdefg', seg) == daily_of('abcdefgj', seg)
+
+
+def test_j_carries_the_last_reported_trades_per_order_and_moves_only_open_quarter_cash():
+    I, G0, r0 = _run_live_tpo('abcdefg')
+    _, G1, r1 = _run_live_tpo('abcdefgj')
+    c0, c1 = r0['calib']['cash_quarter'], r1['calib']['cash_quarter']
+    assert c0['Q3 FY 2027']['tpo'] == 6.53525 and c1['Q3 FY 2027']['tpo'] == 6.85224
+    assert 'g-j' in c1['Q3 FY 2027']['rule'] and 'rule' not in c0['Q3 FY 2027']
+    for q in ('Q1 FY 2026', 'Q4 FY 2026', 'Q2 FY 2027'):                       # reported quarters: untouched
+        assert c0[q] == c1[q]
+    for seg in ('fo', 'comm', 'mtf'):
+        assert r0['daily'][seg] == r1['daily'][seg]
+    q3 = [d for d in r0['daily']['cash'] if q_of(d) == 'Q3 FY 2027']
+    assert len(q3) == 13
+    for d, r in r0['daily']['cash'].items():
+        if d in q3:
+            assert r1['daily']['cash'][d]['rev_mn'] == pytest.approx(r['rev_mn'] * 6.53525 / 6.85224, rel=1e-12)
+        else:
+            assert r1['daily']['cash'][d] == r
+    # the effect on the open quarter's cash revenue: -4.63% (Angel's step was +4.85% on revenue)
+    tot = lambda r: sum(r['daily']['cash'][d]['rev_mn'] for d in q3)
+    assert tot(r1) / tot(r0) - 1 == pytest.approx(6.53525 / 6.85224 - 1, rel=1e-12)
+    assert 6.53525 / 6.85224 - 1 == pytest.approx(-0.04626, abs=1e-5)
+
+
+def test_j_open_quarter_cash_recomputed_without_trades_per_order():
+    """Under g-j the ratio cancels: daily cash revenue = market trades x share x (the last reported quarter's revenue
+    / (its market trades x its share)), i.e. Groww's revenue per share-weighted market trade carries."""
+    I, G, res = _run_live_tpo('abcdefgj')
+    c = res['calib']['cash_quarter']
+    nt, bt = I.series('nse_cash', 'trades'), I.series('bse_cash', 'trades')
+    N = {d: (nt[d] + bt.get(d, 0)) / 1e6 for d in nt}
+    n_q2 = sum(v for d, v in N.items() if q_of(d) == 'Q2 FY 2027')
+    rev_q2 = groww.segment_revenue(G)['cash']['Q2 FY 2027']
+    y = rev_q2 / (n_q2 * c['Q2 FY 2027']['share'])                             # Rs Mn per share-weighted Mn trades
+    for d, r in res['daily']['cash'].items():
+        if q_of(d) == 'Q3 FY 2027':
+            assert r['rev_mn'] == pytest.approx(N[d] * c['Q3 FY 2027']['share'] * y, rel=1e-12)
+    # and the reported quarter still sums to its disclosed cash revenue
+    q2 = sum(r['rev_mn'] for d, r in res['daily']['cash'].items() if q_of(d) == 'Q2 FY 2027')
+    assert q2 == pytest.approx(rev_q2, rel=1e-12)
+
+
+def test_j_with_h_keeps_the_qtd_share_and_the_last_reported_ratio():
+    I, G, res = run('abcdefghj')
+    p = res['calib']['cash_quarter']['Q3 FY 2027']
+    assert p['tpo'] == res['calib']['cash_quarter']['Q2 FY 2027']['tpo']
+    assert 'g-h' in p['rule'] and 'g-j' in p['rule'] and 'qtd_ratio' in p
+
+
+def test_j_is_in_the_published_live_chain():
+    from src.live.groww_run import SWITCHES
+    assert SWITCHES == 'abcdefgj' and GS.check(SWITCHES) == frozenset('abcdefgj')
+
+
+def test_j_bridge_shows_the_live_dry_run_effect():
+    b = B.bridge('j')
+    txt = B.markdown(b)
+    lj = b['live_j']
+    assert lj['chain'] == 'abcdefg' and lj['tpo']['Q3 FY 2027 after'] == lj['tpo']['Q2 FY 2027 (reported)']
+    r = {(x['period'], x['panel']): x for x in lj['rows']}
+    assert r[('Q2 FY 2027', 'Cash')]['after'] == r[('Q2 FY 2027', 'Cash')]['before']
+    k = lj['tpo']['Q3 FY 2027 before'] / lj['tpo']['Q2 FY 2027 (reported)']
+    assert r[('Q3 FY 2027', 'Cash')]['after'] == pytest.approx(r[('Q3 FY 2027', 'Cash')]['before'] * k, rel=1e-12)
+    for per in ('FY 2027', 'Q3 FY 2027', 'FY 2027 October'):
+        d_cons = r[(per, 'Consolidated')]['after'] - r[(per, 'Consolidated')]['before']
+        d_cash = r[(per, 'Cash')]['after'] - r[(per, 'Cash')]['before']
+        assert d_cons == pytest.approx(d_cash, abs=1e-12)
+    assert 'live dry run' in txt and '-4.6262%' in txt

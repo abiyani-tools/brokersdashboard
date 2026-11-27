@@ -19,7 +19,7 @@ from .loader import load_inputs
 from .run import EngineSnapshotReader, coverage
 
 BROKER = 'GROWW'
-SWITCHES = 'abcdefg'
+SWITCHES = 'abcdefgj'                # g-j (cash trades per order) approved by AB on 25 Nov 2026
 
 
 class GrowwRefused(RuntimeError):
@@ -119,7 +119,7 @@ def live_run_groww(angel_run, gsnap, facts, switches=SWITCHES, ir=None, turnover
     """Groww's live run from an Angel live run (its snapshot, reviewed facts, as-of date and calibration).
 
     gsnap: Groww snapshot (seed facts, assumptions, pins); facts: Groww filing facts of any status.
-    switches: the published chain is SWITCHES ('abcdefg'); g-h / g-i (src/engine/groww_ir.py) are added only by the
+    switches: the published chain is SWITCHES ('abcdefgj'); g-h / g-i (src/engine/groww_ir.py) are added only by the
     caller, with `ir` (groww_ir.IR) and, for g-h, `turnover` (groww_ir.Turnover).
     Raises GrowwRefused (nothing computed) unless every fact the switches read is reviewed."""
     from ..engine import groww as GW

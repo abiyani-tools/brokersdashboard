@@ -228,12 +228,19 @@ def cash_parameters(I, G, angel, N_by_q, last_q):
                 tr = prev['take_rate']                                            # one rule: carry the last actual
             else:
                 tr = mean(hist[-3:]) if prev['regime'] == 'actual' else prev['take_rate']   # K42 = AVERAGE(K39:K41), K43 = K42
-            out[q] = {'share': prev['share'], 'take_rate': tr, 'tpo': tpo[q], 'regime': 'projected'}
+            # g-j: the trades per order the take rate was calibrated on (the last reported quarter's), so Groww's
+            # revenue per share-weighted market trade carries; without it, Angel One's projection for the quarter
+            # (the mean of its last 3 quarters, which lags a rising ratio: backtest in docs/GROWW_LIVE_SPEC.md g-j)
+            q_tpo = out[last]['tpo'] if G.on('j') else tpo[q]
+            out[q] = {'share': prev['share'], 'take_rate': tr, 'tpo': q_tpo, 'regime': 'projected'}
             ratio = G.qtd_ratio('cash', q, last) if G.on('h') else None
             if ratio is not None:                                                 # g-h: replaces the carried share
                 out[q].update(share=out[last]['share'] * ratio['ratio'], qtd_ratio=ratio,
                               rule='share = last reported share x (Groww QTD turnover share / its share in the last '
                                    'reported quarter) (g-h); take rate carried')
+            if G.on('j'):
+                out[q]['rule'] = (out[q]['rule'] + '; ' if 'rule' in out[q] else '') + \
+                    f'trades per order = {last} (g-j), not Angel One\'s {q} projection {tpo[q]:.6f}'
     return out
 
 
