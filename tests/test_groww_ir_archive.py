@@ -280,3 +280,33 @@ def test_migration_file_is_the_agreed_table():
                  'primary key (broker_id, snapshot_date, metric, period_key)', 'enable row level security',
                  'for select to anon, authenticated using (true)', 'drop table public.sb_broker_daily'):
         assert want in sql, want
+
+
+# ── optional charts: Groww removed the SIP chart by 23 Nov 2026 ──
+def test_a_page_without_the_sip_chart_still_archives_the_rest():
+    nd = next_data()
+    cfg = nd['props']['pageProps']['initialChartConfigs']
+    nd['props']['pageProps']['initialChartConfigs'] = [c for c in cfg if c['id'] != 'mf_sip']
+    rows, meta = parse(with_data(nd))
+    full, _ = parse()
+    assert meta['missing_optional'] == ['mf_sip']
+    assert {r['metric'] for r in rows} == set(IR.ALL_METRICS) - {IR.M_SIP}
+    strip = lambda rs: [{k: v for k, v in r.items() if k != 'source_ref'} for r in rs]   # source_ref carries the page hash
+    assert strip(rows) == strip([r for r in full if r['metric'] != IR.M_SIP])   # the other charts parse exactly as before
+    mtf = {r['period_key']: r['value'] for r in rows if r['metric'] == IR.M_MTF}
+    assert mtf['Q3 FY 2027'] == pytest.approx(4084893.1 * R.PAGE_TO_MN)
+    txt = R.report(rows, meta, None, 'note')
+    assert 'WARNING' in txt and "['mf_sip']" in txt and 'not on the page' in txt
+
+
+def test_a_required_chart_missing_still_fails_even_without_sip():
+    nd = next_data()
+    cfg = nd['props']['pageProps']['initialChartConfigs']
+    nd['props']['pageProps']['initialChartConfigs'] = [c for c in cfg if c['id'] not in ('mf_sip', 'mtf_net_book')]
+    with pytest.raises(R.PageChanged, match=r"missing: \['mtf_net_book'\]"):
+        parse(with_data(nd))
+
+
+def test_the_full_page_reports_no_missing_chart():
+    _, meta = parse()
+    assert meta['missing_optional'] == []
