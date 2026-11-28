@@ -4,7 +4,8 @@
   python3 run_weekly.py --date 2026-12-05  # a given report date
   python3 run_weekly.py --no-fetch         # rebuild from out/weekly/<date>/raw (e.g. after editing commentary)
 
-Writes out/weekly/<date>/: raw/, facts.json, Brokers_Update_<date>.html / .pdf.
+Writes out/weekly/<date>/: raw/, facts.json, '<YYYYMMDD>_Weekly Brokers Update.html / .pdf'
+(Tusk files start with the date, AB 28 Nov 2026).
 Commentary is out/weekly/<date>/commentary.json (keys: takeaways, s1..s8, optional nse_ref); missing sections
 print as [COMMENTARY NEEDED]. See src/report/weekly_brokers.py for the house rules (40/60 target, no per-order rates).
 """
@@ -13,7 +14,7 @@ import datetime as dt
 import json
 from pathlib import Path
 
-from src.report.weekly_brokers import build_facts, fetch, render
+from src.report.weekly_brokers import TITLE, build_facts, fetch, render
 
 ROOT = Path(__file__).resolve().parent
 
@@ -36,7 +37,7 @@ def main(argv=None) -> int:
     commentary = json.loads(cpath.read_text()) if cpath.exists() else {}
     if not commentary:
         print(f"no {cpath.relative_to(ROOT)}: the note will show [COMMENTARY NEEDED]")
-    pdf = render(facts, commentary, a.date, d / f"Brokers_Update_{a.date}.html")
+    pdf = render(facts, commentary, a.date, d / f"{a.date.replace('-', '')}_{TITLE}.html")
     print(f"as of {sorted(set(asofs.values()))} -> {pdf.relative_to(ROOT)}")
     return 0
 

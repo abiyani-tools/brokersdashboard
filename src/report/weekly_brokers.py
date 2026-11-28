@@ -4,7 +4,7 @@ Three steps, each re-runnable on its own:
   fetch   GET the dashboard's public broker API views (publishable key server-side) and the ExchangesDash data
           files (MTF book, broker MTF shares, special sessions) into out/weekly/<date>/raw/. Read-only.
   facts   raw/ -> facts.json: every number the note uses, with the engine run ids.
-  render  facts.json + commentary.json -> Brokers_Update_<date>.html, then PDF with headless Chrome.
+  render  facts.json + commentary.json -> '<YYYYMMDD>_Weekly Brokers Update.html', then PDF with headless Chrome.
 
 Dates are derived from the data, never typed: as-of = the live runs' as_of_date; the current and previous
 quarter / month come from the summary view's `open` and `periods`; quarter date ranges follow the Indian FY.
@@ -33,6 +33,7 @@ MTF_ID = {"ANGELONE": "angelone", "GROWW": "groww", "MOSL": "motilaloswal"}
 WEIGHTS = {"ratio": 0.4, "adr": 0.6}
 VAL_WINDOW = "all"                     # Valuation tab window used for the ratio leg
 CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+TITLE = "Weekly Brokers Update"          # file and document name: "<YYYYMMDD>_Weekly Brokers Update"
 
 NAME = {"ANGELONE": "Angel One", "GROWW": "Groww", "MOSL": "Motilal Oswal"}
 COL = {"ANGELONE": "#2a78d6", "GROWW": "#eb6834", "MOSL": "#1baf7a"}
@@ -471,7 +472,7 @@ class Report:
         sp = ", ".join(dt.date.fromisoformat(d).strftime("%-d %b") for d in sorted(self.special) if m_range(self.prev_m)[0] <= d <= as_of)
         runs = ", ".join(f"{NAME[b]} {B[b]['run_id'][:8]}" for b in BROKERS)
         nse_src = f" {self.C['nse_ref']['source']}." if self.C.get("nse_ref") else ""
-        return f"""<!doctype html><html><head><meta charset='utf-8'><title>Brokers Update {rep_long}</title><style>
+        return f"""<!doctype html><html><head><meta charset='utf-8'><title>{self.date.replace('-', '')}_{TITLE}</title><style>
 @page {{ size: A4; margin: 14mm 13mm 16mm; }}
 body {{ font: 9.6pt/1.42 -apple-system, 'Helvetica Neue', Arial, sans-serif; color: {INK}; margin: 0; background:#fff; }}
 .hero {{ background:#1d3557; color:#fff; padding:16px 20px 14px; border-radius:2px; }}
