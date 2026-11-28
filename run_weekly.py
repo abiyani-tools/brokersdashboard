@@ -5,24 +5,28 @@
   python3 run_weekly.py --no-fetch         # rebuild from out/weekly/<date>/raw (e.g. after editing commentary)
 
 Writes out/weekly/<date>/: raw/, facts.json, '<YYYYMMDD>_Weekly Brokers Update.html / .pdf'
-(Tusk files start with the date, AB 28 Nov 2026).
+(Tusk files start with the date, AB 28 Nov 2026). The PDF is also copied to the record folder
+'../Weekly updates - brokers/' next to the repo (skip with --no-copy).
 Commentary is out/weekly/<date>/commentary.json (keys: takeaways, s1..s8, optional nse_ref); missing sections
 print as [COMMENTARY NEEDED]. See src/report/weekly_brokers.py for the house rules (40/60 target, no per-order rates).
 """
 import argparse
 import datetime as dt
 import json
+import shutil
 from pathlib import Path
 
 from src.report.weekly_brokers import TITLE, build_facts, fetch, render
 
 ROOT = Path(__file__).resolve().parent
+RECORD_DIR = ROOT.parent / "Weekly updates - brokers"   # AB 28 Nov 2026: keep every issue here
 
 
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--date", default=dt.date.today().isoformat(), help="report date (folder name)")
     ap.add_argument("--no-fetch", action="store_true", help="reuse raw/ already in the folder")
+    ap.add_argument("--no-copy", action="store_true", help="do not copy the PDF to the record folder")
     a = ap.parse_args(argv)
     d = ROOT / "out" / "weekly" / a.date
     d.mkdir(parents=True, exist_ok=True)
@@ -39,6 +43,10 @@ def main(argv=None) -> int:
         print(f"no {cpath.relative_to(ROOT)}: the note will show [COMMENTARY NEEDED]")
     pdf = render(facts, commentary, a.date, d / f"{a.date.replace('-', '')}_{TITLE}.html")
     print(f"as of {sorted(set(asofs.values()))} -> {pdf.relative_to(ROOT)}")
+    if not a.no_copy:
+        RECORD_DIR.mkdir(exist_ok=True)
+        shutil.copy2(pdf, RECORD_DIR / pdf.name)
+        print(f"copied to {RECORD_DIR / pdf.name}")
     return 0
 
 
