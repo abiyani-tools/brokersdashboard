@@ -28,6 +28,7 @@ python3 -m pytest tests/ -q          # parity gate (must pass before every commi
 python3 run_parity.py                # parity report
 python3 src/extract/angel_monthly.py <pdf>   # parse a monthly business update → JSON facts
 python3 src/extract/apply_review.py <dir>    # review-page decisions → SQL
+python3 run_weekly.py --date <YYYY-MM-DD>   # weekly CIO Brokers Update → out/weekly/<date>/ (commentary.json by hand)
 ```
 
 ## Agents (in `.claude/agents/`)

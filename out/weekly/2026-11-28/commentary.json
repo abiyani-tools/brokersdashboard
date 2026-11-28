@@ -1,0 +1,54 @@
+{
+ "takeaways": [
+  "<b>Best quarter so far for all three.</b> Q3 FY27 ADR to 27 Nov: Groww ₹23.2 Cr (+25% QoQ, +43% YoY), Angel One ₹20.1 Cr (+22%, +24%), Motilal Oswal ₹9.9 Cr (+11%, +22%). Each is the highest quarter in the dashboard's series.",
+  "<b>F&amp;O is doing the work.</b> It accounts for 77% of Angel's QoQ increase and 76% of Groww's. F&amp;O ADR is up about 33% at all three brokers.",
+  "<b>Brokers capture less of the volatility than NSE.</b> F&amp;O ADR is up about 33%, in line with F&amp;O orders/day (Angel 3.93 → 5.25 Mn). NSE's ADR is up 47% because its fees also rise with option premium. Higher VIX helps brokers mainly through order counts.",
+  "<b>Flat week.</b> Consolidated ADR for the last 5 sessions vs the 5 before: Angel −2.2%, Groww −0.5%, MOSL −1.2%. F&amp;O was up 10–12%, but commodity fell 42% because a one-day spike on 17 Nov dropped out of the window.",
+  "<b>The MTF book has stopped growing.</b> NSE's book was ₹1,47,019 Cr on 26 Nov, 2.7% below its 30 Sep peak (₹1,51,134 Cr). MTF ADR is up only 2–5% QoQ. Groww's share of the exchanges' book has grown more than 4x in seven quarters (0.63% → 2.74%).",
+  "<b>Angel is now close to its target.</b> It rose 8.0% this week and 37% since 30 Sep, to ₹376. On our 40% ratio / 60% ADR blend the Base target is ₹388 (+3%). Groww (₹222) has more room: Base ₹244 (+10%)."
+ ],
+ "s1": [
+  "<b>Groww is growing fastest:</b> ₹23.2 Cr/day, ₹3.1 Cr ahead of Angel One, and +43% YoY against Angel's +24%. Its previous best was ₹20.9 Cr in Q4 FY26.",
+  "<b>Angel One is steady within the quarter:</b> ₹20.2 Cr in October and ₹20.1 Cr in November. The last 20 sessions averaged ₹20.0 Cr and the last 45 ₹19.8 Cr. Its previous best quarter was ₹18.4 Cr (Q4 FY26).",
+  "<b>MOSL is slower because half its ADR is MTF:</b> MTF NII is ₹4.9 of ₹9.9 Cr/day (49%) and grows slowly. MOSL is the only broker whose ADR rose in November (+2.9% MoM), helped by cash broking (+13.6% MoM)."
+ ],
+ "s2": [
+  "<b>F&amp;O drives the growth:</b> its ADR is +33% QoQ at all three brokers and makes up three quarters of the increase at Angel and Groww (56% at MOSL).",
+  "<b>Commodity is now material:</b> +30% (Angel), +39% (Groww) and +42% (MOSL) QoQ. It is ₹2.0 Cr/day at Angel and Groww, the same size as Angel's cash broking.",
+  "<b>Cash and MTF lag:</b> cash is +3% to +12% QoQ and MTF +2% to +5%, so their share of revenue is shrinking at all three."
+ ],
+ "s3": [
+  "Angel's F&amp;O orders rose from 3.93 to 5.25 Mn/day (+33%) and Groww's from 3.91 to 5.22 Mn/day (+34%), in line with the growth in F&amp;O ADR.",
+  "NSE's ADR grew faster (+47%) because exchange fees rise with option premium: premium per index-option contract is +31% since August (Exchanges Update, 24 Nov). Broker revenue follows the number of orders, so the volatility windfall goes mainly to the exchange."
+ ],
+ "s4": [
+  "F&amp;O rose 10% at Angel and Groww and 12% at MOSL week on week. 26 Nov (₹20.1 Cr at Angel) was the quarter's second-biggest F&amp;O day, after 22 Oct.",
+  "Commodity fell 42% at all three brokers because the previous window included 17 Nov (₹8.3 Cr at Angel, twice any other November day).",
+  "<b>Read with care:</b> the weekly moves are identical across brokers because they are market moves. Until each broker's next filing, the dashboard holds its market share and pricing at the last reported level. Share gains or losses show up only when filings arrive."
+ ],
+ "s5": [
+  "NSE's MTF book peaked at ₹1,51,134 Cr on 30 Sep, fell to ₹1,41,702 Cr on 27 Oct and has recovered only partly, to ₹1,47,019 Cr on 26 Nov. The Q3 average (₹1,46,443 Cr) is still 3.3% above Q2's (₹1,41,830 Cr), which keeps broker MTF ADR slightly up QoQ.",
+  "On the latest filings (Q2 FY27), MOSL has the largest share (6.05%, up from 5.54% in Q1), Angel has stayed between 5.0% and 5.7% since Q3 FY25, and Groww has grown from 0.63% to 2.74% in seven quarters.",
+  "For Q3 the dashboard holds each broker at its Q2 share, so MTF ADR follows the industry book. If the book stays flat, MTF will keep diluting growth in Q4."
+ ],
+ "s6": [
+  "<b>Angel One:</b> Q3 FY27E PAT is ₹372 Cr (+11% QoQ). FY27E is ₹1,310 Cr, up 43% on FY26's ₹915 Cr, and FY28E is ₹1,859 Cr (EPS ₹20.3).",
+  "<b>Groww:</b> Q3 FY27E PAT is ₹866 Cr (+20% QoQ). FY27E is ₹3,214 Cr, up 54% on FY26's ₹2,083 Cr, and FY28E is ₹4,306 Cr (EPS ₹6.90).",
+  "Q3 and Q4 assume the quarter-to-date ADR holds. A return to Q2's run-rate would bring Q3 PAT back towards Q2's level (Angel ₹335 Cr, Groww ₹725 Cr)."
+ ],
+ "s7": [
+  "<b>Angel One's Base target (₹388) is 3% above its price (₹376).</b> The ADR method (FY28 at 27x) gives ₹416 and ratio analysis ₹346, so the upside rests on the PAT model. Bear–Bull is ₹324–452. The trailing P/E is 29.8x, against 29.0x over the last year and 23.1x over the full history.",
+  "<b>Groww</b> fell 1.0% this week. Its Base target (₹244) is 10% above the ₹222 price, with Bear–Bull at ₹218–269. The ADR method gives ₹261; ratio analysis gives ₹217, 2% below the price.",
+  "<b>MOSL</b> has risen 23% since 30 Sep, all of it in November (it closed at ₹942 on 30 Oct). At 4.74x book it is the richest of the three relative to its own history (1-year mean 3.93x, +1.9 SD)."
+ ],
+ "s8": [
+  "<b>Angel One's November business update</b> (expected 3–5 Dec; the last four arrived on 3 Jul, 5 Aug, 4 Sep and 6 Oct) is the first reported read on Q3: orders, F&amp;O and commodity share, and MTF book. It will replace this week's market-driven estimate for November.",
+  "<b>VIX and premium:</b> if India VIX holds at 16–18, F&amp;O orders can stay near 5 Mn/day. Brokers are less exposed to a VIX slide than NSE, because their revenue depends on order counts rather than premium.",
+  "<b>MTF book:</b> watch whether it moves back towards ₹1,50,000 Cr or keeps drifting lower."
+ ],
+ "nse_ref": {
+  "text": "Exchanges Update 24 Nov, data to 23 Nov: ADR ₹45.9 → ₹67.4 Cr",
+  "qoq": "+47%",
+  "source": "NSE ADR and premium: Exchanges Update, 24 Nov 2026"
+ }
+}

@@ -15,7 +15,7 @@ Each to-do ends with an **exit test**. A to-do is done only when its test passes
 | Repo | `abiyani-tools/brokersdashboard` (`main`); CI secrets not yet added |
 | Live brokers (2 Nov) | Angel One `abcdefghij`, Groww `g-abcdefgi`, **MOSL `m-abcdef` (first publish 2 Nov: run `1eb13055`)**; all three as of 30 Oct 2026, daily job 41420521105 |
 | MOSL | parity 264 / 264; switches m-a…m-f (independent check `out/checks/mosl_summary.md`: a 324/324, b 102/104 (bridge row-count only), c–f all agree); 290 reviewed data-book facts (846–1135) + 101 seed facts, 12 assumptions, 11 pins in the DB |
-| Blocked on outside owners | industry MTF view `codex_public_nse_mtf_daily` answers 401 with `NSE_LAKE_ANON_KEY` (key or anon grant; MTF ends 19 Oct for every broker); anon read (RLS) policies on the lake |
+| Blocked on outside owners | anon read (RLS) policies on the lake. *Industry MTF is not blocked: since 5 Nov (PR #4, `5bab820`) the book comes from ExchangesDash's `dashboard/data/mtf_daily.json` from 1 Oct 2024 (latest day 26 Nov 2026, 147,018.6 Cr, checked 28 Nov). The lake view `codex_public_nse_mtf_daily` still answers 401, and is now only a backup.* |
 
 ## 1. Decisions in force (AB, 22–23 Oct)
 D1 summary laid out exactly like the Excel sheet, with FY / quarter / month dropdowns. Comparisons follow the selected period (YoY, QoQ, MoM, 6M ending at the selected month) · D2 cash projection uses the latest **monthly** cash share · D3 commodity take rate = each quarter's own · D4 MTF gross section, net = 45% × gross ([SOURCE NEEDED: basis for 45%]) · D5 daily job on GitHub Actions · D6 review page; live mode uses only `reviewed` facts (seeds as fallback) · D7 catch-up started · special sessions (Muhurat / DR test) excluded from averages in live mode · Angel One first, keyed by broker.
@@ -67,7 +67,7 @@ D1 summary laid out exactly like the Excel sheet, with FY / quarter / month drop
 
 ### Waiting on outside owners (prompts in `docs/`)
 - [x] NSE cash trades into the lake: in ExchangesDash's JSON by 2 Nov (with NSE io/so contracts to 30 Oct and BSE cash 15 Jun fixed); all brokers now run to 30 Oct.
-- [~] Read access to the MTF table: view `codex_public_nse_mtf_daily` exists and AB set `NSE_LAKE_ANON_KEY` (2 Nov), but the view answers **401** (wrong key, or no `select` grant to anon). Check values once it loads: 2024-10-01 81,823.53; 2025-06-09 80,962.95; 2026-05-14 121,761.47; 2026-10-19 148,568.87. A failed read no longer stops the refresh (2a2858a).
+- [x] Industry MTF book: *covered since 5 Nov by `mtf_daily.json` (see §0); MTF no longer stops at 19 Oct.* Backup only, still open: view `codex_public_nse_mtf_daily` exists and AB set `NSE_LAKE_ANON_KEY` (2 Nov), but the view answers **401** (wrong key, or no `select` grant to anon). Check values once it loads: 2024-10-01 81,823.53; 2025-06-09 80,962.95; 2026-05-14 121,761.47; 2026-10-19 148,568.87. A failed read no longer stops the refresh (2a2858a).
 - [~] Anon read (RLS) policies on the lake tables; fix lake gaps and junk 1999 rows.
 
 ## 3. How to run work cheaply (token rules)
